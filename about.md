@@ -4,12 +4,12 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
+A écrire
 
-### More Information
+### Plus d'informations
 
-A place to include any other types of information that you'd like to include about yourself.
+A écrire
 
 ### Contact me
 
-[email@domain.com](mailto:email@domain.com)
+voir mon profil LinkedIn.
