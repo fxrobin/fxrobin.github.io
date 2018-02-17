@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Premier post
+title: Démo
 ---
 
-Ici c'est du MarkDown !
+Démo
