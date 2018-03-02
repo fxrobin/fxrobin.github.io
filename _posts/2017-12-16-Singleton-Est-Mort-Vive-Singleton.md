@@ -1,21 +1,29 @@
----
-layout: post
+nlayout: post
 title: Le singleton est mort, vive le singleton ...
----
+
+## Encore un post sur le Singleton ??
 
 L'objectif de ce billet est de présenter une implémentation simple en Java du pattern Singleton. Je ne traiterai donc pas de l'utilité ni des recommandations d'usage liées à celui-ci mais bien de mise en oeuvre (codage pour les intimes) en Java Standard Edition (JSE). 
 
 Il est vraiment frappant en consultant les sites spécialisés en développement Java de constater à quel point le **Design Pattern Singleton** est dans le top 3 des patterns les plus abordés.
 
-De la même façon, il est encore plus frappant de voir à quel point toutes ces ressources en ligne, toutes ces explications sur l'unicité en mémoire, le double-check-locking prennent une part importante. Même sur des sites pourtant reconnus comme DZONE, on y trouve des articles erronés, car en effet, **rien de plus simple que d'écrire un bon singleton Thread-Safe et Lazy en Java : mais je le garde pour la fin de ce billet ... **
+De la même façon, il est encore plus frappant de voir à quel point toutes ces ressources en ligne, toutes ces explications sur l'unicité en mémoire, le double-check-locking prennent une part importante. Même sur des sites pourtant reconnus comme DZONE, on y trouve des articles erronés, car en effet, **rien de plus simple que d'écrire un bon singleton Thread-Safe et Lazy en Java : mais je le garde pour la fin de ce billet ...**
 
-Au préalable, revenons aux origines du Singleton, alors que Java n'existait pas encore :
+
+
+## Les origines du Design Pattern Singleton
+
+Au préalable, revenons aux origines du Singleton, alors que Java n'existait pas encore et à ses principales caractéristiques :
 
 - un singleton c'est un objet construit conformément à sa sa classe et dont on a la garantie qu'il n'existe qu'**une seule et une seule instance** en mémoire à un instant donné.
 - en cas d'accès concurrent lors de l'instanciation d'un singleton, il faut veiller à ce que cet aspect soit pris en compte par un **mécanisme de verrous. **
 - en général on souhaite que le singleton ne s'initialise pas entièrement, mais seulement à son premier appel, afin d'économiser de la mémoire. On appelle cela le mécanisme "*lazy*".
 
 Ainsi le GoF, propose son pattern singleton. Et certains l'appliquent alors en C++.
+
+
+
+## Et la plateforme Java alors ?
 
 Java arrive alors sur le marché, ressemblant tellement à C++ sur sa syntaxe que le singleton du GoF, façon C++, est tout simplement imité sans prendre en compte les spécificités de la plateforme Java :
 
@@ -28,6 +36,10 @@ Ce qui permet d'envisager déjà que :
 - l'instanciation statique du singleton version Java, sera forcément ThreadSafe
 - toute autre tentative de ne pas se reposer sur ces caractéristiques apportera un code plus lourd, inutile et potentiellement buggué. (Less Code, Less Bug !)
 - un singleton version Java SE avec une seule hiérarchie de ClassLoader sera seul en mémoire JVM. 
+
+
+
+## Et "un lazy thread-safe, un ..."
 
 Et donc, le voilà, notre beau Singleton Lazy Thread-Safe :
 
@@ -87,6 +99,10 @@ Je suis le LazySingleton : demo.LazySingleton@7852e922
 
 ```
 
+
+
+## Et depuis Java 5, ça donne quoi ?
+
 Enfin, depuis Java 5, c'est à dire fin 2004, une éternité, un singleton peut s'implémenter au moyen d'une "enum". Petite limitation dans ce cas : on ne peut pas en hériter, mais en a-t-on souvent besoin ?
 
 Version enum Java 5 :
@@ -143,6 +159,10 @@ Je suis le LazySingleton : INSTANCE
 
 ```
 
-Pour conclure,  je viens d'écrire ce que je m'étais pourtant interdit de faire : un n-ième billet sur le Singleton en Java venant s'ajouter à la quantité déjà astronomique de ceux qui existent sur le net.
+
+
+## Il faut conclure ...
+
+Je viens d'écrire ce que je m'étais pourtant interdit de faire : un n-ième billet sur le Singleton en Java venant s'ajouter à la quantité déjà astronomique de ceux qui existent sur le net.
 
 En guise de réelle conclusion, utilisez @Singleton de CDI, que vous pouvez utiliser même en Java SE si vous prenez "Weld" dans vos dépendances. ou de la spec EJB en environnement Java EE et vous serez définitivement tranquille.
