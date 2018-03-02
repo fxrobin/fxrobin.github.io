@@ -31,7 +31,7 @@ Ce qui permet d'envisager déjà que :
 
 Et donc, le voilà, notre beau Singleton Lazy Thread-Safe :
 
-```
+```java
 public class LazySingleton 
 {
     private static final LazySingleton instance = new LazySingleton();
@@ -57,7 +57,7 @@ public class LazySingleton
 
 Voici un programme qui en obtient une instance :
 
-```
+```java
 public class MainProg 
 {
    
@@ -91,7 +91,7 @@ Enfin, depuis Java 5, c'est à dire fin 2004, une éternité, un singleton peut 
 
 Version enum Java 5 :
 
-```
+```java
 public enum LazySingletonEnum
 {
     INSTANCE;
