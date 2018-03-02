@@ -1,5 +1,7 @@
+---
 nlayout: post
 title: Le singleton est mort, vive le singleton ...
+---
 
 ## Encore un post sur le Singleton ??
 
@@ -21,8 +23,6 @@ Au préalable, revenons aux origines du Singleton, alors que Java n'existait pas
 
 Ainsi le GoF, propose son pattern singleton. Et certains l'appliquent alors en C++.
 
-
-
 ## Et la plateforme Java alors ?
 
 Java arrive alors sur le marché, ressemblant tellement à C++ sur sa syntaxe que le singleton du GoF, façon C++, est tout simplement imité sans prendre en compte les spécificités de la plateforme Java :
@@ -38,10 +38,9 @@ Ce qui permet d'envisager déjà que :
 - un singleton version Java SE avec une seule hiérarchie de ClassLoader sera seul en mémoire JVM. 
 
 
-
 ## Et "un lazy thread-safe, un ..."
 
-Et donc, le voilà, notre beau Singleton Lazy Thread-Safe :
+Le voilà, notre beau Singleton Lazy Thread-Safe :
 
 ```java
 public class LazySingleton 
@@ -98,7 +97,6 @@ Et maintenant je l'affiche ...
 Je suis le LazySingleton : demo.LazySingleton@7852e922
 
 ```
-
 
 
 ## Et depuis Java 5, ça donne quoi ?
