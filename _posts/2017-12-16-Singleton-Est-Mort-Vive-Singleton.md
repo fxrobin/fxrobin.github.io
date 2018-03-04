@@ -163,4 +163,7 @@ Je suis le LazySingleton : INSTANCE
 
 Je viens d'écrire ce que je m'étais pourtant interdit de faire : un n-ième billet sur le Singleton en Java venant s'ajouter à la quantité déjà astronomique de ceux qui existent sur le net.
 
+Et je n'ai pas non plus abordé un autre problème : souvent un Singleton a besoin d'être "Serializable", mais de fait, la déserialisation d'un singleton permet de créer plusieurs instances.
+Ceci "casse" le principe du Singleton qui doit être unique.
+
 En guise de réelle conclusion, utilisez @Singleton de CDI, que vous pouvez utiliser même en Java SE si vous prenez "Weld" dans vos dépendances. ou de la spec EJB en environnement Java EE et vous serez définitivement tranquille.
