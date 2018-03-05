@@ -129,7 +129,7 @@ Puis en 1999 :
 * Quoi ? Je peux générer des pages web côté serveur à la place de mes scripts CGI (les jeunes ne comprendront pas) avec des Servlets ?
 * Quoi ? Tomcat c'est gratuit ?
 * Quoi ? JBuilder c'est PAS gratuit ... 
-* Quoi ? Je peux me connecter à n'importe quelle base de données (ah bah oui parce que j'ai aussi faire du SQL hein ...) ?
+* Quoi ? Je peux me connecter à n'importe quelle base de données (ah bah oui parce que je sais aussi faire du SQL hein ...) ?
 
 To be continued (quand je ferai l'effort de tout me souvenir)
 
