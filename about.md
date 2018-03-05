@@ -116,13 +116,13 @@ Je decouvre le Mode X (mode 13h pour les intimes), les interruptions BIOS, le ca
 
 ![Watcom C++](/images/watcom.png)
 
-Je fais alors du Pascal, du COBOL, du C++, de l'ADA et ... fin 1998 du **JAVA** ! C'est la révélation. Et pourtant à l'époque "*Java c'est moche*", "*Java c'est lent*". 
+Je fais alors du Pascal, du COBOL, du C++, de l'ADA et ... fin 1996 du **JAVA** ! C'est la révélation. Et pourtant à l'époque "*Java c'est moche*", "*Java c'est lent*". 
 
 ## Mon histoire (d'amour ?) avec Java ...
 
 ![I LOVE JAVA](/images/i-love-java.png)
 
-Et voilà toutes les questions qui me sont venues en 1998 :
+Et voilà toutes les questions qui me sont venues en 1996 :
 
 * Quoi ? Je peux enfin avoir du code portable et ne pas avoir à le recompiler ?
 * Quoi ? Le JDK est gratuit ?
