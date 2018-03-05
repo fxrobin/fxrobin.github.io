@@ -12,7 +12,7 @@ En 1984, à 9 ans (les plus forts d'entre vous auront ainsi découvert mon anné
 
 A 10 ans, mes parents m'offrent un THOMSON M05 : 32 Ko de mémoire, sauvegarde cassette, crayon optique. Quand on est seul avec quelques livres (basic, assembleur) c'est donc l'école de la découverte permanente, des tests, des plantages, des resets et de l'optimisation du code. Et oui 32 Ko et 1 MHz de fréquence, cela nécessite quelques astuces. A ce jour (30 ans plus tard), j'ai toujours ce goût de l'optimisation et de l'octet bien utilisé.
 
-A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz de fréquence d'horloge, mais 256 Ko de RAM et surtout un lecture de disquettes double faces. 360 Ko par face ! C'est la profusion d'octets ! Pendant toute cette période mes langages sont donc le BASIC 1.0 puis le BASIC 512 (le deux codés par Microsoft) ainsi que l'assembleur 6809 ! Les fameuses "Routines" 
+A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz de fréquence d'horloge, mais 256 Ko de RAM et surtout un lecteur de disquettes double faces. 360 Ko par face ! C'est la profusion d'octets ! Pendant toute cette période mes langages sont donc le BASIC 1.0 puis le BASIC 512 (les deux codés par Microsoft) ainsi que l'assembleur 6809 ! Les fameuses "Routines" ... 
 
 Un petit exemple pour la route (dont je ne suis pas l'auteur) :
 
@@ -71,6 +71,8 @@ Sur ces ordinateurs, je voue toujours un culte au jeu [L'Aigle d'Or](https://fr.
 A la même période, je m'éclate aussi chez mon cousin et chez des copains avec des ORIC ATMOS, AMSTRAD CPC 464 et 6128 ainsi qu'un MSX : que du beau monde.
 
 Je m'occupe aussi du club informatique de mon collège : le professeur d'EMT me laissant le soin de la gestion du serveur "GOUPIL" qui connectait les MO5 en réseau (nanoréseau). M. Guintrand, si vous me lisez, merci encore !
+
+![Serveur Goupil](/images/goupil.png)
 
 C'est l'époque où on "déplombait" les logiciels protégés avec un `POKE 8699,57`. On ne savait pas trop ce que ça faisait, mais ça le faisait ... (ndlr:  désactiver la protection anti-copie, c'est mal ...)
 
