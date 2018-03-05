@@ -90,7 +90,7 @@ En 2017, j'ai d'ailleurs réalisé un petit hommage à ces deux jeux : [Xenon Re
 
 Cliquez sur l'image ci-dessous pour lancer une vidéo sur YouTube.
 
-[![Xenon_Reborn_Capture v0.1.8](http://img.youtube.com/vi/ki39sbk4VKc/0.jpg)](https://youtu.be/ki39sbk4VKc)
+[![Xenon_Reborn_Capture v0.1.8](https://img.youtube.com/vi/ki39sbk4VKc/0.jpg)](https://youtu.be/ki39sbk4VKc)
 
 Le projet hébergé sur GitHub est ici : [https://github.com/fxrobin/Xenon_Reborn](https://github.com/fxrobin/Xenon_Reborn)
 
