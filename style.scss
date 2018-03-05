@@ -9,6 +9,8 @@
 @import "https://fonts.googleapis.com/css?family=Open+Sans";
 @import "https://fonts.googleapis.com/css?family=Oswald";
 @import "https://fonts.googleapis.com/css?family=Press+Start+2P";
+@import "https://fonts.googleapis.com/css?family=Monda";
+@import "https://fonts.googleapis.com/css?family=Russo+One";
 
 
 @import "reset";
@@ -43,15 +45,15 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Oswald", $helveticaNeue;
+  font-family: "Russo One", $helveticaNeue;
   color: $darkerGray;
-  font-weight: bold;
   line-height: 1.7;
   margin: 0.5em 0 0.5px;
   padding: 0;
 
   @include mobile {
     line-height: 1.4;
+    font-family: "Oswald"
   }
 }
 
