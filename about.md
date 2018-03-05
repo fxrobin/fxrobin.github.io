@@ -98,7 +98,10 @@ Le projet hébergé sur GitHub est ici : [https://github.com/fxrobin/Xenon_Rebor
 
 ## Le permis, une voiture, mais surtout un 486 DX2 66 Mhz Turbo
 
-A 18 ans, patatra ..., je bascule avec un 486 DX2 66 (avec un bouton "turbo") et me voilà dans le monde du x86, du QBASIC et de l'assembleur toujours. Je fais une grande partie de mes études en découvrant de nombreux langages, mais en restant fidèle à mon C et mon assembleur. Le tout avec des mégas "en veux-tu, en voilà", 250 Mo de disque dur 
+A 18 ans, patatra ..., je bascule avec un 486 DX2 66 (avec un bouton "turbo") et me voilà dans le monde du x86, du QBASIC et de l'assembleur toujours. 
+
+Je fais une grande partie de mes études en découvrant de nombreux langages, mais en restant fidèle à mon C et mon assembleur. Le tout avec des mégas "en veux-tu, en voilà", 250 Mo de disque dur. Comme "développer" est maintenant devenu aussi "mes études",
+ma maman **chérie-adorée-que-j'aime-très-fort** ne peut plus me dire "*lâche cet ordinateur et fais tes devoirs !*".
 
 A cette occasion, je découvre aussi ce qu'est le cache de second niveau sur un processeur (AMD en l'occurence). Pourquoi ? Parce que je l'active dans le BIOS, le PC fonctionne vraiment mieux ... jusqu'à ce qu'il plante. Et oui mon cache L2 était défectueux ... 
 
