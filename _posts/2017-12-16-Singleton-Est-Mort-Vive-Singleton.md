@@ -18,7 +18,7 @@ De la même façon, il est encore plus frappant de voir à quel point toutes ces
 Au préalable, revenons aux origines du Singleton, alors que Java n'existait pas encore et à ses principales caractéristiques :
 
 - un singleton c'est un objet construit conformément à sa sa classe et dont on a la garantie qu'il n'existe qu'**une seule et une seule instance** en mémoire à un instant donné.
-- en cas d'accès concurrent lors de l'instanciation d'un singleton, il faut veiller à ce que cet aspect soit pris en compte par un **mécanisme de verrous. **
+- en cas d'accès concurrent lors de l'instanciation d'un singleton, il faut veiller à ce que cet aspect soit pris en compte par un **mécanisme de verrous.**
 - en général on souhaite que le singleton ne s'initialise pas entièrement, mais seulement à son premier appel, afin d'économiser de la mémoire. On appelle cela le mécanisme "*lazy*".
 
 Ainsi le GoF, propose son pattern singleton. Et certains l'appliquent alors en C++.
@@ -156,6 +156,36 @@ On peut aussi l'appeler directement :
 Je suis le LazySingleton : INSTANCE
 
 ```
+## Et la "serialization" entre en jeu ...
+
+Je n'ai pas non plus abordé un autre problème : souvent un Singleton a besoin d'être "Serializable", mais de fait, la déserialisation d'un singleton permet de créer plusieurs instances.
+Ceci "casse" le principe du Singleton qui doit être unique.
+
+Pour résoudre ce problème, il suffit de définir `readResolve()` dans le singleton lui-même.
+
+```java
+public class Singleton implements Serializable {
+
+    private static Singleton singleton = new Singleton( );
+
+    private Singleton() 
+    {
+       // protection 
+    }
+
+    public static Singleton getInstance( ) 
+    {
+      return singleton;
+    }
+
+    public Object readResolve() 
+    {
+       return Singleton.getInstance( );
+    }  
+}
+```
+
+> A noter que cela n'est pas nécessaire dans le cas d'un singleton codé au moyen d'une enum.
 
 
 
@@ -163,7 +193,5 @@ Je suis le LazySingleton : INSTANCE
 
 Je viens d'écrire ce que je m'étais pourtant interdit de faire : un n-ième billet sur le Singleton en Java venant s'ajouter à la quantité déjà astronomique de ceux qui existent sur le net.
 
-Et je n'ai pas non plus abordé un autre problème : souvent un Singleton a besoin d'être "Serializable", mais de fait, la déserialisation d'un singleton permet de créer plusieurs instances.
-Ceci "casse" le principe du Singleton qui doit être unique.
 
 En guise de réelle conclusion, utilisez @Singleton de CDI, que vous pouvez utiliser même en Java SE si vous prenez "Weld" dans vos dépendances. ou de la spec EJB en environnement Java EE et vous serez définitivement tranquille.
