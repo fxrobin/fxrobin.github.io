@@ -3,12 +3,14 @@ code.highlighter-rouge
 {
 	background-color: black;
 	padding : 2px;
+	
 }
 
 pre.highlight {
-  background-color: black;
+  background-color: #111133;
   padding: 7px 7px 7px 10px;
   border: 1px solid #ddd;
+  border-radius: 1em;
   -moz-box-shadow: 3px 3px rgba(0,0,0,0.1);
   -webkit-box-shadow: 3px 3px rgba(0,0,0,0.1);
   box-shadow: 3px 3px rgba(0,0,0,0.1);
@@ -25,7 +27,7 @@ code {
 .highlight .g { color: #93A1A1 } /* Generic */
 .highlight .k { color: #859900 } /* Keyword */
 .highlight .l { color: #93A1A1 } /* Literal */
-.highlight .n { color: #93A1A1 } /* Name */
+.highlight .n { color: #AAAAFF } /* Name */
 .highlight .o { color: #859900 } /* Operator */
 .highlight .x { color: #CB4B16 } /* Other */
 .highlight .p { color: #93A1A1 } /* Punctuation */
@@ -54,7 +56,7 @@ code {
 .highlight .s { color: #2AA198 } /* Literal.String */
 .highlight .na { color: #93A1A1 } /* Name.Attribute */
 .highlight .nb { color: #B58900 } /* Name.Builtin */
-.highlight .nc { color: #00ff00  } /* Name.Class 268BD2 */
+.highlight .nc { color: white  } /* Name.Class 268BD2 */
 .highlight .no { color: #CB4B16 } /* Name.Constant */
 .highlight .nd { color: #00ff00 } /* Name.Decorator */
 .highlight .ni { color: #CB4B16 } /* Name.Entity */
