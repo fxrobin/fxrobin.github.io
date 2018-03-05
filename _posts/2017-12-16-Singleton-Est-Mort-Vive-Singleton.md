@@ -189,6 +189,21 @@ public class Singleton implements Serializable {
 
 > Attention aussi à vos objets que vous serialisez peut-être et qui possèderaient une référence vers le singleton. Il vaut mieux dans ce cas place le mot clé `transient` devant sa référence.
 
+## Petit détour du côté des Servlets
+
+Ce petit paragraphe sort du cadre de ce billet, puisque je ne souhaitais évoquer que le cas de Java SE et non
+pas Java EE.
+
+Mais pour illustrer, et pour ceux qui connaissent, voici ce que sont chacune des servlets déclarées dans une WebApp Java : un singleton ! Et oui, *chaque Servlet est un singleton* ! Lazy de surcroit ! Ce qui vallait d'ailleurs au premier déclencheur (un navigateur via URL par exemple) d'avoir un temps d'attente un peu plus long que les clients suivants qui avaient alors la servlet de chargée en mémoire prête à répondre à la requête au moyen d'un Thread.
+
+Idem pour les pages JSP, qui en plus passaient par une phase de compilation éventuelle, préalablement transformées en Servlet, toujours LAZY, car chargées seulement au premier appel.
+
+Pour éviter ces effets d'attente et charger chaque servlet (singleton) dès le déploiement de l'application, le fameux :
+
+```xml
+<load-on-startup>1</load-on-startup>
+```
+Cette configuration de la servlet dans le `web.xml` permet ainsi de la passer en mode "EAGER" (inverse de LAZY).
 
 
 ## Il faut conclure ...
