@@ -68,5 +68,5 @@ public class Vehicule implements Serializable
 	// equals/hashCode
 ```
 
->To be continued ...
+![To be continued](/images/tobecontinued.png)
 
