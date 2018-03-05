@@ -6,13 +6,17 @@ permalink: /about/
 
 Je suis passionné de développement depuis mon plus jeune âge et voici un bref résumé de mon petit parcours de développeur / administrateur / architecte  ...
 
-## Découverte pendant mon enfance
+## 1984 - 1989 : Découverte pendant mon enfance
 
 En 1984, à 9 ans (les plus forts d'entre vous auront ainsi découvert mon année de naissance au moyen de l'outil mathématique nommé "soustraction") j'ai découvert le développement grâce au THOMSON TO7-70 au fond de la classe de mon école primaire.
 
 A 10 ans, mes parents m'offrent un THOMSON M05 : 32 Ko de mémoire, sauvegarde cassette, crayon optique. Quand on est seul avec quelques livres (basic, assembleur) c'est donc l'école de la découverte permanente, des tests, des plantages, des resets et de l'optimisation du code. Et oui 32 Ko et 1 MHz de fréquence, cela nécessite quelques astuces. A ce jour (30 ans plus tard), j'ai toujours ce goût de l'optimisation et de l'octet bien utilisé.
 
+![MO5](/images/mo5.png)
+
 A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz de fréquence d'horloge, mais 256 Ko de RAM et surtout un lecteur de disquettes double faces. 360 Ko par face ! C'est la profusion d'octets ! Pendant toute cette période mes langages sont donc le BASIC 1.0 puis le BASIC 512 (les deux codés par Microsoft) ainsi que l'assembleur 6809 ! Les fameuses "Routines" ... 
+
+![TO8](/images/to8.png)
 
 Un petit exemple pour la route (dont je ne suis pas l'auteur) :
 
@@ -77,11 +81,14 @@ Je m'occupe aussi du club informatique de mon collège : le professeur d'EMT me 
 C'est l'époque où on "déplombait" les logiciels protégés avec un `POKE 8699,57`. On ne savait pas trop ce que ça faisait, mais ça le faisait ... (ndlr:  désactiver la protection anti-copie, c'est mal ...)
 
 
-## Un peu d'acné, mais beaucoup plus de RAM 
+## 1989 - 1993 : Un peu d'acné, mais beaucoup plus de RAM 
 
 A 14 ans, je bascule dans le monde du 68000, avec un ATARI 1040 STE ! 1 Mo de RAM, 8 Mhz. Ce n'est plus de la profusion, c'est de la décadence. Je tripote aussi l'Amiga d'un copain (Frédéric, si tu me lis, merci !) et on commence enfin à coder en C (et oui déjà), en Omikron, en GFA Basic, en STOS.
 
-30 ans plus tard, je voue toujours un culte immense à cette machine et notamment aux jeux XENON et XENON 2 des [Bitmap Brothers](https://fr.wikipedia.org/wiki/Bitmap_Brothers) !
+![ATARI-ST](/images/atari-st.png) 
+![AMIGA](/images/amiga.png)
+
+30 ans plus tard, je voue toujours un culte immense à cette machine et notamment aux jeux XENON et XENON 2 des [Bitmap Brothers](https://fr.wikipedia.org/wiki/Bitmap_Brothers).
 
 ![Xenon 1](/images/xenon-1.jpg)
 ![Xenon 2](/images/xenon-2.jpg)
@@ -94,15 +101,8 @@ Cliquez sur l'image ci-dessous pour lancer une vidéo sur YouTube.
 
 Le projet hébergé sur GitHub est ici : [https://github.com/fxrobin/Xenon_Reborn](https://github.com/fxrobin/Xenon_Reborn)
 
-## Petit résumé en image avant de passer à l'âge adulte
 
-![MO5](/images/mo5.png)
-![TO8](/images/to8.png)
-
-![ATARI-ST](/images/atari-st.png)
-![AMIGA](/images/amiga.png)
-
-## Le permis, une voiture, mais surtout un 486 DX2 66 Mhz Turbo
+## 1993 - 1996 : Le permis, une voiture, mais surtout un 486 DX2 66 Mhz Turbo
 
 A 18 ans, patatra ..., je bascule avec un 486 DX2 66 (avec un bouton "turbo") et me voilà dans le monde du x86, du QBASIC et de l'assembleur toujours. 
 
@@ -118,7 +118,7 @@ Je decouvre le Mode X (mode 13h pour les intimes), les interruptions BIOS, le ca
 
 Je fais alors du Pascal, du COBOL, du C++, de l'ADA et ... fin 1996 du **JAVA** ! C'est la révélation. Et pourtant à l'époque "*Java c'est moche*", "*Java c'est lent*". 
 
-## Mon histoire (d'amour ?) avec Java ...
+## 1996 : Mon histoire (d'amour ?) avec Java ...
 
 ![I LOVE JAVA](/images/i-love-java.png)
 
