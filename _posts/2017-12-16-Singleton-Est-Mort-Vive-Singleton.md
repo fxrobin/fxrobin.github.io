@@ -187,11 +187,15 @@ public class Singleton implements Serializable {
 
 > A noter que cela n'est pas nécessaire dans le cas d'un singleton codé au moyen d'une enum.
 
+> Attention aussi à vos objets que vous serialisez peut-être et qui possèderaient une référence vers le singleton. Il vaut mieux dans ce cas place le mot clé `transient` devant sa référence.
+
 
 
 ## Il faut conclure ...
 
 Je viens d'écrire ce que je m'étais pourtant interdit de faire : un n-ième billet sur le Singleton en Java venant s'ajouter à la quantité déjà astronomique de ceux qui existent sur le net.
+
+Ce qu'il faut retenir : vous n'aurez JAMAIS la garantie d'avoir une instance unique d'une classe en Java. Par introspection, par AOP, vous aurez toujours un moyen de casser l'unicité mémoire qu'on attend pourtant d'un singleton. Il suffit juste de faire un peu attention.
 
 
 En guise de réelle conclusion, utilisez @Singleton de CDI, que vous pouvez utiliser même en Java SE si vous prenez "Weld" dans vos dépendances. ou de la spec EJB en environnement Java EE et vous serez définitivement tranquille.
