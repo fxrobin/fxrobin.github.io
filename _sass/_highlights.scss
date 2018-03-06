@@ -2,8 +2,7 @@
 code.highlighter-rouge
 {
 	background-color: black;
-	padding : 2px;
-	
+	padding : 2px;	
 }
 
 pre.highlight {
@@ -15,6 +14,8 @@ pre.highlight {
   -webkit-box-shadow: 3px 3px rgba(0,0,0,0.1);
   box-shadow: 3px 3px rgba(0,0,0,0.1);
   margin: 20px 0 20px 0;
+  overflow: auto;
+  overflow-y: hidden;
 }
 
 code {
@@ -66,7 +67,7 @@ code {
 .highlight .nn { color: #93A1A1 } /* Name.Namespace */
 .highlight .nx { color: #555 } /* Name.Other */
 .highlight .py { color: #93A1A1 } /* Name.Property */
-.highlight .nt { color: #00ff00 } /* Name.Tag */
+.highlight .nt { color: #BBBBFF } /* Name.Tag */
 .highlight .nv { color: #00ff00 } /* Name.Variable */
 .highlight .ow { color: #859900 } /* Operator.Word */
 .highlight .w { color: #93A1A1 } /* Text.Whitespace */
