@@ -487,6 +487,7 @@ Je les jette en vrac, avec une petite justification quand même :
 * Toujours utiliser `@EqualsAndHashCode` et `@ToString` en précisant les champs avec l'attribut `of=...`
 * Spécifier les `Getter / Setter` sur les champs, et non pas sur la classe (en gros, pas comme dans tous les exemples que je viens de donner)
 * Attention au Builder : intégrer un Builder sera possible, mais JPA, JSF ou CDI attendront que le constructeur sans argument soit présent avec le niveau "protected".
+* Attention aux logiciels de revue de code qui n'analyse pas le ByteCode mais que le code source : ils sont perdus ...
 
 ## En guise de conclusion
 
@@ -498,6 +499,8 @@ Il y a encore pas mal d'annotations que je n'ai pas couvert ici, mais qui sont t
 * @Cleanup : pour la libération de ressources.
 * @Delegate : pour gérer correctement les collections dans les compositions avec un délégué.
 * @Synchronized :  pour de la synchronisation ENFIN gérée simplement et correctement.
+
+*On va dire que ça fera partie d'un prochain billet ...*
 
 **N'hésitez pas à me faire part de vos usages de Lombok en commentaire, que je reporterai ici le cas échéant.**
 
