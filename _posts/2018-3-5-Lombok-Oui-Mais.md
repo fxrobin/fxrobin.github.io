@@ -294,6 +294,20 @@ vieilles conventions comme `newInstance(...)`. La méthode prendra en argument t
 
 * Cette fois-ci un contrôle plus fin sur les getters / setters est mis en place : seule l'immatriculation peut changer.
 
+
+Usage de cette classe :
+
+```java
+Vehicule v = Vehicule.of("AABBCC123", "X06123", LocalDate.of(1989, 01, 18));
+v.setNumeroImmatriculation("AA-123-BB");
+System.out.println(v);
+```
+
+Et son résultat dans la console grâce au toString généré par Lombok :
+
+```
+Vehicule(numeroMoteur=AABBCC123, numeroChassis=X06123, dateMiseEnCirculation=1989-01-18, numeroImmatriculation=AA-123-BB)
+```
 Ca commence déjà à faire des choses plutôt agréables, mais ce n'est pas fini ! Loin de là ... 
 
 ![To be continued](/images/tobecontinued.png)
