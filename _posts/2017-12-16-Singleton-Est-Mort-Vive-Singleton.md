@@ -1,6 +1,8 @@
 ---
-nlayout: post
+layout: post
 title: Le singleton est mort, vive le singleton ...
+category: CONCEPTION
+tags: [patterns,java,lazy,threadsafe,classloading]
 ---
 
 ## Encore un post sur le Singleton ?

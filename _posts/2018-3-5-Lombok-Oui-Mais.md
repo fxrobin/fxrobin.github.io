@@ -1,6 +1,8 @@
 ---
-nlayout: post
+layout: post
 title: Lombok, Oui ! Mais ...
+category: API
+tags: [lombok,java,builder,patterns]
 ---
 
 ## Lombok, après 4 ans d'usage ...
@@ -175,7 +177,7 @@ public class Vehicule implements Serializable
 
 Le code généré par Eclipse est convenable. J'ai choisi dans cet exemple l'option "StringBuilder chaining" pour `toString` mais souvent je préfère la méthode `String.format` que je trouve plus maintenable au détriment peut-être d'un peu de performance.
 
-Mais celà reste du code source généré : *tout code source, même généré doit être maitenable et maintenu !*
+Mais celà reste du code source généré : *tout code source, même généré doit être maintenable et maintenu !*
 
 ### Implémentation avec Lombok
 
