@@ -48,12 +48,12 @@ public class Vehicule implements Serializable
 	private LocalDate dateMiseEnCirculation;
 	
 	// champs de relation
-	private List<Marque> marques;
+	private List<Intervention> interventions;
 	
 	// constructeurs
 	public Vehicule()
 	{
-		marques = new ArrayList<>();
+		interventions = new ArrayList<>();
 	}
 	
 	public Vehicule(String numeroMoteur, 
@@ -108,18 +108,17 @@ public class Vehicule implements Serializable
 		this.dateMiseEnCirculation = dateMiseEnCirculation;
 	}
 
-	public List<Marque> getMarques() 
+	public List<Intervention> getInterventions() 
 	{
-		return marques;
+		return interventions;
 	}
 
-	public void setMarques(List<Marque> marques) 
+	public void setInterventions(List<Intervention> interventions) 
 	{
-		this.marques = marques;
+		this.interventions = interventions;
 	}
 	
-	
-	// equals/hashCode : génération par Eclipse sur "numeroChassis" et "numeroMoteur"
+	// equals/hashCode : génération par Eclipse
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -149,8 +148,9 @@ public class Vehicule implements Serializable
 		} else if (!numeroMoteur.equals(other.numeroMoteur))
 			return false;
 		return true;
-	}
-
+	}	
+	
+	
 	// toString : génération via Eclipse avec "StringBuilder chaining".
 	@Override
 	public String toString() {
@@ -163,8 +163,8 @@ public class Vehicule implements Serializable
 				.append(numeroImmatriculation)
 				.append(", dateMiseEnCirculation=")
 				.append(dateMiseEnCirculation)
-				.append(", marques=")
-				.append(marques)
+				.append(", interventions=")
+				.append(interventions)
 				.append("]");
 		return builder.toString();
 	}	
@@ -173,7 +173,7 @@ public class Vehicule implements Serializable
 
 *Constat* : déjà plus de 100 lignes de code pour une classe pourtant "mini-rikiki" à la base.
 
-Le code généré par Eclipse est convenable. J'ai choisi dans cet exemple l'option "StringBuilder chaining" pour `toString` mais souvent le préfère la méthode `String.format` que je trouve plus maintenable.
+Le code généré par Eclipse est convenable. J'ai choisi dans cet exemple l'option "StringBuilder chaining" pour `toString` mais souvent je préfère la méthode `String.format` que je trouve plus maintenable au détriment peut-être d'un peu de performance.
 
 Mais celà reste du code source généré : *tout code source, même généré doit être maitenable et maintenu !*
 
@@ -229,14 +229,14 @@ public class Vehicule implements Serializable
 	LocalDate dateMiseEnCirculation;
 	
 	// champs de relation
-	List<Marque> marques = new ArrayList<>();
+	List<Intervention> interventions = new ArrayList<>();
 }
 ```
 Dans cet exemple, pour montrer la puissance de Lombok, j'ai volontairement omis les modificateurs `private` devant chacun
 des champs. Les champs sont pourtant bien `private` grâce à l'annotation `@FieldDefaults(level=AccessLevel.PRIVATE)`.
 Cela étant, après 4 ans d'usage, je préfère quand même faire figurer les modificateurs d'accès au niveau des champs.
 
->Vous noterez que j'ai reporté l'instanciation de la liste au niveau de la déclaration du champs `marques`. Cette instanciation figurait, dans l'exemple précédent, au niveau du constructeur.
+>Vous noterez que j'ai reporté l'instanciation de la liste au niveau de la déclaration du champs `interventions`. Cette instanciation figurait, dans l'exemple précédent, au niveau du constructeur.
 
 Et voilà comment passer de plus de 100 lignes de code à 16 lignes ! C'est quand même bien plus clair et quel temps gagné ! Mais on ne va pas en rester là. Lombok peut nous apporter plus encore. 
 
@@ -245,7 +245,6 @@ Avant celà, détaillons un peu les annotations utilisées :
 * `@NoArgsConstructor` : génère le constructeur sans argument et `public`
 * `@AllArgsConstructor` : génère le constructeur avec tous arguments et `public` (pour l'exemple)
 * `@Getter` : génère tous les getters sur les champs
-* `@Setter` : génère tous les setters sur les champs
 * `@Setter` : génère tous les setters sur les champs
 * `@EqualsAndHashCode(of=...)` : génère `equals` et `hashCode` (et d'autres méthodes) sur les champs donnés
 * `@ToString(of=...)` : génère `toString` sur les champs donnés
@@ -279,7 +278,7 @@ public class Vehicule implements Serializable
 	
 	// champs de relation
 	@Getter
-	List<Marque> marques = new ArrayList<>();
+	List<Intervention> interventions = new ArrayList<>();
 }
 ```
 
