@@ -238,8 +238,63 @@ Cela étant, après 4 ans d'usage, je préfère quand même faire figurer les mo
 
 >Vous noterez que j'ai reporté l'instanciation de la liste au niveau de la déclaration du champs `marques`. Cette instanciation figurait, dans l'exemple précédent, au niveau du constructeur.
 
-Et voilà comment passer de plus de 100 lignes de code
+Et voilà comment passer de plus de 100 lignes de code à 16 lignes ! C'est quand même bien plus clair et quel temps gagné ! Mais on ne va pas en rester là. Lombok peut nous apporter plus encore. 
 
+Avant celà, détaillons un peu les annotations utilisées :
+* `@FieldDefaults(level=AccessLevel.PRIVATE)` : passe tous les champs en `private`
+* `@NoArgsConstructor` : génère le constructeur sans argument et `public`
+* `@AllArgsConstructor` : génère le constructeur avec tous arguments et `public` (pour l'exemple)
+* `@Getter` : génère tous les getters sur les champs
+* `@Setter` : génère tous les setters sur les champs
+* `@Setter` : génère tous les setters sur les champs
+* `@EqualsAndHashCode(of=...)` : génère `equals` et `hashCode` (et d'autres méthodes) sur les champs donnés
+* `@ToString(of=...)` : génère `toString` sur les champs donnés
+
+C'est quand même bien pratique mais on peut aller encore plus loin. D'ailleurs il y a un petit problème avec le `@AllArgsConstructor` qui permet ainsi de passer une liste qui ira supplanter la liste initiale ... Bof bof. On va
+régler cela bientôt.
+
+## Le Design Pattern "factory method" avec Lombok
+
+Reprenons l'exemple précédent et avec quelques ajustements nous aurons une classe uniquement instanciable au moyen
+d'une "factory method" statique.
+
+```java
+@FieldDefaults(level=AccessLevel.PRIVATE)
+@RequiredArgsConstructor(staticName="of")
+@EqualsAndHashCode(of= {"numeroMoteur","numeroChassis"})
+@ToString(of= {"numeroMoteur","numeroChassis","numeroImmatriculation","dateMiseEnCirculation"})
+public class Vehicule implements Serializable
+{
+	@Getter
+	final String numeroMoteur;
+
+	@Getter
+	final String numeroChassis;
+	
+	@Getter
+	final LocalDate dateMiseEnCirculation;
+
+	@Getter	 @Setter
+	String numeroImmatriculation;
+	
+	// champs de relation
+	@Getter
+	List<Marque> marques = new ArrayList<>();
+}
+```
+
+L'exemple devient un peu plus "sympa". Je vais détailler ses particularités :
+* Le constructeur public par défaut sans argument a disparu. En fait il est bien là, mais il a été passé `private` par 
+  l'annotation `@RequiredArgsConstructor`. Cela empèche donc l'instanciation sans argument : ce n'est plus un Java Bean, mais ce n'est pas forcément grave. Attention toutefois aux specs comme CDI, JSF, JPA, qui réclame pourtant ce constructeur.
+  
+* une méthode statique "factory method" est généré et est nommé `of(...)` au moyen de l'annotation `@RequiredArgsConstructor(staticName="of")`. Ici la convention "of" est utilisée, comme pour les nouvelles API de Java 8, mais j'aurais pu utiliser les 
+vieilles conventions comme `newInstance(...)`. La méthode prendra en argument tous les champs marqués `final` ou les champs annotés avec `@NonNull` de Lombok. Attention à ne pas confondre avec `@NotNull` de Bean Validation ou de Guava.
+
+* equals, hashCode et toString ne changent pas.
+
+* Cette fois-ci un contrôle plus fin sur les getters / setters est mis en place : seule l'immatriculation peut changer.
+
+Ca commence déjà à faire des choses plutôt agréables, mais ce n'est pas fini ! Loin de là ... 
 
 ![To be continued](/images/tobecontinued.png)
 
