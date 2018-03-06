@@ -252,7 +252,7 @@ Avant celà, détaillons un peu les annotations utilisées :
 C'est quand même bien pratique mais on peut aller encore plus loin. D'ailleurs il y a un petit problème avec le `@AllArgsConstructor` qui permet ainsi de passer une liste qui ira supplanter la liste initiale ... Bof bof. On va
 régler cela bientôt.
 
-## Le Design Pattern "factory method" avec Lombok
+## Le Design Pattern "Factory Method" avec Lombok
 
 Reprenons l'exemple précédent et avec quelques ajustements nous aurons une classe uniquement instanciable au moyen
 d'une "factory method" statique.
@@ -309,5 +309,196 @@ Vehicule(numeroMoteur=AABBCC123, numeroChassis=X06123, dateMiseEnCirculation=198
 ```
 Ca commence déjà à faire des choses plutôt agréables, mais ce n'est pas fini ! Loin de là ... 
 
-![To be continued](/images/tobecontinued.png)
+## Le Design Pattern "Builder" avec Lombok
+
+Dans la catégorie des patterns un peu verbeux à mettre en place de manière tradionnelle, impliquant de la duplication
+de code (surtout de définitions d'attributs) ce qui est un comble pour des Design Patterns, voici le Builder mis en oeuvre
+avec Lombok.
+
+Avant d'en percevoir sa facilité de mise en oeuvre voici la classe `Intervention` implémentée avec Lombok et une "factory method" pour son intanciation :
+
+```java
+@FieldDefaults(level=AccessLevel.PRIVATE)
+@AllArgsConstructor(staticName="of")
+@ToString
+@Getter
+public class Intervention implements Serializable, Comparable<Intervention> 
+{
+	final LocalDate dateIntervention;
+	
+	final Long kilometrage;
+	
+	@Setter
+	String libelle;
+	
+	@Setter
+	BigDecimal prix;
+
+	@Override
+	public int compareTo(Intervention o) 
+	{	
+		return this.dateIntervention.compareTo(o.getDateIntervention());
+	}
+}
+```
+
+et voici la classe `Vehicule` ainsi que son Builder sous forme de classe interne que je commenterai par la suite :
+
+```java
+@FieldDefaults(level=AccessLevel.PRIVATE)
+@EqualsAndHashCode(of= {"numeroMoteur","numeroChassis"})
+@ToString(of= {"numeroMoteur","numeroChassis","numeroImmatriculation","dateMiseEnCirculation"})
+@Builder
+public class Vehicule implements Serializable
+{
+	@Getter
+	@NonNull
+	String numeroMoteur;
+
+	@Getter
+	@NonNull
+	String numeroChassis;
+	
+	@Getter
+	@NonNull
+	LocalDate dateMiseEnCirculation;
+
+	@Getter	@Setter
+	String numeroImmatriculation;
+	
+	// champs de relation
+	@Getter
+	@Singular
+	List<Intervention> interventions = new ArrayList<>();
+}
+```
+
+Notez donc l'usage des annotations Lombok suivantes :
+* `@Builder` : génère une classe interne de type "Builder" capable de construire au moyen de "method chaining" une instance de la classe. L'opération terminale sera `build()`.
+* `@AllArgsConstructor(access=AccessLevel.PROTECTED)` : le constructeur avec tous les arguments est nécessaire au Builder, mais pour le rendre inaccessible depuis un autre package, mais toujours depuis le Builder, je le place ici en `protected`.
+* `@NonNull` : indique au Builder tous les champs obligatoires.
+* `@Singular` : indique au Builder que l'on pourra ajouter des occurences à la liste toujours grâce à du method chaining.
+
+Voici un exemple d'usage de ce builder :
+
+```java
+Vehicule.VehiculeBuilder builder = Vehicule.builder();
+
+Vehicule v = builder.numeroChassis("AABBCC123")
+		.numeroMoteur("X06123")
+		.dateMiseEnCirculation(LocalDate.of(1989, 01, 18))
+		.numeroImmatriculation("AA-123-BB")
+		.intervention(Intervention.of(LocalDate.of(2018, 03, 05), 1850000L, "Vidange", new BigDecimal("175.0")))
+		.intervention(Intervention.of(LocalDate.of(2018, 02, 03), 1840000L, "Freins", new BigDecimal("210.0")))
+		.intervention(Intervention.of(LocalDate.of(2018, 01, 15), 1830000L, "Embrayage", new BigDecimal("350.0")))
+		.intervention(Intervention.of(LocalDate.of(2017, 12, 10), 1820000L, "Pneus", new BigDecimal("450.0")))
+		.build();
+
+System.out.println(v);
+v.getInterventions().forEach(System.out::println);
+```
+
+et voici le résultat dans la console
+ 
+```
+Vehicule(numeroMoteur=X06123, numeroChassis=AABBCC123, dateMiseEnCirculation=1989-01-18, numeroImmatriculation=AA-123-BB)
+Intervention(dateIntervention=2018-03-05, kilometrage=1850000, libelle=Vidange, prix=175.0)
+Intervention(dateIntervention=2018-02-03, kilometrage=1840000, libelle=Freins, prix=210.0)
+Intervention(dateIntervention=2018-01-15, kilometrage=1830000, libelle=Embrayage, prix=350.0)
+Intervention(dateIntervention=2017-12-10, kilometrage=1820000, libelle=Pneus, prix=450.0)
+```
+
+## Le Design Pattern "Factory" avec Lombok
+
+Il est parfois, voire souvent, nécessaire d'avoir un peu plus de contrôle pour la création des instances,
+notamment dans le Builder, ce qui va nous permettre de mettre en place une solution fondée sur Lombok pour
+le Design Pattern "Factory".
+
+Avec Lombok, cela reste assez simple, en utilisant toujours la même annotation `@Builder` mais cette fois-ci
+sur des méthodes :
+
+```java
+@UtilityClass
+public class VehiculeFactory 
+{
+	@Builder(builderClassName="SmallBuilder", builderMethodName="smallBuilder")
+	public static Vehicule newVehicule(String numeroChassis, String numeroMoteur)
+	{
+		return Vehicule.builder().numeroChassis(numeroChassis)
+					 .numeroMoteur(numeroMoteur)
+					 .dateMiseEnCirculation(LocalDate.now())
+					 .numeroImmatriculation("XX-XXX-XX")
+					 .build();
+	}
+	
+	@Builder(builderClassName="FullBuilder", builderMethodName="fullBuilder")
+	public static Vehicule newVehicule(String numeroChassis, 
+					   String numeroMoteur, 
+					   LocalDate dateMiseEnCirculation, 
+					   String numeroImmatriculation)
+	{
+		return Vehicule.builder().numeroChassis(numeroChassis)
+					 .numeroMoteur(numeroMoteur)
+					 .dateMiseEnCirculation(dateMiseEnCirculation)
+					 .numeroImmatriculation(numeroImmatriculation)
+					 .build();
+	}
+}
+
+```
+Quelques explications :
+* `@UtilityClass` : parce que cette factory n'a pas vocation à être instanciée, le constructeur devient privé. De plus la classe devient aussi `final`.
+* les méthodes de construction doivent être statiques : rien de choquant.
+* `@Builder(builderClassName="...", builderMethodName="...")` : déclarer une classe interne de type Builder et qui va se générer en fonction des arguments de la méthode. Il y aura autant de builder interne que d'annotations.
+
+Et voici un petit usage :
+
+```
+Vehicule v1 = VehiculeFactory.smallBuilder()
+			  .numeroChassis("AAABB123")
+			  .numeroMoteur("123ABCD")
+			  .build();
+
+Vehicule v2 = VehiculeFactory.fullBuilder()
+		      .numeroChassis("AAABB578")
+		      .numeroMoteur("458AAA")
+		      .dateMiseEnCirculation(LocalDate.now())
+		      .numeroImmatriculation("789-AAA-987")
+		      .build();
+
+System.out.println(v1);
+System.out.println(v2);
+```
+
+Ce qui donne sur la console :
+
+```
+Vehicule(numeroMoteur=123ABCD, numeroChassis=AAABB123, dateMiseEnCirculation=2018-03-06, numeroImmatriculation=XX-XXX-XX)
+Vehicule(numeroMoteur=458AAA, numeroChassis=AAABB578, dateMiseEnCirculation=2018-03-06, numeroImmatriculation=789-AAA-987)
+
+```
+
+
+## Préconisations (enfin ...)
+
+Je les jette en vrac, avec une petite justification quand même :
+
+* Ne pas utiliser `@Data` : comme annoncé en préambule, cela génère EqualsAndHashCode sur tous les champs, pareil pour ToString, ce qui peut occasioner des exécutions cycliques quand on a des relations bi-directionnelles entre les classes.
+* Toujours utiliser `@EqualsAndHashCode` et `@ToString` en précisant les champs avec l'attribut `of=...`
+* Spécifier les `Getter / Setter` sur les champs, et non pas sur la classe (en gros, pas comme dans tous les exemples que je viens de donner)
+* Attention au Builder : intégrer un Builder sera possible, mais JPA, JSF ou CDI attendront que le constructeur sans argument soit présent avec le niveau "protected".
+
+## En guise de conclusion
+
+C'est, vous l'aurez compris, une bibliothèque très puissante dont je ne peux plus me passer, comme annoncé en préambule.
+
+Il y a encore pas mal d'annotations que je n'ai pas couvert ici, mais qui sont tout aussi utiles :
+* @CommonsLog ou @Slf4j ou encore @Log : pour les logs faciles.
+* @Value : pour les objets immuables.
+* @Cleanup : pour la libération de ressources.
+* @Delegate : pour gérer correctement les collections dans les compositions avec un délégué.
+* @Synchronized :  pour de la synchronisation ENFIN gérée simplement et correctement.
+
+**N'hésitez pas à me faire part de vos usages de Lombok en commentaire, que je reporterai ici le cas échéant.**
+
 
