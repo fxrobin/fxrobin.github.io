@@ -17,6 +17,7 @@ avatar: https://fxrobin.github.io/images/java-logo.png
 
 # Includes an icon in the footer for each username you enter
 footer-links:
+  twitter: fxrobin75
   dribbble:
   email: 
   facebook:
@@ -26,7 +27,6 @@ footer-links:
   linkedin: fxrobin
   pinterest:
   rss: # just type anything here for a working RSS icon
-  twitter: 
   stackoverflow: # your stackoverflow profile, e.g. "users/50476/bart-kiers"
   youtube: channel/UCt0Bicvr4OrHmk0M8_50VPQ?
   googleplus: # anything in your profile username that comes after plus.google.com/
