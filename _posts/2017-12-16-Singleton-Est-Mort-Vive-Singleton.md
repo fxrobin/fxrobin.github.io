@@ -2,6 +2,7 @@
 layout: post
 title: Le singleton est mort, vive le singleton ...
 subtitle: Encore un post sur le Singleton ?
+logo: brain-logo.png
 category: CONCEPTION
 tags: [patterns,java,lazy,threadsafe,classloading]
 ---

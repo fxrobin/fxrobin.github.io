@@ -48,7 +48,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "Russo One", $helveticaNeue;
   color: $darkerGray;
   line-height: 1.7;
-  margin: 0.5em 0 0.5px;
+  // margin: 0.5em 0 0.5px;
   padding: 0;
 
   @include mobile {
@@ -131,6 +131,7 @@ img {
 
 .date {
   font-style: italic;
+  text-align:right;
   color: $gray;
 }
 
@@ -303,8 +304,8 @@ nav {
   }
 
   .read-more {
-    text-transform: uppercase;
-    font-size: 15px;
+    font-size: 1em;
+    text-align : left;
   }
 }
 
@@ -346,6 +347,10 @@ aside
    }
 }
 
+.logo
+{
+ float : left;
+}
 
 
 
