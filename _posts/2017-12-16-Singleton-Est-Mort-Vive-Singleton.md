@@ -1,11 +1,10 @@
 ---
 layout: post
 title: Le singleton est mort, vive le singleton ...
+subtitle: Encore un post sur le Singleton ?
 category: CONCEPTION
 tags: [patterns,java,lazy,threadsafe,classloading]
 ---
-
-## Encore un post sur le Singleton ?
 
 L'objectif de ce billet est de présenter une implémentation simple en Java du pattern Singleton. Je ne traiterai donc pas de l'utilité ni des recommandations d'usage liées à celui-ci mais bien de mise en oeuvre (codage pour les intimes) en Java Standard Edition (JSE). 
 

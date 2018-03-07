@@ -1,11 +1,10 @@
 ---
 layout: post
 title: Lombok, Oui ! Mais ...
+subtitle: Lombok, après 4 ans d'usage ...
 category: API
 tags: [lombok,java,builder,patterns]
 ---
-
-## Lombok, après 4 ans d'usage ...
 
 Dans ce billet, je vais présenter la bibliothèque Lombok dont je ne peux plus me passer pour mes développement Java.
 Cela fait maintenant plus de 4 ans que j'utilise cette bibliothèque et tout n'est pas rose. Ce sera donc l'occasion de partager aussi certaines recommandations.
