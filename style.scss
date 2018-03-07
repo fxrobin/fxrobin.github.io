@@ -173,12 +173,13 @@ img {
 
 .masthead {
   
-  border-bottom: 1px solid $lightGray;
   background-image : url('/images/scanline.jpg');
   background-size : cover ;
   @include mobile {
     text-align: center;
   }
+  
+  box-shadow: 0px 5px 5px black;
 }
 
 
