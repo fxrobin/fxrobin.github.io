@@ -7,8 +7,7 @@ category: API
 tags: [lombok,java,builder,patterns]
 ---
 
-Dans ce billet, je vais présenter la bibliothèque Lombok dont je ne peux plus me passer pour mes développements Java.
-Cela fait maintenant plus de 4 ans que je l'utilise et tout n'est pas rose. Ce sera donc l'occasion de partager aussi certaines recommandations.
+Dans ce billet, je vais présenter la bibliothèque Lombok dont je ne peux plus me passer pour mes développements Java. Cela fait maintenant plus de 4 ans que je l'utilise et tout n'est pas rose. Ce sera donc l'occasion de partager aussi certaines recommandations.
 
 J'en lâche une : **n'utilisez pas** `@Data` et je vais vous expliquer pourquoi. Un peu de patience.
 
