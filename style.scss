@@ -133,6 +133,12 @@ img {
   font-style: italic;
   text-align:right;
   color: $gray;
+  
+   @include mobile {
+    text-align: center;
+  }
+  
+  
 }
 
 // Specify the color of the selection
