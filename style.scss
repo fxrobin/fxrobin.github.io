@@ -288,6 +288,15 @@ nav {
     font-size: 15px;
     font-style: italic;
   }
+  
+  h1
+  {
+    color : #880000;
+  }
+  
+  h2::before {
+    content: '// ';
+  }
 
   .comments {
     margin-top: 10px;
@@ -316,6 +325,26 @@ footer {
   text-align: center;
 }
 
+aside
+{
+  border : solid #3333AA 2px;
+  border-radius : 1em;
+  float : right;
+  margin-left : 1em;
+  box-shadow: 5px 5px 5px black;
+  background-color : #F2F2FF;
+  
+  h3 { text-align : center}
+  
+  li {
+    padding-right : 1em; 
+  }
+  
+   @include mobile {
+      float : none;
+      margin-left : 0em;
+   }
+}
 
 
 

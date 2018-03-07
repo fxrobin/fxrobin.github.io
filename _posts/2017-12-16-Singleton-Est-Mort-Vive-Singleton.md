@@ -8,6 +8,9 @@ tags: [patterns,java,lazy,threadsafe,classloading]
 
 L'objectif de ce billet est de présenter une implémentation simple en Java du pattern Singleton. Je ne traiterai donc pas de l'utilité ni des recommandations d'usage liées à celui-ci mais bien de mise en oeuvre (codage pour les intimes) en Java Standard Edition (JSE). 
 
+
+## Le constat
+
 Il est vraiment frappant en consultant les sites spécialisés en développement Java de constater à quel point le **Design Pattern Singleton** est dans le top 3 des patterns les plus abordés.
 
 De la même façon, il est encore plus frappant de voir à quel point toutes ces ressources en ligne, toutes ces explications sur l'unicité en mémoire, le double-check-locking prennent une part importante. Même sur des sites pourtant reconnus comme DZONE, on y trouve des articles erronés, car en effet, **rien de plus simple que d'écrire un bon singleton Thread-Safe et Lazy en Java : mais je le garde pour la fin de ce billet ...**

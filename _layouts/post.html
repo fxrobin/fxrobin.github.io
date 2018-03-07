@@ -3,16 +3,22 @@ layout: default
 ---
 
 <article class="post">
+  
+  
   <h1 style="text-align:center">{{ page.title }}</h1>
   <h2>{{ page.subtitle }}</h2>
-
+  
+  <aside>
+    <h3>Sommaire</h3>
+  	{% include toc.html html=content %}
+  </aside>
+  
   <div class="entry">
     {{ content }}
   </div>
-
+  
   <div class="date">
     rédigé le {{page.date | date: "%d/%m/%Y" }}
   </div>
-
   {% include disqus.html %}
 </article>

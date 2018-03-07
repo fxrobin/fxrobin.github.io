@@ -253,7 +253,7 @@ Avant celà, détaillons un peu les annotations utilisées :
 C'est quand même bien pratique mais on peut aller encore plus loin. D'ailleurs il y a un petit problème avec le `@AllArgsConstructor` qui permet ainsi de passer une liste qui ira supplanter la liste initiale ... Bof bof. On va
 régler cela bientôt.
 
-## Le Design Pattern "Factory Method" avec Lombok
+## Le Pattern "Factory Method" avec Lombok
 
 Reprenons l'exemple précédent et avec quelques ajustements nous aurons une classe uniquement instanciable au moyen
 d'une "factory method" statique.
@@ -310,7 +310,7 @@ Vehicule(numeroMoteur=AABBCC123, numeroChassis=X06123, dateMiseEnCirculation=198
 ```
 Ca commence déjà à faire des choses plutôt agréables, mais ce n'est pas fini ! Loin de là ... 
 
-## Le Design Pattern "Builder" avec Lombok
+## Le Pattern "Builder" avec Lombok
 
 Dans la catégorie des patterns un peu verbeux à mettre en place de manière tradionnelle, impliquant de la duplication
 de code (surtout de définitions d'attributs) ce qui est un comble pour des Design Patterns, voici le Builder mis en oeuvre
@@ -409,7 +409,7 @@ Intervention(dateIntervention=2018-01-15, kilometrage=1830000, libelle=Embrayage
 Intervention(dateIntervention=2017-12-10, kilometrage=1820000, libelle=Pneus, prix=450.0)
 ```
 
-## Le Design Pattern "Factory" avec Lombok
+## Le Pattern "Factory" avec Lombok
 
 Il est parfois, voire souvent, nécessaire d'avoir un peu plus de contrôle pour la création des instances,
 notamment dans le Builder, ce qui va nous permettre de mettre en place une solution fondée sur Lombok pour
