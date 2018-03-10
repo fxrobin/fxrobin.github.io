@@ -21,6 +21,8 @@ pre.highlight {
 code {
   font-family: 'Share Tech Mono', monospace;
   color : #00ff00;
+  -moz-tab-size: 3em;
+  tab-size: 3em;
 }
 
 .highlight .c { color: #586E75 } /* Comment */
