@@ -446,6 +446,15 @@ aside A, aside A:visited, aside A:hover
   }
 }
 
+.logo-in-page
+{
+ float : left;
+	 @include mobile {
+	    width : 25%;
+	    float : none;
+  }
+}
+
 
 .share-page
 {
