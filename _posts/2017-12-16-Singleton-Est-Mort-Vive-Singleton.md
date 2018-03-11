@@ -67,7 +67,7 @@ public class LazySingleton
     {
        return String.format("Je suis le LazySingleton : %s", super.toString());
     }
-} 32
+}
 
 ```
 
