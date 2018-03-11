@@ -131,8 +131,9 @@ img {
 }
 
 .date {
+  clear:both;
   font-style: italic;
-  text-align:right;
+  text-align: left;
   color: $gray;
   
    @include mobile {
@@ -278,6 +279,31 @@ nav {
 // .main
 //
 
+
+
+.read-more  {
+    font-size: 1em;
+    text-align : right;
+    border-bottom : solid #666666 1px;
+    margin-bottom : 1em;
+    color: $blue;
+    
+    A, A:visited, A:hover { color : $blue; }
+}
+
+
+.front-post .entry A
+{
+  color : $gray;
+}
+
+.front-post P
+{
+  font-size : 1.2em;
+}
+
+
+
 .posts > .post {
   padding-bottom: 2em;
   border-bottom: 1px solid $lightGray;
@@ -298,6 +324,11 @@ nav {
     font-style: italic;
   }
   
+  h1, h2
+  {
+  	text-shadow: 1px 1px 2px #777777;
+  }
+  
   h1:after
   {
   	font-size : 1.5em;
@@ -309,7 +340,7 @@ nav {
   
   h2 {
   border-bottom : solid #DDDDDD 1px;
-  text-shadow: 1px 1px 1px #555555;
+  
   }
   
   
@@ -327,10 +358,7 @@ nav {
     margin-top: 10px;
   }
 
-  .read-more {
-    font-size: 1em;
-    text-align : left;
-  }
+  
 }
 
 .entry > P > IMG
@@ -356,28 +384,40 @@ aside
   border-radius : 1em;
   float : right;
   margin-left : 1em;
+  margin-bottom : 1em;
   box-shadow: 2px 2px 2px #555555;
   background-color : #F2F2FF;
   
   
   h3 { text-align : center; text-shadow: 1px 1px 1px #555555;}
   
+  ul
+  {
+   list-style-type: square
+  }
+  
   li {
     padding-right : 1em; 
+    color : darkblue;
   }
   
    @include mobile {
       float : none;
       margin-left : 0em;
+      margin-bottom : 0.5em;
    }
-   
+  
+}
 
-   
+aside A, aside A:visited, aside A:hover 
+{
+  color : darkblue;
 }
 
 .logo
 {
- float : left;
+ float : right;
+ margin-right : 1em;
 	 @include mobile {
 	    width : 25%;
 	    float : none;

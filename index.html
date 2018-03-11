@@ -5,14 +5,15 @@ layout: default
 <div class="posts">
   {% for post in site.posts %}
     
-    <article class="post">
+    <article class="front-post">
       <img src="{{ site.baseurl }}/images/logos/{{ post.logo }}" class="logo"/>
-      <div class="date" style="text-decoration : underline; float:right">Publié le {{post.date | date: "%d/%m/%Y" }}</div>
       <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
       <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.subtitle }}</a></h2>
+      
+      <div class="date" style="text-decoration : underline;">Le {{post.date | date: "%d/%m/%Y" }}</div>
 
-      <div class="entry" style="clear : both ; padding : 1em;">      
-        {{ post.excerpt }}
+      <div class="entry" style="clear : both ;">      
+        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.excerpt }}</a>
       </div>
       <div class="read-more">
       <a href="{{ site.baseurl }}{{ post.url }}" >Lire plus ...</a>

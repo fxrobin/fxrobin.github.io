@@ -25,7 +25,7 @@ Enfin pour des raisons de maintenabilité, il vaut mieux aussi sortir les défin
 Quant il s'agit de construire dynamiquement des requêtes, je conseille plutôt d'utiliser Criteria que des concaténations 
 de chaines de caractères contenant du JPQL.
 
-## Où placer nativement une NamedQuery 
+## Où placer nativement une NamedQuery ?
 
 JPA offre nativement deux "endroits" pour déclarer des `NamedQuery`
 * soit sur une Entity, avec l'usage d'une ou plusieurs annotations `@NamedQuery`
