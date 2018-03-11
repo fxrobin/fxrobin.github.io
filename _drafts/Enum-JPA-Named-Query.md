@@ -29,7 +29,7 @@ de chaines de caractères contenant du JPQL.
 
 JPA offre nativement deux "endroits" pour déclarer des `NamedQuery`
 * soit sur une Entity, avec l'usage d'une ou plusieurs annotations `@NamedQuery`
-* soit dans le fichier persistence.xml au moyen du tag `<mapping-file>orm.xml</mapping-file>` et donc d'un fichier orm.xml
+* soit dans le fichier `persistence.xml` au moyen du tag `<mapping-file>orm.xml</mapping-file>` et donc d'un fichier orm.xml
 
 Mais cela n'est pas très agréable.
 
