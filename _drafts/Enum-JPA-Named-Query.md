@@ -347,12 +347,9 @@ Souvenez-vous, c'était dans programme principal :
 QueryRegistrator.build(em).register(VideoGameQuery.values());
 ```
 
-## Au résultat
-
-
-
-## Avantages et conclusion
+## Avantages, conclusions et reste à faire ...
 
 parce que c'est mieux et qu'on a des constantes.
-
+* Autocomplétion
+* Manque QueryHints et LockMode
 
