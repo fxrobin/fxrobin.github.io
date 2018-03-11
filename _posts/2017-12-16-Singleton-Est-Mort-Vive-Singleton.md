@@ -76,7 +76,7 @@ Voici un programme qui en obtient une instance :
 ```java
 public class MainProg 
 {
-   
+
     public static void main(String[] args) 
     {
         System.out.println("Démarrage du programme");
@@ -86,7 +86,6 @@ public class MainProg
         System.out.println("Et maintenant je l'affiche ...");
         System.out.println(singleton);
     }
-
 }
 
 ```
@@ -129,7 +128,6 @@ public enum LazySingletonEnum
     {
         return String.format("Je suis le LazySingleton : %s", super.toString());
     }
-
 }
 
 ```
@@ -169,8 +167,8 @@ Ceci "casse" le principe du Singleton qui doit être unique.
 Pour résoudre ce problème, il suffit de définir `readResolve()` dans le singleton lui-même.
 
 ```java
-public class Singleton implements Serializable {
-
+public class Singleton implements Serializable 
+{
     private static Singleton singleton = new Singleton( );
 
     private Singleton() 
