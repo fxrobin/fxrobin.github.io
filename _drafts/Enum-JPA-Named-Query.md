@@ -33,7 +33,7 @@ JPA offre nativement deux "endroits" pour déclarer des `NamedQuery`
 
 Mais cela n'est pas très agréable.
 
-Dans le premier cas, il faut "choisir" la classe qui représente une entité et lui faire porter la requête ... Ce n'est pas très logique. Une entité est sensé représenter une instance d'un tuple et pas de travailler sur plusieurs tuples. De plus l'identifiant de la NamedQuery est spécifié sous forme
+Dans le premier cas, il faut "choisir" la classe qui représente une entité et lui faire porter la requête ... Ce n'est pas très logique. Une entité est sensée représenter une instance d'un tuple et pas de travailler sur plusieurs tuples. De plus l'identifiant de la NamedQuery est spécifié sous forme
 textuelle, ce qui n'est pas très pratique pour l'autocomplétion et vérifier que tout fonctionne avant un lancement RUNTIME. On peut régler un peu ce problème avec des constantes String classique éventuellement.
 
 Dans le second cas, on ne pollue pas la classe qui représente l'entité. La déclaration se fait donc "à l'ancienne" dans un fichier XML, ce qui est 
