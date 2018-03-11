@@ -50,6 +50,7 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.7;
   // margin: 0.5em 0 0.5px;
   padding: 0;
+  
 
   @include mobile {
     line-height: 1.4;
@@ -78,7 +79,7 @@ h4 {
 }
 
 p {
-  margin: 15px 0;
+  margin: 1em 1em;
   text-align : justify;
 }
 
@@ -297,9 +298,26 @@ nav {
     font-style: italic;
   }
   
+  h1:after
+  {
+  	font-size : 1.5em;
+    content: "\25A0";
+    @include mobile {
+      content: '';
+    }
+  }
+  
+  h2 {
+  border-bottom : solid #DDDDDD 1px;
+  text-shadow: 1px 1px 1px #555555;
+  }
+  
+  
     
   h2::before {
-    content: '// ';
+    // color : #33FF33;
+    font-size : 1.5em;
+    content: "> ";
     @include mobile {
       content: '';
     }
@@ -338,10 +356,11 @@ aside
   border-radius : 1em;
   float : right;
   margin-left : 1em;
-  box-shadow: 5px 5px 5px black;
+  box-shadow: 2px 2px 2px #555555;
   background-color : #F2F2FF;
   
-  h3 { text-align : center}
+  
+  h3 { text-align : center; text-shadow: 1px 1px 1px #555555;}
   
   li {
     padding-right : 1em; 
@@ -351,6 +370,9 @@ aside
       float : none;
       margin-left : 0em;
    }
+   
+
+   
 }
 
 .logo
@@ -363,16 +385,32 @@ aside
   }
 }
 
+
 .share-page
 {
+   box-shadow: 5px 5px 5px black;
    text-align : center;
+   text-shadow: 1px 1px 1px #555555;
    margin : 1em;
    padding : 0.5em;
    border-radius : 1em;
-   background-color : darkblue;
-   color : white ;
-   a, a:visited, a:hover { color: white }
+   background-color : #000066;
+   color : yellow ;
+
 }
+
+ .share-page  a, .share-page a:visited, .share-page a:hover 
+   { 
+   color: white !important; 
+   text-shadow: 1px 1px 1px white !important;
+   }
+ 
+ .share-page a:before
+ {
+   content : '>';
+   color : yellow;
+ }  
+
 
 
 

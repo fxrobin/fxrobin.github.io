@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Où définir au mieux une NamedQuery JPA
-subtitle: Parce que le mécaniseme par défaut n'est pas terrible ...
+title: Où définir au mieux une NamedQuery JPA ?
+subtitle: Parce que le mécanisme par défaut n'est pas terrible ...
 logo: lombok-logo.png
 category: JPA, JAVA_EE
 tags: [java_ee, jpa]
@@ -11,9 +11,9 @@ Dans court billet, je vais vous passer succinctement en revue les deux façons
 natives qui sont offertes pour déclarer des `NamedQuery` JPA. On verra alors qu'elles
 ont des défauts et je vous proposerai alors une 3ème solution qui me parait plus satisfaisante, fondée sur une `enum`.
 
-## Rappel sur les NamedQuery
+## Rappels sur les NamedQuery
 
-Une `NamedQuery` est tout simplement une requête JPQL associé avec un nom. 
+Une `NamedQuery` est tout simplement une requête JPQL associée avec un nom. 
 Pour mémoire, une requête JPQL permet d'intéragir avec le modèle persistant d'un point de vue "Objet" : on ne travaille pas directement
 sur les tables et les champs de la base de données.
 
@@ -50,7 +50,7 @@ L'idée générale est de pouvoir obtenir une NamedQuery au moyen d'une définit
 
 De cette manière, on bénéficera d'emblée de l'autocomplétion.
 De plus on va faire porter à l'enum la génération automatique de l'identificateur de la NamedQuery : comme ça plus d'erreur possible !
-De toutes façon cet identificateur ne servira qu'en interne de la solution
+De toutes façons cet identificateur ne servira qu'en interne de la solution.
 
 Enfin, au démarrage de l'application, un Singleton (quelque soit son implémentation) se charger d'aller référencer les requête JPQL avec
 leur identificateur en tant que NamedQuery dans l'EntityManagerFactory, obtenu au moyen de l'EntityManager courant. 
@@ -106,7 +106,7 @@ FacadeVideoGame.findByNameLike(em, "Rick%").forEach(System.out::println);
 em.close();
 ```
 
-Pour joindre l'utile à l'agréable j'ai pris ici comme entité persistante la réprésentation d'un jeu vidéo.
+Pour joindre l'utile à l'agréable j'ai pris ici comme entité persistante la représentation d'un jeu vidéo.
 J'utilise aussi Lombok pour simplifier l'écriture des classes.
 
 ```java
@@ -178,7 +178,7 @@ public class DataPopulator
 
 
 
-## Le référenceur programmatique de JPQL
+## Le référenceur programmatique de NamedQuery
 
 Je suis d'accord, le titre de ce paragraphe est un peu pompeux, mais je n'ai pas trouvé mieux
 pour le moment. Si vous avez une meilleure idée, faites m'en part en commentaires.
