@@ -32,7 +32,7 @@ Prenez par exemple les classes métiers suivantes :
 
 ### Implémentation sans Lombok
 
-Pour montrer ce qu'il faudrait faire en Java "sans Lombok", je vais simplement coder la classe `Vehicule` afin qu'elle respecte les convention Java Beans.
+Pour montrer ce qu'il faudrait faire en Java "sans Lombok", je vais simplement coder la classe `Vehicule` afin qu'elle respecte les conventions Java Beans.
 
 Pour l'exemple, l'unicité sera portée par les champs "numeroMoteur, numeroChassis".
 Dans la réalité, l'unicité d'un véhicule est bien plus complexe et dans tous les cas
