@@ -283,12 +283,20 @@ nav {
 
 .read-more  {
     font-size: 1em;
-    text-align : right;
-    border-bottom : solid #666666 1px;
+    text-align : left;
     margin-bottom : 1em;
     color: $blue;
+    margin : 1em;
     
-    A, A:visited, A:hover { color : $blue; }
+    A, A:visited, A:hover { 
+    
+    color : white;
+    background-color : $blue;
+    padding : 0.5em; 
+    border-radius : 1em;
+    
+    
+    }
 }
 
 
@@ -300,6 +308,19 @@ nav {
 .front-post P
 {
   font-size : 1.2em;
+}
+
+.front-post 
+{
+  border-bottom : solid #AAAAAA 2px;
+  padding-bottom : 1em;
+  margin-bottom : 1em;
+}
+
+.front-post H2 A
+{
+  font-family : "Oswald";
+  color : black;
 }
 
 
