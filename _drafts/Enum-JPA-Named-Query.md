@@ -151,30 +151,56 @@ public enum GameGenre
 
 Afin de diposer de données de test, voici le "DataPopulator" utilisé dans le programme principal :
 
+
 ```java
 public class DataPopulator
 {
 	static void populate(EntityManager em)
 	{
-		Map <String, GameGenre> initialData = new HashMap<>();
-		
 		// Best ATARI-ST Games ever !
-		initialData.put("Xenon", GameGenre.SHOOT_THEM_UP);
-		initialData.put("Xenon 2", GameGenre.SHOOT_THEM_UP);
-		initialData.put("Rick Dangerous", GameGenre.PLATFORM);
-		initialData.put("Rick Dangerous 2", GameGenre.PLATFORM);
-		initialData.put("Stunt Car Racer", GameGenre.RACING);	
-		
+		List<VideoGame> data = ListPopulator.start()
+				.add("Xenon", GameGenre.SHOOT_THEM_UP)
+				.add("Xenon 2", GameGenre.SHOOT_THEM_UP)
+				.add("Rick Dangerous", GameGenre.PLATFORM)
+				.add("Rick Dangerous 2", GameGenre.PLATFORM)
+				.add("Stunt Car Racer", GameGenre.RACING)
+				.build();
+
 		// on les persiste en base via l'entity manager.
 		em.getTransaction().begin();
-		initialData.entrySet().stream()
-				      .map(e -> new VideoGame(e.getKey(), e.getValue()))
-				      .forEach(em::persist);;
+		data.forEach(em::persist);
 		em.getTransaction().commit();
 	}
+
 }
 ```
 
+Cette classe utilise ListPopulator que voici :
+
+```java
+public class ListPopulator
+{
+    private List <VideoGame> data = new LinkedList<>();
+	
+	private ListPopulator() {}
+	
+	public static ListPopulator start()
+	{
+		return new ListPopulator();
+	}
+	
+	public ListPopulator add(String name, GameGenre gameGenre)
+	{
+		data.add(new VideoGame(name, gameGenre));
+		return this;
+	}
+	
+	public List<VideoGame> build()
+	{
+		return new ArrayList<>(data);
+	}
+}
+```
 
 
 
