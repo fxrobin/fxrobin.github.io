@@ -82,7 +82,7 @@ FacadeVideoGame.findByNameLike(em, "Rick%").forEach(System.out::println);
 
 ## Domaine
 
-Pour joindre l'utile à l'agréable j'ai pris ici comme entité persistante la représentation d'un jeu vidéo et d'un genre de jeu.
+Pour joindre l'utile à l'agréable, j'ai pris ici comme entité persistante la représentation d'un jeu vidéo et d'un genre de jeu.
 
 ![Diag Classes](/images/enum-jpa-named-query/dcla.png)
 
@@ -162,7 +162,10 @@ public final class FacadeVideoGame
 
 ## Données de test
 
-Afin de diposer de données de test, voici l'ensemble des classes utilisées :
+Afin de disposer de données de test, voici l'ensemble des classes utilisées pour peupler la base de données.
+
+> J'aurais pu utiliser un script SQL d'initialisation, mais je n'ai pas eu envie. 
+L'envie est parfois très importante dans la réalisation d'une solution :-)
 
 ![Diag Classes](/images/enum-jpa-named-query/diag-data.png)
 
@@ -247,6 +250,68 @@ public class ListPopulator
 }
 ```
 
+Enfin dans le cadre de ce test, j'utilise une base de données embarquée H2.
+
+Voici donc mon `pom.xml` :
+
+```xml
+<properties>
+	<maven.compiler.source>1.8</maven.compiler.source>
+	<maven.compiler.target>1.8</maven.compiler.target>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+</properties>
+
+
+<dependencies>
+	<dependency>
+		<groupId>javax.persistence</groupId>
+		<artifactId>javax.persistence-api</artifactId>
+		<version>2.2</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.eclipse.persistence</groupId>
+		<artifactId>org.eclipse.persistence.jpa</artifactId>
+		<version>2.7.1</version>
+		<scope>runtime</scope>
+	</dependency>
+
+	<dependency>
+		<groupId>com.h2database</groupId>
+		<artifactId>h2</artifactId>
+		<version>1.4.196</version>
+		<scope>runtime</scope>
+	</dependency>
+
+	<dependency>
+		<groupId>org.projectlombok</groupId>
+		<artifactId>lombok</artifactId>
+		<version>1.16.20</version>
+		<scope>provided</scope>
+	</dependency>
+</dependencies>
+```
+
+et voici la déclaration du `persistence-unit` du fichier `persistence.xml` :
+
+```xml
+<persistence-unit name="named-queries-demo" transaction-type="RESOURCE_LOCAL">
+ <exclude-unlisted-classes>false</exclude-unlisted-classes>
+	<properties>
+		<property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+		<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test"/>
+		<property name="javax.persistence.jdbc.user" value="sa"/>
+		<property name="javax.persistence.schema-generation.database.action" value="create"/>
+		<property name="eclipselink.logging.level" value="FINE"/>
+		<property name="eclipselink.logging.thread" value="false"/>
+		<property name="eclipselink.logging.timestamp" value="false"/>
+		<property name="eclipselink.logging.exceptions" value="false"/>
+	</properties>
+ </persistence-unit>
+</persistence>
+```
+
+> Oui, j'aurais pu aussi le faire avec des tests unitaires JUnit, mais je n'avais toujours pas envie :-)
 
 
 ## Le référenceur programmatique de NamedQuery
@@ -434,25 +499,26 @@ On a gagné :
 * en ré-utilisation,
 * en maintenance (les NamedQuery sont centralisées).
 
-Il restera pour améliorer le système à prendre en compte les `QueryHints` et `LockMode` : cela pourra se coder au niveau de l'enum.
+Il restera, pour améliorer le système, à prendre en compte les `QueryHints` et `LockMode` : cela pourra être codé au niveau de l'enum.
 
 On pourra aussi faire porter à l'enum la classe métier "de travail" et créer une classe
 utilitaire pour créer automatiquememt des "RegistrableQuery" sans avoir à le faire
-nous même. J'ai préféré cette approche pour ne pas chabouler toutes les pratiques d'instanciation de NamedQuery déjà éventuellement en place.
+nous même. J'ai préféré cette approche pour ne pas chambouler toutes les pratiques d'instanciation de NamedQuery déjà éventuellement en place.
 
 Enfin, le référencement pourra se faire de manière automatique au démarrage au moyen
 d'un singleton dédié. Par exemple :
 * un EJB Singleton annoté avec `@Singleton` et `@Startup` 
 * ou un Bean CDI annoté avec `@ApplicationScoped` avec un observateur sur `ApplicationScoped.class` : https://rmannibucau.wordpress.com/2015/03/10/cdi-and-startup/
 
-**Enfin cela me permettra d'embrayer sur un nouveau post relatif à Spring Data versus CDI DeltaSpike Data Module, pour voir que finalement on peut presque se passer de la définition de `@NamedQuery` à l'ancienne avec ces deux bibliothèques ! Nom de Zeus !**
+**Enfin cela me permettra d'embrayer sur un nouveau post relatif à "Spring Data JPA" versus "CDI DeltaSpike Data Module", pour voir que finalement on peut presque se passer de la définition de `@NamedQuery` à l'ancienne avec ces deux bibliothèques ! Nom de Zeus !**
 
 Comme on dit à *Hill Valley* ...
 
 ![To Be Continued](/images/tobecontinued.png)
 
 
-*N'hesitez pas à formuler des remarques ou poser des questions dans lec ommentaires afin
-d'améliorer la clareté de ce qui est présenter, voire d'améliorer et/ou simplifier l'ensemble.*
+*N'hesitez pas à formuler des remarques ou poser des questions dans les commentaires afin d'améliorer la clareté de ce qui est présenté, voire d'améliorer et/ou de simplifier l'ensemble.* 
+
+**Vous pouvez retrouver l'intégralité du code source de ce projet sur mon compte [GitHub](https://github.com/fxrobin/articles).**
 
 
