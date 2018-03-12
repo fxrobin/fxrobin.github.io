@@ -29,7 +29,7 @@ title: Blog
             {% endif %}
         </span>
 
-        {{ post.content | split:"<!-- more -->" | first % }}
+        {{ post.content | split:"<!-- more -->" | first  }}
 
         <div class="codinfox-post-more">
             <a href="{{ post.url }}#disqus_thread">Comment</a>&nbsp;

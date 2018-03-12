@@ -6,10 +6,11 @@ layout: default
  
   <img src="{{ site.baseurl }}/images/logos/{{  page.logo }}" class="logo-in-page"/>
   <h1 style="text-align:center">{{ page.title }}</h1>
+  <div class="accroche">{{ page.subtitle }}</div>
   <div class="date">
     Publié le {{page.date | date: "%d/%m/%Y" }}
   </div>
-  <h2>{{ page.subtitle }}</h2>
+  
   <aside>
     <h3>Sommaire</h3>
   	{% include toc.html html=content %}
@@ -23,15 +24,10 @@ layout: default
 	    <a href="https://plus.google.com/share?url={{ site.url }}{{ page.url }}" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
 	    </div>
   </aside>
-   
-
-
-  
   
   <div class="entry">
     {{ content }}
-  </div>
-  
+  </div> 
  
   {% include disqus.html %}
 </article>

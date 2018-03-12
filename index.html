@@ -10,7 +10,7 @@ layout: default
       <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
       <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.subtitle }}</a></h2>
       
-      <div class="date" style="text-decoration : underline;">Le {{post.date | date: "%d/%m/%Y" }}</div>
+      <div class="front-date">Le {{post.date | date: "%d/%m/%Y" }}</div>
 
       <div class="entry" style="clear : both ;">      
         <a href="{{ site.baseurl }}{{ post.url }}">{{ post.excerpt }}</a>
@@ -19,6 +19,6 @@ layout: default
       <a href="{{ site.baseurl }}{{ post.url }}" >Lire plus ...</a>
       </div>
     </article>
-    <div style="clear : both" />
+    <div style="clear : both"></div>
   {% endfor %}
 </div>

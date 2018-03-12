@@ -45,9 +45,8 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Russo One", $helveticaNeue;
+  font-family: "Oswald", $helveticaNeue;
   color: $darkerGray;
-  line-height: 1.7;
   // margin: 0.5em 0 0.5px;
   padding: 0;
   
@@ -59,22 +58,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 30px;
+  font-family: "Russo One", $helveticaNeue;
+  font-size: 2em;
   a {
     color: inherit;
   }
 }
 
 h2 {
-  font-size: 24px;
+  font-size: 1.5em;;
 }
 
 h3 {
-  font-size: 20px;
+  font-size: 1.25em;
 }
 
 h4 {
-  font-size: 18px;
+  font-size: 1.10em;
   color: $gray;
 }
 
@@ -133,14 +133,15 @@ img {
 .date {
   clear:both;
   font-style: italic;
+  text-align: center;
+  color: $gray; 
+}
+
+.front-date {
+  clear:both;
+  font-style: italic;
   text-align: left;
-  color: $gray;
-  
-   @include mobile {
-    text-align: center;
-  }
-  
-  
+  color: $gray; 
 }
 
 // Specify the color of the selection
@@ -222,6 +223,7 @@ img {
 
 .site-name {
   margin-top : 10px;
+  margin-bottom : 0.5em;
   color: #00FF00;
   cursor: pointer;
   font-family: "Press Start 2P", $helveticaNeue;
@@ -302,7 +304,7 @@ nav {
 
 .front-post .entry A
 {
-  color : $gray;
+  color : $darkGray;
 }
 
 .front-post P
@@ -336,6 +338,16 @@ nav {
 }
 
 .post {
+
+  ul, ol { margin-left : 1em; }
+
+  .accroche 
+  { 
+     color : $darkGray ; 
+     text-align : center; 
+     font-size : 1.5em; 
+  }
+  
   blockquote {
     margin: 1.8em .8em;
     border-left: 2px solid $gray;
@@ -345,31 +357,35 @@ nav {
     font-style: italic;
   }
   
-  h1, h2
+  h1
   {
-  	text-shadow: 1px 1px 2px #777777;
+  	text-shadow: 1px 1px 2px #999999;  	
   }
   
-  h1:after
-  {
-  	font-size : 1.5em;
-    content: "\25A0";
-    @include mobile {
-      content: '';
-    }
-  }
   
-  h2 {
-  border-bottom : solid #DDDDDD 1px;
+  /* h2 {
+  vertical-align : middle;
+  border-radius : 0.5em 0em 0.5em 0em;
+  padding : 0.05em;
+  text-shadow: 1px 1px 2px #555555;  	
+  background: linear-gradient(to right, #555555 , #AAAAFF);
+  	color : white;
+  	box-shadow: 0px 5px 5px black;
+  } */
   
+  h2 
+  { 
+  	border-bottom : solid #DDDDDD 2px; 
+  	font-family : "Russo One";
   }
   
   
     
   h2::before {
     // color : #33FF33;
+    // padding-left : 0.5em;
     font-size : 1.5em;
-    content: "> ";
+    content: " > ";
     @include mobile {
       content: '';
     }
@@ -381,6 +397,19 @@ nav {
 
   
 }
+
+.entry > P:first-child
+{
+  font-size : 1.2em;
+  font-family : "Monda";
+  color : $darkGray;
+  background-color : $lightGray;
+  border-radius : 0.5em;
+  padding : 0.5em;
+  margin-right : 1em;
+  box-shadow: 0px 2px 5px #DDDDDD;
+}
+
 
 .entry > P > IMG
 {
@@ -404,13 +433,13 @@ aside
   border : solid #3333AA 2px;
   border-radius : 1em;
   float : right;
+  margin-top : 1em;
   margin-left : 1em;
   margin-bottom : 1em;
   box-shadow: 2px 2px 2px #555555;
   background-color : #F2F2FF;
   
-  
-  h3 { text-align : center; text-shadow: 1px 1px 1px #555555;}
+  h3 { font-family : "Russo One"; text-align : center; text-shadow: 1px 1px 1px #555555;}
   
   ul
   {
@@ -448,10 +477,13 @@ aside A, aside A:visited, aside A:hover
 
 .logo-in-page
 {
- float : left;
+ float : none;
+	   display: block;
+    margin-left: auto;
+    margin-right: auto;
 	 @include mobile {
 	    width : 25%;
-	    float : none;
+	   
   }
 }
 
@@ -466,7 +498,6 @@ aside A, aside A:visited, aside A:hover
    border-radius : 1em;
    background-color : #000066;
    color : yellow ;
-
 }
 
  .share-page  a, .share-page a:visited, .share-page a:hover 

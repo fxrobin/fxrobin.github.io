@@ -1,15 +1,17 @@
 
 code.highlighter-rouge
 {
-	background-color: black;
-	padding : 2px;	
+	background-color: $lightGray;
+	border-radius: 0.25em;
+	padding : 3px;	
 }
 
 pre.highlight {
+  color : #00ff00;
   background-color: #111133;
   padding: 7px 7px 7px 10px;
   border: 1px solid #ddd;
-  border-radius: 1em;
+  border-radius: 0.5em;
   -moz-box-shadow: 3px 3px rgba(0,0,0,0.1);
   -webkit-box-shadow: 3px 3px rgba(0,0,0,0.1);
   box-shadow: 3px 3px rgba(0,0,0,0.1);
@@ -20,7 +22,6 @@ pre.highlight {
 
 code {
   font-family: 'Share Tech Mono', monospace;
-  color : #00ff00;
   -moz-tab-size: 3em;
   tab-size: 3em;
 }
