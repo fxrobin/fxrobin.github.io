@@ -8,7 +8,7 @@ tags: [java_ee, jpa]
 ---
 
 Je vais vous présenter succinctement les deux façons
-natives qui sont offertes par JPA pour déclarer des `NamedQuery`. On verra alors que ces deux solutions ont des défauts et je vous proposerai alors une **3ème solution qui me paraît plus satisfaisante, fondée sur une "enum"**.
+natives en JPA pour déclarer des `NamedQuery`. On verra alors que ces deux solutions ont des défauts et je vous proposerai alors une **3ème solution qui me paraît plus satisfaisante, fondée sur une "enum"**.
 
 ## Rappels sur les NamedQuery
 
