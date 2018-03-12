@@ -4,8 +4,8 @@
   height: 40px;
   width: 40px;
   position: fixed;
-  bottom: 40px;
-  right: 10px;
+  bottom: 1em;
+  right: 1em;
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   /* image replacement properties */
@@ -44,16 +44,16 @@
 
 @media only screen and (min-width: 768px) {
   .cd-top {
-    right: 20px;
-    bottom: 20px;
+    right: 1em;
+    bottom: 1em;
   }
 }
 
 @media only screen and (min-width: 1024px) {
   .cd-top {
-    height: 60px;
-    width: 60px;
-    right: 30px;
-    bottom: 30px;
+    height: 3em;
+    width: 3em;
+    right: 1em;
+    bottom: 1em;
   }
 }
