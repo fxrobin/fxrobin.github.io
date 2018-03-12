@@ -216,5 +216,5 @@ Je viens d'écrire ce que je m'étais pourtant interdit de faire : un n-ième bi
 Ce qu'il faut retenir : vous n'aurez JAMAIS la garantie d'avoir une instance unique d'une classe en Java. Par introspection, par AOP, vous aurez toujours un moyen de casser l'unicité mémoire qu'on attend pourtant d'un singleton. Il suffit juste de faire un peu attention.
 
 En guise de réelle conclusion, utilisez : 
-* @ApplicationScoped de CDI, que vous pouvez utiliser même en Java SE si vous prenez "Weld" dans vos dépendances 
-* @Singleton de la spec EJB en environnement Java EE et vous serez définitivement tranquille.
+* `@ApplicationScoped` de CDI, que vous pouvez utiliser même en Java SE si vous prenez "Weld" dans vos dépendances 
+* `@Singleton` de la spec EJB en environnement Java EE et vous serez définitivement tranquille.
