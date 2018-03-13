@@ -116,8 +116,10 @@ afin de ne pas trop complexifier la tâche de mes développeurs, l'objectif éta
 Jouer du MP3, rien de plus facile avec LibGDX. Trop facile même.
 
 Pour rendre vraiment hommage aux RetroGames, j'ai donc utilisé une bibliothèque de lecture de "MOD".
-Les nostalgiques comme moi se rappeleront alors des différents Sound Tracker utilisés sur ST et AMIGA
-qui jouient des musiques digitalisées "de dingues" alors que le poids du fichier était très faible.
+Les nostalgiques comme moi se rappeleront alors des différents *Sound Tracker* utilisés sur ST et AMIGA
+qui jouaient des musiques digitalisées "de dingues" alors que le poids des fichiers était très faibles.
+
+Je m'y suis donc contraint, ne serait-ce que pour retrouver "le son d'autrefois" ...
 
 Le reste des effets sonores (tirs, explosions) sont généralement joués à partir de fichier WAV directement
 par LibGDX.
