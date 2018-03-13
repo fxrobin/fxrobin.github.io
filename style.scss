@@ -536,6 +536,25 @@ aside A, aside A:visited, aside A:hover
    color : yellow;
  }  
  
+  .video
+ {
+ 	margin-left : 2em;
+    width : 800px;
+    height : 450px;
+    border : solid black 3px;
+    border-radius : 0.5em;
+    box-shadow: 2px 2px 2px #555555;
+    
+     @include mobile {
+        margin-left : 2em;
+	    width : 320px;
+	    height : 180px;
+	   
+  }
+    
+ }
+ 
+ 
  .legal
  { 
     margin-top : 1em;
@@ -544,9 +563,7 @@ aside A, aside A:visited, aside A:hover
  	font-family : 'volter';
  	font-size : 9px;
  }
-
-
-
+ 
 
 // Settled on moving the import of syntax highlighting to the bottom of the CSS
 // ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start

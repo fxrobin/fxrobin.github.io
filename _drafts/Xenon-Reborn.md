@@ -1,11 +1,12 @@
 ---
 layout: post
 title: Développer en s'amusant et réciproquement
-subtitle: Ou comment apprendre à coder en réalisant un jeu vidéo ?
+subtitle: Ou comment apprendre à coder en réalisant un jeu vidéo ...
 logo: xenon-reborn.png
 category: JAVA
 tags: [algo, LibGDX]
 ---
+
 
 Dans mon parcours professionnel, j'ai été formateur de jeunes développeurs pendant sept années.
 Ces derniers venaient d'horizons différents, parfois, voire souvent, sans aucun pré-requis en terme de
@@ -56,14 +57,20 @@ de deux jeux : Xenon et Xenon 2 des [Bitmap Brothers](https://fr.wikipedia.org/w
 ![Xenon 1](/images/xenon-1.jpg)
 ![Xenon 2](/images/xenon-2.jpg)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/v9nD9DQwd80?start=175" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe class="video" src="https://www.youtube.com/embed/v9nD9DQwd80?start=175" frameborder="1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ![ATARI-ST](/images/atari-st.png) 
 ![AMIGA](/images/amiga.png)
 
 J'ai donc souhaité rendre hommage, à mon humble niveau, à ces deux "hits" de l'informatique micro-ludique 1980-2000 ...
 
+
+
 ## Au résultat
+
+Voici ce que cela donne pour le moment, le jeu commence vraiment vers 48 secondes de vidéo :
+
+<iframe class="video" src="https://www.youtube.com/embed/ki39sbk4VKc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 Pour donner un ordre de grandeur, j'ai dû passer 20 heures sur l'ensemble du coding, sans compter
 le temps passer à trouver (pomper oooh c'est pas bien) des ressources graphiques et sonores.
@@ -82,12 +89,6 @@ Vu des stagiaires, se rendre compte  :
 * que reprendre du code qu'on a pas écrit, ce n'est pas simple.
 
 Cela m'a permis surtout, en fonction du niveau de mes développeurs, de leur faire faire des choses plus au moins complexes et même d'en initier certains aux lambdas Java 8 et à la Stream API.
-
-
-Voici ce que cela donne pour le moment, le jeu commence vraiment vers 48 secondes de vidéo :
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/ki39sbk4VKc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
 
 ## Solutions techniques
 
