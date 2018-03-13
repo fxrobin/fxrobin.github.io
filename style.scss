@@ -310,7 +310,6 @@ nav {
 .read-more  {
     font-size: 1em;
     text-align : left;
-    margin-bottom : 1em;
     color: $blue;
     margin : 1em;
     
@@ -338,9 +337,9 @@ nav {
 
 .front-post 
 {
-  border-bottom : solid #AAAAAA 2px;
-  padding-bottom : 1em;
-  margin-bottom : 1em;
+  border-bottom : solid #DDDDDD 2px;
+  margin : 2em;
+  padding-bottom : 2em;
 }
 
 .front-post H2 A
@@ -351,13 +350,7 @@ nav {
 
 
 
-.posts > .post {
-  padding-bottom: 2em;
-  border-bottom: 1px solid $lightGray;
-}
-
-.posts > .post:last-child {
-  padding-bottom: 1em;
+.front-post:last-child {
   border-bottom: none;
 }
 
