@@ -9,7 +9,7 @@ name: FX JavaDevBlog
 description: Encore un nouveau blog sur Java et l'architecture logicielle ...
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
-avatar: https://fxrobin.github.io/images/java-logo.png
+avatar: /images/java-logo.png
 
 #
 # Flags below are optional
