@@ -17,6 +17,18 @@
 @import "variables";
 @import "back-to-top";
 
+@font-face 
+{
+	font-family: "volter";
+	src: url('/fonts/volter.ttf');
+}
+
+@font-face 
+{
+	font-family: "atari";
+	src: url('/fonts/atari-st.ttf');
+}
+
 // Syntax highlighting @import is at the bottom of this file
 
 /**************/
@@ -228,7 +240,7 @@ img {
   margin-bottom : 0.5em;
   color: #00FF00;
   cursor: pointer;
-  font-family: "Press Start 2P", $helveticaNeue;
+  font-family: "volter", "Press Start 2P", $helveticaNeue;
   font-size: 2em;
   letter-spacing: 1px;
    
@@ -243,9 +255,11 @@ img {
 .site-description {
   margin: -15px 0 0 0;
   color: $white;
-  font-size: 1em;
+  font-size: 1.5em;
+  font-family : 'atari';
 
   @include mobile {
+    font-size: 1em;
     margin: 3px 3px;
     text-align: center;
   }
@@ -513,7 +527,15 @@ aside A, aside A:visited, aside A:hover
    content : '>';
    color : yellow;
  }  
-
+ 
+ .legal
+ { 
+    margin-top : 1em;
+ 	display : block;
+ 	clear : both;
+ 	font-family : 'volter';
+ 	font-size : 12px;
+ }
 
 
 
