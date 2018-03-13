@@ -95,9 +95,7 @@ A 14 ans, je bascule dans le monde du 68000, avec un ATARI 1040 STE ! 1 Mo de RA
 
 En 2017, j'ai d'ailleurs réalisé un petit hommage à ces deux jeux : [Xenon Reborn](https://www.youtube.com/watch?v=ki39sbk4VKc) en Java avec LibGDX.
 
-Cliquez sur l'image ci-dessous pour lancer une vidéo sur YouTube.
-
-[![Xenon_Reborn_Capture v0.1.8](https://img.youtube.com/vi/ki39sbk4VKc/0.jpg)](https://youtu.be/ki39sbk4VKc)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ki39sbk4VKc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 Le projet hébergé sur GitHub est ici : [https://github.com/fxrobin/Xenon_Reborn](https://github.com/fxrobin/Xenon_Reborn)
 
