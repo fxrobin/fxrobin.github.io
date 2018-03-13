@@ -483,11 +483,15 @@ aside A, aside A:visited, aside A:hover
 
 .logo
 {
- float : right;
- margin-right : 1em;
+ float  : right;
+ margin : 1em;
+ margin-top : 0em;
 	 @include mobile {
 	    width : 25%;
 	    float : none;
+	    margin : auto;
+	    text-align : center;
+	    display :block;
 
   }
 }
