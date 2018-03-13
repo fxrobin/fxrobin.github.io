@@ -8,7 +8,7 @@ tags: [algo, LibGDX]
 ---
 
 Dans mon parcours professionnel, j'ai été formateur de jeunes développeurs pendant sept années.
-Ces derniers venaient d'horizons différents, parfois, voire souvent,sans aucun pré-requis en terme de
+Ces derniers venaient d'horizons différents, parfois, voire souvent, sans aucun pré-requis en terme de
 compétences en programmation. Afin de rendre ludique l'apprentissage des fondamentaux de l'algorithmique
 et du langage Java, j'ai eu l'idée de les faire participer à la création d'un jeu video : Xenon Reborn.
 
@@ -55,6 +55,8 @@ de deux jeux : Xenon et Xenon 2 des [Bitmap Brothers](https://fr.wikipedia.org/w
 
 ![Xenon 1](/images/xenon-1.jpg)
 ![Xenon 2](/images/xenon-2.jpg)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/v9nD9DQwd80?start=175" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ![ATARI-ST](/images/atari-st.png) 
 ![AMIGA](/images/amiga.png)
