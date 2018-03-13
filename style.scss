@@ -266,11 +266,12 @@ img {
 }
 
 nav {
+  clear : both;
   float: right;
   margin-top: 23px; // @TODO: Vertically middle align
   margin-right : 1em;
-  font-family: $helveticaNeue;
-  font-size: 1em;
+  font-family: 'volter';
+  font-size: 1.5em;
 
   @include mobile {
     float: none;
@@ -279,10 +280,17 @@ nav {
     display: block;
     font-size: 1em;
   }
+  
+  a:before
+  {
+    content : '> ';
+  }
+  
+  a:visited { color: #00FF00; }
 
   a {
     margin-left: 20px;
-    color: $white;
+    color: #00FF00;
     text-align: right;
     font-weight: 300;
     letter-spacing: 1px;
