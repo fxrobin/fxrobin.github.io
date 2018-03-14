@@ -551,6 +551,12 @@ aside A, aside A:visited, aside A:hover
     
  }
  
+ .mini
+ {
+   width : 320px;
+   height : 180px;
+ }
+ 
  
  .legal
  { 
@@ -559,6 +565,15 @@ aside A, aside A:visited, aside A:hover
  	clear : both;
  	font-family : 'volter';
  	font-size : 9px;
+ }
+ 
+ .entry > TABLE
+ {
+ 	margin : 2em;
+ 	
+ 	TD { border : solid #DDDDDD 1px; padding : 0.5em; }
+ 	
+ 	Th { border : solid #DDDDDD 1px; background-color : #444444; color : white; }
  }
  
 
