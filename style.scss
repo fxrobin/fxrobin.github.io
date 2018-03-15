@@ -151,12 +151,7 @@ img {
   color: $gray; 
 }
 
-.front-date {
-  clear:both;
-  font-style: italic;
-  text-align: left;
-  color: $gray; 
-}
+
 
 // Specify the color of the selection
 ::-moz-selection {
@@ -322,6 +317,62 @@ nav {
     }
 }
 
+#left
+{
+  margin-right : 300px;
+  @include mobile { margin-right : inherit }
+}
+
+#right
+{
+  
+  @include mobile { display : none; }
+
+  margin-top : 0.5em;
+  margin-right : 0.5em;
+  padding : 0.5em;
+  border : solid blue 1px;
+  float : right;
+  width : 300px;
+  border : solid #555599 2px;
+  border-radius : 0.5em;
+  box-shadow: 2px 2px 2px #555555;
+  background-color : #F2F2FF;
+  
+  .article-list-header 
+  {
+    font-family : "Russo One"; text-align : center; text-shadow: 1px 1px 1px #DDDDDD;
+    margin-bottom : 1em;
+  }
+  
+  .article-list-entry
+  {
+   	font-size :1em;
+    border-top : solid #9999AA 1px;
+    margin-bottom : 1em;
+    
+    .article-list-entry-date { display:block; font-size : 0.8em; color : #AAAAAA; }
+    
+    A:before { content : '> '; }
+    
+  }
+  
+  .article-list-entry:last-child
+  {
+     margin-bottom : 0.5em;
+  }
+
+}
+
+.front-date {
+  font-style: italic;
+  text-align: left;
+  color: $gray; 
+   @include mobile
+  {
+ 	 margin-top : 1em;
+  }
+}
 
 .front-post .entry A
 {
@@ -357,13 +408,18 @@ nav {
   {
  	 font-size:1.5em;
  	 text-shadow: none;
+ 	 text-align : center;
   }
 }
 
-.front-post H2 A
+.front-post H2
 {
   font-family : "Oswald";
-  color : black;
+  A { color : black; }
+   @include mobile
+  {
+ 	 text-align : center;
+  }
 }
 
 
@@ -502,10 +558,10 @@ aside A, aside A:visited, aside A:hover
 .logo
 {
  float  : right;
- margin : 1em;
+ margin-left : 1em;
  margin-top : 0em;
 	 @include mobile {
-	    width : 25%;
+	    // width : 25%;
 	    float : none;
 	    margin : auto;
 	    text-align : center;

@@ -2,23 +2,37 @@
 layout: default
 ---
 
-<div class="posts">
-  {% for post in site.posts %}
-    
-    <article class="front-post">
-      <img src="{{ site.baseurl }}/images/logos/{{ post.logo }}" class="logo"/>
-      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
-      <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.subtitle }}</a></h2>
-      
-      <div class="front-date">Le {{post.date | date: "%d/%m/%Y" }}</div>
-
-      <div class="entry" style="clear : both ;">      
-        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.excerpt }}</a>
-      </div>
-      <div class="read-more">
-      <a href="{{ site.baseurl }}{{ post.url }}" >Lire plus ...</a>
-      </div>
-    </article>
-    
-  {% endfor %}
+<div id="right">
+  <div class="article-list-header">Publications</div>
+ 	{% for post in site.posts %}
+	 <div class="article-list-entry"> 
+	   <span class="article-list-entry-date">{{post.date | date: "%d/%m/%Y" }} </span>
+	   <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+	 </div>  
+	{% endfor %}
 </div>
+
+<div id="left">
+	<div class="posts">
+	  {% for post in site.posts %}
+	    
+	    <article class="front-post">
+	      <img src="{{ site.baseurl }}/images/logos/{{ post.logo }}" class="logo"/>
+	      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+	      <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.subtitle }}</a></h2>
+	      
+	      <div class="front-date">Le {{post.date | date: "%d/%m/%Y" }}</div>
+	
+	      <div class="entry">      
+	        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.excerpt }}</a>
+	      </div>
+	      <div class="read-more">
+	      <a href="{{ site.baseurl }}{{ post.url }}" >Lire plus ...</a>
+	      </div>
+	    </article>
+	    
+	  {% endfor %}
+	</div>
+</div>
+
+
