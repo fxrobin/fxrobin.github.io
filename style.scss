@@ -278,7 +278,8 @@ nav {
   
   a:before
   {
-    content : '> ';
+    content : '>';
+    margin-right : 0.2em;
   }
   
   a:visited { color: #00FF00; }
