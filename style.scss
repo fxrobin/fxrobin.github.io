@@ -189,20 +189,20 @@ img {
 //
 
 .wrapper-masthead {
+  background-image : url('/images/scanline.jpg');
+  background-size : cover ;
   margin : 0px 0px 0px 0px;
   padding-bottom :10px;
   width : 100%;
+  box-shadow: 0px 5px 5px black;
 }
 
 .masthead {
   
-  background-image : url('/images/scanline.jpg');
-  background-size : cover ;
   @include mobile {
     text-align: center;
   }
   
-  box-shadow: 0px 5px 5px black;
 }
 
 
@@ -216,17 +216,15 @@ img {
 
   @include mobile {
     float: none;
+    width: 50px;
+    height: 50px;
     display: block;
+    padding-top:0.5em;
     margin: 0 auto;
-  }
-
-  img {
-    border-radius: 5px;
   }
 }
 
 .site-info {
-  float: left;
 
   @include mobile {
     float: none;
@@ -246,7 +244,7 @@ img {
    
    @include mobile {
       margin-top : 0px;
-      font-size: 1em;
+      font-size: 1.5em;
       text-align: center;
   }
  
@@ -332,14 +330,34 @@ nav {
 
 .front-post P
 {
-  font-size : 1.2em;
+  font-size : 1.1em;
+  
+   @include mobile {
+    font-size : 1em;
+   }
+  
 }
 
 .front-post 
 {
   border-bottom : solid #DDDDDD 2px;
   margin : 2em;
+  
+  @include mobile
+  {
+    margin : 0.5em;
+  }
+  
   padding-bottom : 2em;
+}
+
+.front-post H1
+{
+  @include mobile
+  {
+ 	 font-size:1.5em;
+ 	 text-shadow: none;
+  }
 }
 
 .front-post H2 A
