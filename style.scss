@@ -341,15 +341,20 @@ nav {
   
   .article-list-header 
   {
-    font-family : "Russo One"; text-align : center; text-shadow: 1px 1px 1px #DDDDDD;
+    font-family : "Russo One"; 
+    text-align : center; 
+    text-shadow: 1px 1px 1px #DDDDDD;
+    color : #3333AA;
     margin-bottom : 1em;
+    font-size : 1.5em;
   }
   
   .article-list-entry
   {
    	font-size :1em;
     border-top : solid #9999AA 1px;
-    margin-bottom : 1em;
+    margin-bottom : 0.5em;
+    padding-top : 0.5em;
     
     .article-list-entry-date { display:block; font-size : 0.8em; color : #AAAAAA; }
     
@@ -360,6 +365,13 @@ nav {
   .article-list-entry:last-child
   {
      margin-bottom : 0.5em;
+  }
+  
+  .social-icons-right
+  {
+    border-top : solid #9999AA 1px;
+    padding-top : 0.5em;
+    text-align : center;
   }
 
 }
