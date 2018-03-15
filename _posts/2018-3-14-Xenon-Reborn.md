@@ -35,7 +35,7 @@ C'est cette infrastructure sur laquelle sont venus s'appuyer mes stagiaires pour
 Car oui, sous des allures "peu sérieuses", coder un jeu vidéo permet de mettre en oeuvre des concepts de Design Patterns (Singleton, Facade, Factory), de polymorphisme, de découplage, de complexité algorithmique. Ces concepts seront toujours valables sur des applications professionnelles. 
 
 
-Ce projet "fil rouge" s'incrivait dans un cours de "Java Bases" ou les notions suivantes n'avaient pas encore été abordées, ce qui représentait un sacré challenge pour faire un jeu vidéo :
+Ce projet "fil rouge" s'incrivait dans un cours de "Java Bases" où les notions suivantes n'avaient pas encore été abordées, ce qui représentait un sacré challenge pour faire un jeu vidéo :
 * les collections (toutes) : ils n'avaient étudier que `List` et `ArrayList` ;
 * les fichiers ;
 * les interfaces graphiques ;
