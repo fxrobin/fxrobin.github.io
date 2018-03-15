@@ -145,12 +145,7 @@ img {
   max-width: none;
 }
 
-.date {
-  clear:both;
-  font-style: italic;
-  text-align: center;
-  color: $gray; 
-}
+
 
 
 
@@ -446,6 +441,16 @@ nav {
 
 .post {
 
+  .date {
+	  font-style: italic;
+	  text-align: left;
+	  color: $gray; 
+	  @include mobile
+		 {
+		 text-align : center;
+		 }
+	}
+
   .logo-in-page
 	{
 	 	float : left;
@@ -531,6 +536,7 @@ nav {
 
 .entry > P:first-child
 {
+  clear:left;
   font-size : 1.2em;
   font-family : "Monda";
   color : $darkGray;
