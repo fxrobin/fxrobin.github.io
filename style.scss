@@ -341,8 +341,7 @@ nav {
   
   .article-list-header 
   {
-    font-family : "volter";
-    text-transform: uppercase;
+    font-family : "Russo One";
     text-align : center; 
     text-shadow: 1px 1px 1px #DDDDDD;
     color : #3333AA;
@@ -359,13 +358,13 @@ nav {
     
     .article-list-entry-date 
     { 
-	    font-family : "volter"; 
+	    font-family : "Oswald"; 
 	    display:block; 
-	    font-size : 0.5em; 
+	    font-size : 0.8em; 
 	    color : #AAAAAA; 
     }
     
-    A:before { content : '> '; }
+
     
   }
   
