@@ -6,7 +6,7 @@ layout: default
   <div class="article-list-header">Publications</div>
  	{% for post in site.posts %}
 	 <div class="article-list-entry"> 
-	   <span class="article-list-entry-date">{{post.date | date: "%d/%m/%Y" }} </span>
+	   <span class="article-list-entry-date"><img src="/images/terminal-icons-55321.png" style="vertical-align: middle;"/> {{post.date | date: "%d/%m/%Y" }} </span>
 	   <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
 	 </div>  
 	{% endfor %}
