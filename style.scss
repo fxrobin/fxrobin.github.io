@@ -302,15 +302,34 @@ nav {
     color: $blue;
     margin : 1em;
     
-    A, A:visited, A:hover { 
+    A, A:visited { 
     
     color : white;
     background-color : $blue;
     padding : 0.5em; 
     border-radius : 1em;
     
+    	-moz-transition: all .2s ease-in;
+    	-o-transition: all .2s ease-in;
+    	-webkit-transition: all .2s ease-in;
+    	transition: all .2s ease-in;
     
     }
+    
+     A:hover 
+    {
+      color : #FFFF00;
+      background-color : #000080;
+      border-radius : 0.5em;
+      
+    }
+    
+    A:hover:after
+    {
+      margin-left : 0.2em;
+      content : '\2588';
+    }
+    
 }
 
 #left
