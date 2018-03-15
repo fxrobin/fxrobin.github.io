@@ -137,6 +137,13 @@ Puis en 1999 :
 
 To be continued (quand je ferai l'effort de tout me souvenir)
 
+<div style="text-align : center">
+  <a href="{{ site.baseurl }}">
+  	<img src="{{ site.baseurl }}/images/guru-meditation.gif" alt="Guru Meditation Amiga" /> <br/>
+  	<img src="{{ site.baseurl }}/images/bombs.png" alt="Bombing Crash Atari ST" />
+  </a>
+</div>
+
 
 ### Contactez moi ...
 
