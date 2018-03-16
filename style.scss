@@ -209,7 +209,7 @@ img {
   float: left;
   width: 70px;
   height: 70px;
-  margin : 10px;
+  margin : 5px;
   
 
   @include mobile {
@@ -263,8 +263,9 @@ img {
 
 nav {
   clear : both;
+  height : 1.5em;
   float: right;
-  margin-top: 23px; // @TODO: Vertically middle align
+  margin-top: 0.5em; 
   margin-right : 1em;
   font-family: 'volter';
   font-size: 1.5em;
