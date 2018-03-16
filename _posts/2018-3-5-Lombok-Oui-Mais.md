@@ -488,7 +488,7 @@ Je les jette en vrac, avec une petite justification quand même :
 * Toujours utiliser `@EqualsAndHashCode` et `@ToString` en précisant les champs avec l'attribut `of=...`
 * Spécifier les `Getter / Setter` sur les champs, et non pas sur la classe (en gros, pas comme dans tous les exemples que je viens de donner)
 * Attention au Builder : intégrer un Builder sera possible, mais JPA, JSF ou CDI attendront que le constructeur sans argument soit présent avec le niveau "protected".
-* Attention aux logiciels de revue de code qui n'analyse pas le ByteCode mais que le code source : ils sont perdus ...
+* Attention aux logiciels de revue de code qui n'analysent pas le ByteCode mais que le code source : ils sont perdus ...
 
 ## En guise de conclusion
 
