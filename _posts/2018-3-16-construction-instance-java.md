@@ -15,7 +15,7 @@ Une classe Java, que l'on souhaite pouvoir instancier, peut disposer :
 * d'une et unique portion de code d'instance (si vous ne savez pas ce que c'est, l'exemple arrive ci-après ...) ; 
 * d'un ou plusieurs constructeurs.
 
-> Pour être un peu plus complet, une classe elle peut aussi contenir les éléments suivants, mais cet article **ne traite pas de leur instanciation** :
+> Pour être un peu plus complet, une classe peut aussi contenir les éléments suivants, mais cet article **ne traite pas de leur instanciation** :
 * une ou plusieurs classes embarquées statiques ;
 * une ou plusieurs classes embarquées d'instance.
 
