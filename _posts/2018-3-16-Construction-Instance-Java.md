@@ -31,7 +31,7 @@ Pour faire plaisir à J-Jacques (qui cherche encore une `enum` dans cet article)
 
 ![UML](/images/instance-construction-mecanism/uml.png)
 
-On a rarement fait plus simple ...
+On peut difficilement faire plus simple ...
 
 Voici le code source de la classe `Root`
 
@@ -94,12 +94,12 @@ portion de code.
 Quand on instancie la classe avec le code suivant : `Child child = new Child()`, voici le résultat :
 
 ```
-static block : class fr.fxjavadevblog.articles.Root			<1> 
-static block : class fr.fxjavadevblog.articles.Child			<2>
-Root instance block : class fr.fxjavadevblog.articles.Child	<3>
-Root noargs constructor								<4>
-Child instance block : class fr.fxjavadevblog.articles.Child	<5>
-Child noargs constructor								<6>
+static block : class fr.fxjavadevblog.articles.Root			 <1> 
+static block : class fr.fxjavadevblog.articles.Child		 <2>
+Root instance block : class fr.fxjavadevblog.articles.Child	 <3>
+Root noargs constructor										 <4>
+Child instance block : class fr.fxjavadevblog.articles.Child <5>
+Child noargs constructor									 <6>
 ```
 
 Commentaires :
