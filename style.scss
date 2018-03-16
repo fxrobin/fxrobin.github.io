@@ -29,6 +29,12 @@
 	src: url('/fonts/atari-st.ttf');
 }
 
+@font-face 
+{
+	font-family: "amstrad";
+	src: url('/fonts/amstrad-cpc-extended.ttf');
+}
+
 // Syntax highlighting @import is at the bottom of this file
 
 /**************/
@@ -272,17 +278,38 @@ nav {
   
   a:before
   {
-    content : '> ';
+    content : '>';
+    margin-right : 0.2em;
   }
   
   a:visited { color: #00FF00; }
+  
+  A:hover 
+    {
+      color : #FFFF00;
+      background-color : #000080;
+      border-radius : 0.2em;
+     
+    }
+    
+    A:hover:after
+    {
+      content : '\2589';
+      
+    }
+   
 
   a {
+   	padding : 0.2em;
     margin-left: 20px;
     color: #00FF00;
     text-align: right;
     font-weight: 300;
     letter-spacing: 1px;
+    -moz-transition: all .4s ease-in;
+    	-o-transition: all .4s ease-in;
+    	-webkit-transition: all .4s ease-in;
+    	transition: all .4s ease-in;
 
     @include mobile {
       margin: 0 1em;
@@ -302,15 +329,36 @@ nav {
     color: $blue;
     margin : 1em;
     
-    A, A:visited, A:hover { 
+    A, A:visited { 
     
     color : white;
     background-color : $blue;
     padding : 0.5em; 
     border-radius : 1em;
     
+    	-moz-transition: all .2s ease-in;
+    	-o-transition: all .2s ease-in;
+    	-webkit-transition: all .2s ease-in;
+    	transition: all .2s ease-in;
     
     }
+    
+     A:hover 
+    {
+      color : #FFFF00;
+      background-color : #000080;
+      border-radius : 0.5em;
+      font-size : 12px;
+      font-family : "amstrad";
+      
+    }
+    
+    A:hover:after
+    {
+      content : '\2589';
+      font-size : 18px;
+    }
+    
 }
 
 #left
@@ -341,7 +389,7 @@ nav {
     text-shadow: 1px 1px 1px #DDDDDD;
     color : #3333AA;
     margin-bottom : 1em;
-    font-size : 1em;
+    font-size : 1.4em;
   }
   
   .article-list-entry
@@ -357,6 +405,34 @@ nav {
 	    display:block; 
 	    font-size : 0.8em; 
 	    color : #AAAAAA; 
+    }
+    
+    A { 	
+    	font-size :1.1em; 
+    	display:block; 
+    	padding : 0.2em;
+    	-moz-transition: all .2s ease-in;
+    	-o-transition: all .2s ease-in;
+    	-webkit-transition: all .2s ease-in;
+    	transition: all .2s ease-in;
+      }
+    
+    A, A:visited 
+    {
+      color :  #2222BB;
+    }
+    
+    A:hover 
+    {
+      color : #FFFF00;
+      background-color : #000080;
+      border-radius : 0.5em;
+      
+    }
+    A:hover:after
+    {
+      margin-left : 0.2em;
+      content : '\2588';
     }
     
 
