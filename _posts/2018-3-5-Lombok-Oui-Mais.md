@@ -506,5 +506,3 @@ Il y a encore pas mal d'annotations que je n'ai pas couvert ici, mais qui sont t
 *On va dire que ça fera partie d'un prochain billet ...*
 
 **N'hésitez pas à me faire part de vos usages de Lombok en commentaire, que je reporterai ici le cas échéant.**
-
-
