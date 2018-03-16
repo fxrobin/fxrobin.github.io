@@ -43,7 +43,7 @@ public class Root
 	{
 		System.out.printf("static block : %s %n", Root.class);
 	}
-	concis
+	
 	// <2>
 	{
 		System.out.printf("Root instance block : %s %n",this.getClass());
