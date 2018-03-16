@@ -20,3 +20,5 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * REST versus SOAP (perf.) ?
 * UTF8
 * Complexité algorithmique
+* JEE8 + OpenLiberty
+* CDI + JavaFX
