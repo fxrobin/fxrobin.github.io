@@ -94,12 +94,12 @@ portion de code.
 Quand on instancie la classe avec le code suivant : `Child child = new Child()`, voici le résultat :
 
 ```
-static block : class fr.fxjavadevblog.articles.Root			 <1> 
-static block : class fr.fxjavadevblog.articles.Child		 <2>
-Root instance block : class fr.fxjavadevblog.articles.Child	 <3>
-Root noargs constructor										 <4>
-Child instance block : class fr.fxjavadevblog.articles.Child <5>
-Child noargs constructor									 <6>
+<1> static block : class fr.fxjavadevblog.articles.Root			 
+<2> static block : class fr.fxjavadevblog.articles.Child		 
+<3> Root instance block : class fr.fxjavadevblog.articles.Child	 
+<4> Root noargs constructor										 
+<5> Child instance block : class fr.fxjavadevblog.articles.Child 
+<6> Child noargs constructor									 
 ```
 
 Commentaires :
