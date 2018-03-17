@@ -72,7 +72,7 @@ Sur ces ordinateurs, je voue toujours un culte au jeu [L'Aigle d'Or](https://fr.
 ![Generique Aigle d'or](/images/generique-aigle-d-or.png)
 ![Aigle d'or](/images/aigle-d-or.jpg)
 
-Si vous n'avez pas la chance, comme moi de posséder encore ces fabuleuses machines en état de fonctionnement, vous pouvez aller sur le formidable site de Daniel Coulom dédié à l'émulation des Thomson : http://dcmoto.free.fr/
+Si vous n'avez pas la chance, comme moi, de posséder encore ces fabuleuses machines en état de fonctionnement, vous pouvez aller sur le formidable site de Daniel Coulom dédié à l'émulation des Thomson : [http://dcmoto.free.fr](http://dcmoto.free.fr/)
 
 A la même période, je m'éclate aussi chez mon cousin et chez des copains avec des ORIC ATMOS, AMSTRAD CPC 464 et 6128 ainsi qu'un MSX : que du beau monde.
 
