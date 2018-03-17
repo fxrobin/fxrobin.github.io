@@ -26,7 +26,10 @@ layout: default
 	  {% for post in site.posts %}
 	    
 	    <article class="front-post">
-	      <img src="{{ site.baseurl }}/images/logos/{{ post.logo }}" class="logo" alt="{{ post.title }}" title="{{ post.title }}" />
+	      <a href="{{ site.baseurl }}{{ post.url }}"><img src="{{ site.baseurl }}/images/logos/{{ post.logo }}" 
+	      												  class="logo" 
+	      												  alt="{{ post.title }}" 
+	      												  title="{{ post.title }}" /></a>
 	      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
 	      <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.subtitle }}</a></h2>
 	      
