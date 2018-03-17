@@ -6,7 +6,13 @@ layout: default
   <div class="article-list-header">Publications</div>
  	{% for post in site.posts %}
 	 <div class="article-list-entry"> 
-	   <span class="article-list-entry-date"><img src="/images/terminal-icons-55321.png" style="vertical-align: middle;"/> {{post.date | date: "%d/%m/%Y" }} </span>
+	   <span class="article-list-entry-date">
+	   		<img src="/images/terminal-icons-55321.png" 
+	   		     style="vertical-align: middle;" 
+	   		     alt="{{ post.title }}" 
+	   		     title="{{ post.title }}"/> 
+	   		{{post.date | date: "%d/%m/%Y" }}
+	   </span>
 	   <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
 	 </div>  
 	{% endfor %}
@@ -20,7 +26,7 @@ layout: default
 	  {% for post in site.posts %}
 	    
 	    <article class="front-post">
-	      <img src="{{ site.baseurl }}/images/logos/{{ post.logo }}" class="logo"/>
+	      <img src="{{ site.baseurl }}/images/logos/{{ post.logo }}" class="logo" alt="{{ post.title }}" title="{{ post.title }}" />
 	      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
 	      <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.subtitle }}</a></h2>
 	      
