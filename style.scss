@@ -17,16 +17,37 @@
 @import "variables";
 @import "back-to-top";
 
-@font-face 
-{
-	font-family: "volter";
-	src: url('/fonts/volter.ttf');
+@font-face {
+    font-family: 'volter';
+    src: url('/fonts/volter.eot');
+    src: url('/fonts/volter.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/volter.woff2') format('woff2'),
+         url('/fonts/volter.woff') format('woff'),
+         url('/fonts/volter.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
-@font-face 
-{
-	font-family: "atari";
-	src: url('/fonts/atari-st.ttf');
+@font-face {
+    font-family: 'amstrad';
+    src: url('/fonts/amstrad-cpc-extended.eot');
+    src: url('/fonts/amstrad-cpc-extended.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/amstrad-cpc-extended.woff2') format('woff2'),
+         url('/fonts/amstrad-cpc-extended.woff') format('woff'),
+	url('/fonts/amstrad.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'atari';
+    src: url('/fonts/atari-st.eot');
+    src: url('/fonts/atari-st.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/atari-st.woff2') format('woff2'),
+         url('/fonts/atari-st.woff') format('woff'),
+		 url('/fonts/atari-st.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
 }
 
 @font-face 
