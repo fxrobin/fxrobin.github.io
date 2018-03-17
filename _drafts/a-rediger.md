@@ -22,3 +22,4 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * Complexité algorithmique
 * JEE8 + OpenLiberty
 * CDI + JavaFX
+* Preconditions
