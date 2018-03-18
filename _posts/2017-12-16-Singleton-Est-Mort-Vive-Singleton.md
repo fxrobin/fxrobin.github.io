@@ -68,7 +68,6 @@ public class LazySingleton
        return String.format("Je suis le LazySingleton : %s", super.toString());
     }
 }
-
 ```
 
 Voici un programme qui en obtient une instance :
@@ -87,7 +86,6 @@ public class MainProg
         System.out.println(singleton);
     }
 }
-
 ```
 
 et voici son résultat de son exécution qui prouve bien son chargement "*lazy*" :
@@ -99,7 +97,6 @@ Bon allez, je me décide à l'appeler ...
 Construction du Singleton au premier appel
 Et maintenant je l'affiche ...
 Je suis le LazySingleton : demo.LazySingleton@7852e922
-
 ```
 
 
@@ -129,7 +126,6 @@ public enum LazySingletonEnum
         return String.format("Je suis le LazySingleton : %s", super.toString());
     }
 }
-
 ```
 
 et son usage :
@@ -143,7 +139,6 @@ System.out.println("Et maintenant je l'appelle  ...");
 System.out.println(singleton.getMessage());
 System.out.println("On peut aussi l'appeler directement : ");
 System.out.println(LazySingletonEnum.INSTANCE.getMessage());
-
 ```
 
 qui donne le résultat probant suivant :
@@ -157,8 +152,8 @@ Et maintenant je l'appelle  ...
 Je suis le LazySingleton : INSTANCE
 On peut aussi l'appeler directement : 
 Je suis le LazySingleton : INSTANCE
-
 ```
+
 ## Et la "serialization" entre en jeu ...
 
 Je n'ai pas non plus abordé un autre problème : souvent un Singleton a besoin d'être "Serializable", mais de fait, la déserialisation d'un singleton permet de créer plusieurs instances.

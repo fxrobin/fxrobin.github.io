@@ -41,36 +41,14 @@ SUITE2      LDB     #$80
             STB      CHDRAW
             CALL    CHPLH
             JSR      COMPT
-            LDB      #$81
-            STB      CHDRAW
-            CALL    CHPLH
-            JSR       COMPT
-            INCA
-            CMPA    #$32
-            BNE      SUITE2
-            BRA      FIN
-COMPT       PSHS     A
-            CLRA    
-            CLRB
-A1          ADDD    #1 
-            CMPD    #$80FF
-            BNE       A1
-            PULS     A
-            RTS
-FIN         LDB       #$70
-            CALL PUTCH
-            STOP
-TABLE       FCB   $0C, $1B, $73, $14, $4
-DEFGR0      FCB    36, 36, 36, 60, 255, 24, 60, 60
-DEFGR1      FCB    129, 66, 36, 60, 60, 90, 189, 60
-            END           
-
+etc ...           
 ```
 
 Sur ces ordinateurs, je voue toujours un culte au jeu [L'Aigle d'Or](https://fr.wikipedia.org/wiki/L%27Aigle_d%27or) de Louis-Marie Rocques.
 
-![Generique Aigle d'or](/images/generique-aigle-d-or.png)
-![Aigle d'or](/images/aigle-d-or.jpg)
+![Generique Aigle d'or](/images/generique-aigle-d-or.png) ![Aigle d'or](/images/aigle-d-or.jpg)
+
+<iframe class="video normal" src="https://www.youtube.com/embed/vwpK4_K0ygQ?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 Si vous n'avez pas la chance, comme moi, de posséder encore ces fabuleuses machines en état de fonctionnement, vous pouvez aller sur le formidable site de Daniel Coulom dédié à l'émulation des Thomson : [http://dcmoto.free.fr](http://dcmoto.free.fr/)
 
@@ -100,6 +78,8 @@ En 2017, j'ai d'ailleurs réalisé un petit hommage à ces deux jeux : [Xenon Re
 <iframe class="video" src="https://www.youtube.com/embed/ki39sbk4VKc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 Le projet hébergé sur GitHub est ici : [https://github.com/fxrobin/Xenon_Reborn](https://github.com/fxrobin/Xenon_Reborn)
+
+Un article y est consacré : [Développer en s'amusant et réciproquement : Xenon-Reborn](/Xenon-Reborn)
 
 
 ## 1993 - 1996 : Le permis, une voiture, mais surtout un 486 DX2 66 Mhz Turbo

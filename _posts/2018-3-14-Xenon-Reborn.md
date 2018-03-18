@@ -268,7 +268,6 @@ public interface Artefact extends Renderable
 	void increaseLife(final int points);
 	
 }
-
 ```
 
 Système de gestion de collisions :
@@ -389,7 +388,6 @@ public final class CollisionManager
 		}
 	}
 }
-
 ```
 
 ## Temps passé et technos abordées

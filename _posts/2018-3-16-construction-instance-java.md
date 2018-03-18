@@ -55,7 +55,6 @@ public class Root
 		System.out.println("Root noargs constructor");
 	}
 }
-
 ```
 
 On a rarement fait plus concis, mais cette classe n'est quand même pas banale, car elle dispose :
@@ -94,12 +93,12 @@ portion de code.
 Quand on instancie la classe avec le code suivant : `Child child = new Child()`, voici le résultat :
 
 ```
-<1> static block : class fr.fxjavadevblog.articles.Root			 
-<2> static block : class fr.fxjavadevblog.articles.Child		 
-<3> Root instance block : class fr.fxjavadevblog.articles.Child	 
-<4> Root noargs constructor										 
-<5> Child instance block : class fr.fxjavadevblog.articles.Child 
-<6> Child noargs constructor									 
+static block : class fr.fxjavadevblog.articles.Root			 
+static block : class fr.fxjavadevblog.articles.Child		 
+Root instance block : class fr.fxjavadevblog.articles.Child	 
+Root noargs constructor										 
+Child instance block : class fr.fxjavadevblog.articles.Child 
+Child noargs constructor									 
 ```
 
 Commentaires :
