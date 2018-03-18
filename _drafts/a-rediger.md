@@ -23,3 +23,4 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * JEE8 + OpenLiberty
 * CDI + JavaFX
 * Preconditions
+* nommage des interfaces
