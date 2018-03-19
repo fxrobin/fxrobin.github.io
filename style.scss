@@ -71,7 +71,7 @@ body {
   background-size : cover;
   font: 1em $helvetica;
   color: $darkGray;
-  cursor: url("/images/mouse-pointer.png"), auto;
+  cursor: url("/images/mouse-pointer-atari.png"), auto;
   
   @include mobile {
     font-size: 0.8em;
