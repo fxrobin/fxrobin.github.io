@@ -24,3 +24,5 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * CDI + JavaFX
 * Preconditions
 * nommage des interfaces
+* tutorial JANDEX : http://docs.wildfly.org/jandex/org/jboss/jandex/package-summary.html
+* Pattern State
