@@ -392,8 +392,7 @@ public final class CollisionManager
 
 ## Temps passé et technos abordées
 
-Pour donner un ordre de grandeur, j'ai dû passer 20 heures sur l'ensemble du coding sans compter le temps passer à trouver (pomper oooh c'est pas bien) des ressources graphiques et sonores. 
-Cela reste assez peu finalement au regard du résultat.
+Pour donner un ordre de grandeur, j'ai dû passer 20 heures sur l'ensemble du coding sans compter le temps passer à trouver (pomper oooh c'est pas bien) des ressources graphiques et sonores. Cela reste assez peu finalement au regard du résultat.
 
 Je me suis forcé aussi à ne pas utiliser Lombok, qui aurait pourtant bien acceléré les choses, mais il fallait être en accord avec les compétences détenues par mes stagiaires à ce moment là.
 
@@ -404,12 +403,12 @@ A ce jour voici les statistiques d'analyse de code (CODACY et CODEFACTOR) :
 * CODEFACTOR : rated A
 * CODACY: rated A
 
-Je sais que certains aiment bien les statisques de "production de code". Grosso modo, cela représente  140 LoC par heure. Comme un classe c'est en moyenne 50 LoC, cela fait 3 classes par heure. Ces statistiques ne veulent pas dire grand chose, mais je les laisse quand même.
+Je sais que certains aiment bien les statistiques de "production de code". Grosso modo, cela représente  140 LoC par heure. Comme une classe c'est en moyenne 50 LoC, cela fait 3 classes par heure. Ces statistiques ne veulent pas dire grand chose, mais je les laisse quand même.
 
 Voici les points du jeu sur lesquels j'ai passé le plus de temps, souvent sur des détails d'ailleurs :
 * enchainement par fade-in, fade-out des écrans (rien dans LibGDX pour cette chose pourtant nécessaire !)
 * scrolling parallax perso versus TileMap
-* affichage en channel Alpha du niveau de bouclier à guache, parce que il faut prendre en compte les particularités du SpriteBatch
+* affichage en channel Alpha du niveau de bouclier à gauche, parce que il faut prendre en compte les particularités du SpriteBatch
 * gestion des ressources au moyen d'enum (Jean-Jacques, spéciale dédicasse si tu as lu jusque là ...)
 * Découplage de l'affichage du vaisseau en fonction de son état et des traitements des inputs.
 
