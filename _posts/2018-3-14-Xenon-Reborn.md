@@ -79,7 +79,7 @@ Pour vous amuser un peu, voici les commandes :
 |-------------------------------|---------------------------------------------------|
 |`FLECHES DU CURSEUR` 		| mouvements du vaisseau							|
 |`CTRL-DROIT` 					| tir conventionnel									|
-|`SHIFT-DROIT` 				| tir desctructeur									|
+|`SHIFT-DROIT` 				| tir destructeur									|
 |`ENTREE` 						| activation/désactivation du bouclier				|
 |`F1` 							| bascule mode plein écran / fenêtré				|
 |`ESC` 							| retour à l'écran précédent						|
