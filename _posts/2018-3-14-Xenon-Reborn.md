@@ -67,7 +67,11 @@ Voici ce que cela donne pour le moment, le jeu commence vraiment vers 48 seconde
 
 <iframe class="video" src="https://www.youtube.com/embed/ki39sbk4VKc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-Si vous souhaitez y jouer, il vous suffit d'avoir un Java 8 (JRE) d'installé sur votre poste (Windows ou Linux), de dézipper ce fichier : [XenonReborn_0_1_9.zip](/download/XenonReborn_0_1_9.zip) et de lancer le fichier jar `XenonReborn_0_1_9.jar` situé à la racine.
+Si vous souhaitez y jouer, il vous suffit d'avoir un Java 8 (JRE) d'installé sur votre poste (Windows ou Linux), de dézipper ce fichier : 
+
+{%include download.html url="/download/XenonReborn_0_1_9.zip" title="XenonReborn_0_1_9.zip" %}
+
+Puis, lancez le fichier jar `XenonReborn_0_1_9.jar` situé à la racine.
 
 Pour vous amuser un peu, voici les commandes :
 
