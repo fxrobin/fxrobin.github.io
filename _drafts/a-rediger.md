@@ -26,3 +26,16 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * nommage des interfaces
 * tutorial JANDEX : http://docs.wildfly.org/jandex/org/jboss/jandex/package-summary.html
 * Pattern State
+* ByteBuddy
+* GraphQL
+* Joker (Java Docker)
+* Emulateur TO8 sur Debian
+* Installation de Jekyll sur un poste local (+ démarche) 
+	* zlib, build-essentials, libcurl4-openssl-dev
+	* tuto classique
+* Spring vs Java EE (dixit salon BreizhCamp)
+* Spring Secu + JSF
+* refactoriser son code et être plus efficace avec Eclipse
+* tests unitaires Java EE 7 8 ? avec Arquillian	
+* OWASP ZAP
+* Perf test + période de chauffe + collecte
