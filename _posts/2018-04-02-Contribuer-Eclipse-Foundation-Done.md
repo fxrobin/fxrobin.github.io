@@ -13,7 +13,7 @@ Il était donc temps, au lieu d'attendre *en ronchonnant* qu'un patch ne soit d�
 
 ## Contexte
 
-Je vais faire court : Payara 5, dérivé supporté de GlassFish 5 est sorti officiellement le 22/03/2018. Son numéro de version `5.181` contenu dans le fichier MANIFEST du module `glassfish-api.jar` n'est pas compatible avec le plugin "GlassFish Tools" d'Eclipse. Ce dernier se fonde sur une expression régulière qui refuse que le second numéro comporte plus d'un nombre.
+Je vais faire court : Payara 5, dérivé supporté de GlassFish 5 est sorti officiellement le 22/03/2018. Son numéro de version `5.181` contenu dans le fichier MANIFEST du module `glassfish-api.jar` n'est pas compatible avec le plugin "GlassFish Tools" d'Eclipse. Ce dernier se fonde sur une expression régulière qui refuse que le second numéro comporte plus d'un chiffre.
 
 Exemples : 
 * `4.1.1` : OK
@@ -61,7 +61,7 @@ Je fais mon `git clone [url]` et j'obtiens les sources, ce qui me permet de loca
 
 ## Correctif
 
-Voici la partie la plus simple, car je trouve rapidement la classe incriminée : `GlassFishInstall` et son pattern de détection de version : 
+Voici la partie la plus simple, je m'attaque à la classe `GlassFishInstall` et son pattern de détection de version : 
 
 ```java
 private static final Pattern VERSION_PATTERN = Pattern.compile( "([0-9]\\.[0-9](\\.[0-9])?(\\.[0-9])?)(\\..*)?" );
@@ -73,14 +73,14 @@ La correction est triviale, je rajoute `{1,3}` après le premier point détecté
 ```java
 private static final Pattern VERSION_PATTERN = Pattern.compile( "([0-9]\\.[0-9]{1,3}(\\.[0-9])?(\\.[0-9])?)(\\..*)?" );
 ```
-Je teste mon expression régulière sur différentes valeurs avec des outils en ligne, puis je teste en lançant de la feature dont fait partie le plugin sous forme de "Eclipse Appplication".
+Je teste mon expression régulière sur différentes valeurs avec des outils en ligne, puis je teste en lançant de la feature dont fait partie le plugin sous forme de "Eclipse Application".
 
 J'ai plusieurs versions de GlassFish d'installées sur mon poste et de Payara, donc je teste toutes les instances.
 Tout fonctionne du premier coup, comme d'habitude :-) :-) Aïe mes chevilles ...
 
 > À ce moment précis, je m'autocongratule derrière mon clavier, puis devant la glace de la salle de bain : *"La machine Tuck Pendleton, zéro défaut !"*. Un cadeau à gagner pour celui qui me dit de quel film est issue cette phrase dans les commentaires, avec le minutage !
 
-Enfin, je me décide à le publier sur son repository Eclipse
+Enfin, je me décide à le publier sur son repository Eclipse.
 
 > L'autocongratulation ne va pas durer longtemps.
 
@@ -102,7 +102,7 @@ Pour contribuer, il va me falloir :
 Une fois toutes ces opérations faites, le PUSH ne fonctionne toujours pas.
 Logique encore, pourquoi aurais-je le droit sur le "master" sans être un committer officiel.
 
-Ce qui m'aide, comme souvent, c'est [cet article le site de Lars Vogel](http://www.vogella.com/tutorials/EclipsePlatformDevelopment/article.html).
+Ce qui m'aide, comme souvent, c'est [cet article du site de Lars Vogel](http://www.vogella.com/tutorials/EclipsePlatformDevelopment/article.html).
 
 Je découvre, avec le moteur de recherche de Gerrit un autre projet et une autre URL pour GlassFish Tools, qui me mettent la puce à l'oreille: 
 * PROJET : `permissions/glassfish-tools-dev`
