@@ -113,7 +113,7 @@ de contributeurs enregistrés et authentifiés sur le site Eclipse (ECA).
 
 Je réapplique mon correctif dans ce nouveau repo, qui est identique à l'autre.
 J'ai choisi cette "tactique" car j'avais vraiment fait très peu de modification sur le code source.
-Sinon j'aurai cherché un peu plus comment reparamétrer l'upstream, mais je ne voulais plus me 
+Sinon j'aurais cherché un peu plus comment reparamétrer l'upstream, mais je ne voulais plus me 
 complexifier la démarche.
 
 Je *commit* en faisant bien attention au format du message :
