@@ -334,7 +334,7 @@ img {
 
 #left
 {
-  margin-right : 300px;
+  margin-right : 450px;
   @include mobile { margin-right : inherit }
 }
 
@@ -347,7 +347,7 @@ img {
   padding : 0.5em;
   border : solid blue 1px;
   float : right;
-  width : 300px;
+  width : 450px;
   border : solid #555599 2px;
   border-radius : 0.5em;
   box-shadow: 2px 2px 2px #555555;
