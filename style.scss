@@ -575,12 +575,12 @@ img {
     }
   }
 
-  .comments {
-    margin-top: 10px;
-  }
-
-  
 }
+
+.comments {
+    margin-top: 1em;
+    margin-left : 1em;
+  }
 
 .entry > P:first-child
 {
@@ -744,6 +744,48 @@ aside A, aside A:visited, aside A:hover
  	Th { border : solid #DDDDDD 1px; background-color : #444444; color : white; }
  }
  
+ 
+ .disqus
+ {
+   
+ h2 
+  { 
+  	border-bottom : solid #DDDDDD 2px; 
+  	font-family : "Russo One";
+  }
+  
+  
+    
+  h2::before {
+    // color : #33FF33;
+    // padding-left : 0.5em;
+    font-size : 1.5em;
+    content: " > ";
+    @include mobile {
+      content: '';
+    }
+  }
+ 
+ }
+ 
+ .article-list-footer
+ {
+    margin-top: 1em;
+    
+    .article-list-header
+    {
+    	color : #000066;
+  		border-bottom : solid #DDDDDD 2px; 
+  		font-family : "Russo One";
+  		font-size : 1.5em;
+  	}
+  	
+  	.article-list-entry
+  	{
+  	  margin-left : 1em;
+  	}
+ 
+ }
 
 // Settled on moving the import of syntax highlighting to the bottom of the CSS
 // ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start

@@ -28,6 +28,26 @@ layout: default
   <div class="entry">
     {{ content }}
   </div> 
- 
-  {% include disqus.html %}
 </article>
+
+<div class="disqus">
+  <h2>Vos commentaires</h2>
+  {% include disqus.html %}
+</div>  
+
+<div class="article-list-footer">
+   <div class="article-list-header"><i class="fa fa-newspaper-o"></i> Mes autres articles</div>
+ 	{% for post in site.posts %}
+ 	 {% if post != page %}
+	 <div class="article-list-entry">   
+	   <span class="article-list-entry-date">  		
+	   		{{post.date | date: "%d/%m/%Y" }}
+	   </span>
+	   <i class="fa fa-chevron-circle-right"></i>
+	   <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+	 </div>  
+	 {% endif %}
+	{% endfor %}
+</div>
+
+
