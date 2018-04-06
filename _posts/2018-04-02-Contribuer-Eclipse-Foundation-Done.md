@@ -100,7 +100,7 @@ Pour contribuer, il va me falloir :
 * générer un compte et un password sur Gerrit : c'est ce compte qui servira pour git.
 
 Une fois toutes ces opérations faites, le PUSH ne fonctionne toujours pas.
-Logique encore, pourquoi aurais-je le droit sur le "master" sans être un committer officiel.
+Logique encore, pourquoi aurais-je le droit sur le "master" sans être un committer officiel ?
 
 Ce qui m'aide, comme souvent, c'est [cet article du site de Lars Vogel](http://www.vogella.com/tutorials/EclipsePlatformDevelopment/article.html).
 
