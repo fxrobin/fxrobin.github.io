@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/blink.css" />
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/hover/hover.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/TypewriterJS/1.0.0/typewriter.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />  
   </head>
@@ -24,7 +25,7 @@
           <a href="{{ site.baseurl }}/" class="site-avatar"><img src="{{ site.avatar }}" alt="{{ site.name }}" title="{{ site.name }}" /></a>
 
           <div class="site-info">
-            <h1 class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }} </a><span class="blinking-cursor">&#0095;</span></h1>
+            <h1 id="site-name" class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }} </a></h1>
             <p class="site-description">{{ site.description }}</p>
           </div>
 
@@ -73,5 +74,25 @@
     </script>
 
     {% include analytics.html %}
+    
+    <script>
+    var app = document.getElementById('site-name');
+
+    var typewriter = new Typewriter(app, {
+        loop: true,
+        cursor: '\u2588'
+    });
+
+    typewriter.typeString('FX JavaDevBlog')
+        .pauseFor(2500)
+        .typeString(' : un blog sur Java')
+        .pauseFor(2500)
+        .deleteChars(4)
+        .typeString("et sur l'architecture SI")
+        .pauseFor(2500)
+        .start();
+
+    </script>
+    
   </body>
 </html>
