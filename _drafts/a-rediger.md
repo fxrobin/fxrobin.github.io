@@ -39,3 +39,4 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * tests unitaires Java EE 7 8 ? avec Arquillian	
 * OWASP ZAP
 * Perf test + période de chauffe + collecte
+* Java Service Wrapper + NEXUS + Raspberry
