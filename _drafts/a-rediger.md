@@ -41,3 +41,6 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * Perf test + période de chauffe + collecte
 * Java Service Wrapper + NEXUS + Raspberry : https://wrapper.tanukisoftware.com/doc/english/download.jsp
 * Archiva + Wrapper + Maven + Raspberry
+* Java EE 8 Security API + Interceptor CDI + SecurityContext
+* Les EJB mal aimés ...  
+* Java EE 8 + Angular 5 + ?  
