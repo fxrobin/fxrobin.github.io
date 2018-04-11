@@ -8,6 +8,8 @@ logo: brain-logo.png
 Ce court billet va vous présenter quelles instructions sont exécutées dans vos
 classes, lorsque que vous en réclamez une instance.
 
+<!--excerpt-->
+
 ## Que va-t-on tester ?
 
 Une classe Java, que l'on souhaite pouvoir instancier, peut disposer :

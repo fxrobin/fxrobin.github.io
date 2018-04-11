@@ -7,6 +7,8 @@ logo: brain-logo.png
 
 Post uniquement en Draft qui contient les sujets à rédiger.
 
+<!--excerpt-->
+
 ## A rédiger
 
 * publication WAR + JSF + EJB + PrimeFaces + JAX-RS + PostGreSQL sur HEROKU

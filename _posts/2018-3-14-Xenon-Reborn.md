@@ -9,7 +9,11 @@ tags: [algo, LibGDX, java]
 
 
 Dans mon parcours professionnel, j'ai été formateur de jeunes développeurs pendant sept années.
-Ces derniers venaient d'horizons différents, parfois sans aucune compétence en terme de programmation. Afin de rendre ludique l'apprentissage des fondamentaux de l'algorithmique et de Java, je les ai fait participer à la création d'un jeu video : **Xenon Reborn**.
+Ces derniers venaient d'horizons différents, parfois sans aucune compétence en terme de programmation. 
+
+Afin de rendre ludique l'apprentissage des fondamentaux de l'algorithmique et de Java, je les ai fait participer à la création d'un jeu video : **Xenon Reborn**.
+
+<!--excerpt-->
 
 ## Contexte
 
