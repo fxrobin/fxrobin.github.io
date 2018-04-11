@@ -108,7 +108,7 @@ Logique encore, pourquoi aurais-je le droit sur le "master" sans être un commit
 Ce qui m'aide, comme souvent, c'est [cet article du site de Lars Vogel](http://www.vogella.com/tutorials/EclipsePlatformDevelopment/article.html).
 
 Je découvre, avec le moteur de recherche de Gerrit un autre projet et une autre URL pour GlassFish Tools, qui me mettent la puce à l'oreille: 
-* PROJET : `permissions/glassfish-tools-dev`
+* PROJET : `glassfish-tools/glassfish-tools`
 * URL : `https://[username]@git.eclipse.org/r/a/glassfish-tools/glassfish-tools`
 
 Un peu perdu dans la configuration du PUSH STREAM par rapport à mon repo git, je décide alors de faire un clone de ce nouveau repo, dédié au DEV

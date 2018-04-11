@@ -4,10 +4,12 @@ code.highlighter-rouge
 	background-color: $lightGray;
 	border-radius: 0.25em;
 	padding : 3px;	
+    font-family: 'atari', monospace;
+    font-size : 1em;
 }
 
 pre.highlight {
-  font-family: 'atari', monospace;
+  font-family: 'volter', 'atari', monospace;
   color : #00ff00;
   background-color: #111133;
   // background-image : url('/images/scanline.jpg');
@@ -37,12 +39,6 @@ pre.highlight {
     clear: both;
   }
   
-}
-
-
-
-code {
-  font-family: 'atari', monospace;
 }
 
 .highlight .c { color: #586E75 } /* Comment */
