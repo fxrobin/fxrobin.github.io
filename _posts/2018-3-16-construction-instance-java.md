@@ -1,12 +1,12 @@
 ---
 layout: post
-title: Connaissez-vous vraiment bien l'instanciation en Java ?
-subtitle: Afin de (re)découvrir quelques subtilités ...
+title: Connaissez-vous bien l'instanciation ?
+subtitle: Afin de (re)découvrir quelques subtilités de ce mécanisme en Java ...
 logo: brain-logo.png
 ---
 
 Ce court billet va vous présenter quelles instructions sont exécutées dans vos
-classes, lorsque que vous en réclamez une instance.
+classes Java, lorsque que vous en réclamez une instance.
 
 <!--excerpt-->
 
