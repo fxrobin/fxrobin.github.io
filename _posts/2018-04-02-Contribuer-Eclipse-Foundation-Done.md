@@ -7,10 +7,12 @@ category: JAVA
 tags: [OpenSource, Eclipse, Java, GlassFish, GlasFishTools]
 ---
 
+<div class="intro" markdown='1'>
 Comme tout bon développeur Java, je suis un gros consommateur des solutions fournies par l'Eclipse Foundation.
 Je ne vais en citer que quelques-unes : Eclipse IDE, EclipseLink, Eclipse GlassFish, Jetty, Eclipse EGit, Eclipse Maven Integration, etc.
 
 Il était donc temps, au lieu d'attendre *en ronchonnant* qu'un patch ne soit développé, de **contribuer en fournissant un correctif** à un projet.
+</div>
 
 <!--excerpt-->
 

@@ -7,10 +7,12 @@ category: JAVA_EE
 tags: [java_ee, jpa]
 ---
 
+<div class="intro" markdown='1'>
 Je vais vous présenter succinctement les deux façons
 natives en JPA pour déclarer des `NamedQuery`. 
 
 On verra alors que ces deux solutions ont des défauts et je vous proposerai alors une **3ème qui me paraît plus satisfaisante, fondée sur une "enum"**.
+</div>
 
 <!--excerpt-->
 

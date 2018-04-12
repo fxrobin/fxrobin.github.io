@@ -5,8 +5,10 @@ subtitle: Afin de (re)découvrir quelques subtilités de ce mécanisme en Java .
 logo: brain-logo.png
 ---
 
+<div class="intro" markdown='1'>
 Ce court billet va vous présenter quelles instructions sont exécutées dans vos
 classes Java, lorsque que vous en réclamez une instance.
+</div>
 
 <!--excerpt-->
 

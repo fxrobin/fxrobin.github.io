@@ -6,11 +6,11 @@ logo: brain-logo.png
 category: CONCEPTION
 tags: [patterns,java,lazy,threadsafe,classloading]
 ---
-
+<div class="intro" markdown='1'>
 L'objectif de ce billet est de présenter une implémentation simple en Java du pattern Singleton. 
 
 Je ne traiterai donc pas de l'utilité ni des recommandations d'usage liées à celui-ci mais bien de mise en oeuvre (codage pour les intimes) en Java Standard Edition (JSE). 
-
+</div>
 <!--excerpt-->
 
 

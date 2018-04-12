@@ -7,11 +7,12 @@ category: JAVA
 tags: [algo, LibGDX, java]
 ---
 
-
+<div class="intro" markdown='1'>
 Dans mon parcours professionnel, j'ai été formateur de jeunes développeurs pendant sept années.
 Ces derniers venaient d'horizons différents, parfois sans aucune compétence en terme de programmation. 
 
 Afin de rendre ludique l'apprentissage des fondamentaux de l'algorithmique et de Java, je les ai fait participer à la création d'un jeu video : **Xenon Reborn**.
+</div>
 
 <!--excerpt-->
 
@@ -73,7 +74,7 @@ Voici ce que cela donne pour le moment, le jeu commence vraiment vers 48 seconde
 
 Si vous souhaitez y jouer, il vous suffit d'avoir un Java 8 (JRE) d'installé sur votre poste (Windows ou Linux), de dézipper ce fichier : 
 
-{%include download.html url="/download/XenonReborn_0_1_10.zip" title="XenonReborn_0_1_10.zip" %}
+{%include download.html url="https://github.com/fxrobin/Xenon_Reborn/files/1894717/XenonReborn_0.1.10.zip" title="XenonReborn_0_1_10.zip" %}
 
 Puis, lancez le fichier jar `XenonReborn.jar` situé à la racine.
 
