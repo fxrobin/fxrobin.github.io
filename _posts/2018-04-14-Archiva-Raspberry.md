@@ -27,7 +27,7 @@ En toute confiance alors, je me dis que la petite coquette boitounnette rose pou
 
 ![RPI-et-Freebox](/images/archiva-rpi/rpi-box.jpg)
 
-Mon Raspberry 1ère génération m'en avait déjà rendusrendu pas mal soit par le passé, soit toujours en place :
+Mon Raspberry 1ère génération m'en avait déjà rendu pas mal soit par le passé, soit toujours en place :
 - serveur d'applications Tomcat, GlassFish ! (si si !)
 - serveur de Blog
 - Console de RetroGaming avec Retropie ... avec quand même quelques lenteurs pour certains émulateurs
