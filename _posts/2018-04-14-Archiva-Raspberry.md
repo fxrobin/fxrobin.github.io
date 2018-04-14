@@ -11,7 +11,7 @@ tags: [OpenSource, Maven, Archiva, Raspberry]
 "**Il me faut un repo Maven dédié !**". Voilà ce qui m'est venu en tête quand j'ai dû changer
 de machine récemment alors que tous les artefacts maven que je produisais étaient *capitalisés* dans le `.m2/repository` de mon *home*. Autant dire "Pas capitalisés". 
 
-Biensûr, j'utilise un repo Nexus *au boulot* mais je change d'activité et je vais devenir plus *mobile*, il me faut donc une solution.
+Bien sûr, j'utilise un repo Nexus *au boulot* mais je change d'activité et je vais devenir plus *mobile*, il me faut donc une solution.
 
 J'aurais pu prendre une image Docker et la déployer sur AWS ou équivalent : la solution de facilité qui demande toutefois un peu de "ressource" financière. 
 
@@ -27,7 +27,7 @@ En toute confiance alors, je me dis que la petite coquette boitounnette rose pou
 
 ![RPI-et-Freebox](/images/archiva-rpi/rpi-box.jpg)
 
-Mon Raspberry 1ère génération m'en avait déjà rendus pas mal soit par le passé, soit toujours en place :
+Mon Raspberry 1ère génération m'en avait déjà rendusrendu pas mal soit par le passé, soit toujours en place :
 - serveur d'applications Tomcat, GlassFish ! (si si !)
 - serveur de Blog
 - Console de RetroGaming avec Retropie ... avec quand même quelques lenteurs pour certains émulateurs
@@ -36,7 +36,7 @@ Mon Raspberry 1ère génération m'en avait déjà rendus pas mal soit par le pa
 
 Quand même, finalement, c'est pas mal pour un RPI1 !
 
-> J'ai aussi un RPI3, mais celui là me sert officiellement de console retrogaming : il y a des priorités.
+> J'ai aussi un RPI3, mais celui-là me sert officiellement de console retrogaming : il y a des priorités.
 
 Donc c'est parti, je vérifie que Java 8 est bien installé dessus :
 
@@ -61,7 +61,7 @@ pi@raspberrypi:~ $ uname -a
 Linux raspberrypi 4.9.59+ #1047 Sun Oct 29 11:47:10 GMT 2017 armv6l GNU/Linux
 ```
 
-> A ce moment là, un doute commence à apparaitre ... Ca va être "léger" quand même. Tant pis, le défi m'interesse ... C'est parti !
+> A ce moment-là, un doute commence à apparaitre ... Ca va être "léger" quand même. Tant pis, le défi m'interesse ... C'est parti !
 
 ## Sonatype Nexus versus Apache Archiva
 
@@ -358,5 +358,3 @@ et après publication de mon projet, tout est bien présent dans Archiva dans `f
 Pour achever le tout il me faudra activer une redirection de port sur la FREEBOX pour pouvoir y accéder quand je suis en déplacement ou, mieux, un VPN (mais cela dépasse le cadre de ce petit tuto) et le tour sera joué ...
 
 Encore un truc qui **devait** prendre 15 minutes ...
-
-
