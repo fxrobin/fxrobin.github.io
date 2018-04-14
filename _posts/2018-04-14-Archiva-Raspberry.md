@@ -8,32 +8,35 @@ tags: [OpenSource, Maven, Archiva, Raspberry]
 ---
 
 <div class="intro" markdown='1'>
-"*Il me faut un repo Maven dédié !*". Voilà ce qui m'est venu en tête quand j'ai dû changer
-de machine récemment alors que tous les artefacts maven que je produisais étaient *capitalisés* dans le `.m2\repository` de mon *home*. Autant dire "Pas capitalisés". Biensûr, j'utilise un repo Nexus *au boulot* mais
-je change d'activité et je vais devenir plus *mobile*, il me faut donc une solution.
+"**Il me faut un repo Maven dédié !**". Voilà ce qui m'est venu en tête quand j'ai dû changer
+de machine récemment alors que tous les artefacts maven que je produisais étaient *capitalisés* dans le `.m2/repository` de mon *home*. Autant dire "Pas capitalisés". 
 
-J'aurai pu prendre une image docker et la déployer sur Amazon Web Services. La solution de facilité, mais qui demande quand même un peu de "ressource" financière. 
+Biensûr, j'utilise un repo Nexus *au boulot* mais je change d'activité et je vais devenir plus *mobile*, il me faut donc une solution.
+
+J'aurais pu prendre une image Docker et la déployer sur AWS ou équivalent : la solution de facilité qui demande toutefois un peu de "ressource" financière. 
 
 Et je le vois, là, rose, toutes diodes allumées, connecté à ma box, servant de proxy Squid de temps en temps.
-Mon Raspberry PI 1, je l'entends encore me dire "moi je peux, moi je peux, moi je peux !" 
+Mon Raspberry PI 1, je l'entends encore me dire "**Moi je peux, moi je peux, moi je peux !**" en trépignant dans son joli boitier.
 </div>
 
 <!--excerpt-->
 
-## Pré-requis
+## Etat des lieux
 
 En toute confiance alors, je me dis que la petite coquette boitounnette rose pourra effectivement rendre le service.
 
 ![RPI-et-Freebox](/images/archiva-rpi/rpi-box.jpg)
 
-Il m'en avait déjà rendu pas mal par le passé :
-- Serveur d'applications GlassFish ! (si si !)
+Mon Raspberry 1ère génération m'en avait déjà rendus pas mal soit par le passé, soit toujours en place :
+- serveur d'applications Tomcat, GlassFish ! (si si !)
+- serveur de Blog
 - Console de RetroGaming avec Retropie ... avec quand même quelques lenteurs pour certains émulateurs
-- Serveur "NextCloud"
+- serveur "NextCloud"
 - et donc plus récemment proxy SQUID et proxy APT.
 
 Quand même, finalement, c'est pas mal pour un RPI1 !
-J'ai aussi un RPI3, mais celui là me sert officiellement de console retrogaming : il y a des priorités :-)
+
+> J'ai aussi un RPI3, mais celui là me sert officiellement de console retrogaming : il y a des priorités.
 
 Donc c'est parti, je vérifie que Java 8 est bien installé dessus :
 
@@ -44,7 +47,9 @@ Java(TM) SE Runtime Environment (build 1.8.0_65-b17)
 Java HotSpot(TM) Client VM (build 25.65-b01, mixed mode)
 ```
 
-Parfait, en plus il s'agit de la version "Oracle" accessible par le PPA de WebUpd8.
+Parfait, en plus il s'agit de la version "Oracle" accessible par le PPA de WebUpd8Team :
+
+S'il n'est pas installé, tout est là : https://launchpad.net/~webupd8team/+archive/ubuntu/java
 
 Petit rappel des caractéristiques de la bête :
 - Processeur ARM
@@ -56,7 +61,7 @@ pi@raspberrypi:~ $ uname -a
 Linux raspberrypi 4.9.59+ #1047 Sun Oct 29 11:47:10 GMT 2017 armv6l GNU/Linux
 ```
 
-> A ce moment là, un doute commence à apparaitre ... Ca va être "léger" quand même. Tant pis, le chalenge m'interesse ... C'est parti !
+> A ce moment là, un doute commence à apparaitre ... Ca va être "léger" quand même. Tant pis, le défi m'interesse ... C'est parti !
 
 ## Sonatype Nexus versus Apache Archiva
 
@@ -98,6 +103,7 @@ $ ./archiva
 
 et bim ! Ca ne marche pas !
 
+
 ```
 Unable to locate any of the following operational binaries:
   /opt/archiva2/bin/./wrapper-linux-armv6l-64
@@ -105,11 +111,13 @@ Unable to locate any of the following operational binaries:
   /opt/archiva2/bin/./wrapper
 ```
 
+![Angry](/images/archiva-rpi/angry.png)
+
 Et oui le lanceur `archiva` n'est pas un simple `java -jar`. Il utilise un wrapper qui monte tout un environnement et un paramétrage spécifique. Pour en savoir plus sur ce wrapper : https://wrapper.tanukisoftware.com/doc/english/download.jsp 
 
 ## Recompilation du Java Wrapper pour Raspberry PI
 
-Il me faut donc récupérer le source du wrapper, le recompiler pour ARM (armv6l-32) et place les fichiers
+Il me faut donc récupérer le source du wrapper, le recompiler pour ARM (armv6l-32) et placer les fichiers
 dans le répertoire d'archiva. Attention au passage les *build* pour ARM7 de fonctionne pas sur RPI. Il faut donc bien recompiler l'ensemble pour le RPI.
 
 On télécharge les sources du Wrapper :
@@ -119,7 +127,7 @@ $ wget -O wrapper-sources.zip https://sourceforge.net/projects/wrapper/files/wra
 $ unzip wrapper-sources.zip
 ```
 
-Pour récompiler il faudra "ant" et exporter JAVA_HOME s'il n'est pas défini :
+Pour recompiler il faudra aussi "ant" et exporter JAVA_HOME s'il n'est pas défini :
 
 ```
 $ su 
@@ -212,14 +220,13 @@ Et voilà, au bout de 9 minutes sur mon RPI overclocké, Apache Archiva est fonc
 
 ## Configuration d'Apache Archiva
 
-Je le configure avec un compte admin et un compte `fxjavadevblog` qui pourra publier des artefacts
-dans archiva.internal et archiva.snapshots. Ce point est assez intuitif par l'interface web de Archiva,
-donc pas besoin de le détailler. Même un administrateur Windows pourrait y arriver.
+Je le configure avec un compte `admin` et un compte `fxjavadevblog` qui pourra publier des artefacts
+dans `archiva.internal` et `archiva.snapshots`. Ce point est assez intuitif par l'interface web de Archiva,
+donc pas besoin de le détailler. *Même un administrateur Windows pourrait y arriver.*
 
-Il ne manque plus qu'à faire en sorte qu'Archiva soit lancé au démarrage du RPI, si jamais il reboote.
-Pour ce faire, il suffit de lier le script `/opt/archiva/bin/archiva` avec `/etc/init.d/archiva`.
-Il faut tout de même modifier le script `archiva` au préalable pour y ajouter (en décommentant) la
-ligne suivante :
+Il ne manque plus que de faire en sorte qu'Archiva soit lancé au démarrage du RPI, si jamais le RPI reboote.
+
+Au préalable, il faut tmodifier le script `bin/archiva` au préalable pour y ajouter (en décommentant) la ligne suivante :
 
 ```
 RUN_AS_USER=archiva
@@ -245,9 +252,9 @@ et automatique :
 Enfin : 
 - je fais un lien sur le script, 
 - je l'enregistre comme daemon de démarrage, 
-- puis je l'active,
+- je l'active,
 - je le lance,
-- je vérifie qu'il fonctionne
+- je vérifie qu'il fonctionne.
 
 
 ```
@@ -278,16 +285,19 @@ avril 13 22:06:47 raspberrypi archiva[871]: Removed stale pid file: /opt/archiva
 avril 13 22:06:47 raspberrypi systemd[1]: Started SYSV: Apache Archiva.
 ```
 
-Tout va bien.
+Victoire, tout va bien.
+
+![Victory](/images/archiva-rpi/victory.png)
 
 > C'est le moment d'aller prendre un second petit café en récompense ...
 
 
 ## Configuration de ~/.m2/settings.xml
 
-Il faut maintenant modifier le fichier "settings.xml" de la station pour le prendre en compte.
+Il faut maintenant modifier le fichier `~/.m2/settings.xml` de la station pour le prendre en compte.
 Attention ici, `raspberry` est un alias DNS que j'ai placé dans mon fichier `/etc/hosts`.
-Pour plus de faciliter vous pourrez le remplacer par une adresse IP, éventuellement.
+
+Plus simplement, vous pourrez le remplacer par une adresse IP, éventuellement.
 
 De plus je fais donc en sorte qu'Archiva soit mon proxy pour tous les artefacts issus de Maven Central.
 Cette déclaration se fait dans la partie `<mirror> ... </mirror>`
@@ -316,8 +326,9 @@ Cette déclaration se fait dans la partie `<mirror> ... </mirror>`
 ```
 ## Configuration des "pom.xml"
 
-Biensûr, je n'oublie pas de modifier les POM des projets, car ce sera le "goal" `install` de maven qui ira publier les artefacts. D'ailleurs sur ce point, la documentation officielle d'Apache Archiva est fausse, car les 
-URL de publication sont éronnés. Voici une configuration correcte :
+Biensûr, je n'oublie pas de modifier les POM de mes projets Java, car ce sera le "goal" `install` de maven qui ira publier les artefacts. D'ailleurs sur ce point, la documentation officielle d'Apache Archiva est fausse, car les URL de publication sont éronnées. 
+
+Voici une configuration correcte :
 
 ```
 <distributionManagement>
@@ -334,12 +345,18 @@ URL de publication sont éronnés. Voici une configuration correcte :
 </distributionManagement>
 ```
 
+et après publication de mon projet, tout est bien présent dans Archiva dans `fr.fxjavadevblog`. On y voit aussi les autres artefacts téléchargés depuis Maven Central.
+
+![Capture Archiva](/images/archiva-rpi/capture.png)
+
 ## Conclusion
 
-> J'adore quand un plan de déroule sans accroc ...
+> J'adore quand un plan se déroule sans accroc ...
 
 <iframe class="video mini" width="560" height="315" src="https://www.youtube.com/embed/HzRF2622m9A?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-Pour achever le tout il me faudra activer une redirection de port sur la FREEBOX pour pouvoir y accéder quand je suis en déplacement ou mieux, un VPN (mais cela dépasse le cadre de ce petit tuto) et le tour sera joué ...
+Pour achever le tout il me faudra activer une redirection de port sur la FREEBOX pour pouvoir y accéder quand je suis en déplacement ou, mieux, un VPN (mais cela dépasse le cadre de ce petit tuto) et le tour sera joué ...
 
 Encore un truc qui **devait** prendre 15 minutes ...
+
+
