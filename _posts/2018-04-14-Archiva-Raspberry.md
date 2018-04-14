@@ -61,7 +61,7 @@ pi@raspberrypi:~ $ uname -a
 Linux raspberrypi 4.9.59+ #1047 Sun Oct 29 11:47:10 GMT 2017 armv6l GNU/Linux
 ```
 
-> A ce moment-là, un doute commence à apparaitre ... Ca va être "léger" quand même. Tant pis, le défi m'interesse ... C'est parti !
+> A ce moment-là, un doute commence à apparaitre ... Ca va être "léger" quand même. Tant pis, le défi m'intéresse ... C'est parti !
 
 ## Sonatype Nexus versus Apache Archiva
 
@@ -118,7 +118,7 @@ Et oui le lanceur `archiva` n'est pas un simple `java -jar`. Il utilise un wrapp
 ## Recompilation du Java Wrapper pour Raspberry PI
 
 Il me faut donc récupérer le source du wrapper, le recompiler pour ARM (armv6l-32) et placer les fichiers
-dans le répertoire d'archiva. Attention au passage les *build* pour ARM7 de fonctionne pas sur RPI. Il faut donc bien recompiler l'ensemble pour le RPI.
+dans le répertoire d'archiva. Attention au passage les *build* pour ARM7 ne fonctionne pas sur RPI. Il faut donc bien recompiler l'ensemble pour le RPI.
 
 On télécharge les sources du Wrapper :
 
@@ -226,7 +226,7 @@ donc pas besoin de le détailler. *Même un administrateur Windows pourrait y ar
 
 Il ne manque plus que de faire en sorte qu'Archiva soit lancé au démarrage du RPI, si jamais le RPI reboote.
 
-Au préalable, il faut tmodifier le script `bin/archiva` au préalable pour y ajouter (en décommentant) la ligne suivante :
+Au préalable, il faut modifier le script `bin/archiva` au préalable pour y ajouter (en décommentant) la ligne suivante :
 
 ```
 RUN_AS_USER=archiva
@@ -326,7 +326,7 @@ Cette déclaration se fait dans la partie `<mirror> ... </mirror>`
 ```
 ## Configuration des "pom.xml"
 
-Biensûr, je n'oublie pas de modifier les POM de mes projets Java, car ce sera le "goal" `install` de maven qui ira publier les artefacts. D'ailleurs sur ce point, la documentation officielle d'Apache Archiva est fausse, car les URL de publication sont éronnées. 
+Bien sûr, je n'oublie pas de modifier les POM de mes projets Java, car ce sera le "goal" `install` de maven qui ira publier les artefacts. D'ailleurs sur ce point, la documentation officielle d'Apache Archiva est fausse, car les URL de publication sont éronnées. 
 
 Voici une configuration correcte :
 
