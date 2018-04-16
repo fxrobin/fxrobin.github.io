@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Contribuer à l'Eclipse Foundation : DONE !"
+title: "Contribuer à l'Eclipse Foundation : <nobr>DONE !</nobr>"
 subtitle: plutôt que d'attendre en pestant sur sa chaise ...
 logo: eclipse.png
 category: JAVA

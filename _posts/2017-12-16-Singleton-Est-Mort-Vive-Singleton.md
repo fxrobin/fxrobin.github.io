@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Le singleton est mort, vive le singleton !
+title: Le singleton est mort, vive le <nobr>singleton !</nobr>
 subtitle: Encore un post sur le Singleton ?
 logo: brain-logo.png
 category: CONCEPTION

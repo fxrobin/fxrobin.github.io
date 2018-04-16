@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Connaissez-vous bien l'instanciation ?
+title: Connaissez-vous bien <nobr>l'instanciation ?</nobr>
 subtitle: Afin de (re)découvrir quelques subtilités de ce mécanisme en Java ...
 logo: brain-logo.png
 ---
