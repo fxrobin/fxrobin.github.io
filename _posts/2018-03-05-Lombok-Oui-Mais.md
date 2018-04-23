@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Lombok, <nobr>Oui !</nobr> <nobr>Mais ...</nobr>
+title: Lombok, Oui ! Mais...
 subtitle: Petit retour d'expérience de Lombok après 4 ans d'usage.
 logo: lombok-logo.png
 category: API
