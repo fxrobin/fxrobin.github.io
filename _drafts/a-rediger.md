@@ -20,7 +20,7 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * Spring Security et JSF
 * CDI avancé (Producer)
 * REST versus SOAP (perf.) ?
-* UTF8
+* UTF8 / UTF16 / Java Encoding
 * Complexité algorithmique
 * JEE8 + OpenLiberty
 * CDI + JavaFX
@@ -32,17 +32,21 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * GraphQL
 * Joker (Java Docker)
 * Emulateur TO8 sur Debian
-* Installation de Jekyll sur un poste local (+ démarche) 
+* Installation de Jekyll sur un poste local (+ démarche)
 	* zlib, build-essentials, libcurl4-openssl-dev
 	* tuto classique
 * Spring vs Java EE (dixit salon BreizhCamp)
 * Spring Secu + JSF
 * refactoriser son code et être plus efficace avec Eclipse
-* tests unitaires Java EE 7 8 ? avec Arquillian	
+* tests unitaires Java EE 7 8 ? avec Arquillian
 * OWASP ZAP
 * Perf test + période de chauffe + collecte
-* Java Service Wrapper + NEXUS + Raspberry : https://wrapper.tanukisoftware.com/doc/english/download.jsp
-* Archiva + Wrapper + Maven + Raspberry
 * Java EE 8 Security API + Interceptor CDI + SecurityContext
 * Les EJB mal aimés ...  
 * Java EE 8 + Angular 5 + ?
+* Java EE 8 + OpenLiberty
+* Moving to JavaScript / TypeScript
+* Les EJB c'est lourd et c'est lent ...
+* NodeJS : back to the roots ...
+* Apache Cassandra + Solr
+* Troll : Kotlin ...
