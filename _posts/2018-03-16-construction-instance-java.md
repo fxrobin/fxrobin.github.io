@@ -109,8 +109,8 @@ Commentaires :
 
 1. sans surprise, le bloc `static` de `Root` est exécuté en premier.
 2. puis vient le tour du bloc `static` de `Child` : rien d'étonnant pour le moment.
-3. puis c'est le bloc d'instance de `Root` alors que `this.getClass()` retourne bien `Child`. Et oui l'instance concrète courante est bien de type `Child` bien que le code soit présent dans la classe `Root`.
-4. le constructeur sans argument de `Root` est déclenché. C'est intéressant, on est toujours pas passé dans le bloc d'instance de `Child`. Pour mémoire, le constructeur par défaut d'une classe mère est toujours appelé implicitement quand aucun autre constructeur `super(args...)` n'est invoqué de manière explicite.
+3. puis c'est le bloc d'instance de `Root` alors que `this.getClass()` retourne bien `Child`. Et oui ! L'instance concrète courante est bien de type `Child` bien que le code soit présent dans la classe `Root`.
+4. le constructeur sans argument de `Root` est déclenché. C'est intéressant, on n'est toujours pas passé dans le bloc d'instance de `Child`. Pour mémoire, le constructeur par défaut d'une classe mère est toujours appelé implicitement quand aucun autre constructeur `super(args...)` n'est invoqué de manière explicite.
 5. le voilà maintenant exécuté notre bloc d'instance de `Child`, **intercallé** donc entre le constructeur sans argument de `Root` et son propre constructeur.
 6. Enfin, pour terminer, le constructeur sans argument de `Child` ferme la marche ... Il était temps !
 
