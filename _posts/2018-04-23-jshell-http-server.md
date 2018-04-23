@@ -172,7 +172,7 @@ jshell> /exit
 
 ## Encore un petit effort d'encodage
 
-Pour compléter ce petit exemple, il faut signaler l'encodage au navigateur :
+Pour compléter ce petit exemple, il faut signaler l'encodage `UTF-8` au navigateur :
 
 ```java
 import com.sun.net.httpserver.*;
@@ -199,7 +199,7 @@ et voici ce que l'on reçoit dans les headers HTTP de retour :
 ```
 Content-length : 12
 Content-type   : text/plain; charset=UTF-8
-Date	         : Mon, 23 Apr 2018 11:27:22 GMT
+Date	        : Mon, 23 Apr 2018 11:27:22 GMT
 ```
 
 On voit bien que le caractère `ç` est codé en UTF-8 sur deux octets. Puisque la chaine
