@@ -12,13 +12,13 @@ NodeJS se targue de pouvoir monter en quelques lignes
 de code un simple serveur HTTP. Effectivement, créer ce genre de serveur est vraiment simple et particulièrement
 utile pour du déploiement dans le Cloud.
 
-Et Java dans tout ça ? A la traine ? Has-Been ?
+Et Java dans tout ça ? A la traîne ? Has-Been ?
 
 > "Si à 50 ans t'as pas de Rolex et/ou si tu sais pas faire de TypeScript, t'as raté ta vie !"
 
 Fort heureusement, je vais vous montrer qu'avec JShell, apparu avec Java 9, en 10 lignes de code environ,
 vous obtiendrez un serveur HTTP Asynchrone, performant, en ayant à portée de main tout ce que vous offre Java 10,
-ses modules, ainsi qu'historiquement, toutes les bibliothèques JAR de son ecosystème !
+ses modules, ainsi qu'historiquement, toutes les bibliothèques JAR de son écosystème !
 </div>
 
 <!--excerpt-->
