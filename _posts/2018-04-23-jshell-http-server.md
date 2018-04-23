@@ -129,10 +129,10 @@ import java.net.InetSocketAddress;
 var address = new InetSocketAddress(8000);
 
 HttpHandler handler = service -> {
-            var response = "It works!".getBytes();
-						service.sendResponseHeaders(200, response.length);
-			      service.getResponseBody().write(response);
-			      service.getResponseBody().close(); };
+	var response = "It works!".getBytes();
+	service.sendResponseHeaders(200, response.length);
+	service.getResponseBody().write(response);
+	service.getResponseBody().close(); };
 
 var server = HttpServer.create(address,0);
 server.createContext("/test", handler);
@@ -182,11 +182,11 @@ var CONTENT_TYPE = "text/plain; charset=UTF-8";
 var address = new InetSocketAddress(8000);
 
 HttpHandler handler = service -> {
-            var response = "ça marche !".getBytes();
-						service.getResponseHeaders().set("Content-Type", CONTENT_TYPE);
-					  service.sendResponseHeaders(200, response.length);
-						service.getResponseBody().write(response);
-						service.close(); };
+	var response = "ça marche !".getBytes();
+	service.getResponseHeaders().set("Content-Type", CONTENT_TYPE);
+	service.sendResponseHeaders(200, response.length);
+	service.getResponseBody().write(response);
+	service.close(); };
 
 var server = HttpServer.create(address,0);
 server.createContext("/test", handler);
@@ -218,7 +218,7 @@ import com.sun.net.httpserver.*;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ForkJoinPool;
 
-/* Handler équivalent aux exemples précédents */
+/* HttpHandler équivalent aux exemples précédents */
 
 var server = HttpServer.create(address,0);
 server.createContext("/test", handler);
