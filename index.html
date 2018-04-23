@@ -8,10 +8,12 @@ layout: default
  	{% for post in site.posts %}
 	 <div class="article-list-entry"> 
 	  
-	   <span class="article-list-entry-date">  		
+	   
+	   <span class="article-list-entry-date">  	
+	   <i class="fa fa-chevron-circle-right"></i>	
 	   		{{post.date | date: "%d/%m/%Y" }}
 	   </span>
-	   <i class="fa fa-chevron-circle-right"></i>
+	   
 	   <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
 	 </div>  
 	{% endfor %}
