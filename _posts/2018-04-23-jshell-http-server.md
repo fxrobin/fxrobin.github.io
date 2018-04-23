@@ -93,7 +93,7 @@ Java 10 vient de sortir fin mars 2018. JShell est donc un outil assez récent ma
 et précieux.
 
 Pour faire simple, JShell vous permet d'écrire, à la volée ou dans un script, un programme
-Java sans avoir à coder tout le cérémonial classique d'un classe et son fameux `public static void main(String... args)`.
+Java sans avoir à coder tout le cérémonial classique d'une classe et son fameux `public static void main(String... args)`.
 
 Cet article n'a pas vocation à être un tutoriel JShell, mais d'en faire un usage simple.
 
@@ -144,7 +144,7 @@ Bon, à part le fait que j'ai l'impression de (re)découvrir les Servlets en 199
 cela reste agréable à écrire :
 
 * InetSocketAddress : vous connaissez tous depuis un paquet d'années, sans mauvais jeu de mots.
-* HttpServer et HttpHandler : ces classes sont apparues depuis Java 6 et elles sont bien présentes dans Java 10.
+* HttpServer et HttpHandler : cette classe et cette interface sont apparues depuis Java 6 et elles sont bien présentes dans Java 10.
 * Une petite expression lambda, pour définir le HttpHandler, qui est une bien interface à une seule méthode !
 * Un peu de "mamaille low level" : taille de la réponse, code HTTP en retour 200, écriture et fermeture du flux.
 * Création du serveur HTTP et de l'association du handler avec le context `/test`.
