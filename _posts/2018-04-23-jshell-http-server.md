@@ -197,9 +197,9 @@ System.out.printf("Serveur démarré : %s%n", address);
 et voici ce que l'on reçoit dans les headers HTTP de retour :
 
 ```
-Content-length : 12
-Content-type   : text/plain; charset=UTF-8
-Date	        : Mon, 23 Apr 2018 11:27:22 GMT
+Content-length	: 12
+Content-type	: text/plain; charset=UTF-8
+Date			: Mon, 23 Apr 2018 11:27:22 GMT
 ```
 
 On voit bien que le caractère `ç` est codé en UTF-8 sur deux octets. Puisque la chaine
@@ -238,7 +238,7 @@ avec Docker.
 Donc je remercie chaleureusement celui qui est à l'autre bout de l'oreillette, **Mickaël Baron**, pour la version Docker, une fois le script `minimal.jsh` créé bien évidemment (ici dans le répertoire courant) :
 
 ```
-docker run -it -p 8000:8000 -v $(pwd)/minimal.jsh:/minimal.jsh openjdk:10-jdk /bin/jshell --startup /minimal.jsh
+$ sudo docker run -it -p 8000:8000 -v $(pwd)/minimal.jsh:/minimal.jsh openjdk:10-jdk /bin/jshell --startup /minimal.jsh
 ```
 
 
