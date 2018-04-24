@@ -232,11 +232,10 @@ Asynchrone, et multicores !
 
 ## Version Docker
 
-On me dit dans l'oreillette que j'aurais pu être un peu moins fleimard et de conteneuriser le tout
+On me dit dans l'oreillette que j'aurais pu être un peu moins flemmard et de conteneuriser le tout
 avec Docker.
 
-Donc je remercie chaleureusement celui qui est à l'autre bout de l'oreillette, **Mickaël Baron**, pour la version Docker,
-une fois le script `minimal.jsh` créé bien évidemment (ici dans le répertoire courant) :
+Donc je remercie chaleureusement celui qui est à l'autre bout de l'oreillette, **Mickaël Baron**, pour la version Docker, une fois le script `minimal.jsh` créé bien évidemment (ici dans le répertoire courant) :
 
 ```
 docker run -it -p 8000:8000 -v $(pwd)/minimal.jsh:/minimal.jsh openjdk:10-jdk /bin/jshell --startup /minimal.jsh
