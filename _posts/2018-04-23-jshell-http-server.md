@@ -143,9 +143,9 @@ System.out.printf("Serveur démarré : %s%n", address);
 Bon, à part le fait que j'ai l'impression de (re)découvrir les Servlets en 1999,
 cela reste agréable à écrire :
 
-* InetSocketAddress : vous connaissez tous depuis un paquet d'années, sans mauvais jeu de mots.
-* HttpServer et HttpHandler : cette classe et cette interface sont apparues depuis Java 6 et elles sont bien présentes dans Java 10.
-* Une petite expression lambda, pour définir le HttpHandler, qui est bien une interface à une seule méthode !
+* `InetSocketAddress` : vous connaissez tous depuis un paquet d'années, sans mauvais jeu de mots.
+* `HttpServer` et `HttpHandler` : cette classe et cette interface sont apparues depuis Java 6 et elles sont bien présentes dans Java 10.
+* Une petite expression lambda, pour définir le `HttpHandler`, qui est bien une interface à une seule méthode !
 * Un peu de "mamaille low level" : taille de la réponse, code HTTP en retour 200, écriture et fermeture du flux.
 * Création du serveur HTTP et de l'association du handler avec le context `/test`.
 
