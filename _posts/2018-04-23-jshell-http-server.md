@@ -85,7 +85,7 @@ jshell> /exit
 
 ## Eh mais JShell c'est quoi donc ?
 
-Si vous vous pouvez cette question, c'est que vous n'êtes pas encore passé à Java 9
+Si vous vous posez cette question, c'est que vous n'êtes pas encore passé à Java 9
 et/ou que vous résidez dans une grotte depuis 2014, date d'élaboration de JShell.
 
 Bon d'accord Java 9 n'est sorti officiellement qu'en septembre 2017. Et, vous allez rire,
