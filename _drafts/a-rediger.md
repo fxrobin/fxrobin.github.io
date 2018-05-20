@@ -24,7 +24,7 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * Complexité algorithmique
 * JEE8 + OpenLiberty
 * CDI + JavaFX
-* Preconditions
+* Preconditions [EN COURS : 85%]
 * nommage des interfaces
 * tutorial JANDEX : http://docs.wildfly.org/jandex/org/jboss/jandex/package-summary.html
 * Pattern State
@@ -42,12 +42,13 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * OWASP ZAP
 * Perf test + période de chauffe + collecte
 * Java EE 8 Security API + Interceptor CDI + SecurityContext
-* Les EJB mal aimés ...  
 * Java EE 8 + Angular 5 + ?
 * Java EE 8 + OpenLiberty
 * Moving to JavaScript / TypeScript
-* Les EJB c'est lourd et c'est lent ...
+* Les EJB mal aimés ...   : Les EJB c'est lourd et c'est lent ...
 * NodeJS : back to the roots ...
 * Apache Cassandra + Solr
 * Troll : Kotlin ...
 * JOOQ : https://www.jooq.org/legal/licensing#databases
+* Modèle Thread JAVA EE vs Node JS : parce que j'en ai marre de lire des bullshits [EN COURS 30%]
+* Microprofile Tuto
