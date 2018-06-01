@@ -8,7 +8,7 @@ tags: [Java, Guava, Apache Preconditions, Spring, Bean Validation, CleanCode, JA
 ---
 
 <div class="intro" markdown='1'>
-Comme tout système s'appuyant sur des *inputs*, il est très importants de contrôler les arguments des méthodes quand on élabore une API, qu'elle soit locale sous forme de JAR ou distante via un service REST, afin  non seulement pour la rendre plus robuste et stable mais aussi de se prémunir de certaines attaques.
+Comme tout système s’appuyant sur des *inputs*, il est très important de contrôler les arguments des méthodes quand on élabore une API, qu’elle soit locale sous forme de JAR ou distante via un service REST, afin de non seulement la rendre plus robuste et stable mais aussi de se prémunir de certaines attaques.
 
 Cependant, en Java *de base*, c'est particulièrement laborieux, rébarbatif et cela
 engendre une fainéantise exacerbée. Conséquences directes et désastreuses : baisse de la qualité, de la robustesse du code et 
