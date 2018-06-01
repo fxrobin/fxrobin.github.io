@@ -4,31 +4,31 @@ title: Préconditions des méthodes d'une API
 subtitle: Parce qu'il faudrait toujours vérifier les arguments
 logo: api-preconditions.png
 category: JAVA
-tags: [Java, Guava, Apache Preconditions, Spring, Bean Validation, CleanCode]
+tags: [Java, Guava, Apache Preconditions, Spring, Bean Validation, CleanCode, JAX-RS, REST]
 ---
 
 <div class="intro" markdown='1'>
-Quand on élabore une API accessible, que ce soit
-en interne sous forme de librairie JAR ou à distance via un service REST, la bonne pratique est que l'on doit 
-toujours vérifier les arguments en "entrée" des méthodes mises à disposition afin de se prémunir non seulement
-de certaines attaques mais sûrement pour la rendre plus robuste et stable.
+Comme tout système s'appuyant sur des *inputs*, il est très importants de contrôler les arguments des méthodes quand on élabore une API, qu'elle soit locale sous forme de JAR ou distante via un service REST, afin  non seulement pour la rendre plus robuste et stable mais aussi de se prémunir de certaines attaques.
 
 Cependant, en Java *de base*, c'est particulièrement laborieux, rébarbatif et cela
-engendre une fainéantise exacerbée. Cela a malheureusement pour conséquence un impact
-sur la qualité et à la robustesse du code.
+engendre une fainéantise exacerbée. Conséquences directes et désastreuses : baisse de la qualité, de la robustesse du code et 
+création potentielles de **failles de sécurité**.
 
-Cet article *tente* de faire le tour de la question, sans prétention.
+Cet article *tente* de faire le tour de la question, sans prétention, en ratissant assez large. C'est à dire en 
+allant de *Java classique* jusqu'à *Bean Validation* et JAX-RS, en passant par une implémentation spécifique "*Faite Maison*".
 </div>
 
 <!--excerpt-->
 
 ## La problématique
 
-Partons du principe que nous devons coder une méthode, accessible depuis du code tiers, qui accepte trois arguments :
-* un nom exprimé en majuscules, sans espaces, ni caractères spéciaux ;
-* un age entre 0 et 150 ans
-* une image PNG contenue dans un tableau de byte ;
-* une liste de compétences, sous formes de chaines de caractères.
+Partons du principe que nous devons coder une méthode, accessible depuis du code tiers sous forme d'API.
+
+Cette méthode acceptera quatre arguments :
+* **un nom** exprimé en majuscules, sans espaces, ni caractères spéciaux ;
+* **un age** entre 0 et 150 ans
+* **une image PNG** contenue dans un tableau de byte ;
+* **une liste de compétences**, sous formes de chaines de caractères.
 
 Ce gentil monsieur représentera notre jeu de test :
 * **nom** : WAYNE (J'espère ne pas trahir un secret ... j'ai un doute)
@@ -45,19 +45,20 @@ Ce gentil monsieur représentera notre jeu de test :
 ![jeu de test batman](/images/preconditions/batman.jpg)
 
 > Il ne faut pas être mentaliste pour se rendre compte qu'on a intérêt à bien valider les informations pour qu'il soit content !
+> Il n'a pas l'air commode ...
 
-Dans ce post, on va tester donc :
+Dans cet article, on va tester donc :
  * Java assert
  * Apache Commons Lang
  * Guava
  * Spring
  * Better Preconditions
  * Java 8 Objects
- * **Une solution perso bien que j'évite d'en faire en temps normal**
+ * **Une solution perso** (bien que j'évite d'en faire en temps normal)
  * Bean Validation
  
  On terminera avec une mise en pratique avec JAX-RS :
- * avec la solution perso
+ * avec la solution "faite-maison"
  * avec Bean Validation
  
  Puis on concluera avec quelques réflexions et points d'attention supplémentaires.
@@ -66,8 +67,8 @@ Dans ce post, on va tester donc :
 
 ### Vérification d'une image PNG
 
-Globalementt, toutes les bibliothèques auront besoin à un moment ou à un autre de s'assurer
-qu'un tableau de bytes contient bien une image PNG.
+Globalement, toutes ces cas de figure auront besoin à un moment ou à un autre de vérifier
+qu'un tableau de d'octets `byte[]` contient bien une image PNG.
 
 Ici, on descend "bas niveau" afin de vérifier une simple séquence d'octets qui réprésentent
 la signature d'un fichier PNG :
@@ -115,13 +116,15 @@ public final class ValidationUtils
 }
 ```
 
-Ces méthodes seront appelées, voires désignées par une lambda ou référence de méthode, au moment opportun.
+Ces méthodes seront appelées, voire implémentées au moyen d'une expression lambda ou désignées par une référence de méthode, au moment opportun.
 
 ### Messages d'erreurs
 
-Tous les messages seront conservés sous formes de contantes.
-Je suis un peu fainéant sur ce coup, il me faudrait faire un bundle i18n ... mais ce n'est pas trop l'objet
+Tous les messages seront conservés sous formes de constantes.
+Je suis un peu fainéant sur ce coup, il me faudrait faire un `bundle i18n` ... mais ce n'est pas trop l'objet
 de cet article.
+
+> En espérant que Mickaël Baron dans l'oreillette ne me dise pas que j'aurais vraiment dû le faire :-)
 
 ```java
 package fr.fxjavadevblog.resources;
@@ -146,7 +149,7 @@ public final class PreconditionsMessages
 }
 ```
 
-et enfin quelques règles "métier" déportées, accessibles via la classe `PreconditionsRules" ci-dessous :
+Quelques règles "métier" seront déportées, accessibles via la classe `PreconditionsRules" ci-dessous :
 
 ```java
 package fr.fxjavadevblog.resources;
@@ -170,6 +173,26 @@ public final class PreconditionsRules
 	}
 }
 ```
+
+et enfin, comme on voudra désigner une exception par référence de méthode (vers un constructueur),
+il nous en faut une de type `RuntimeException` :
+
+```java
+import static fr.fxjavadevblog.resources.PreconditionsMessages.MSG_RANGE_PATTERN;
+import static fr.fxjavadevblog.resources.PreconditionsRules.AGE_MAX;
+import static fr.fxjavadevblog.resources.PreconditionsRules.AGE_MIN;
+
+
+@SuppressWarnings("serial")
+public class AgeException extends RuntimeException
+{
+	public AgeException(String argumentName, Integer argumentValue)
+	{
+		super(String.format(MSG_RANGE_PATTERN, argumentName , argumentValue, AGE_MIN, AGE_MAX));
+	}
+}
+```
+
 
 
 ## La manière classique en JAVA
@@ -226,21 +249,19 @@ Qu'existe-t-il pour nous faciliter tout cela ?
 
 ### Java assert
 
-Soyons succinct : **cette technique est déconseillée**. Elle ne peut être utilisée que pour une phase de développement et requiert un paramètre de JVM au lancement de l'application pour être prise en compte.
+Soyons succinct : **cette technique est déconseillée**. Elle ne peut être utilisée que pour une phase expérimentale et requiert un paramètre de JVM au lancement de l'application pour être prise en compte.
 
-De plus, cette solution est assez limitée.
-
-On oublie donc ici, chaînes de formatage `String.format`, lazy instanciation avec lambda, etc.
+De plus, cette solution est assez limitée. On oublie : chaînes de formatage `String.format`, lazy instanciation avec lambda, etc.
 
 J'en parle parce qu'il le faut, mais volontairement je ne donnerais pas d'exemple.
 
 
 ### Apache Commons Lang
 
-C'est à mon sens la bibliothèque la plus fournie pour les tests des arguments.
+C'est à mon sens **LA** bibliothèque la plus fournie pour les tests des arguments.
 Elle existe depuis 2003, avec sa classe `Validate`.
 
-Néanmoins, conçue avant Java 8, elle n'offre aucune intégration de lambdas et de références de constructeurs.
+Néanmoins, conçue avant Java 8, elle n'offre aucune intégration de lambdas ni  de référence de méthodes.
 Elle permet la concaténation a posteriori de style `String.format` ou `printf`, ce qui est une bonne optimisation.
 
 Pour l'utiliser, il suffit de déclarer la dépendance MAVEN suivante :
@@ -277,7 +298,7 @@ public static void executeApacheCommonsLang(String name, Integer age, byte[] pho
 La classe `Preconditions` de Guava existe depuis 2010. Historiquement elle faisait partie de leur ancien projet *Google Collection Library* datant de 2009.
 
 Cette solution est très certainement la plus proche de ce qui me serait utile, mais là pas de support de lambda
-et donc d'instanciation lazy des exception à lever.
+et donc d'instanciation lazy des exceptions à lever, par exemple.
 
 Elle permet toutefois d'éviter la concaténation directe des chaînes au moyen de chaînes de formatage et d'arguments,
 comme l'offre `String.format` ou `printf`.
@@ -301,7 +322,7 @@ public static void executeGuava(String name, Integer age, byte[] photo, Collecti
 	Preconditions.checkNotNull(age, MSG_NOT_NULL, "age");
 	Preconditions.checkNotNull(photo, MSG_NOT_NULL, "photo");
 	Preconditions.checkArgument(pattern.matcher(name).matches(), REGEXP_MAJUSCULES, MSG_UPPER_CASE, "name");
-	Preconditions.checkArgument(age >= AGE_MIN && age <= AGE_MAX, MSG_RANGE_PATTERN, "age", AGE_MIN, AGE_MAX);
+	Preconditions.checkArgument(age >= AGE_MIN && age <= AGE_MAX, MSG_RANGE_PATTERN, "age", age, AGE_MIN, AGE_MAX);
 	Preconditions.checkArgument(ValidationUtils.isPngData(photo), MSG_NOT_PNG_IMAGE, "photo");
 	Preconditions.checkNotNull(competences, MSG_NOT_NULL, "competences");
 	Preconditions.checkArgument(competences.size() > 0, MSG_NOT_EMPTY_COLLECTION, "competences");
@@ -337,7 +358,7 @@ public static void executeSpringFramework(String name, Integer age, byte[] photo
 	Assert.notNull(photo, () -> String.format(MSG_NOT_NULL, "photo"));
 	Assert.notNull(competences, () -> String.format(MSG_NOT_NULL, "competences"));
 	Assert.isTrue(pattern.matcher(name).matches(), () -> String.format(MSG_UPPER_CASE, "name"));
-	Assert.isTrue(age >= AGE_MIN && age <= AGE_MAX, () -> String.format(MSG_RANGE_PATTERN, "age", AGE_MIN, AGE_MAX));
+	Assert.isTrue(age >= AGE_MIN && age <= AGE_MAX, () -> String.format(MSG_RANGE_PATTERN, "age", age, AGE_MIN, AGE_MAX));
 	Assert.isTrue(ValidationUtils.isPngData(photo), () -> String.format(MSG_NOT_PNG_IMAGE, "photo"));
 	Assert.notEmpty(competences, () -> String.format(MSG_NOT_EMPTY_COLLECTION, "competences"));
 }
@@ -436,7 +457,7 @@ public static void executeHomeMadePreconditions(String name, Integer age, byte[]
 	Checker.notNull(age, MSG_NOT_NULL, "age");
 	Checker.notNull(photo, MSG_NOT_NULL, "photo");
 	Checker.respects(name, pattern, MSG_UPPER_CASE, "name");
-	Checker.inRange(age, AGE_MIN, AGE_MAX, MSG_RANGE_PATTERN, "age");
+	Checker.inRange(age, AGE_MIN, AGE_MAX, AgeException::new, "age");
 	Checker.respects(photo, ValidationUtils::isPngData, MSG_NOT_PNG_IMAGE, "photo");
 	Checker.notEmpty(competences, MSG_NOT_EMPTY_COLLECTION, "competences");
 }
@@ -450,6 +471,7 @@ package fr.fxjavadevblog.preconditions;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiFunction;
 import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -464,7 +486,6 @@ import java.util.regex.Pattern;
  */
 public final class Checker
 {
-
 	/**
 	 * vérifie que la référence n'est pas nulle. Si elle l'est, une exception de
 	 * type "IllegalArgumentException" est levée avec le message (format et
@@ -510,28 +531,54 @@ public final class Checker
 		}
 	}
 
+
 	/**
-	 * vérifie que l'argument se situe bien sans une plage de valeur
+	 * vérifie que l'argument se situe bien sans une plage de valeurs Integer.
 	 * 
 	 * @param arg
-	 *            argumenter à tester
+	 * 		 argumenter à tester
 	 * @param min
-	 *            valeur minimale incluse
+	 * 		valeur minimale incluse
 	 * @param max
-	 *            valeur maximale incluse
+	 * 		valeur maximale incluse
 	 * @param msgRangePattern
-	 *            format message en cas d'erreur (voir String.format)
-	 * @param vals
-	 *            valeurs à injecter dans le format de message
-	 * 
-	 * @see String#format(String, Object...)
-	 * @see IllegalArgumentException
+	 *  	format message en cas d'erreur (voir String.format)
+	 * @param argName
+	 * 		 nom de l'argument testé
 	 */
-	public static void inRange(Integer arg, int min, int max, String msgRangePattern, String vals)
+	public static void inRange(Integer arg, int min, int max, String msgRangePattern, String argName)
 	{
 		if (arg == null || arg < min || arg > max)
 		{
-			throw new IllegalArgumentException(String.format(msgRangePattern, vals, min, max));
+			throw new IllegalArgumentException(String.format(msgRangePattern, argName, arg, min, max));
+		}
+	}
+
+	/**
+	 * vérifie que l'argument se situe bien sans une plage de valeurs Integer.
+	 * Cette méthode permet de désigner une exception, pour la démo (à compléter dans les autres méthodes).
+	 * 
+	 * @param arg
+	 * 		 argumenter à tester
+	 * @param min
+	 * 		valeur minimale incluse
+	 * @param max
+	 * 		valeur maximale incluse
+	 * @param function
+	 * 		function lambda prenant une chaine de caractères et un entier 
+	 * 		et retournant une instance de RuntimeException. Permet de désigner une exception
+	 * 		notamment avec l'un des ses constructeurs. 
+	 * @param argumentName
+	 */
+	public static void inRange(Integer arg, 
+								 int min, 
+								 int max, 
+								 BiFunction<String, Integer, ? extends RuntimeException> function, 
+								 String argumentName)
+	{
+		if (arg == null || arg < min || arg > max)
+		{
+			throw function.apply(argumentName, arg);
 		}
 	}
 
@@ -648,6 +695,29 @@ public final class Checker
 			throw new IllegalArgumentException(String.format(format, vals));
 		}
 	}
+	
+	/**
+	 * vérifie que la référence, confrontée au prédicat, retourne true, sinon
+	 * une exception "IllegalException" est levée avec le message fourni.
+	 * 
+	 * @param predicate
+	 *            prédicat prenant un type T et qui contient la logique "true"
+	 *            ou "false"
+	 * @param function
+	 * 			function lambda prenant le nom de l'argument testé et un T 
+	 * 			qui retourne une instance de RuntimeException. Permet de désigner une exception
+	 * 			notamment avec l'un des ses constructeurs. 
+	 * 			
+	 * @param argumentName
+	 */
+	
+	public static <T> void respects(T t, Predicate<T> predicate,  BiFunction<String, T, ? extends RuntimeException> function, String argumentName)
+	{
+		if (!predicate.test(t))
+		{
+			throw function.apply(argumentName, t);
+		}
+	}
 
 	/**
 	 * vérifie qu'aucune valeur de la Map ne fasse référence à "null", sinon une
@@ -664,7 +734,7 @@ public final class Checker
 	 *            chaine de formatage du message.
 	 * 
 	 */
-	public static void notNull(Map<?, ?> arguments, String format)
+	public static void notAnyNullValue(Map<?, ?> arguments, String format)
 	{
 		for (Entry<?, ?> e : arguments.entrySet())
 		{
@@ -682,6 +752,30 @@ Biensûr, ici il ne s'agit que d'un embryon du début d'un commencement d'un pr�
 Mais cela donne une bonne idée du cadre qui est offert et, en l'état, offre déjà beaucoup de souplesse,
 notamment grâce au Predicate<T>.
 
+Je vais commenter toutefois l'une des méthodes de cette classe qui est, à mon sens, la plus intéressante :
+
+```java
+public static <T> void respects(T t, 
+								 Predicate<T> predicate,  
+								 BiFunction<String, T, ? extends RuntimeException> function, 
+								 String argumentName)
+{
+	if (!predicate.test(t))
+	{
+		throw function.apply(argumentName, t);
+	}
+}
+```
+
+De prime abord, cette méthode attend pas mal de choses pour fonctionner : elle devrait elle-même contrôler
+ses arguments ... mais je ne le fais pas pour être un peu plus concis dans cet article déjà bien long.
+
+En regardant la signature de la méthode, voici quelques éléments de compréhension :
+* `<T>` : type générique qui représentera le type de l'argument testé et par conséquent `t` est la valeur de l'argument.
+* `Predicate<T> predicate` interface fonctionnelle capable de tester un `<T>` et le fait que sa valeur soit correcte. Un `Predicate` retourne toujours `true` ou `false`.
+* `BiFunction<String, T, ? extends RuntimeException> function` : cela peut paraitre complexe, mais permet de désigner une interface fonctionnelle prenant un `String` (le nom de l'argument) et un `T` (la valeur de l'argument) et retournant une instance d'une classe héritant directement ou indirectement de RuntimeException. Cela permettra de désigner `AgeException::new` par exemple car son constructeur est le suivant pour mémoire : `public AgeException(String, Integer)`.
+
+
 ### Bean Validation
 
 Petite incartade avec une API de "haut niveau" mais trop peu utilisée à mon goût.
@@ -693,6 +787,12 @@ Petite incartade avec une API de "haut niveau" mais trop peu utilisée à mon go
 Bean Validation permet de placer des annotations de validation de valeur sur des
 attributs ou des arguments. C'est une spécification extensible dont l'implémentation de
 référence est Hibernate Validator.
+
+> J'adore cette spec. Elle est vraiment très puissante. Elle s'intègre parfaitement à 
+> un ensemble conséquent d'autres specs de Java EE, comme notamment JPA, JSF, EJB, CDI.
+> et en plus elle est extensible aussi bien par annotation que par programmation ...
+> Si vous ne connaissez pas Bean Validation, je vous recommande de jeter un coup d'oeil
+> rapide sachant qu'on peut l'utiliser aussi en Java SE.
 
 Pour l'utiliser :
 
@@ -745,7 +845,7 @@ public class BeanValidationChecker
 }
 ```
 
-Ensuite voici la classe qui encapsulera les aguments (utilisation de Lombok ici, juste pour plus de concision) :
+Ensuite voici la classe qui encapsulera les arguments (utilisation de Lombok ici, juste pour plus de concision) :
 
 ```java
 @Getter
@@ -892,31 +992,165 @@ public class BatCaveSystem extends Application
 ```
 
 Comme je vais fournir une API REST sur le backend de SI de Bruce au manoir Wayne, je nomme donc
-l'url "/bat-api". Bruce souhaite pouvoir envoyer un nom et un age, et que les information en entrée
+l'url `/bat-api`. Bruce souhaite pouvoir envoyer un nom et un age, et que les information en entrée
 soient validées. C'est un peu idiot, mais comme c'est Bruce Wayne, et bien on obéït ...
+
+### JAX-RS et Checker "fait maison"
+
+Pour des raisons de concision, je restreins le champs d'étude à deux types d'arguments : le nom et l'age.
+
+Contrôle des entrées avec le `Checker` présenté précédemment :
+
+```java
+@Path("/directory")
+public class BatCaveDirectory
+{
+	private static java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("[A-Z]*");
+
+	@POST
+	@Path("/add")
+	public Response add(String name, Integer age)
+	{
+		Checker.notNull(name, MSG_NOT_NULL, "name");
+		Checker.notNull(age, MSG_NOT_NULL, "age");
+		Checker.respects(name, pattern, MSG_UPPER_CASE, "name");
+		Checker.inRange(age, AGE_MIN, AGE_MAX, AgeException::new, "age");
+		
+		System.out.printf("Name : %s %n", name); // bouhh les sysout moches !
+		System.out.printf("Age : %d %n", age);   // un peu fainéant, je l'avoue !
+		
+		return Response.ok(LocalDateTime.now().toString()).build();
+	}
+}
+```
+
+### JAX-RS et Bean Validation
 
 Voici donc le moyen de contrôler tout cela en JAX-RS avec Bean Validation :
 
 ```java
+@Path("/directory")
+public class BatCaveDirectory
+{
+	@POST
+	@Path("/add")
+	public Response add(@FormParam(value = "name") String name, 
+						@FormParam(value = "age") @Min(0) @Max(150) Integer age)
+	{
+		System.out.printf("Name : %s %n", name);
+		System.out.printf("Age : %d %n", age);
+		
+		return Response.ok(LocalDateTime.now().toString()).build();
+	}
+}
 ```
 
 Afin d'avoir un retour "lisible" en cas d'erreur, il faut coder un `ExceptionManager`.
 
 ```java
+package fr.fxjavadevblog.demo;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
+
+import lombok.Data;
+import lombok.Builder;
+
+/**
+ * gestionnaire d'exception specifique pour JAX-RS.
+ *
+ * source : https://stackoverflow.com/questions/44308101/customizing-jax-rs-response-when-a-constraintviolationexception-is-thrown-by-bea
+ * 
+ */
+
+
+@Provider
+public class ConstraintViolationExceptionMapper implements ExceptionMapper<ConstraintViolationException>
+{
+	// classe interne qui détient les erreurs de validation, usage de Lombok au passage
+	@Data
+	@Builder
+	public static class ValidationError
+	{
+		private String path;
+		private String message;
+	}
+	
+	// transforme l'ensemble des contraintes violées en une liste de ValidationError
+	// retournée sous forme JSON
+	@Override
+	public Response toResponse(ConstraintViolationException exception)
+	{
+		List<ValidationError> errors = exception.getConstraintViolations().stream().map(this::toValidationError).collect(Collectors.toList());
+		return Response.status(Response.Status.BAD_REQUEST).entity(errors).type(MediaType.APPLICATION_JSON).build();
+	}
+
+	// transforme une constrainte de validation en une ValidationError
+	private ValidationError toValidationError(ConstraintViolation<?> constraintViolation)
+	{
+		return ValidationError.builder()
+			   .path(constraintViolation.getPropertyPath().toString())
+			   .message(constraintViolation.getMessage()).build();
+	}
+}
 ```
 
-Si les données ne sont pas valides ont obtient alors un erreur sérialisée en JSON :
-```
-JSON
-```
-
-On peut même faire en sorte que les données soient directement mappées et validation au sein d'une classe de type DTO :
+On peut même faire en sorte que les données soient directement mappées et validation au sein d'une classe de type DTO.
+Dans cet exemple j'utilise une classe interne statique pour cela, et même encore un peu de Lombok :
 
 ```java
+@Path("/directory")
+public class BatCaveDirectory
+{
+	@Data
+	public static class InputData
+	{
+		@FormParam(value = "name")
+		@NotNull
+		@NotEmpty
+		private String name;
+		
+		@FormParam(value = "age")
+		@Min(0) @Max(150)
+		private Integer age;
+	}
+
+	@POST
+	@Path("/add")
+	public Response addEntity(@Valid @BeanParam InputData input)
+	{
+		return Response.ok(LocalDateTime.now().toString() + " : " + input).build();
+	}
+}
 ```
 
-Cela devient vraiment simple et puissant !
+Cela devient vraiment simple et puissant avec `@Valid` et `@BeanParam` !
+On peut bien sûr envisager de faire sa propre contrainte BeanValidation ...
+
+> Oulah, mais oui, dis donc ! C'est bien puissant ! 
+
+
+Enfin, si les données ne sont pas valides ont obtient alors un erreur sérialisée en JSON :
+
+```json
+[
+  { 
+    "message":"doit être inférieur ou égal à 150",
+    "path":"addEntity.arg0.age"
+  },
+  { 
+    "message":"doit correspondre à \"[A-Z]*\"",
+    "path":"addEntity.arg0.name"
+  }
+]
+```
 
 
 ## Quelques réflexions supplémentaires
@@ -924,15 +1158,12 @@ Cela devient vraiment simple et puissant !
 On voit dans les exemples ci dessus que le nombre d'arguments peut être trop élevé : en général j'encapsule cela dans
 une nouvelle classe, par exemple une classe static interne. L'avantage c'est que cette classe pourra porter des annotations Bean Validation et donc être soumise à validation. Cependant en cas de très forte sollication, étant donné le nombre important d'objets temporaires créés uniquement pour encapsuler, il faudra faire attention à la consommation mémoire et au coût de passage du garbage collector.
 
-Il m'arrive même souvent que ces classes soient aussi des classes JPA. Pas de mélange des genres selon moi car tant qu'aucune instance n'est pas validée par Bean Validation, JPA ne la persiste pas et ne fait donc pas partie du contexte du persistence.
+Il m'arrive même souvent que ces classes soient aussi des classes JPA. Pas de mélange des genres selon moi car tant qu'aucune instance n'est pas validée par Bean Validation, JPA ne la persiste pas et ne fait donc pas partie du contexte du persistence. C'est une sorte de DTO temporaire qui m'évite de redéfinir les champs : un bon développeur se doit d'être paresseux.
 
-C'est une sorte de DTO temporaire qui m'évite de redéfinir les champs : un bon développeur se doit d'être paresseux.
-
-Dans tous les cas, je pense qu'il ne faut pas généraliser les tests de préconditions à toutes les classes d'une application Java. Il faut, à mon sens, se concentrer sur ce qui est proposer et visible par l'API, que ce soit localement ou à distance avec des services REST.
+Dans tous les cas, je pense qu'il ne faut pas généraliser les tests de préconditions à toutes les classes d'une application Java. Il faut, à mon sens, se concentrer sur ce qui est offert en `public` par l'API, que ce soit localement ou à distance via services REST.
 
 Au sujet des webservices, j'aimerais rappeler qu'avec JAX-WS (SOAP) ou JAX-RS (REST) les annotations Bean Validation sont prises en compte :
-- lors de la génération des schémas XSD et contrat WSDL. En entrée d'un WS SOAP, d'un point de vu méthode JAVA, les arguments sont
-donc automatiquement validés :
+- lors de la génération des schémas XSD et contrat WSDL. En entrée d'un WS SOAP, d'un point de vu méthode JAVA, les arguments sont donc automatiquement validés
 - lors de l'appel de la méthode dans le cas de REST (donc plus tardivement).
 
 > En espérant ne pas vous avoir effrayé avec ces tests de préconditions ...
