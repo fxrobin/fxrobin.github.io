@@ -12,7 +12,7 @@ Comme tout système s’appuyant sur des *inputs*, il est très important de con
 
 Cependant, en Java *de base*, c'est particulièrement laborieux, rébarbatif et cela
 engendre une fainéantise exacerbée. Conséquences directes et désastreuses : baisse de la qualité, de la robustesse du code et 
-création potentielles de **failles de sécurité**.
+créations potentielles de **failles de sécurité**.
 
 Cet article *tente* de faire le tour de la question, sans prétention, en ratissant assez large. C'est à dire en 
 allant de *Java classique* jusqu'à *Bean Validation* et JAX-RS, en passant par une implémentation spécifique "*Faite Maison*".
@@ -440,7 +440,7 @@ Donc c'est parti, j'ai décidé de ne pas en faire une API fluent, malgré l'env
 
 Grosso modo, cela va ressembler à Apache Commons Lang Validation avec ce qui lui manque de prise en compte des lambdas.
 
-Dans une premier temps, la solution permettra de faire les test suivants, adapté à mon besoin immédiat :
+Dans un premier temps, la solution permettra de faire les tests suivants, en liaison avec mon besoin immédiat :
 
 * non nullité d'un argument ;
 * une plage de valeurs d'entiers ;
