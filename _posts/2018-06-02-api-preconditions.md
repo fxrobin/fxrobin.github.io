@@ -1140,7 +1140,7 @@ On peut bien sûr envisager de faire sa propre contrainte BeanValidation ...
 > Oulah, mais oui, dis donc ! C'est bien puissant ! 
 
 
-Enfin, si les données ne sont pas valides ont obtient alors un erreur sérialisée en JSON :
+Enfin, si les données ne sont pas valides on obtient alors un erreur sérialisée en JSON :
 
 ```json
 [
