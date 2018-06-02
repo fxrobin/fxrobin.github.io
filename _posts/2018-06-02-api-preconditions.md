@@ -640,7 +640,7 @@ public final class Checker
 	 *            valeurs à injecter dans le format de message
 	 * 
 	 * @see String#format(String, Object...)
-	 * @see IllegalArgumentExceptions
+	 * @see IllegalArgumentException
 	 */
 	public static void respects(boolean predicate, String format, Object... vals)
 	{
@@ -663,7 +663,7 @@ public final class Checker
 	 *            valeurs à injecter dans le format de message
 	 * 
 	 * @see String#format(String, Object...)
-	 * @see IllegalArgumentExceptions
+	 * @see IllegalArgumentException
 	 */
 	public static void respects(BooleanSupplier predicate, String format, Object... vals)
 	{
@@ -686,7 +686,7 @@ public final class Checker
 	 *            valeurs à injecter dans le format de message
 	 * 
 	 * @see String#format(String, Object...)
-	 * @see IllegalArgumentExceptions
+	 * @see IllegalArgumentException
 	 */
 	public static <T> void respects(T t, Predicate<T> predicate, String format, Object... vals)
 	{
@@ -709,6 +709,9 @@ public final class Checker
 	 * 			notamment avec l'un des ses constructeurs. 
 	 * 			
 	 * @param argumentName
+	 * 			nom de l'argument testé
+	 *
+	 *	@see IllegalArgumentException
 	 */
 	
 	public static <T> void respects(T t, Predicate<T> predicate,  BiFunction<String, T, ? extends RuntimeException> function, String argumentName)
