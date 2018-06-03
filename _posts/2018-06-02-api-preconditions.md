@@ -26,7 +26,7 @@ Partons du principe que nous devons coder une méthode, accessible depuis du cod
 
 Cette méthode acceptera quatre arguments :
 * **un nom** exprimé en majuscules, sans espaces, ni caractères spéciaux ;
-* **un age** entre 0 et 150 ans
+* **un âge** entre 0 et 150 ans
 * **une image PNG** contenue dans un tableau de byte ;
 * **une liste de compétences**, sous formes de chaines de caractères.
 
@@ -40,7 +40,7 @@ Ce gentil monsieur représentera notre jeu de test :
 	* JUSTICE
 	* GROSSE BAFFE
 	* BOOMERANG
-	* CLUEDO LE WEEKEND AVEC ALFRED
+	* CLUEDO LE WEEK-END AVEC ALFRED
 
 ![jeu de test batman](/images/preconditions/batman.jpg)
 
@@ -67,8 +67,8 @@ Dans cet article, on va tester donc :
 
 ### Vérification d'une image PNG
 
-Globalement, toutes ces cas de figure auront besoin à un moment ou à un autre de vérifier
-qu'un tableau de d'octets `byte[]` contient bien une image PNG.
+Globalement, tous ces cas de figure auront besoin à un moment ou à un autre de vérifier
+qu'un tableau d'octets `byte[]` contient bien une image PNG.
 
 Ici, on descend "bas niveau" afin de vérifier une simple séquence d'octets qui réprésentent
 la signature d'un fichier PNG :
@@ -401,7 +401,7 @@ En fait, si j'avais un peu de temps à consacrer à un projet sympa, je pense qu
 
 Niveau performances, rien de notable, aucune dégradation constatée même après un tir de 10000 tests.
 
-A noté qu'il faut implémenter une interface `Matcher<V>` pour les tests plus élaborés. Par exemple en l'état pas évident de tester
+A noter qu'il faut implémenter une interface `Matcher<V>` pour les tests plus élaborés. Par exemple en l'état pas évident de tester
 le nom avec une expression régulière ni le contenu du tableau d'octets.
 
 
@@ -430,13 +430,13 @@ Le "fait maison", sauf au restaurant, en général j'évite : je fais une entors
 En effet, ces librairies n'exploitent pas la puissance des expressions lambdas et notamment des références de méthodes et constructeurs, ou quand elle le font
 elles ne le permettent pas au bon endroit.
 
-Impossible par exemple de désigner le constructeur d'une exception pour qu'elle soit instanciée a posteriori, ou encore de produire une chaine avec du formatage type "printf" ou "String.format", ou encore, et c'est le plus important de déclencher à posteriori les expression booléenne ou des prédicats.
+Impossible par exemple de désigner le constructeur d'une exception pour qu'elle soit instanciée a posteriori, ou encore de produire une chaîne avec du formatage type "printf" ou "String.format", ou encore, et c'est le plus important de déclencher a posteriori les expressions booléennes ou des prédicats.
 
 Il faut donc un mix entre toutes ces solutions : *notre propre "bibliothèque"*.
 
 > bibliothèque est un bien grand mot car cela va se résumer à une seule classe !
 
-Donc c'est parti, j'ai décidé de ne pas en faire une API fluent, malgré l'envie, pour des raisons de performances supposées : je souhaite éviter l'instanciation d'objets pendant cette phase pour ne pas surcharger le Garbage Collector.
+Donc c'est parti, j'ai décidé de ne pas en faire une API *fluent*, malgré l'envie, pour des raisons de performances supposées : je souhaite éviter l'instanciation d'objets pendant cette phase pour ne pas surcharger le Garbage Collector.
 
 Grosso modo, cela va ressembler à Apache Commons Lang Validation avec ce qui lui manque de prise en compte des lambdas.
 
@@ -995,12 +995,12 @@ public class BatCaveSystem extends Application
 ```
 
 Comme je vais fournir une API REST sur le backend de SI de Bruce au manoir Wayne, je nomme donc
-l'url `/bat-api`. Bruce souhaite pouvoir envoyer un nom et un age, et que les information en entrée
-soient validées. C'est un peu idiot, mais comme c'est Bruce Wayne, et bien on obéït ...
+l'url `/bat-api`. Bruce souhaite pouvoir envoyer un nom et un âge, et que les information en entrée
+soient validées. C'est un peu idiot, mais comme c'est Bruce Wayne, et bien on obéit ...
 
 ### JAX-RS et Checker "fait maison"
 
-Pour des raisons de concision, je restreins le champs d'étude à deux types d'arguments : le nom et l'age.
+Pour des raisons de concision, je restreins le champ d'étude à deux types d'arguments : le nom et l'age.
 
 Contrôle des entrées avec le `Checker` présenté précédemment :
 
@@ -1140,7 +1140,7 @@ On peut bien sûr envisager de faire sa propre contrainte BeanValidation ...
 > Oulah, mais oui, dis donc ! C'est bien puissant ! 
 
 
-Enfin, si les données ne sont pas valides on obtient alors un erreur sérialisée en JSON :
+Enfin, si les données ne sont pas valides on obtient alors une erreur sérialisée en JSON :
 
 ```json
 [
@@ -1158,15 +1158,15 @@ Enfin, si les données ne sont pas valides on obtient alors un erreur sérialis�
 
 ## Quelques réflexions supplémentaires
 
-On voit dans les exemples ci dessus que le nombre d'arguments peut être trop élevé : en général j'encapsule cela dans
+On voit dans les exemples ci-dessus que le nombre d'arguments peut être trop élevé : en général, j'encapsule cela dans
 une nouvelle classe, par exemple une classe static interne. L'avantage c'est que cette classe pourra porter des annotations Bean Validation et donc être soumise à validation. Cependant en cas de très forte sollication, étant donné le nombre important d'objets temporaires créés uniquement pour encapsuler, il faudra faire attention à la consommation mémoire et au coût de passage du garbage collector.
 
-Il m'arrive même souvent que ces classes soient aussi des classes JPA. Pas de mélange des genres selon moi car tant qu'aucune instance n'est pas validée par Bean Validation, JPA ne la persiste pas et ne fait donc pas partie du contexte du persistence. C'est une sorte de DTO temporaire qui m'évite de redéfinir les champs : un bon développeur se doit d'être paresseux.
+Il m'arrive même souvent que ces classes soient aussi des classes JPA. Pas de mélange des genres selon moi car tant qu'aucune instance n'est validée par Bean Validation, JPA ne la persiste pas et ne fait donc pas partie du contexte du persistence. C'est une sorte de DTO temporaire qui m'évite de redéfinir les champs : un bon développeur se doit d'être paresseux.
 
 Dans tous les cas, je pense qu'il ne faut pas généraliser les tests de préconditions à toutes les classes d'une application Java. Il faut, à mon sens, se concentrer sur ce qui est offert en `public` par l'API, que ce soit localement ou à distance via services REST.
 
 Au sujet des webservices, j'aimerais rappeler qu'avec JAX-WS (SOAP) ou JAX-RS (REST) les annotations Bean Validation sont prises en compte :
-- lors de la génération des schémas XSD et contrat WSDL. En entrée d'un WS SOAP, d'un point de vu méthode JAVA, les arguments sont donc automatiquement validés
+- lors de la génération des schémas XSD et contrat WSDL. En entrée d'un WS SOAP, avant l'invocation de la méthode JAVA, les arguments sont donc automatiquement validés
 - lors de l'appel de la méthode dans le cas de REST (donc plus tardivement).
 
 > En espérant ne pas vous avoir effrayé avec ces tests de préconditions ...
