@@ -120,7 +120,7 @@ Ces méthodes seront appelées, voire implémentées au moyen d'une expression l
 
 ### Messages d'erreurs
 
-Tous les messages seront conservés sous formes de constantes.
+Tous les messages seront conservés sous forme de constantes.
 Je suis un peu fainéant sur ce coup, il me faudrait faire un `bundle i18n` ... mais ce n'est pas trop l'objet
 de cet article.
 
@@ -249,11 +249,11 @@ Qu'existe-t-il pour nous faciliter tout cela ?
 
 ### Java assert
 
-Soyons succinct : **cette technique est déconseillée**. Elle ne peut être utilisée que pour une phase expérimentale et requiert un paramètre de JVM au lancement de l'application pour être prise en compte.
+Soyons succincts : **cette technique est déconseillée**. Elle ne peut être utilisée que pour une phase expérimentale et requiert un paramètre de JVM au lancement de l'application pour être prise en compte.
 
 De plus, cette solution est assez limitée. On oublie : chaînes de formatage `String.format`, lazy instanciation avec lambda, etc.
 
-J'en parle parce qu'il le faut, mais volontairement je ne donnerais pas d'exemple.
+J'en parle parce qu'il le faut, mais volontairement je ne donnerai pas d'exemple.
 
 
 ### Apache Commons Lang
@@ -261,7 +261,7 @@ J'en parle parce qu'il le faut, mais volontairement je ne donnerais pas d'exempl
 C'est à mon sens **LA** bibliothèque la plus fournie pour les tests des arguments.
 Elle existe depuis 2003, avec sa classe `Validate`.
 
-Néanmoins, conçue avant Java 8, elle n'offre aucune intégration de lambdas ni  de référence de méthodes.
+Néanmoins, conçue avant Java 8, elle n'offre aucune intégration de lambdas ni  de références de méthodes.
 Elle permet la concaténation a posteriori de style `String.format` ou `printf`, ce qui est une bonne optimisation.
 
 Pour l'utiliser, il suffit de déclarer la dépendance MAVEN suivante :
@@ -297,7 +297,7 @@ public static void executeApacheCommonsLang(String name, Integer age, byte[] pho
 
 La classe `Preconditions` de Guava existe depuis 2010. Historiquement elle faisait partie de leur ancien projet *Google Collection Library* datant de 2009.
 
-Cette solution est très certainement la plus proche de ce qui me serait utile, mais là pas de support de lambda
+Cette solution est très certainement la plus proche de ce qui me serait utile, mais elle ne dispose pas de support de lambda
 et donc d'instanciation lazy des exceptions à lever, par exemple.
 
 Elle permet toutefois d'éviter la concaténation directe des chaînes au moyen de chaînes de formatage et d'arguments,
