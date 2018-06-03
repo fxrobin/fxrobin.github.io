@@ -364,7 +364,7 @@ public static void executeSpringFramework(String name, Integer age, byte[] photo
 }
 ```
 
-Clairement, bien qu'il y ait pas possibilité de désigner des lambdas, c'est à mon sens le moins agréable à utiliser.
+Clairement, bien qu'il y ait la possibilité de désigner des lambdas, c'est à mon sens la moins agréable à utiliser.
 
 
 ### Better Preconditions
@@ -421,7 +421,7 @@ public Foo(Bar bar, Baz baz) {
 Intéressant, mais beaucoup trop limité, bien qu'elle puisse prendre un `Supplier<String>` comme message.
 On utilise en fait la classe `Objects` plutôt dans des `filter(Objects::nonNull)` dans l'API Stream de JAVA 8.
 
-Donc, cela ne réponds pas au besoin en l'état.
+Donc, cela ne répond pas au besoin en l'état.
 
 ### Preconditions "Fait maison"
 
