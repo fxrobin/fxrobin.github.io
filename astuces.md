@@ -47,6 +47,24 @@ En JSF, pour éviter la demande de confirmation de "re-submit POST", il faut ajo
 
 ## Docker
 
+### Installation sous Linux Mint 18 
+
+source : [https://gist.github.com/Simplesmente/a84343b1f71a46bbeedbb6c9b20fa9c1#file-install-docker-mint-sh](https://gist.github.com/Simplesmente/a84343b1f71a46bbeedbb6c9b20fa9c1#file-install-docker-mint-sh)
+
+```
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates -y
+sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+sudo echo deb https://apt.dockerproject.org/repo ubuntu-xenial main >> /etc/apt/sources.list.d/docker.list
+sudo apt-get update
+sudo apt-get purge lxc-docker
+sudo apt-get install linux-image-extra-$(uname -r) -y
+sudo apt-get install docker-engine cgroup-lite apparmor -y
+sudo usermod -a -G docker $USER
+sudo service docker start
+```
+
+
 ### usage sans sudo
 
 Après l'installation de Docker pour éviter d'avoir à exécuter "sudo" dans chaque ligne de commande.
