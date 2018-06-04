@@ -290,7 +290,7 @@ L'exemple devient un peu plus "sympa". Je vais détailler ses particularités :
 * Le constructeur public par défaut sans argument a disparu. En fait il est bien là, mais il a été passé `private` par 
   l'annotation `@RequiredArgsConstructor`. Cela empèche donc l'instanciation sans argument : ce n'est plus un Java Bean, mais ce n'est pas forcément grave. Attention toutefois aux specs comme CDI, JSF, JPA, qui réclame pourtant ce constructeur.
   
-* une méthode statique "factory method" est généré et est nommé `of(...)` au moyen de l'annotation `@RequiredArgsConstructor(staticName="of")`. Ici la convention "of" est utilisée, comme pour les nouvelles API de Java 8, mais j'aurais pu utiliser les 
+* une méthode statique "factory method" est générée et est nommée `of(...)` au moyen de l'annotation `@RequiredArgsConstructor(staticName="of")`. Ici la convention "of" est utilisée, comme pour les nouvelles API de Java 8, mais j'aurais pu utiliser les 
 vieilles conventions comme `newInstance(...)`. La méthode prendra en argument tous les champs marqués `final` ou les champs annotés avec `@NonNull` de Lombok. Attention à ne pas confondre avec `@NotNull` de Bean Validation ou de Guava.
 
 * equals, hashCode et toString ne changent pas.
