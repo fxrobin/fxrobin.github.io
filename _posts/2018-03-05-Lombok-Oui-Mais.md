@@ -457,7 +457,7 @@ Quelques explications :
 
 Et voici un petit usage :
 
-```
+```java
 Vehicule v1 = VehiculeFactory.smallBuilder()
 			  .numeroChassis("AAABB123")
 			  .numeroMoteur("123ABCD")
@@ -479,7 +479,6 @@ Ce qui donne sur la console :
 ```
 Vehicule(numeroMoteur=123ABCD, numeroChassis=AAABB123, dateMiseEnCirculation=2018-03-06, numeroImmatriculation=XX-XXX-XX)
 Vehicule(numeroMoteur=458AAA, numeroChassis=AAABB578, dateMiseEnCirculation=2018-03-06, numeroImmatriculation=789-AAA-987)
-
 ```
 
 
