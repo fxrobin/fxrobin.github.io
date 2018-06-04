@@ -324,6 +324,7 @@ Avant d'en percevoir sa facilité de mise en oeuvre voici la classe `Interventio
 ```java
 @FieldDefaults(level=AccessLevel.PRIVATE)
 @AllArgsConstructor(staticName="of")
+@EqualsAndHashCode(of="dateIntervention")
 @ToString
 @Getter
 public class Intervention implements Serializable, Comparable<Intervention> 
