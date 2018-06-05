@@ -211,18 +211,19 @@ Je me suis "déchiré" sur le titre de cette partie. L'idée est de répartir la
 sur tous les coeurs (cores) à notre disposition au moyen d'un pool de Threads.
 En l'occurence en NodeJS ce point devient dejà un peu moins simple.
 
-En JShell (et donc Java) cela est extra-supra-simplissimismus grâce au ForkJoinPool :
+En JShell (et donc Java) cela est extra-supra-simplissimismus grâce au FixedThreadPool offert
+par la classe `Executors`, que l'on limite ici aux nombre de *cores* disponibles :
 
 ```java
 import com.sun.net.httpserver.*;
 import java.net.InetSocketAddress;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Executors;
 
 /* HttpHandler équivalent aux exemples précédents */
 
 var server = HttpServer.create(address,0);
 server.createContext("/test", handler);
-server.setExecutor(ForkJoinPool.commonPool());
+server.setExecutor(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
 server.start();
 System.out.printf("Serveur démarré : %s%n", address);
 ```
