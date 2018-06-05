@@ -231,6 +231,24 @@ System.out.printf("Serveur démarré : %s%n", address);
 Et bim ! (comme dirait ma petite soeur)
 Asynchrone, et multicores !
 
+Après de multiples `F5`, voici ce que l'on obtient dans le navigateur :
+
+```
+ça marche ! Thread[pool-1-thread-1,5,main]
+ça marche ! Thread[pool-1-thread-2,5,main]
+ça marche ! Thread[pool-1-thread-3,5,main]
+ça marche ! Thread[pool-1-thread-4,5,main]
+ça marche ! Thread[pool-1-thread-5,5,main]
+ça marche ! Thread[pool-1-thread-6,5,main]
+ça marche ! Thread[pool-1-thread-7,5,main]
+ça marche ! Thread[pool-1-thread-8,5,main]
+ça marche ! Thread[pool-1-thread-1,5,main]
+ça marche ! Thread[pool-1-thread-2,5,main]
+ça marche ! Thread[pool-1-thread-3,5,main]
+ça marche ! Thread[pool-1-thread-4,5,main]
+ça marche ! Thread[pool-1-thread-5,5,main]
+```
+
 ## Version Docker
 
 On me dit dans l'oreillette que j'aurais pu être un peu moins flemmard et de conteneuriser le tout
