@@ -78,6 +78,16 @@ La commande `sudo groupadd docker` est optionnelle car il se peut que le groupe 
 
 * source : [nickjanetakis.com : docker-tip-20-running-docker-without-sudo-on-linux](https://nickjanetakis.com/blog/docker-tip-20-running-docker-without-sudo-on-linux)
 
+## Scripting Linux
+
+### générer un représentation texte d'un répertoire pour Markdown
+
+```
+#!/bin/bash
+export pwd=$(pwd)
+find $pwd | sed -e "s;$pwd;\.;g;s;[^/]*\/;|__;g;s;__|; |;g"
+```
+
 ## Vidéo
 
 ### concaténer
