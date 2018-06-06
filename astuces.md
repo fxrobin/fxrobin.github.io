@@ -109,3 +109,10 @@ $ ffmpeg -i normal_video.mp4 \
        faster_result_video.mp4
 ```
 
+### Streaming Live de l'écran vers YouTube
+
+Il faut obtenir l'adresse de streaming ainsi que la clé (cf. compte Youtube, ma chaine, mes vidéos)
+
+```
+$ ffmpeg -f alsa -ac 2 -i hw:0,0 -f x11grab -framerate 30 -video_size 1280x720 -i :0.0+0,0 -c:v libx264 -preset veryfast -maxrate 1984k -bufsize 3968k -vf "format=yuv420p" -g 60 -c:a libvo_aacenc -b:a 128k -ar 44100 -f flv rtmp://example.rtmp.address.youtube/example-key
+```
