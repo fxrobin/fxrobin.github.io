@@ -80,7 +80,7 @@ La commande `sudo groupadd docker` est optionnelle car il se peut que le groupe 
 
 ## Scripting Linux
 
-### générer un représentation texte d'un répertoire pour Markdown
+### générer une représentation texte d'un répertoire pour Markdown
 
 ```
 #!/bin/bash
