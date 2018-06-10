@@ -179,6 +179,31 @@ Je bascule en mode *économie d'énergie* pour lister les points-clés de cette 
 > Certains projets Eclipse sont sur GitHub. C'est le cas de "GlassFish AppServer" ou encore de "Payara".
 > Dans ce cas les manipulations sont différentes et sont "classiques" avec des PULL REQUESTS.
 
+## Builds
+
+Pour ceux qui n'auraient pas la patience de l'intégration de ce BugFix dans le build officiel, voici
+le build de la *deployable feature* :
+
+{%include download.html url="/downloads/org.eclipse.glassfish.tools-ROBIN-Bug-FIX-532854.zip" title="org.eclipse.glassfish.tools-ROBIN-Bug-FIX-532854.zip" %}
+
+> Attention, ce build n'est livré que temporairement et ne se substitue pas au futurs builds.
+
+Pour l'installer : cliquer sur `Help` > `Install new software`. 
+
+### Etape 01
+
+Cliquer sur `Add` puis `Archive` : séléctionner le fichier ZIP téléchargé précédemment.
+
+![Etape 01](/images/glassfish-tools/GlassFishTools_FIX_532854_01.png)
+
+### Etape 02
+
+![Etape 02](/images/glassfish-tools/GlassFishTools_FIX_532854_02.png)
+
+> Attention à bien décocher : "Group items by category" et "Hide items that are already installed"
+
+Cliquer sur `Next` et laisser faire l'installation.
+
 ## Liens utiles
 
 * http://www.vogella.com/tutorials/EclipsePlatformDevelopment/article.html
