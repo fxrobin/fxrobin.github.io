@@ -74,10 +74,10 @@ private static final Pattern VERSION_PATTERN = Pattern.compile( "([0-9]\\.[0-9](
 
 La correction est triviale, je rajoute `{1,3}` après le premier point détecté dans la *regexp*.
 
-
 ```java
 private static final Pattern VERSION_PATTERN = Pattern.compile( "([0-9]\\.[0-9]{1,3}(\\.[0-9])?(\\.[0-9])?)(\\..*)?" );
 ```
+
 Je teste mon expression régulière sur différentes valeurs avec des outils en ligne, puis je teste en lançant de la feature dont fait partie le plugin sous forme de "Eclipse Application".
 
 J'ai plusieurs versions de GlassFish d'installées sur mon poste et de Payara, donc je teste toutes les instances.
@@ -100,6 +100,7 @@ Je commence donc à chercher des articles ou des références liées à la contr
 Je trouve peu de choses finalement et je me rends compte que le repo git est géré par Gerrit.
 
 Pour contribuer, il va me falloir :
+
 * un compte Eclipse (ok ça j'en ai déjà un) et activer l'ECA : Eclipse Contributor Agreement
 * s'enregistrer sur Gerrit avec le compte Eclipse
 * générer un compte et un password sur Gerrit : c'est ce compte qui servira pour git.
@@ -109,7 +110,8 @@ Logique encore, pourquoi aurais-je le droit sur le "master" sans être un commit
 
 Ce qui m'aide, comme souvent, c'est [cet article du site de Lars Vogel](http://www.vogella.com/tutorials/EclipsePlatformDevelopment/article.html).
 
-Je découvre, avec le moteur de recherche de Gerrit un autre projet et une autre URL pour GlassFish Tools, qui me mettent la puce à l'oreille: 
+Je découvre, avec le moteur de recherche de Gerrit un autre projet et une autre URL pour GlassFish Tools, qui me mettent la puce à l'oreille:
+
 * PROJET : `glassfish-tools/glassfish-tools`
 * URL : `https://[username]@git.eclipse.org/r/a/glassfish-tools/glassfish-tools`
 
@@ -134,8 +136,7 @@ Signed-off-by: François-Xavier Robin <...@...com>
 
 > l'Id sera changé automatiquement par Bugzilla.
 
-Voici le tracker : [ https://git.eclipse.org/r/#/c/120562](https://git.eclipse.org/r/#/c/120562)
-
+Voici le tracker : [https://git.eclipse.org/r/#/c/120562](https://git.eclipse.org/r/#/c/120562)
 
 ## PUSH PUSH PUSH
 
@@ -145,7 +146,6 @@ Je consulte Gerrit : mon correctif est bien présent.
 Je me félicite, tel le politicien moyen.
 
 > Bon pas trop, parce que j'ai un peu cherché quand même. 
-
 
 ## Plugin Eclipse EGerrit
 
@@ -158,6 +158,7 @@ Je lui fournis mes *credentials* et j'obtiens, dans une *view eclipse : EGerrit 
 ![EGerrit](/images/glassfish-tools/egerrit.png)
 
 Pour m'y connecter, j'ai fourni :
+
 * l'URL du Gerrit de l'Eclipse Foundation : `https://git.eclipse.org/r`
 * le login/password **Eclipse Foundation** (attention, pas celui pour interagir via Git sur un repo Gerrit)
 
@@ -165,7 +166,6 @@ Je vois qu'il y a une *issue* concernant l'association avec le JDK 9, ce sera do
 prochain fix, maintenant que tout est configuré.
 
 > Mais les *bandits sont toujours en cavale et en voiture c'est poursuite infernale* ...
-
 
 ## Conclusions
 
@@ -188,7 +188,7 @@ le build de la *deployable feature* :
 
 > Attention, ce build n'est livré que temporairement et ne se substitue pas aux futurs builds.
 
-Pour l'installer : cliquer sur `Help` > `Install new software`. 
+Pour l'installer : cliquer sur `Help` > `Install new software`.
 
 ### Etape 01
 
