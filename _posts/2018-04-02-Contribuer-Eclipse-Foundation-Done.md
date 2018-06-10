@@ -134,7 +134,7 @@ Signed-off-by: François-Xavier Robin <...@...com>
 
 > l'Id sera changé automatiquement par Bugzilla.
 
-Voici le tracker : https://git.eclipse.org/r/#/c/120562
+Voici le tracker : [ https://git.eclipse.org/r/#/c/120562](https://git.eclipse.org/r/#/c/120562)
 
 
 ## PUSH PUSH PUSH
