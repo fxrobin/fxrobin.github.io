@@ -186,7 +186,7 @@ le build de la *deployable feature* :
 
 {%include download.html url="/downloads/org.eclipse.glassfish.tools-ROBIN-Bug-FIX-532854.zip" title="org.eclipse.glassfish.tools-ROBIN-Bug-FIX-532854.zip" %}
 
-> Attention, ce build n'est livré que temporairement et ne se substitue pas au futurs builds.
+> Attention, ce build n'est livré que temporairement et ne se substitue pas aux futurs builds.
 
 Pour l'installer : cliquer sur `Help` > `Install new software`. 
 
