@@ -7,37 +7,48 @@ category: JAVAEE
 tags: [JavaEE, Payara, Arquillian, JUnit 5]
 ---
 
+
 <div class="intro" markdown='1'>
-L'objectif de ce post est de présenter la mise en oeuvre de tests unitaires
-JUnit 5 de DeltaSpike Data dans un environnement embarqué Payara 5 avec Arquillian
+The main goal of this article is to present the using of JUnit 5 tests with DeltaSpike inside an embedded Payara Server 5 through Arquillian.
 </div>
 <!--excerpt-->
 
 
 ## The problem
 
-Here are the main caracteristics of the Java EE 7 plateform
+Here are the main caracteristics of the Java EE 7 plateform :
+
 * Managed environment, containing CDI, EJB, JPA implementations
 * proxified transactional EJBs, addressing both model and service layer through entities and stateless EJB.
 * Pooled JDBC Connections, managed by the application server
 
-In the other hand, here are the caracteristics of a JUnit environment
+In the other hand, here are the caracteristics of a standard JUnit environment :
+
 * running on Java Standard Edition
 * no managed transaction
 * no connection pool
 
-# The solution
+## The solution
+
+To cover the needs, we will setup a test environment using those components and services : 
 
 * Embedded AppServer will be launched by JUnit : Payara Embedded
 * Setting up a connection pool within the AppServer :
 * Embedding a Database Server : using H2 Database
 * Setting up JPA to use the connection POOL
 
-> A JUnit test case must be easy to create and must be able to use @Inject for CDI bean and EJB injections.
+## Unit testing thoughs
+
+Here is my opinion about unit testing Java EE artefacts :
+
+* A JUnit test case must be easy to create and must be able to use @Inject for CDI bean and EJB injections. It must be run as seamlessly as possible without the need of creating specific testing artefacts. 
+
+* Close mocking isn't a good pattern for testing**. Abusing of mockito, for example, makes tests not so real. For example, if you want to be sure about your JPA annotations regarding association mappings, you cannot by-pass a database check
 
 # Putting all together with Arquillian
 
 Arquillian will :
+
 * serve as a bridge between the AppServer and the JUnit test using `@RunWith`
 * setup the AppServer : JNDI JDBC Ressource and Connection Pool
 * allow to use `@Inject` into the JUnit test case.
@@ -45,12 +56,16 @@ Arquillian will :
 
 # The tested application
 
-* using the Web Profile packaging : EJB Lite are enough, no EAR composed by EJB-JAR and WAR modules
-* using Lombok for simplifying classes boilerplate
-* using one JPA Entity Only
-* using one CRUD Service using DeltaSpike Data `@Repository`
+The example Java EE application will use the following :
+
+* Web Profile packaging : EJB Lite are enough, no EAR composed by EJB-JAR and WAR modules
+* Lombok for simplifying classes boilerplate
+* a single JPA Entity
+* a single CRUD Service thanks to DeltaSpike Data `@Repository`
 
 # Architecture details
+
+Here are the details of what would be link together in order to run the tests :
 
 * JUnit 4 + Surefire + configuration
 * Arquillian + arquillian.xml
@@ -62,17 +77,6 @@ Arquillian will :
 
 # The pom.xml
 
-
-
-## TOMCAT 9, paramétrage
-
-## Définition du backend REST
-
-## Implémentation du backend avec JAX-RS
-
-## Implémentation du backend avec NodeJS
-
-## Test et mesures de performances
 
 ## Conclusion
 

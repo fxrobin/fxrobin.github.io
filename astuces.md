@@ -69,9 +69,9 @@ sudo service docker start
 
 Après l'installation de Docker pour éviter d'avoir à exécuter "sudo" dans chaque ligne de commande.
 
-```
-sudo groupadd docker
-sudo usermod -aG docker $USER
+```bash
+$ sudo groupadd docker
+$ sudo usermod -aG docker $USER
 ```
 
 La commande `sudo groupadd docker` est optionnelle car il se peut que le groupe existe déjà.
@@ -82,11 +82,24 @@ La commande `sudo groupadd docker` est optionnelle car il se peut que le groupe 
 
 ### générer une représentation texte d'un répertoire pour Markdown
 
-```
+```bash
 #!/bin/bash
 export pwd=$(pwd)
 find $pwd | sed -e "s;$pwd;\.;g;s;[^/]*\/;|__;g;s;__|; |;g"
 ```
+
+### maven clean recursif sur des projets maven
+
+Ce script permet de lancer un "maven clean" à partir d'une arborescence de manière récursive et 
+de nettoyer ansi tous les builds :
+
+```bash
+echo "Cleaning all maven projects recursively"
+
+find . -name "pom.xml" -exec mvn clean -f '{}'
+```
+
+source : [https://stackoverflow.com/questions/15895805/find-pom-in-subdirectories-and-execute-mvn-clean](https://stackoverflow.com/questions/15895805/find-pom-in-subdirectories-and-execute-mvn-clean)
 
 ## Vidéo
 
