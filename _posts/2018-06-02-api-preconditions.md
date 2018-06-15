@@ -41,10 +41,12 @@ Ce gentil monsieur représentera notre jeu de test :
   * BOOMERANG
   * CLUEDO LE WEEK-END AVEC ALFRED
 
-![jeu de test batman](/images/preconditions/batman.jpg)
+![&copy; DC Comics and Time Warner Company](/images/preconditions/batman.jpg)
 
 > Il ne faut pas être mentaliste pour se rendre compte qu'on a intérêt à bien valider les informations pour qu'il soit content !
 > Il n'a pas l'air commode ...
+
+> Image : &copy; DC Comics and Time Warner Company
 
 Dans cet article, on va tester donc :
 
@@ -773,9 +775,11 @@ Petit détour avec une API de "haut niveau" mais trop peu utilisée à mon goût
 
 ![ring](/images/preconditions/ring.jpg)
 
-> Ambiance ring de boxe : Et voici **Beeeeeaaaan Vaaaaalidationnnnnn** ! 
+> Ambiance ring de boxe : Et voici **Beeeeeaaaan Vaaaaalidationnnnnn** !
 
-Bean Validation permet de placer des annotations de validation de valeur sur des attributs ou des arguments. C'est une spécification extensible dont l'implémentation de référence est **Hibernate Validator**.
+> Image: [Panza Kick Boxing](https://fr.wikipedia.org/wiki/Panza_Kick_Boxing) &copy; Loriciels 1990 - Futura, Pascal Jarry, Marco de Flores.
+
+**Bean Validation** permet de placer des annotations de validation de valeur sur des attributs ou des arguments. C'est une spécification extensible dont l'implémentation de référence est **Hibernate Validator**.
 
 > J'adore cette spec. Elle est vraiment très puissante. Elle s'intègre parfaitement à un ensemble conséquent d'autres specs de Java EE, comme notamment JPA, JSF, EJB, CDI. De plus elle est extensible aussi bien par annotation que par programmation ... Si vous ne connaissez pas Bean Validation, je vous recommande de jeter un coup d'oeil rapide sachant qu'on peut l'utiliser aussi en Java SE.
 
@@ -1139,7 +1143,7 @@ Dans tous les cas, je pense qu'il ne faut pas généraliser les tests de précon
 
 Au sujet des webservices, j'aimerais rappeler qu'avec JAX-WS (SOAP) ou JAX-RS (REST) les annotations Bean Validation sont prises en compte :
 
-* lors de la génération des schémas XSD et contrat WSDL. En entrée d'un WS SOAP, avant l'invocation de la méthode JAVA, les arguments sont donc automatiquement validés
+* lors de la génération des schémas XSD et contrat WSDL. En entrée d'un WS SOAP, avant l'invocation de la méthode JAVA, les arguments sont donc automatiquement validés ;
 * lors de l'appel de la méthode dans le cas de REST (donc plus tardivement).
 
 > En espérant ne pas vous avoir effrayé avec ces tests de préconditions ...
