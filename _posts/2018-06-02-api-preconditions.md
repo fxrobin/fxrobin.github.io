@@ -1085,7 +1085,7 @@ public class ConstraintViolationExceptionMapper implements ExceptionMapper<Const
 }
 ```
 
-On peut même faire en sorte que les données soient directement mappées et validées au sein d'une classe de type *Value Object*. Dans cet exemple, j'utilise une classe interne statique encore un peu de Lombok :
+On peut même faire en sorte que les données soient directement mappées et validées au sein d'une classe de type *Value Object*. Dans cet exemple, j'utilise une classe interne statique encore un peu de Lombok et son annotation `@Data` qui, pour une fois, convient bien :
 
 ```java
 @Path("/directory")
