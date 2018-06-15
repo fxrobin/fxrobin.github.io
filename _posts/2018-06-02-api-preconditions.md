@@ -31,10 +31,11 @@ Cette méthode acceptera quatre arguments :
 * **une liste de compétences**, sous formes de chaines de caractères.
 
 Ce gentil monsieur représentera notre jeu de test :
+
 * **nom** : WAYNE (J'espère ne pas trahir un secret ... j'ai un doute)
 * **age** : 35 ans (à vue de nez ...)
 * **photo** : une image au format PNG (format préconisé par la league des justiciers)
-* **liste de compétences** : 
+* **liste de compétences** :
 	* NINJA,  
 	* HACKING
 	* JUSTICE
@@ -48,20 +49,22 @@ Ce gentil monsieur représentera notre jeu de test :
 > Il n'a pas l'air commode ...
 
 Dans cet article, on va tester donc :
- * Java assert
- * Apache Commons Lang
- * Guava
- * Spring
- * Better Preconditions
- * Java 8 Objects
- * **Une solution perso** (bien que j'évite d'en faire en temps normal)
- * Bean Validation
+
+* Java assert
+* Apache Commons Lang
+* Guava
+* Spring
+* Better Preconditions
+* Java 8 Objects
+* **Une solution perso** (bien que j'évite d'en faire en temps normal)
+* Bean Validation
  
- On terminera avec une mise en pratique avec JAX-RS :
- * avec la solution "faite-maison"
- * avec Bean Validation
+On terminera avec une mise en pratique avec JAX-RS :
+
+* avec la solution "faite-maison"
+* avec Bean Validation
  
- Puis on concluera avec quelques réflexions et points d'attention supplémentaires.
+Puis on concluera avec quelques réflexions et points d'attention supplémentaires.
  
 ## Factorisation : éléments communs
 
@@ -1166,7 +1169,8 @@ Il m'arrive même souvent que ces classes soient aussi des classes JPA. Pas de m
 Dans tous les cas, je pense qu'il ne faut pas généraliser les tests de préconditions à toutes les classes d'une application Java. Il faut, à mon sens, se concentrer sur ce qui est offert en `public` par l'API, que ce soit localement ou à distance via services REST.
 
 Au sujet des webservices, j'aimerais rappeler qu'avec JAX-WS (SOAP) ou JAX-RS (REST) les annotations Bean Validation sont prises en compte :
-- lors de la génération des schémas XSD et contrat WSDL. En entrée d'un WS SOAP, avant l'invocation de la méthode JAVA, les arguments sont donc automatiquement validés
-- lors de l'appel de la méthode dans le cas de REST (donc plus tardivement).
+
+* lors de la génération des schémas XSD et contrat WSDL. En entrée d'un WS SOAP, avant l'invocation de la méthode JAVA, les arguments sont donc automatiquement validés
+* lors de l'appel de la méthode dans le cas de REST (donc plus tardivement).
 
 > En espérant ne pas vous avoir effrayé avec ces tests de préconditions ...
