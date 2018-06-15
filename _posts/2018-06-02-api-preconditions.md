@@ -10,9 +10,7 @@ tags: [Java, Guava, Apache Preconditions, Spring, Bean Validation, CleanCode, JA
 <div class="intro" markdown='1'>
 Comme tout système s’appuyant sur des *inputs*, il est très important de contrôler les arguments des méthodes quand on élabore une API, qu’elle soit locale sous forme de JAR ou distante via un service REST, afin de non seulement la rendre plus robuste et stable mais aussi de se prémunir de certaines attaques.
 
-Cependant, en Java *de base*, c'est particulièrement laborieux, rébarbatif et cela
-engendre une fainéantise exacerbée. Conséquences directes et désastreuses : baisse de la qualité, de la robustesse du code et 
-créations potentielles de **failles de sécurité**.
+Cependant, en Java *de base*, c'est particulièrement laborieux, rébarbatif et cela engendre une fainéantise exacerbée. Conséquences directes et désastreuses : baisse de la qualité, de la robustesse du code et créations potentielles de **failles de sécurité**.
 
 Cet article *tente* de faire le tour de la question, sans prétention, en ratissant assez large. C'est à dire en 
 allant de *Java classique* jusqu'à *Bean Validation* et JAX-RS, en passant par une implémentation spécifique "*Faite Maison*".
@@ -36,12 +34,12 @@ Ce gentil monsieur représentera notre jeu de test :
 * **age** : 35 ans (à vue de nez ...)
 * **photo** : une image au format PNG (format préconisé par la league des justiciers)
 * **liste de compétences** :
-	* NINJA,  
-	* HACKING
-	* JUSTICE
-	* GROSSE BAFFE
-	* BOOMERANG
-	* CLUEDO LE WEEK-END AVEC ALFRED
+  * NINJA,  
+  * HACKING
+  * JUSTICE
+  * GROSSE BAFFE 
+  * BOOMERANG
+  * CLUEDO LE WEEK-END AVEC ALFRED
 
 ![jeu de test batman](/images/preconditions/batman.jpg)
 
@@ -58,14 +56,14 @@ Dans cet article, on va tester donc :
 * Java 8 Objects
 * **Une solution perso** (bien que j'évite d'en faire en temps normal)
 * Bean Validation
- 
+
 On terminera avec une mise en pratique avec JAX-RS :
 
 * avec la solution "faite-maison"
 * avec Bean Validation
- 
+
 Puis on concluera avec quelques réflexions et points d'attention supplémentaires.
- 
+
 ## Factorisation : éléments communs
 
 ### Vérification d'une image PNG
@@ -123,9 +121,7 @@ Ces méthodes seront appelées, voire implémentées au moyen d'une expression l
 
 ### Messages d'erreurs
 
-Tous les messages seront conservés sous forme de constantes.
-Je suis un peu fainéant sur ce coup, il me faudrait faire un `bundle i18n` ... mais ce n'est pas trop l'objet
-de cet article.
+Tous les messages seront conservés sous forme de constantes. Je suis un peu fainéant sur ce coup, il me faudrait faire un `bundle i18n` ... mais ce n'est pas trop l'objet de cet article.
 
 > En espérant que Mickaël Baron dans l'oreillette ne me dise pas que j'aurais vraiment dû le faire :-)
 
@@ -261,11 +257,9 @@ J'en parle parce qu'il le faut, mais volontairement je ne donnerai pas d'exemple
 
 ### Apache Commons Lang
 
-C'est à mon sens **LA** bibliothèque la plus fournie pour les tests des arguments.
-Elle existe depuis 2003, avec sa classe `Validate`.
+C'est à mon sens **LA** bibliothèque la plus fournie pour les tests des arguments. Elle existe depuis 2003, avec sa classe `Validate`.
 
-Néanmoins, conçue avant Java 8, elle n'offre aucune intégration de lambdas ni  de références de méthodes.
-Elle permet la concaténation a posteriori de style `String.format` ou `printf`, ce qui est une bonne optimisation.
+Néanmoins, conçue avant Java 8, elle n'offre aucune intégration de lambdas ni  de références de méthodes. Elle permet la concaténation a posteriori de style `String.format` ou `printf`, ce qui est une bonne optimisation.
 
 Pour l'utiliser, il suffit de déclarer la dépendance MAVEN suivante :
 
@@ -300,11 +294,9 @@ public static void executeApacheCommonsLang(String name, Integer age, byte[] pho
 
 La classe `Preconditions` de Guava existe depuis 2010. Historiquement elle faisait partie de leur ancien projet *Google Collection Library* datant de 2009.
 
-Cette solution est très certainement la plus proche de ce qui me serait utile, mais elle ne dispose pas de support de lambda
-et donc d'instanciation lazy des exceptions à lever, par exemple.
+Cette solution est très certainement la plus proche de ce qui me serait utile, mais elle ne dispose pas de support de lambda et donc d'instanciation lazy des exceptions à lever, par exemple.
 
-Elle permet toutefois d'éviter la concaténation directe des chaînes au moyen de chaînes de formatage et d'arguments,
-comme l'offre `String.format` ou `printf`.
+Elle permet toutefois d'éviter la concaténation directe des chaînes au moyen de chaînes de formatage et d'arguments, comme l'offre `String.format` ou `printf`.
 
 Pour l'utiliser, il suffit de déclarer la dépendance MAVEN suivante :
 
@@ -336,10 +328,9 @@ public static void executeGuava(String name, Integer age, byte[] photo, Collecti
 
 Spring offre de quoi valider les arguments aussi depuis la version 1.0 de 2004 !
 
-Depuis la version 5, chaque méthode de vérification se voit surchargée avec la capacité de fournir un `Supplier<String>`, donc une lambda qui fournira une chaîne seulement si le test de validation échoue. C'est ce comportement qui est le plus
-optimisé et que je recherche, mais il ne prend pas de référence vers des constructeurs d'`Exception`.
+Depuis la version 5, chaque méthode de vérification se voit surchargée avec la capacité de fournir un `Supplier<String>`, donc une lambda qui fournira une chaîne seulement si le test de validation échoue. C'est ce comportement qui est le plus optimisé et que je recherche, mais il ne prend pas de référence vers des constructeurs d'`Exception`.
 
-De plus, Spring 5 ne propose pas le formatage `String.format` ou `printf`. Dommage.
+De plus, Spring 5 ne propose pas le formatage `String.format` ou `printf`. Dommage !
 
 Pour l'utiliser, il suffit de déclarer la dépendance MAVEN suivante :
 
@@ -372,8 +363,7 @@ Clairement, bien qu'il y ait la possibilité de désigner des lambdas, c'est à 
 
 ### Better Preconditions
 
-Petite coquette bibliothèquounette très intéressante sur son approche au moyen d'une API fluent que j'ai pu dénicher
-au hasard de mes recherches sur GitHub.
+Petite coquette bibliothèquounette très intéressante sur son approche au moyen d'une API fluent que j'ai pu dénicher au hasard de mes recherches sur GitHub.
 
 Il manque cependant des choses primordiales comme la validation avec une regexp ou simplement un test booléen.
 
@@ -404,8 +394,7 @@ En fait, si j'avais un peu de temps à consacrer à un projet sympa, je pense qu
 
 Niveau performances, rien de notable, aucune dégradation constatée même après un tir de 10000 tests.
 
-A noter qu'il faut implémenter une interface `Matcher<V>` pour les tests plus élaborés. Par exemple en l'état pas évident de tester
-le nom avec une expression régulière ni le contenu du tableau d'octets.
+A noter qu'il faut implémenter une interface `Matcher<V>` pour les tests plus élaborés. Par exemple en l'état pas évident de tester le nom avec une expression régulière ni le contenu du tableau d'octets.
 
 
 ### Java 8 Objects
@@ -421,8 +410,7 @@ public Foo(Bar bar, Baz baz) {
 }
 ```
 
-Intéressant, mais beaucoup trop limité, bien qu'elle puisse prendre un `Supplier<String>` comme message.
-On utilise en fait la classe `Objects` plutôt dans des `filter(Objects::nonNull)` dans l'API Stream de JAVA 8.
+Intéressant, mais beaucoup trop limité, bien qu'elle puisse prendre un `Supplier<String>` comme message. On utilise en fait la classe `Objects` plutôt dans des `filter(Objects::nonNull)` dans l'API Stream de JAVA 8.
 
 Donc, cela ne répond pas au besoin en l'état.
 
@@ -430,8 +418,7 @@ Donc, cela ne répond pas au besoin en l'état.
 
 Le "fait maison", sauf au restaurant, en général j'évite : je fais une entorse à ce principe quand je ne trouve vraiment rien qui me convienne et c'est malheureusement le cas avec toutes les solutions décrites si dessus.
 
-En effet, ces librairies n'exploitent pas la puissance des expressions lambdas et notamment des références de méthodes et constructeurs, ou quand elle le font
-elles ne le permettent pas au bon endroit.
+En effet, ces librairies n'exploitent pas la puissance des expressions lambdas et notamment des références de méthodes et constructeurs, ou quand elle le font, elles ne le permettent pas au bon endroit.
 
 Impossible par exemple de désigner le constructeur d'une exception pour qu'elle soit instanciée a posteriori, ou encore de produire une chaîne avec du formatage type "printf" ou "String.format", ou encore, et c'est le plus important de déclencher a posteriori les expressions booléennes ou des prédicats.
 
@@ -445,14 +432,15 @@ Grosso modo, cela va ressembler à Apache Commons Lang Validation avec ce qui lu
 
 Dans un premier temps, la solution permettra de faire les tests suivants, en liaison avec mon besoin immédiat :
 
-* non nullité d'un argument ;
-* une plage de valeurs d'entiers ;
-* *matching* d'une expression régulière :
-* test booléen standard et par Supplier<Boolean> ainsi que par Predicate<T> ;
-* désignation par référence et déclenchement d'une exception;
+* non nullité d'un argument,
+* une plage de valeurs d'entiers,
+* *matching* d'une expression régulière,
+* test booléen standard et par Supplier<Boolean> ainsi que par Predicate<T>,
+* désignation par référence et déclenchement d'une exception,
 * collection non vide.
 
 Usage :
+
 ```java
 public static void executeHomeMadePreconditions(String name, Integer age, byte[] photo, Collection<String> competences)
 {
@@ -754,17 +742,15 @@ public final class Checker
 }
 ```
 
-Biensûr, ici il ne s'agit que d'un embryon du début d'un commencement d'un prémice de classe utilitaire.
-Mais cela donne une bonne idée du cadre qui est offert et, en l'état, offre déjà beaucoup de souplesse,
-notamment grâce au Predicate<T>.
+Biensûr, ici il ne s'agit que d'un embryon du début d'un commencement d'un prémice de classe utilitaire. Mais cela donne une bonne idée du cadre qui est offert et, en l'état, offre déjà beaucoup de souplesse, notamment grâce au `Predicate<T>`.
 
 Je vais commenter toutefois l'une des méthodes de cette classe qui est, à mon sens, la plus intéressante :
 
 ```java
 public static <T> void respects(T t, 
-								 Predicate<T> predicate,  
-								 BiFunction<String, T, ? extends RuntimeException> function, 
-								 String argumentName)
+								Predicate<T> predicate,  
+								BiFunction<String, T, ? extends RuntimeException> function, 
+								String argumentName)
 {
 	if (!predicate.test(t))
 	{
@@ -773,32 +759,25 @@ public static <T> void respects(T t,
 }
 ```
 
-De prime abord, cette méthode attend pas mal de choses pour fonctionner : elle devrait elle-même contrôler
-ses arguments ... mais je ne le fais pas pour être un peu plus concis dans cet article déjà bien long.
+De prime abord, cette méthode attend pas mal de choses pour fonctionner : elle devrait elle-même contrôler ses arguments ... mais je ne le fais pas pour être un peu plus concis dans cet article déjà bien long.
 
 En regardant la signature de la méthode, voici quelques éléments de compréhension :
+
 * `<T>` : type générique qui représentera le type de l'argument testé et par conséquent `t` est la valeur de l'argument.
 * `Predicate<T> predicate` interface fonctionnelle capable de tester un `<T>` et le fait que sa valeur soit correcte. Un `Predicate` retourne toujours `true` ou `false`.
 * `BiFunction<String, T, ? extends RuntimeException> function` : cela peut paraitre complexe, mais permet de désigner une interface fonctionnelle prenant un `String` (le nom de l'argument) et un `T` (la valeur de l'argument) et retournant une instance d'une classe héritant directement ou indirectement de RuntimeException. Cela permettra de désigner `AgeException::new` par exemple car son constructeur est le suivant pour mémoire : `public AgeException(String, Integer)`.
 
-
 ### Bean Validation
 
-Petite incartade avec une API de "haut niveau" mais trop peu utilisée à mon goût.
+Petit détour avec une API de "haut niveau" mais trop peu utilisée à mon goût.
 
 ![ring](/images/preconditions/ring.jpg)
 
 > Ambiance ring de boxe : Et voici **Beeeeeaaaan Vaaaaalidationnnnnn** ! 
 
-Bean Validation permet de placer des annotations de validation de valeur sur des
-attributs ou des arguments. C'est une spécification extensible dont l'implémentation de
-référence est Hibernate Validator.
+Bean Validation permet de placer des annotations de validation de valeur sur des attributs ou des arguments. C'est une spécification extensible dont l'implémentation de référence est **Hibernate Validator**.
 
-> J'adore cette spec. Elle est vraiment très puissante. Elle s'intègre parfaitement à 
-> un ensemble conséquent d'autres specs de Java EE, comme notamment JPA, JSF, EJB, CDI.
-> et en plus elle est extensible aussi bien par annotation que par programmation ...
-> Si vous ne connaissez pas Bean Validation, je vous recommande de jeter un coup d'oeil
-> rapide sachant qu'on peut l'utiliser aussi en Java SE.
+> J'adore cette spec. Elle est vraiment très puissante. Elle s'intègre parfaitement à un ensemble conséquent d'autres specs de Java EE, comme notamment JPA, JSF, EJB, CDI. De plus elle est extensible aussi bien par annotation que par programmation ... Si vous ne connaissez pas Bean Validation, je vous recommande de jeter un coup d'oeil rapide sachant qu'on peut l'utiliser aussi en Java SE.
 
 Pour l'utiliser :
 
@@ -810,8 +789,7 @@ Pour l'utiliser :
 </dependency>
 ```
 
-L'idée est d'encapsuler les arguments dans une classe spécifique
-et de la confronter en validation avant usage.
+L'idée est d'encapsuler les arguments dans une classe spécifique et de la confronter en validation avant usage.
 
 Voici ce qui va permettrer de déclencher Bean Validation :
 
@@ -871,7 +849,7 @@ protected static class InputData
 	@NotNull
 	@PngData
 	private byte[] photo;
-	
+
 	@NotNull
 	@NotEmpty
 	private Collection<String> competences;
@@ -881,7 +859,6 @@ protected static class InputData
 Voici la création de l'annotation "@PngData"  :
 
 ```java
-
 package fr.fxjavadevblog.demo;
 
 import java.lang.annotation.Documented;
@@ -907,7 +884,7 @@ public @interface PngData
 }
 ```
 
-Et voici son ConstraintValidator associé
+Et voici son ConstraintValidator associé :
 
 ```java
 package fr.fxjavadevblog.demo;
@@ -940,17 +917,16 @@ public static void executeBeanValidation(String name, Integer age, byte[] photo,
 {
 	InputData input = new InputData(name, age, photo);
 	BeanValidationChecker.check(input);
-	
+
 	// c'est court ! Mais ça fonctionne parfaitement
 }
 ```
 
 ## REST : JAX-RS et Bean Validation
 
-On pose le décor : JAX-RS est une spécification, incluse dans Java EE, capable de motoriser simplement
-une API que l'on souhaite exposer sous forme REST.
+On pose le décor : JAX-RS est une spécification, incluse dans Java EE, capable de motoriser simplement une API que l'on souhaite exposer sous forme REST.
 
-Soyons succinct : JAX-RS est capable déclencher des annotations Bean Validation !
+Soyons succinct : **JAX-RS est capable déclencher des annotations Bean Validation** !
 
 > Trop classe !
 
@@ -984,8 +960,7 @@ On passe à la démo avec d'abord un extrait du POM :
 </dependencies>	
 ```
 
-On dépend donc de Java EE 8 qui sera motorisé dans mon cas par OpenLiberty mais cela n'a pas d'incidence
-sur le développement.
+On dépend donc de Java EE 8 qui sera motorisé dans mon cas par OpenLiberty mais cela n'a pas d'incidence sur le développement.
 
 On déclare le endpoint global JAX-RS :
 
@@ -997,15 +972,13 @@ public class BatCaveSystem extends Application
 }
 ```
 
-Comme je vais fournir une API REST sur le backend de SI de Bruce au manoir Wayne, je nomme donc
-l'url `/bat-api`. Bruce souhaite pouvoir envoyer un nom et un âge, et que les information en entrée
-soient validées. C'est un peu idiot, mais comme c'est Bruce Wayne, et bien on obéit ...
+Comme je vais fournir une API REST sur le backend de SI de Bruce au manoir Wayne, je nomme donc l'url `/bat-api`. Bruce souhaite pouvoir envoyer un nom et un âge, et que les information en entrée soient validées. C'est un peu idiot, mais comme c'est Bruce Wayne, et bien on obéit ...
 
 ### JAX-RS et Checker "fait maison"
 
 Pour des raisons de concision, je restreins le champ d'étude à deux types d'arguments : le nom et l'age.
 
-Contrôle des entrées avec le `Checker` présenté précédemment :
+Le contrôle des entrées est réalisé avec le `Checker` présenté précédemment :
 
 ```java
 @Path("/directory")
@@ -1051,7 +1024,7 @@ public class BatCaveDirectory
 }
 ```
 
-Afin d'avoir un retour "lisible" en cas d'erreur, il faut coder un `ExceptionManager`.
+Afin d'avoir un retour "lisible" en cas d'erreur, il faut coder un `ExceptionManager` :
 
 ```java
 package fr.fxjavadevblog.demo;
@@ -1108,8 +1081,7 @@ public class ConstraintViolationExceptionMapper implements ExceptionMapper<Const
 }
 ```
 
-On peut même faire en sorte que les données soient directement mappées et validation au sein d'une classe de type DTO.
-Dans cet exemple j'utilise une classe interne statique pour cela, et même encore un peu de Lombok :
+On peut même faire en sorte que les données soient directement mappées et validation au sein d'une classe de type DTO. Dans cet exemple j'utilise une classe interne statique pour cela, et même encore un peu de Lombok :
 
 ```java
 @Path("/directory")
@@ -1137,10 +1109,9 @@ public class BatCaveDirectory
 }
 ```
 
-Cela devient vraiment simple et puissant avec `@Valid` et `@BeanParam` !
-On peut bien sûr envisager de faire sa propre contrainte BeanValidation ...
+Cela devient vraiment simple et puissant avec `@Valid` et `@BeanParam` ! On peut bien sûr envisager de faire sa propre contrainte BeanValidation ...
 
-> Oulah, mais oui, dis donc ! C'est bien puissant ! 
+> Oulah, mais oui, dis donc ! C'est bien puissant !
 
 
 Enfin, si les données ne sont pas valides on obtient alors une erreur sérialisée en JSON :
@@ -1158,11 +1129,9 @@ Enfin, si les données ne sont pas valides on obtient alors une erreur sérialis
 ]
 ```
 
-
 ## Quelques réflexions supplémentaires
 
-On voit dans les exemples ci-dessus que le nombre d'arguments peut être trop élevé : en général, j'encapsule cela dans
-une nouvelle classe, par exemple une classe static interne. L'avantage c'est que cette classe pourra porter des annotations Bean Validation et donc être soumise à validation. Cependant en cas de très forte sollication, étant donné le nombre important d'objets temporaires créés uniquement pour encapsuler, il faudra faire attention à la consommation mémoire et au coût de passage du garbage collector.
+On voit dans les exemples ci-dessus que le nombre d'arguments peut être trop élevé : en général, j'encapsule cela dans une nouvelle classe, par exemple une classe static interne. L'avantage c'est que cette classe pourra porter des annotations Bean Validation et donc être soumise à validation. Cependant en cas de très forte sollication, étant donné le nombre important d'objets temporaires créés uniquement pour encapsuler, il faudra faire attention à la consommation mémoire et au coût de passage du garbage collector.
 
 Il m'arrive même souvent que ces classes soient aussi des classes JPA. Pas de mélange des genres selon moi car tant qu'aucune instance n'est validée par Bean Validation, JPA ne la persiste pas et ne fait donc pas partie du contexte du persistence. C'est une sorte de DTO temporaire qui m'évite de redéfinir les champs : un bon développeur se doit d'être paresseux.
 
