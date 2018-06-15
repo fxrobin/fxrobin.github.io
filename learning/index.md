@@ -8,13 +8,11 @@ logo: brain-logo.png
 # Motivations
 
 Si tu arrives sur cette page, c'est que tu as déjà une idée de ce que tu cherches.
-Tu veux donc apprendre à coder. La question à te poser est "Pourquoi veux-tu apprendre à coder ?"
-Cette question me parait fondamentale si tu ne veux pas être déçu(e).
+Tu veux donc **apprendre à coder**. La question à te poser est **"Pourquoi veux-tu apprendre à coder ?"**. Cette question me parait fondamentale si tu ne veux pas être déçu(e).
 
 Pardonne moi déjà le fait de te tutoyer, mais il me semble important que tu te sentes à l'aise, comme si tu parlais à un ami.
 
-Revenons à la question initiale : que cherches-tu ? Et, attention, je vais commencer par les choses
-qui, à mon avis, ne devraient pas te plaire.
+Revenons à la question initiale : que cherches-tu ? Et, attention, je vais commencer par les choses qui, à mon avis, ne devraient pas te plaire.
 
 Tu ne trouveras donc pas ici :
 
@@ -23,29 +21,21 @@ Tu ne trouveras donc pas ici :
 * un programme capable de faire tes devoirs à ta place,
 * de quoi pirater le logiciel de ton collège pour augmenter tes notes, ou changer les appréciations des profs.
 
-Sur cette partie de mon site, tu trouveras de quoi t'initier à la programmation et que tu pourras appliquer
-quelque soit le langage de programmation et j'espère te donner l'envie d'aller encore plus loin dans ce domaine.
+Sur cette partie de mon site, tu trouveras de quoi t'initier à la programmation et que tu pourras appliquer quelque soit le langage de programmation et j'espère te donner l'envie d'aller encore plus loin dans ce domaine.
 
-*Programmer, c'est créer, c'est adapter, c'est automatiser des tâches répétitives et longues.* C'est
-aussi imaginer des usages qui simplifient la vie ou qui te permettent de te détendre, de jouer. 
+*Programmer, c'est créer, c'est adapter, c'est automatiser des tâches répétitives et longues.* C'est aussi imaginer des usages qui simplifient la vie ou qui te permettent de te détendre, de jouer.
 
 Cette page que tu es en train de lire nécessite un ensemble impressionnant de technologies pour fonctionner que tu sous-estimes très certainement et j'essaierai, autant que faire se peut, de te donner les clés de ce monde parallèle.
 
-Si tu es prêt à devenir un codeur, un artiste du clavier, que tu soies une fille ou un garçon, ce site est donc
-fait pour toi. 
+Si tu es prêt à devenir un codeur, un artiste du clavier, que tu soies une fille ou un garçon, ce site est donc fait pour toi.
 
-J'ai eu la chance de décrouvrir l'informatique et le développement de logiciel à ton âge, c'est
-à dire vers 10 ans. Je vais donc te présenter des concepts et des techniques qui te permettront de prendre goût
-à cet univers secret du *coding*. 
+J'ai eu la chance de décrouvrir l'informatique et le développement de logiciel à ton âge, c'est à dire vers 10 ans. Je vais donc te présenter des concepts et des techniques qui te permettront de prendre goût à cet univers secret du *coding*.
 
-Tu peux enlever ta capuche et allumer, il n'y a que dans les films où les
-programmeurs codent dans le noir sur des écrans noirs et vert, affublé d'une capuche et de lunettes.
+Tu peux enlever ta capuche, allumer la lumière et ouvrir les volets : il n'y a que dans les films où les programmeurs codent dans le noir sur des écrans vert et noirs, affublés d'une capuche et de lunettes.
 
 # Prépare ton environnement
 
-Tu t'attends à trouver dans ce paragraphe un guide pour installer des logiciels et commencer à coder. 
-Désolé de te décevoir, mais ce ne sera pas le cas, pas de tout de suite. Cela va arriver rapidement car
-je te sens impatient, cependant il me parait important d'évoquer ton cadre de travail.
+Tu t'attends à trouver dans ce paragraphe un guide pour installer des logiciels et commencer à coder. Désolé de te décevoir, mais ce ne sera pas le cas, pas de tout de suite. Cela va arriver rapidement car je te sens impatient, cependant il me parait important d'évoquer ton cadre de travail.
 
 ## Organisation de ton espace
 
@@ -171,7 +161,7 @@ Chez Google par exemple, tu accèdes avec ton navigateur à leur site. Ton navig
 
 Donc je vais t'apprendre à créer des suites d'opérations, c'est à dire des mini-tâches, qui vont constituer tes programmes.
 
-# Qu'est-ce qu'un programme
+# L'ordinateur
 
 Nous y voilà ! Un programme est simplement un ensemble de tâches successives que l'on pourra répeter autant de fois que l'on voudra.
 
@@ -182,7 +172,7 @@ Pour écrire un programme il te faudra un langage, car un ordinateur ne comprend
 
 On appelle cela le binaire qui signifie "deux chiffres" : 0 ou 1.
 
-Un chiffre binaire est appelé en anglais "*bit*". Je te vois sourire, ce n'est pas ce que tu crois, mais ça se prononce bien comme ton gros mot favori.
+Un chiffre binaire est appelé en anglais "*bit*".
 
 Donc un programme va manipuler des chiffres et des nombres binaires qui vont représenter des données, c'est à dire des nombres, des lettres, des phrases, de la musique, des vidéos, etc. Tout est binaire dans ordinateur.
 
@@ -190,7 +180,11 @@ D'ailleurs même le programme que tu vas écrire dans un langage sera traduit en
 
 Ca parait simple dit comme cela, mais ça l'est. En plus tu vas utiliser un langage de haut niveau qui te permettra de rédiger et comprendre rapidement du code.
 
-Voici un programme dans un langage imaginaire, mais il suffirait de créer un traducteur vers le binaire pour qu'un ordinateur puisse l'exécuter :
+# Un programme
+
+Je vais commencer par un exemple de programme dans un langage imaginaire, afin que tu voies à quoi ça ressemble.
+
+Ce langage imaginaire n'est pas exécutable en l'état par une machine, il suffirait de créer un traducteur vers le binaire pour qu'un ordinateur puisse l'exécuter. Mais ce qui est *drôle*, c'est que ton cerveau, lui, il pourra l'exécuter !
 
 ```
 Ligne 01 : effacer l'écran
@@ -198,14 +192,14 @@ Ligne 02 : afficher "Bonjour, comment t'appelles-tu ?"
 Ligne 03 : attendre la réponse au clavier la mettre dans la variable PRENOM
 Ligne 04 : afficher "Bonjour {PRENOM}, tu as un joli prénom !"
 Ligne 05 : afficher "Veux-tu devenir mon ami(e) ?"
-Ligne 06 : attendre la réponse au clavier la mettre dans la variable ETRE_AMI
-Ligne 07 : si ETRE_AMI = OUI alors afficher "Super, je sens que l'on va bien s'entendre, {PRENOM} !"
+Ligne 06 : attendre la réponse au clavier la mettre dans la variable AMI
+Ligne 07 : si AMI = OUI alors afficher "Super, je sens que l'on va bien s'entendre, {PRENOM} !"
 Ligne 08 : sinon afficher "Dommage {PRENOM}, on aurait pu bien s'amuser."
 ```
 
-Voilà, il s'agit d'un programme. Il détient détient beaucoup de concept que je vais te décrire.
+Voilà, il s'agit d'un programme. Il détient beaucoup de concepts que je vais te décrire par la suite.
 
-Malheureusement ce programme, dans ce langage que je viens d'inventer, ne pourra pas s'exécuter sur un ordinateur si je ne dispose pas d'un traducteur.
+Comme je te l'ai déjà dit, malheureusement ce programme, écrit dans ce langage que je viens d'inventer, ne pourra pas s'exécuter sur un ordinateur si je ne dispose pas d'un traducteur.
 
 Ces traducteurs, sont de deux grandes catégories :
 
@@ -237,12 +231,68 @@ Veux-tu devenir mon ami(e) ?
 Dommage Océane, on aurait pu bien s'amuser.
 ```
 
-## Instructions et variables
+# Instructions et variables et mémoire
 
 Si je reprends le code du paragraphe précédent, tu pourras y voir :
 
-* des lignes qui contiennent des instructions : effacer, afficher, attendre la saisie ...
-* des variables, c'est à dire un endroit pour stocker de l'information : PRENOM, ETRE_AMI
-* une structure de contrôle "si ... alors ... sinon" qui permet de prendre plusieurs chemin en fonction de la valeur des variables testées.
+* des lignes qui contiennent des instructions :
+  * `effacer`
+  * `afficher`
+  * `attendre la saisie`
+* des variables, c'est à dire un endroit pour stocker de l'information : 
+  * PRENOM
+  * AMI
+* une structure de contrôle `si ... alors ... sinon` qui permet de prendre plusieurs chemin en fonction de la valeur des variables testées.
 
 > Le terme de "structure contrôle" est le terme exacte. Désolé, cela peut paraitre difficile à cerner, mais il en existe d'autres qui permettent, comme le "si ... alors ... sinon" de **contrôler** le déroulement de ton programme et de lui faire prendre des chemins, des directions différentes.
+
+Tu peux déjà remarquer que les instructions sont des **verbes à l'infinitif** et que les variables sont des **noms communs**. Et oui, quand tu coderas il te vaudra mieux respecter des conventions. Cela te permettra de relire ton code plus tard et de le comprendre facilement, mais cela permettra aussi à d'autres personnes de reprendre ton code pour corriger des erreurs (des bugs) ou les améliorer.
+
+Derrière les instructions de bases que je viens de te montrer, il s'exécutent en réalité une multitude d'autres petites instructions. Par exemple `afficher` qui permet donc d'afficher une phrase à l'écran effectue un travail considérable à ta place :
+
+* elle parcourt chacune des lettres de la phrase.
+* pour chacune des lettre trouvée, elle va écrire sur la carte vidéo de ton ordinateur tous les pixels (les points) qui composent la lettre, à l'endroit ou se situe le curseur.
+* elle avance le curseur de la taille de lettre. Et oui le "i" est plus petit que le "B" en largeur.
+
+Tu pourras, quand tu le souhaiteras, te plonger dans les détails techniques que je viens à peine de t'expliquer, mais tu n'en a pas besoin pour apprendre à programmer. Je te rassure aussi, ce que tu apprendras te permettra aussi de mieux comprendre les détails quand tu en auras besoin ou quand tu auras un bug à résoudre.
+
+# Coder, c'est se tromper
+
+Avant de bien coder, en tout cas j'espère que je code bien aujourd'hui, je me suis beacuoup trompé. J'ai fait beaucoup de programme avec plein de bugs dedans. J'ai fait des programmes lents qui consommaient beaucoup de mémoire ou qui n'étaient pas très optimisé. J'ai fait aussi beaucoup de programme que je n'arrivaient à comprendre quelques mois plus tard.
+
+Faire des erreurs c'est normal, et tu en feras. Je te souhaite d'en faire, car c'est aussi comme cela que tu apprendras. On apprend toujours plus de ses échecs que de ses succès, surtout si tu arrives à comprendre pourquoi et si tu te corriges.
+
+Toutefois, je vais t'aider à éviter quelques pièges et découvrir des astuces. Quand j'ai commencé à programmer, je n'avais pas internet : ça n'existait pas. J'avais quelques livres, pas forcément très clairs pour mon âge et j'avais aussi quelques copains passionnés comme moi. Je te souhaite de faire un peu le même chemin que moi, mais en accéléré. C'est le but de ce site : te donner les clés pour progresser rapidement.
+
+Donc prépare toi à créer des bugs et à les résoudre ! Je te donnerai des exercices en ce sens. C'est à dire que je te fournirai du code avec des erreurs qu'il faudra que tu trouves et que tu corriges. Il n'y a pas plus formateur que ça !
+
+# Ton premier programme réel qui fonctionne
+
+J'ai décidé de te faire utiliser un langage professionnel très répandu et qui te permettra de tout faire par la suite, que ce soit un site web professionnel, un jeu vidéo, ou une application sur Android et que tu soies sous Linux ou Windows : **JAVA**.
+
+Tu as beaucoup de chance, JAVA est un langage très facile. Il existe beaucoup d'outils pour t'aider à programmer. Il est aussi très puissant et possède plein de détails techniques très pointus. Mais il te permettra d'apprendre et surtout de t'ouvrir des perspectives de développement très larges.
+
+Certains pourront penser qu'apprendre directement avec **JAVA** est trop compliqué et donc que c'est une erreur : tu vas voir, on va les faire mentir !
+
+## Installation de Java
+
+D'abord il va te falloir installer JAVA. Il existe plusieurs déclinaisons de la plateforme JAVA : dans notre cas il s'agit du compilateur et de tous les outils necessaires pour faire du JAVA. 
+
+Si tu as bien suivi mes paragraphes précédents, je viens de dire **compilateur JAVA**. C'est à moitié vrai, à moitié faux. En fait la plateforme JAVA existe sous tout un tas de systèmes d'exploitation comme Linux ou Windows. Il te faut une **JAVA Virtual Machine** pour faire fonctionner un programme Java. Mais tu n'auras pas besoin de le recompiler quand tu passes d'un Windows à un Linux, un peu comme un langage interprété.
+
+Java est donc une solution hybride à mi-chemin entre un langage compilé et interprété. Je pourrais rentrer dans de plus amples détails mais je pense que cela suffit pour le moment.
+
+Si tu es sous windows, rends toi sur ce site et télécharge le JDK (Java Development Kit) et installe le.
+
+Si tu es sous Linux Mint, comme je te l'ai conseillé, ouvre un terminal et tape la commande suivante, sans te tromper, bien évidemment `sudo apt install openjdk-10`
+
+Pour vérifier que Java est bien installé, ouvre un nouveau terminal et tape la commande suivante : `java -version`
+
+Voici ce que tu verras apparaitre dans ton terminal :
+
+```
+
+```
+
+
+
