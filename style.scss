@@ -34,7 +34,7 @@
     src: url('/fonts/amstrad-cpc-extended.eot?#iefix') format('embedded-opentype'),
          url('/fonts/amstrad-cpc-extended.woff2') format('woff2'),
          url('/fonts/amstrad-cpc-extended.woff') format('woff'),
-	url('/fonts/amstrad.ttf') format('truetype');
+	       url('/fonts/amstrad.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -45,15 +45,19 @@
     src: url('/fonts/atari-st.eot?#iefix') format('embedded-opentype'),
          url('/fonts/atari-st.woff2') format('woff2'),
          url('/fonts/atari-st.woff') format('woff'),
-		 url('/fonts/atari-st.ttf') format('truetype');
-    font-weight: 500;
+		     url('/fonts/atari-st.ttf') format('truetype');
+    font-weight: normal;
     font-style: normal;
 }
 
 @font-face 
 {
-	font-family: "amstrad";
-	src: url('/fonts/amstrad-cpc-extended.ttf');
+	font-family: "amiga";
+    src: url('/fonts/amiga.woff2') format('woff2'),
+         url('/fonts/amiga.woff') format('woff'),
+         url('/fonts/amiga.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;        
 }
 
 // Syntax highlighting @import is at the bottom of this file
