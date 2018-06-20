@@ -37,7 +37,7 @@ Tu peux enlever ta capuche, allumer la lumière et ouvrir les volets : il n'y a 
 
 Tu t'attends à trouver dans ce paragraphe un guide pour installer des logiciels et commencer à coder. Désolé de te décevoir, mais ce ne sera pas le cas, pas de tout de suite. Cela va arriver rapidement car je te sens impatient, cependant il me parait important d'évoquer ton cadre de travail.
 
-## Organisation de ton espace
+## Organise de ton espace
 
 Il te faudra un bureau agréable, une chaise confortable, un écran d'une taille acceptable. Bref plein de choses en "able". Je te conseille aussi une lumière indirecte, qui éclaire bien ton clavier mais qui n'est pas trop forte, afin de favoriser ta concentration.
 
@@ -50,7 +50,7 @@ t'aider à concevoir tes programmes. On a pas fait mieux que le crayon et le pap
 
 Tu peux écouter un peu de musique, mais il faut qu'elle soit assez reposante et pas trop forte. Cela nuira à ta concentration. Ton cerveau ne sera pas mobilisé à 100% sur ce que tu es en train d'apprendre. D'ailleurs ces conseils valent aussi pour n'importe quel travail.
 
-## Un ordinateur
+## Ton ordinateur
 
 Si tu lis cette page, c'est que tu as au moins un smartphone, une tablette ou un ordinateur.
 
@@ -68,11 +68,11 @@ Ce que je peux te conseiller, c'est de demander à un adulte si tu peux installe
 
 Avec cette solution, je te recommande quand même un ordinateur avec au moins 4 Go de RAM. Le mieux serait même 8 Go ou plus encore. Si tu ne vois pas de quoi je parle, ce n'est pas grave, demande à un adulte de vérifier la quantité de mémoire présente sur ton ordinateur. Attention, il ne s'agit pas de l'espace sur le disque dur, mais de la quantité de mémoire vive.
 
-Et oui, programmer nécessite un système d'exploitation. Même si tu ne connaitras tout ce que tu peux faire avec, dévelloper un programmer te fera passer de l'autre côté de la barrière. Tu ne seras un simple utilisateur du système, mais tu l'enrichiras.
+Et oui, programmer nécessite un système d'exploitation (*Operating System* en anglais). Même si tu ne connaitras tout ce que tu peux faire avec, développer un programme te fera passer de l'autre côté de la barrière. Tu ne seras un simple utilisateur du système, mais tu l'enrichiras.
 
 ## Installation de Linux Mint dans VirtualBox
 
-Ces étapes ne sont que des recommandations, tu n'es pas obligé(e) d'installer VirtualBox et Linux Mint, mais ce serait mieux. Encore mieux, si tu es déjà sous Linux, à la place de Windows, ce sera d'autant plus facile.
+Ces étapes ne sont que des recommandations, tu n'es pas obligé(e) d'installer `VirtualBox` et `Linux Mint`, mais ce serait mieux. Encore mieux, si tu es déjà sous Linux, à la place de Windows, ce sera d'autant plus facile.
 
 Si tu as suivi mes recommandations du paragraphe précédent, te voici avec VirtualBox installé sur ton ordinateur.
 Tu peux donc installer Linux Mint dedans. C'est assez simple car il existe des "images" pré-installées de Linux Mint pour Virtual Box.
@@ -144,7 +144,7 @@ Après toute ces manipulations, **je te félicite**. Si tu as réussi, tu as tou
 
 On va pouvoir passer aux choses sérieuses.
 
-# Quest-ce qu'un ordinateur
+# Définition : ordinateur
 
 Si on prend la définition du Larousse, tu sais, le gros bouquin qui est dans la bibliothèque de tes parents, mais que tu ne consultes jamais parce que maintenant tu as Google et Wikipedia ... voire même YouTube.
 
@@ -161,11 +161,21 @@ Chez Google par exemple, tu accèdes avec ton navigateur à leur site. Ton navig
 
 Donc je vais t'apprendre à créer des suites d'opérations, c'est à dire des mini-tâches, qui vont constituer tes programmes.
 
-# L'ordinateur
+# Définition : programme informatique
 
-Nous y voilà ! Un programme est simplement un ensemble de tâches successives que l'on pourra répeter autant de fois que l'on voudra.
+Nous y voilà ! Un programme informatique est simplement un ensemble de tâches successives qui aura pour but de fournir un résultat.
 
-Pour écrire un programme il te faudra un langage, car un ordinateur ne comprend que des petites impulsions électriques : 
+Il prendra des informations en entrée, comme des saisies au clavier, des fichiers sur le disque dur, des images d'une webcam.
+
+Le programme va traiter ses informations et en fonction de ce qui est analysé, il va faire des choix très simple. Ce sont ces choix que tu vas coder. En gros, tu vas lui permettre de choisir entre tel et tel cas, mais ne t'attends à une intelligence. Comme je te l'ai déjà dit, un ordinateur c'est "idiot".
+
+Enfin tu pourras répéter des tâches. C'est justement la force d'un programme par rapport à un humain : un programme ne se fatigue pas (normalement). Il n'a pas besoin de se reposer ni de manger. Il ne ralentit pas quand il est fatiqué. Il est donc capable de faire des milliards de fois les mêmes taĉhes. 
+
+Par exemple, pendant que tu lisais ce paragraphe pendant 30 secondes, l'ordinateur a analysé environ 1800 fois ce qu'il devait afficher à l'écran ! C'est beaucoup, non ? Mais tu vois, il va continuer à le faire tant qu'il est allumé environ 60 fois par seconde ! C'est magique. En fonction des ordinateurs et de leur capacité, cela peut même être beaucoup plus.
+
+## Un peu de détails : bits et octets
+
+Pour écrire un programme il te faudra un langage, car un ordinateur ne comprend que des petites impulsions électriques :
 
 * `0` : éteint
 * `1` : allumé
@@ -176,15 +186,17 @@ Un chiffre binaire est appelé en anglais "*bit*".
 
 Donc un programme va manipuler des chiffres et des nombres binaires qui vont représenter des données, c'est à dire des nombres, des lettres, des phrases, de la musique, des vidéos, etc. Tout est binaire dans ordinateur.
 
+En général, un ordinateur regroupe ces *bits* par paquet de 8 pour les manipulés. Un paquet de 8 bits est appelé `octet`. Tu en as sûrement déjà entendu parlé, car les clés USB, les débits internets, les tailles de carte SD sont exprimés avec cette unitée.
+
 D'ailleurs même le programme que tu vas écrire dans un langage sera traduit en binaire pour être exécuté par l'ordinateur mais aussi pour pouvoir être sauvegarder sur ton disque dur ou sur une clé USB.
 
 Ca parait simple dit comme cela, mais ça l'est. En plus tu vas utiliser un langage de haut niveau qui te permettra de rédiger et comprendre rapidement du code.
 
-# Un programme
+## Exemple : un programme
 
 Je vais commencer par un exemple de programme dans un langage imaginaire, afin que tu voies à quoi ça ressemble.
 
-Ce langage imaginaire n'est pas exécutable en l'état par une machine, il suffirait de créer un traducteur vers le binaire pour qu'un ordinateur puisse l'exécuter. Mais ce qui est *drôle*, c'est que ton cerveau, lui, il pourra l'exécuter !
+Ce langage imaginaire n'est pas exécutable en l'état par une machine mais il suffirait de créer un traducteur vers son langage binaire pour qu'il puisse l'exécuter. Mais ce qui est *drôle*, c'est que ton cerveau, lui, il pourra l'exécuter !
 
 ```
 Ligne 01 : effacer l'écran

@@ -754,32 +754,46 @@ aside A, aside A:visited, aside A:hover
  
  .entry
  {
-    h3
+    h2
     {
       font-family : "amiga";
       margin-top : 1em;
-      margin-left: 1em;
       padding : 0.75em;
       color : #FFFF00;
-      background-color : rgba(0, 0, 172, 0.801);
+      background-color : rgba(0, 0, 172, 0.950);
       border-radius : 0.5em; 
-      font-size : 1.25em;
+      //font-size : 1.25em;
       box-shadow: 2px 2px 2px #555555;
     } 
     
-    h3:before
+    h2:before
     {
         margin-right : 0.25em;
-      	content : '>';
+        content : '>';
+        font-size : 1em;
     }
     
-    h3:after
+
+
+    h2:after
     {
         margin-left : 0.25em;
       	content : '_';
     }
-    
 
+    h3 
+    {
+      margin-top : 1em;
+      font-size : 1.5em;
+    }
+    
+    h3:before
+    {
+      margin-left : 0.25em;
+      margin-right : 0.25em;
+      content : '\2738';
+    }
+  
     
      p
      {

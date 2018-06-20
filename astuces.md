@@ -51,7 +51,7 @@ En JSF, pour éviter la demande de confirmation de "re-submit POST", il faut ajo
 
 source : [https://gist.github.com/Simplesmente/a84343b1f71a46bbeedbb6c9b20fa9c1#file-install-docker-mint-sh](https://gist.github.com/Simplesmente/a84343b1f71a46bbeedbb6c9b20fa9c1#file-install-docker-mint-sh)
 
-```
+```bash
 sudo apt-get update
 sudo apt-get install apt-transport-https ca-certificates -y
 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
@@ -63,7 +63,6 @@ sudo apt-get install docker-engine cgroup-lite apparmor -y
 sudo usermod -a -G docker $USER
 sudo service docker start
 ```
-
 
 ### usage sans sudo
 
@@ -115,7 +114,7 @@ capture-03.mp4
 
 Concaténation :
 
-```
+```bash
 $ ffmpeg -f concat -i files.txt -c:v libx264 -preset result_video.mp4
 ```
 
@@ -123,7 +122,7 @@ $ ffmpeg -f concat -i files.txt -c:v libx264 -preset result_video.mp4
 
 Accélération légère d'une vidéo pour la rendre plus "punchy" tout en restant écoutable :
 
-```
+```bash
 $ ffmpeg -i normal_video.mp4 \ 
        -filter_complex "[0:v]setpts=0.85*PTS[v];[0:a]atempo=(1/0.85)[a]" \
        -map "[v]" -map "[a]" \
@@ -136,7 +135,7 @@ $ ffmpeg -i normal_video.mp4 \
 
 Il faut obtenir l'adresse de streaming ainsi que la clé (cf. compte Youtube, ma chaine, mes vidéos)
 
-```
+```bash
 $ ffmpeg -f alsa -ac 2 -i hw:0,0 -f x11grab -framerate 30 -video_size 1280x720 \
          -i :0.0+0,0 -c:v libx264 -preset veryfast -maxrate 1984k -bufsize 3968k \
          -vf "format=yuv420p" -g 60 -c:a libvo_aacenc -b:a 128k -ar 44100 \
