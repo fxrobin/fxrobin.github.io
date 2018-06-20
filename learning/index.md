@@ -33,7 +33,7 @@ J'ai eu la chance de décrouvrir l'informatique et le développement de logiciel
 
 Tu peux enlever ta capuche, allumer la lumière et ouvrir les volets : il n'y a que dans les films où les programmeurs codent dans le noir sur des écrans vert et noirs, affublés d'une capuche et de lunettes.
 
-# Prépare ton environnement
+## Prépare ton environnement
 
 Tu t'attends à trouver dans ce paragraphe un guide pour installer des logiciels et commencer à coder. Désolé de te décevoir, mais ce ne sera pas le cas, pas de tout de suite. Cela va arriver rapidement car je te sens impatient, cependant il me parait important d'évoquer ton cadre de travail.
 

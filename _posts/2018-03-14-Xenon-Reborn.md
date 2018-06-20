@@ -25,6 +25,7 @@ Cela ne peut pas se faire sans une bonne maîtrise des fondamentaux.
 > "Science sans conscience n’est que ruine de l’âme", François Rabelais, Pantagruel. 
 
 A mon sens, ces fondamentaux sont :
+
 * la représentation des données, l'adressage ;
 * l'exécution d'un programme ;
 * l'ordonnancement des tâches et des instructions ;
@@ -41,6 +42,7 @@ Car oui, sous des allures "peu sérieuses", coder un jeu vidéo permet de mettre
 
 
 Ce projet "fil rouge" s'incrivait dans un cours de "Java Bases" où les notions suivantes n'avaient pas encore été abordées, ce qui représentait un sacré challenge pour faire un jeu vidéo :
+
 * les collections (toutes) : ils n'avaient étudier que `List` et `ArrayList` ;
 * les fichiers ;
 * les interfaces graphiques ;
@@ -60,11 +62,10 @@ Si vous ne l'aviez pas encore [compris ou lu](/about), je suis nostalgique des j
 
 <iframe class="video mini" src="https://www.youtube.com/embed/v9nD9DQwd80?start=175" frameborder="1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-![ATARI-ST](/images/atari-st.png) 
+![ATARI-ST](/images/atari-st.png)
 ![AMIGA](/images/amiga.png)
 
 J'ai donc souhaité rendre hommage, à mon humble niveau, à ces deux "hits" de l'informatique micro-ludique 1980-2000 ...
-
 
 ## Au résultat
 
@@ -82,14 +83,13 @@ Pour vous amuser un peu, voici les commandes :
 
 |Touche(s)    					| Action 											|
 |-------------------------------|---------------------------------------------------|
-|`FLECHES DU CURSEUR` 		| mouvements du vaisseau							|
+|`FLECHES DU CURSEUR` 		    | mouvements du vaisseau							|
 |`CTRL-DROIT` 					| tir conventionnel									|
-|`SHIFT-DROIT` 				| tir destructeur									|
+|`SHIFT-DROIT` 				    | tir destructeur									|
 |`ENTREE` 						| activation/désactivation du bouclier				|
 |`F1` 							| bascule mode plein écran / fenêtré				|
 |`ESC` 							| retour à l'écran précédent						|
-|`CURSEUR GAUCHE et DROIT`	|  change la musique seulement sur l'écran de menu	|
-
+|`CURSEUR GAUCHE et DROIT`	    | change la musique seulement sur l'écran de menu   |
 
 ## Solutions techniques
 
@@ -100,7 +100,6 @@ Voici différents diagrammes, afin de vous rendre compte d'une partie du systèm
 ![Diagramme UML Game](/images/xenon-reborn/dclaa-game.png)
 
 ![Diagramme UML Screens](/images/xenon-reborn/dclaa-screens.png)
-
 
 ### Graphismes
 
@@ -125,15 +124,16 @@ Je m'y suis donc contraint, ne serait-ce que pour retrouver "le son d'autrefois"
 Le reste des effets sonores (tirs, explosions) sont généralement joués à partir de fichier WAV directement
 par LibGDX.
 
-
 ### Algorithmes
 
-Ici le terme d'algorithme est un bien grand nom. En effet, il s'agissait surtout de mettre en oeuvre les fondamentaux du développement : 
+Ici le terme d'algorithme est un bien grand nom. En effet, il s'agissait surtout de mettre en oeuvre les fondamentaux du développement :
+
 * variables,
 * boucles,
 * conditions.
 
 Puis d'enchainer sur les concepts fondamentaux de la programmation orientée "objets" :
+
 * responsabilité,
 * découplage,
 * encapsulation,
@@ -281,7 +281,6 @@ public interface Artefact extends Renderable
 
 Système de gestion de collisions :
 
-
 ```java
 package net.entetrs.xenon.artefacts.managers;
 
@@ -406,15 +405,17 @@ Pour donner un ordre de grandeur, j'ai dû passer 20 heures sur l'ensemble du co
 Je me suis forcé aussi à ne pas utiliser Lombok, qui aurait pourtant bien acceléré les choses, mais il fallait être en accord avec les compétences détenues par mes stagiaires à ce moment là.
 
 A ce jour voici les statistiques d'analyse de code (CODACY et CODEFACTOR) :
+
 * LineOfCode : 2897
 * Java Files : 61
-* Issues : 0%, Complex Files : 0%, Duplicated Code : 0% 
+* Issues : 0%, Complex Files : 0%, Duplicated Code : 0%
 * CODEFACTOR : rated A
 * CODACY: rated A
 
 Je sais que certains aiment bien les statistiques de "production de code". Grosso modo, cela représente  140 LoC par heure. Comme une classe c'est en moyenne 50 LoC, cela fait 3 classes par heure. Ces statistiques ne veulent pas dire grand chose, mais je les laisse quand même.
 
 Voici les points du jeu sur lesquels j'ai passé le plus de temps, souvent sur des détails d'ailleurs :
+
 * enchainement par fade-in, fade-out des écrans (rien dans LibGDX pour cette chose pourtant nécessaire !)
 * scrolling parallax perso versus TileMap
 * affichage en channel Alpha du niveau de bouclier à gauche, parce que il faut prendre en compte les particularités du SpriteBatch
@@ -422,6 +423,7 @@ Voici les points du jeu sur lesquels j'ai passé le plus de temps, souvent sur d
 * Découplage de l'affichage du vaisseau en fonction de son état et des traitements des inputs.
 
 Vu des stagiaires, se rendre compte  :
+
 * que développer un jeu vidéo ce n'est pas simple et finalement revoir à la baisse leurs prétentions de recoder Call Of Duty ...
 * qu'avec quelques lignes de codes, quelques boucles, on fait des choses sympatiques
 * que reprendre du code qu'on a pas écrit, ce n'est pas simple.
@@ -446,4 +448,4 @@ Si c'était à refaire, je le referais, mais en y consacrant plus que 20 heures 
 
 S'ils lisent cet article, je les invite d'ailleurs à faire part de leurs commentaires sur cette partie "ludique" de l'apprentissage du développement.
 
-Le code source du projet est disponible sur mon repository GitHub : https://github.com/fxrobin/Xenon_Reborn
+Le code source du projet est disponible sur mon repository GitHub : <https://github.com/fxrobin/Xenon_Reborn>

@@ -1,51 +1,64 @@
 ---
 layout: post
-title: Découverte de DeltaSpike Data 
+title: Découverte de Deltaspike Data Module
 subtitle: avec CDI 2.0, Weld 3, JUnit 5, JPA 2.2, EclipseLink 2.7, H2 et Lombok
-logo: api-preconditions.png
+logo: deltaspike.png
 category: JAVA
 tags: [Java, CDI, Weld, JUnit, JPA, EclipseLink, H2, Lombok]
 ---
 
 <div class="intro" markdown='1'>
-Cet article va vous permettre de découvrir `Deltaspike Data`, une alternative à `Spring Data` dans le monde `CDI` et dans notre cas en `CDI 2.0`.
+Cet article va vous permettre de découvrir `Deltaspike Data Module`, une alternative à `Spring Data` dans le monde `CDI` et dans notre cas en `CDI 2.0`.
 
-Cette accroche est parlante pour ceux qui connaissent `Spring Data` mais peut-être pas pour les autres : **Deltaspike Data** va permettre d'avoir très simple une fonctionnalité de `DAO` sur des entités JPA et bien plus encore en vous faisant économiser énormément de temps.
-
+Cette accroche est parlante pour ceux qui connaissent `Spring Data` mais peut-être pas pour les autres : **Deltaspike Data** va permettre d'avoir très simplement une fonctionnalité de `CRUD` (Create, Read, Update, Delete) sur des entités JPA et bien plus encore en vous faisant économiser énormément de temps de développement et de bugs potentiels !
 </div>
 <!--excerpt-->
 
+## TL;DR
 
+![Too Long, Did not read](/images/tldr.jpg)
+> Too long; did not read
+
+Pour les plus pressés, tout est sur mon repository GitHub dédié à cloner :
+
+<https://github.com/fxrobin/cdi-deltaspike-demo>
+
+Et voici le fichier pom.xml :
+
+<https://github.com/fxrobin/cdi-deltaspike-demo/blob/master/pom.xml>
 
 ## CDI et Deltaspike en bref
 
-CDI est une spécification pour l'injection de dépendances, pratique rendue en vogue par Spring IoC. 
+CDI est une spécification pour l'injection de dépendances, paradigme de programmation rendu célèbre par Spring IoC.
 
 > Cet article n'a pas vocation à comparer les deux solutions. Je vous invite à vous rendre sur ce site pour cela : <http://blog.sedona.fr/2015/07/spring-vs-cdi/>
 
-En premier lieu CDI n'est pas une implémentation dont le spec lead est [Antoine Sabot-Durand](https://www.linkedin.com/in/antoinesabotdurand) (cocorico). Il en existe plusieurs actuellement sur le marché :
+En premier lieu CDI n'est pas une implémentation. C'est une spécification historiquement créée pour Java EE 6 et qui est maintenant autonome. Le *spec lead* est [Antoine Sabot-Durand](https://www.linkedin.com/in/antoinesabotdurand) (cocorico). Il existe plusieurs implémentations actuellement sur le marché :
 
-* JBoss Weld (implem de référence)
+* JBoss Weld (implementation de référence)
 * OpenWebBeans (Apache)
 
-CDI offre tout ce qu'il faut pour mettre en place du découplage, essentiellement au moyen d'annotations et de fournir tous les services et l'extensibilité attendue par ce genre d'outils.
+CDI offre tout ce qu'il faut pour mettre en place du découplage, essentiellement au moyen d'annotations. En outre CDI est extensible. Si j'osais un parallèle, Deltaspike est à CDI ce que PrimeFaces et Omnifaces sont à JSF : des bibliothèques dont on ne peut plus se passer une fois qu'on y a goûter.
 
-Ainsi Deltaspike arrive en complément de CDI et offre de nouvelles fonctionnalités pour des spécifications existantes comme JPA, JSF, Servlet, etc.
+Ainsi Deltaspike arrive en complément de CDI et offre de nouvelles fonctionnalités au moyen de divers modules pour des spécifications existantes :
 
-Le but de cet article est de se focaliser sur Deltaspike Data et de sa mise en oeuvre simple avec CDI 2.0 au sein de tests unitaires JUnit 5.
+* Core : API de base et classes utilitaires
+* Bean Validation : intégration de CDI et Bean Validation
+* Container Control : permet de démarrer et arrêter un contexte CDI
+* **Data** : pour accélérer le développement JPA
+* JPA : apport d'un contexte et d'un scope transactionnel
+* JSF : intégration fine de JSF et CDI (multi-fenêtrage, scopes étendus, gestion des messages)
+* Partial-Bean : pour implémenter de manière générique rapidement des interfaces et des classes abstraites
+* Scheduler : pour exécuter des tâches de manière récurrentes (intégration avec Quartz 2 par défaut)
+* Security : intercepteur de méthodes pour vérifications de la sécurité (credentials)
+* Servlet : intégration poussée en CDI et Servlets notamment dans la propagation d'Events (asynchrone)
+* Test-Control : pour réaliser aisément des tests unitaires en environnement CDI.
 
-## TL;DR
-> Too long; did not read
+Le but de cet article est de se focaliser sur **Deltaspike Data Module** et de sa mise en œuvre simple avec CDI 2.0 au sein de tests unitaires JUnit 5.
 
-Pour les plus pressés, tout est sur mon repo GitHub dédié : <https://github.com/fxrobin/cdi-deltaspike-demo>
+## Deltaspike Data Module @Repository
 
-Et voici le fichier pom.xml : <https://github.com/fxrobin/cdi-deltaspike-demo/blob/master/pom.xml>
-
-
-
-## DeltaSpike Data @Repository
-
-Grâce à DeltaSpike Data, on pourra donc *coder* très rapidement un service CRUD sur une entité JPA.
+Grâce à Deltaspike Data Module, on pourra *coder* très rapidement un service CRUD sur une entité JPA.
 
 ```java
 @Repository
@@ -55,7 +68,7 @@ public interface VideoRepository extends EntityRepository<VideoGame, Long>
 }
 ```
 
-Ensuite, au moyen d'une injection CDI, on pourra obtenir une instance d'un service généré (via ASM) qui offre ton un tas de méthodes et faire donc ce genre de choses dans un test unitaire :
+Ensuite, au moyen d'une injection CDI, on obtiendra une instance d'un service généré (via ASM) qui offre un grand nombre de méthodes. On pourra l'invoquer de la sorte dans un test unitaire :
 
 ```java
 @Inject
@@ -90,7 +103,7 @@ Au moyen d'une simple interface qui hérite de `EntityRepository <E,K>` on obtie
 * count
 * countLike
 
-Je ne présente pas le détail de chacune, la JavaDoc est très bien faite à ce sujet (<https://deltaspike.apache.org/javadoc/1.8.0/org/apache/deltaspike/data/api/EntityRepository.html>) d'autant plus que, par conventions de nommage, tout est extensible :
+Je ne présente pas le détail de chacune, la JavaDoc est très bien faite à ce sujet (<https://deltaspike.apache.org/javadoc/1.8.0/org/apache/deltaspike/data/api/EntityRepository.html>) d'autant plus que, par conventions de nommage, tout est extensible, la preuve avec ces simples déclarations de signature de méthode :
 
 ```java
 @Repository
@@ -108,7 +121,7 @@ Il n'y a rien de plus à coder, grâce au nommage de la méthode et la reprise d
 
 ## Mise en oeuvre en Java SE pour les tests unitaires
 
-Autant mettre DeltaSpike dans un projet Java EE (6, 7 ou 8) est vraiment simple et rapide, autant mettre tout en place pour les tests unitaires peut s'avérer un peu fastidieux car il faut dépendre des éléments suivants :
+Autant mettre Deltaspike dans un projet Java EE (6, 7 ou 8) est vraiment simple et rapide, autant mettre tout en place pour les tests unitaires peut s'avérer un peu fastidieux car il faut dépendre des éléments suivants :
 
 * JUnit 5
 * CDI 2.0
@@ -123,7 +136,7 @@ Globalement cela parait simple, mais il y a de quoi se prendre les pieds dans le
 
 ### Configuration basique du projet
 
-On commence par la partie classique du pom.xml
+On commence par la partie classique du `pom.xml` : la configuration Java 8, UTF-8 et diverses versions.
 
 ```xml
 <properties>
@@ -135,9 +148,9 @@ On commence par la partie classique du pom.xml
 </properties>
 ```
 
-### Configuration pour usage de Deltaspike
+### Configuration globale Deltaspike
 
-Dans la partie `DependencyManagement` il faut ajouter ceci :
+Dans la partie `<DependencyManagement>` il faut ajouter ceci :
 
 ```xml
 <dependencyManagement>
@@ -155,7 +168,7 @@ Dans la partie `DependencyManagement` il faut ajouter ceci :
 
 ### Dépendances vers les spécifications
 
-Il s'agit de dépendre de CDI 2.0, Transaction API 1.3 et JPA 2.2 :
+Il s'agit de dépendre de CDI 2.0, Java Transaction API 1.3 et JPA 2.2 :
 
 ```xml
 <dependency>
@@ -169,7 +182,7 @@ Il s'agit de dépendre de CDI 2.0, Transaction API 1.3 et JPA 2.2 :
     <groupId>javax.transaction</groupId>
     <artifactId>javax.transaction-api</artifactId>
     <version>1.3</version>
-</dependency>   
+</dependency>
 
 <dependency>
     <groupId>javax.persistence</groupId>
@@ -178,7 +191,7 @@ Il s'agit de dépendre de CDI 2.0, Transaction API 1.3 et JPA 2.2 :
 </dependency>
 ```
 
-### Dépendances vers DeltaSpike et Weld 3
+### Dépendances vers Deltaspike et Weld 3
 
 ```xml
 <dependency>
@@ -213,7 +226,7 @@ Il s'agit de dépendre de CDI 2.0, Transaction API 1.3 et JPA 2.2 :
 </dependency>
 ```
 
-### Dépendances vers DeltaSpike Data Module
+### Dépendances vers Deltaspike Data Module
 
 Le voilà le module qui nous intéresse et qui contient tous les services que l'on souhaite utiliser :
 
@@ -235,7 +248,9 @@ Le voilà le module qui nous intéresse et qui contient tous les services que l'
 
 ### Dépendances vers EclipseLink 2.7 et H2
 
-EclipseLink sera le moteur de persistence JPA 2.2. La base de données sera embarquées et conservée exclusivement en mémoire pour les tests unitaires au moyen de H2.
+EclipseLink sera le moteur de persistence JPA 2.2.
+
+La base de données sera embarquée et conservera les informations exclusivement en mémoire pour les tests unitaires au moyen de H2.
 
 ```xml
 <dependency>
@@ -254,7 +269,7 @@ EclipseLink sera le moteur de persistence JPA 2.2. La base de données sera emba
 
 ### Dépendances vers JUnit 5
 
-Un gros paquet de configuration pour JUnit 5 :
+Un bel ensemble de dépendances pour la configuration de JUnit 5 :
 
 ```xml
 <dependency>
@@ -293,9 +308,9 @@ Un gros paquet de configuration pour JUnit 5 :
 </dependency>
 ```
 
-### Intégration JUnit 5 et Weld
+### Intégration JUnit 5 et Weld 3
 
-Pour rendre les tests unitaires JUnit 5 et Weld simple, il faut cette dépendances :
+Pour intégrer ensemble les tests unitaires JUnit 5 et Weld 3, il faut cette dépendances :
 
 ```xml
 <dependency>
@@ -306,7 +321,7 @@ Pour rendre les tests unitaires JUnit 5 et Weld simple, il faut cette dépendanc
 </dependency>
 ```
 
-### Configuration pour JUnit 5 de maven-surefire-plugin
+### Configuration de maven-surefire-plugin et JUnit 5
 
 ```xml
 <build>
@@ -333,7 +348,7 @@ Pour rendre les tests unitaires JUnit 5 et Weld simple, il faut cette dépendanc
 
 ## Dépendances complémentaires : Lombok et SLF4J
 
-Histoire d'être succinct, je vais utiliser Lombok et SLF4J :
+Histoire d'éviter du *boilter-plate*, je vais utiliser Lombok et SLF4J pour les logs :
 
 ```xml
 <dependency>
@@ -382,12 +397,14 @@ test/java/fr/fxjavadevblog
 
 ### Entité JPA
 
-Il va donc nous falloir une entité JPA `VideoGame`, ah bah oui quand même ! C'est pour elle qu'on fait tout ça ! L'ingrâte ! Elle ne se rend pas compte de tous les efforts que l'on fait pour elle !
+Il va donc nous falloir une entité JPA `VideoGame`.
+
+> Ah bah oui quand même ! C'est pour elle qu'on fait tout ça ! L'ingrâte ! Elle ne se rend pas compte de tous les efforts que l'on fait pour elle !
 
 ```java
-
 // lombok annotations
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // to avoid direct instanciation bypassing the factory.
+@EqualsAndHashCode(of = "id")
 @ToString(of = {"id","name"})
 
 // CDI Annotation
@@ -414,9 +431,11 @@ public class VideoGame implements Serializable {
 
 On peut y voir l'usage de Lombok de manière assez classique. Les clés primaires seront générées côté applicatif, par un producer de UUID, injecté par CDI au moyen du Qualifier `@InjectedUUID` et de l'annotation `@Inject`.
 
+> C'est la méthode que je préfère pour garantir un `equals/hashCode` stable, comme les API Java Collections l'attendent et éviter les surprises sur les `HashSet` par exemple.
+
 ### La factory de VideoGame
 
-Pour obtenir un objet "Valide" il faudra passer une factory qui s'appuira du CDI pour en obtenir une instance ainsi que l'injection de ses dépendances :
+Pour obtenir un objet *valide* il faudra obligatoirement passer une factory. Celle-ci s'appuira sur CDI pour en obtenir une instance ainsi que l'injection de ses dépendances :
 
 ```java
 public class VideoGameFactory
@@ -492,9 +511,9 @@ interface VideoGameRepository extends EntityRepository <VideoGame, String>
 
 ### Configuration beans.xml et persistence.xml
 
-Quelques fichiers de configuration à dupliquer aussi bien de la partie classique que dans la partie tests.
+Quelques fichiers de configuration à dupliquer aussi bien de la partie classique que dans la partie des tests unitaires.
 
-Fichier **beans.xml** :
+Fichier `beans.xml` :
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -504,7 +523,7 @@ Fichier **beans.xml** :
 </beans>
 ```
 
-Fichier **persistence.xml** :
+Fichier `persistence.xml` :
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -535,7 +554,7 @@ Et enfin le test unitaire en lui même :
 @EnableWeld
 class VideoGameRepositoryTest
 {
-    @WeldSetup // This is need to discover Producers and DeltaSpike Repository functionality
+    @WeldSetup // This is needed to discover Producers and Deltaspike Repository functionality
     private WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
 
     @Inject
@@ -544,7 +563,6 @@ class VideoGameRepositoryTest
     @Test
     void test()
     {
-
         VideoGame videoGame = VideoGameFactory.newInstance();
         videoGame.setName("XENON");
         repo.save(videoGame);
@@ -553,11 +571,10 @@ class VideoGameRepositoryTest
         Assert.assertTrue(videoGame.getVersion() > 0);
         log.info("Video Game : {}", videoGame);
     }
-
 }
 ```
 
-Grâce à `@EnableWeld`, le test unitaire s'exécute dans un contexte CDI existant. e context est initialisé par `WeldInitiator.performDefaultDiscovery()`, car par défaut dans les tests unitaires, rien n'est découvert par défaut.
+Grâce à `@EnableWeld`, le test unitaire s'exécute dans un contexte CDI existant. Le context est initialisé par `WeldInitiator.performDefaultDiscovery()`, car dans les tests unitaires rien n'est découvert par défaut.
 
 ## Exécution du test unitaire
 
@@ -584,19 +601,24 @@ Process finished with exit code 0
 
 > "Il est content Rosco !" &copy; Shérif fais moi peur
 
-A vous de jouer maintenant en découvrant encore plus DeltaSpike Data Module !
-
-## Conclusion
+## Conclusions
 
 Deltaspike Data Module est vraiment un "*must-have*" si vous faites du Java EE (vraiment Java EE, pas *juste* du Spring) et du CDI et JPA.
 
 Cette solution n'est pas restreinte à du Java EE et fonctionne aussi en Java SE, la preuve avec le test unitaire réalisé précédemment.
 
-En architecture REST avec un back-end Java EE (JAX-RS + CDI + DeltaSpike), on devient vraiment rapide et efficace ! Qu'attendez-vous ?
+En architecture REST avec un back-end Java EE (JAX-RS + CDI + DeltaSpike), on devient vraiment rapide et efficace !
 
-> J'ai encore réussi à placer [Lombok](/Lombok-Oui-Mais/) dans un article ...
+> C'est à vous de jouer maintenant, qu'attendez-vous pour passer à la vitesse supérieure avec **Deltaspike Data Module** ?
 
 ## Liens
+
+Code source :
+
+* Repo GitHub dédié : <https://github.com/fxrobin/cdi-deltaspike-demo>
+* Question posée sur Stackoverflow et ma réponse : <https://stackoverflow.com/questions/50688919/test-deltaspike-repositories-cannot-inject-entitymanager>
+
+Documentation :
 
 * CDI 2.0 : <http://cdi-spec.org/>
 * Weld : <http://weld.cdi-spec.org/>
@@ -604,4 +626,4 @@ En architecture REST avec un back-end Java EE (JAX-RS + CDI + DeltaSpike), on de
 * DeltaSpike : <https://deltaspike.apache.org/>
 * DeltaSpike Data : <https://deltaspike.apache.org/documentation/data.html>
 
-Question posée sur Stackoverflow et ma réponse : <https://stackoverflow.com/questions/50688919/test-deltaspike-repositories-cannot-inject-entitymanager>
+> J'ai encore réussi à placer [Lombok](/Lombok-Oui-Mais/) dans un article ...
