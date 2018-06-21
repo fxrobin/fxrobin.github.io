@@ -342,6 +342,14 @@ img {
   @include mobile { margin-right : inherit }
 }
 
+#right:before
+{
+  content:url('/images/croco-amstrad.gif');
+  position : absolute;
+  margin-top : -32px;
+  margin-left : -32px;
+}
+
 #right
 {
   @include mobile { display : none; }
