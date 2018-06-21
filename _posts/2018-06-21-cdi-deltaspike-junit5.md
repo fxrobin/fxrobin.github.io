@@ -35,10 +35,10 @@ CDI est une spécification pour l'injection de dépendances, paradigme de progra
 
 En premier lieu CDI n'est pas une implémentation. C'est une spécification historiquement créée pour Java EE 6 et qui est maintenant autonome. Le *spec lead* est [Antoine Sabot-Durand](https://www.linkedin.com/in/antoinesabotdurand) (cocorico). Il existe plusieurs implémentations actuellement sur le marché :
 
-* JBoss Weld (implementation de référence)
+* JBoss Weld (implémentation de référence)
 * OpenWebBeans (Apache)
 
-CDI offre tout ce qu'il faut pour mettre en place du découplage, essentiellement au moyen d'annotations. En outre CDI est extensible. Si j'osais un parallèle, Deltaspike est à CDI ce que PrimeFaces et Omnifaces sont à JSF : des bibliothèques dont on ne peut plus se passer une fois qu'on y a goûter.
+CDI offre tout ce qu'il faut pour mettre en place du découplage, essentiellement au moyen d'annotations. En outre CDI est extensible. Si j'osais un parallèle, Deltaspike est à CDI ce que PrimeFaces et Omnifaces sont à JSF : des bibliothèques dont on ne peut plus se passer une fois qu'on y a goûté.
 
 Ainsi Deltaspike arrive en complément de CDI et offre de nouvelles fonctionnalités au moyen de divers modules pour des spécifications existantes :
 
@@ -49,7 +49,7 @@ Ainsi Deltaspike arrive en complément de CDI et offre de nouvelles fonctionnali
 * JPA : apport d'un contexte et d'un scope transactionnel
 * JSF : intégration fine de JSF et CDI (multi-fenêtrage, scopes étendus, gestion des messages)
 * Partial-Bean : pour implémenter de manière générique rapidement des interfaces et des classes abstraites
-* Scheduler : pour exécuter des tâches de manière récurrentes (intégration avec Quartz 2 par défaut)
+* Scheduler : pour exécuter des tâches de manière récurrente (intégration avec Quartz 2 par défaut)
 * Security : intercepteur de méthodes pour vérifications de la sécurité (credentials)
 * Servlet : intégration poussée en CDI et Servlets notamment dans la propagation d'Events (asynchrone)
 * Test-Control : pour réaliser aisément des tests unitaires en environnement CDI.
@@ -130,7 +130,7 @@ Autant mettre Deltaspike dans un projet Java EE (6, 7 ou 8) est vraiment simple 
 * EclipseLink 2.7 (ou Hibernate)
 * H2 (ou tout autre base de données)
 
-Globalement cela parait simple, mais il y a de quoi se prendre les pieds dans le tapis à chaque étape.
+Globalement cela paraît simple, mais il y a de quoi se prendre les pieds dans le tapis à chaque étape.
 
 ## Configuration du projet MAVEN
 
@@ -248,7 +248,7 @@ Le voilà le module qui nous intéresse et qui contient tous les services que l'
 
 ### Dépendances vers EclipseLink 2.7 et H2
 
-EclipseLink sera le moteur de persistence JPA 2.2.
+EclipseLink sera le moteur de persistance JPA 2.2.
 
 La base de données sera embarquée et conservera les informations exclusivement en mémoire pour les tests unitaires au moyen de H2.
 
@@ -310,7 +310,7 @@ Un bel ensemble de dépendances pour la configuration de JUnit 5 :
 
 ### Intégration JUnit 5 et Weld 3
 
-Pour intégrer ensemble les tests unitaires JUnit 5 et Weld 3, il faut cette dépendances :
+Pour intégrer ensemble les tests unitaires JUnit 5 et Weld 3, il faut cette dépendance :
 
 ```xml
 <dependency>
@@ -435,7 +435,7 @@ On peut y voir l'usage de Lombok de manière assez classique. Les clés primaire
 
 ### La factory de VideoGame
 
-Pour obtenir un objet *valide* il faudra obligatoirement passer une factory. Celle-ci s'appuira sur CDI pour en obtenir une instance ainsi que l'injection de ses dépendances :
+Pour obtenir un objet *valide* il faudra obligatoirement passer une factory. Celle-ci s'appuiera sur CDI pour en obtenir une instance ainsi que l'injection de ses dépendances :
 
 ```java
 public class VideoGameFactory
@@ -455,7 +455,7 @@ public class VideoGameFactory
 
 ### Producer d'EntityManager et UUID (version HexaString)
 
-DeltaSpike Data Module réclame un `Producer` CDI d' `EntityManager`. Cela est codé dans la classe `Producers` ainsi que la production de UUID sous forme de chaine hexa-décimale :
+DeltaSpike Data Module réclame un `Producer` CDI d' `EntityManager`. Cela est codé dans la classe `Producers` ainsi que la production de UUID sous forme de chaîne hexa-décimale :
 
 ```java
 @ApplicationScoped
@@ -574,7 +574,7 @@ class VideoGameRepositoryTest
 }
 ```
 
-Grâce à `@EnableWeld`, le test unitaire s'exécute dans un contexte CDI existant. Le context est initialisé par `WeldInitiator.performDefaultDiscovery()`, car dans les tests unitaires rien n'est découvert par défaut.
+Grâce à `@EnableWeld`, le test unitaire s'exécute dans un contexte CDI existant. Le contexte est initialisé par `WeldInitiator.performDefaultDiscovery()`, car rien n'est découvert par défaut dans ce mode d'exécution de Weld.
 
 ## Exécution du test unitaire
 
