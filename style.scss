@@ -792,9 +792,8 @@ aside A, aside A:visited, aside A:hover
     
     h3:before
     {
-      margin-left : 0.25em;
-      margin-right : 0.25em;
-      content : '\2738';
+      margin : 0.25em;
+      content : url('/images/bullet-amiga.png') ;
     }
   
  }
