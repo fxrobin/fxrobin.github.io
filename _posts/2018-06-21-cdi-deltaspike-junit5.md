@@ -128,9 +128,13 @@ Autant mettre Deltaspike dans un projet Java EE (6, 7 ou 8) est vraiment simple 
 * Weld 3
 * JPA 2.2
 * EclipseLink 2.7 (ou Hibernate)
-* H2 (ou tout autre base de données)
+* H2 (ou tout autre base de données embarquée)
 
 Globalement cela paraît simple, mais il y a de quoi se prendre les pieds dans le tapis à chaque étape.
+
+![NoMock](/images/nomock.png)
+
+> Histoire de troller un peu, je suis assez partisant du [mouvement NoMock lancé par A. Goncalves en 2012](https://twitter.com/nomockmov), ainsi que des [réfléxions sur le sujet de Robert C. Martin](http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.html).
 
 ## Configuration du projet MAVEN
 
