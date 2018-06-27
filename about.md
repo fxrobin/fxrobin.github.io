@@ -41,7 +41,7 @@ SUITE2      LDB     #$80
             STB      CHDRAW
             CALL    CHPLH
             JSR      COMPT
-etc ...           
+etc ...
 ```
 
 Sur ces ordinateurs, je voue toujours un culte au jeu [L'Aigle d'Or](https://fr.wikipedia.org/wiki/L%27Aigle_d%27or) de Louis-Marie Rocques.
