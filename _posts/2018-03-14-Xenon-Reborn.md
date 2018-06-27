@@ -40,7 +40,6 @@ C'est cette infrastructure sur laquelle sont venus s'appuyer mes stagiaires pour
 
 Car oui, sous des allures "peu sérieuses", coder un jeu vidéo permet de mettre en oeuvre des concepts de Design Patterns (Singleton, Facade, Factory), de polymorphisme, de découplage, de complexité algorithmique. Ces concepts seront toujours valables sur des applications professionnelles. 
 
-
 Ce projet "fil rouge" s'incrivait dans un cours de "Java Bases" où les notions suivantes n'avaient pas encore été abordées, ce qui représentait un sacré challenge pour faire un jeu vidéo :
 
 * les collections (toutes) : ils n'avaient étudier que `List` et `ArrayList` ;
@@ -60,7 +59,7 @@ Si vous ne l'aviez pas encore [compris ou lu](/about), je suis nostalgique des j
 ![Xenon 1](/images/xenon-1.jpg)
 ![Xenon 2](/images/xenon-2.jpg)
 
-<iframe class="video mini" src="https://www.youtube.com/embed/v9nD9DQwd80?start=175" frameborder="1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+{%include video.html youtube-id="v9nD9DQwd80?start=175"  size="normal" %}
 
 ![ATARI-ST](/images/atari-st.png)
 ![AMIGA](/images/amiga.png)
@@ -71,9 +70,9 @@ J'ai donc souhaité rendre hommage, à mon humble niveau, à ces deux "hits" de 
 
 Voici ce que cela donne pour le moment, le jeu commence vraiment vers 48 secondes de vidéo, avant il s'agit surtout d'un peu de musique et de mouvements aléatoires de caméra sur le fond étoilé :
 
-<iframe class="video" src="https://www.youtube.com/embed/ki39sbk4VKc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+{%include video.html youtube-id="ki39sbk4VKc" size="normal" %}
 
-Si vous souhaitez y jouer, il vous suffit d'avoir un Java 8 (JRE) d'installé sur votre poste (Windows ou Linux), de dézipper ce fichier : 
+Si vous souhaitez y jouer, il vous suffit d'avoir un Java 8 (JRE) d'installé sur votre poste (Windows ou Linux), de dézipper ce fichier :
 
 {%include download.html url="https://github.com/fxrobin/Xenon_Reborn/files/1894717/XenonReborn_0.1.10.zip" title="XenonReborn_0_1_10.zip" %}
 

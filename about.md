@@ -14,13 +14,13 @@ A 10 ans, mes parents m'offrent un THOMSON M05 : 32 Ko de mémoire, sauvegarde c
 
 ![MO5](/images/mo5.png)
 
-A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz de fréquence d'horloge, mais 256 Ko de RAM et surtout un lecteur de disquettes double faces. 360 Ko par face ! C'est la profusion d'octets ! Pendant toute cette période mes langages sont donc le BASIC 1.0 puis le BASIC 512 (les deux codés par Microsoft) ainsi que l'assembleur 6809 ! Les fameuses "Routines" ... 
+A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz de fréquence d'horloge, mais 256 Ko de RAM et surtout un lecteur de disquettes double faces. 360 Ko par face ! C'est la profusion d'octets ! Pendant toute cette période mes langages sont donc le BASIC 1.0 puis le BASIC 512 (les deux codés par Microsoft) ainsi que l'assembleur 6809 ! Les fameuses "Routines" ...
 
 ![TO8](/images/to8.png)
 
 Un petit exemple pour la route (dont je ne suis pas l'auteur) :
 
-```
+```assembly
 USERAF      EQU     $2070
 PUTCH       EQU     2
 CHDRAW      EQU     $2036
@@ -60,8 +60,7 @@ Je m'occupe aussi du club informatique de mon collège : le professeur d'EMT me 
 
 C'est l'époque où on "déplombait" les logiciels protégés avec un `POKE 8699,57`. On ne savait pas trop ce que ça faisait, mais ça le faisait ... (ndlr:  désactiver la protection anti-copie, c'est mal ...)
 
-
-## 1989 - 1993 : Un peu d'acné, mais beaucoup plus de RAM 
+## 1989 - 1993 : Un peu d'acné, mais beaucoup plus de RAM
 
 A 14 ans, je bascule dans le monde du 68000, avec un ATARI 1040 STE ! 1 Mo de RAM, 8 Mhz. Ce n'est plus de la profusion, c'est de la décadence. Je tripote aussi l'Amiga d'un copain (Frédéric, si tu me lis, merci !) et on commence enfin à coder en C (et oui déjà), en Omikron, en GFA Basic, en STOS.
 
@@ -81,41 +80,40 @@ Le projet hébergé sur GitHub est ici : [https://github.com/fxrobin/Xenon_Rebor
 
 Un article y est consacré : [Développer en s'amusant et réciproquement : Xenon-Reborn](/Xenon-Reborn)
 
-
 ## 1993 - 1996 : Le permis, une voiture, mais surtout un 486 DX2 66 Mhz Turbo
 
-A 18 ans, patatra ..., je bascule avec un 486 DX2 66 (avec un bouton "turbo") et me voilà dans le monde du x86, du QBASIC et de l'assembleur toujours. 
+A 18 ans, patatra ..., je bascule avec un 486 DX2 66 (avec un bouton "turbo") et me voilà dans le monde du x86, du QBASIC et de l'assembleur toujours.
 
 Je fais une grande partie de mes études en découvrant de nombreux langages, mais en restant fidèle à mon C et mon assembleur. Le tout avec des mégas "en veux-tu, en voilà", 250 Mo de disque dur. Comme "développer" est maintenant devenu aussi "mes études",
 ma maman **chérie-adorée-que-j'aime-très-fort** ne peut plus me dire "*lâche cet ordinateur et fais tes devoirs !*".
 
-A cette occasion, je découvre aussi ce qu'est le cache de second niveau sur un processeur (CYRIX en l'occurence). Pourquoi ? Parce que quand je l'active dans le BIOS, le PC fonctionne vraiment mieux ... jusqu'à ce qu'il plante. Et oui mon cache L2 était défectueux ... 
-
+A cette occasion, je découvre aussi ce qu'est le cache de second niveau sur un processeur (CYRIX en l'occurence). Pourquoi ? Parce que quand je l'active dans le BIOS, le PC fonctionne vraiment mieux ... jusqu'à ce qu'il plante. Et oui mon cache L2 était défectueux ...
 
 Je decouvre le Mode X (mode 13h pour les intimes), les interruptions BIOS, le cartes graphiques faisant planter le redimensionnement de colonnes sous Excel et WIN 3.11. C'est l'heure de la programmation avec Watcom C++ et son fameux mode protégé `dos4gw` avec lequel tous les jeux du moment tournaient pour avoir accès à toute la RAM ... 16 Mo !
 
 ![Watcom C++](/images/watcom.png)
 
-Je fais alors du Pascal, du COBOL, du C++, de l'ADA et ... fin 1996 du **JAVA** ! C'est la révélation. Et pourtant à l'époque "*Java c'est moche*", "*Java c'est lent*". 
+Je fais alors du Pascal, du COBOL, du C++, de l'ADA et ... fin 1996 du **JAVA** ! C'est la révélation. Et pourtant à l'époque "*Java c'est moche*", "*Java c'est lent*".
 
-## 1996 : Mon histoire (d'amour ?) avec Java ...
+## 1996 : Mon histoire (d'amour ?) avec Java
 
 ![I LOVE JAVA](/images/i-love-java.png)
 
 Et voilà toutes les questions qui me sont venues en 1996 :
 
-* Quoi ? Je peux enfin avoir du code portable et ne pas avoir à le recompiler ?
-* Quoi ? Le JDK est gratuit ?
-* Quoi ? Je peux faire des interfaces graphiques portables (bon c'était AWT ... argh) ?
-* Quoi ? Je peux embarquer tout ça dans Netscape (les jeunes ne comprendront pas) ?
-* Quoi ? Quand je mets à jour mon application sur le serveur c'est téléchargé automatiquement ?
-* Quoi ? C'est multithread ?
+- Quoi ? Je peux enfin avoir du code portable et ne pas avoir à le recompiler ?
+- Quoi ? Le JDK est gratuit ?
+- Quoi ? Je peux faire des interfaces graphiques portables (bon c'était AWT ... argh) ?
+- Quoi ? Je peux embarquer tout ça dans Netscape (les jeunes ne comprendront pas) ?
+- Quoi ? Quand je mets à jour mon application sur le serveur c'est téléchargé automatiquement ?
+- Quoi ? C'est multithread ?
 
 Puis en 1999 :
-* Quoi ? Je peux générer des pages web côté serveur à la place de mes scripts CGI (les jeunes ne comprendront pas) avec des Servlets ?
-* Quoi ? Tomcat c'est gratuit ?
-* Quoi ? JBuilder c'est PAS gratuit ... 
-* Quoi ? Je peux me connecter à n'importe quelle base de données (ah bah oui parce que je sais aussi faire du SQL hein ...) ?
+
+- Quoi ? Je peux générer des pages web côté serveur à la place de mes scripts CGI (les jeunes ne comprendront pas) avec des Servlets ?
+- Quoi ? Tomcat c'est gratuit ?
+- Quoi ? JBuilder c'est PAS gratuit ... 
+- Quoi ? Je peux me connecter à n'importe quelle base de données (ah bah oui parce que je sais aussi faire du SQL hein ...) ?
 
 To be continued (quand je ferai l'effort de tout me souvenir)
 
