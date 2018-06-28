@@ -28,6 +28,7 @@ En toute confiance alors, je me dis que la petite coquette boitounnette rose pou
 ![RPI-et-Freebox](/images/archiva-rpi/rpi-box.jpg)
 
 Mon Raspberry 1ère génération m'en avait déjà rendu pas mal soit par le passé, soit toujours en place :
+
 - serveur d'applications Tomcat, GlassFish ! (si si !)
 - serveur de Blog
 - Console de RetroGaming avec Retropie ... avec quand même quelques lenteurs pour certains émulateurs
@@ -49,9 +50,10 @@ Java HotSpot(TM) Client VM (build 25.65-b01, mixed mode)
 
 Parfait, en plus il s'agit de la version "Oracle" accessible par le PPA de WebUpd8Team :
 
-S'il n'est pas installé, tout est là : https://launchpad.net/~webupd8team/+archive/ubuntu/java
+S'il n'est pas installé, tout est là : <https://launchpad.net/~webupd8team/+archive/ubuntu/java>
 
 Petit rappel des caractéristiques de la bête :
+
 - Processeur ARM
 - 700 Mhz (overclocké à 800 Mhz ... ça me rappelle mon bouton *Turbo* sur mon DX2 66)
 - 512 Mo RAM
@@ -93,6 +95,7 @@ $ tar -xvf apache-archiva-2.2.3-bin.tar.gz
 $ sudo mv apache-archiva-2.2.3 /opt/archiva
 $ sudo chown -R archiva:archiva /opt/archiva
 ```
+
 La confiance règne alors, je bascule sous le compte "archiva" pour lancer le script de démarrage.
 
 ```
@@ -102,7 +105,6 @@ $ ./archiva
 ```
 
 et bim ! Ca ne marche pas !
-
 
 ```
 Unable to locate any of the following operational binaries:
@@ -217,7 +219,6 @@ Et voilà, au bout de 9 minutes sur mon RPI overclocké, Apache Archiva est fonc
 
 > C'est le moment d'aller prendre un premier café en récompense ...
 
-
 ## Configuration d'Apache Archiva
 
 Je le configure avec un compte `admin` et un compte `fxjavadevblog` qui pourra publier des artefacts
@@ -235,7 +236,7 @@ RUN_AS_USER=archiva
 J'ajoute aussi en entête de ce fichier les "Run Levels" pour son inscription en tant que service activé
 et automatique :
 
-```
+```bash
 #! /bin/sh
 
 ### BEGIN INIT INFO
@@ -249,13 +250,13 @@ et automatique :
 ### END INIT INFO 
 ```
 
-Enfin : 
-- je fais un lien sur le script, 
-- je l'enregistre comme daemon de démarrage, 
+Enfin :
+
+- je fais un lien sur le script,
+- je l'enregistre comme daemon de démarrage,
 - je l'active,
 - je le lance,
 - je vérifie qu'il fonctionne.
-
 
 ```
 $ su
@@ -291,7 +292,6 @@ Victoire, tout va bien.
 
 > C'est le moment d'aller prendre un second petit café en récompense ...
 
-
 ## Configuration de ~/.m2/settings.xml
 
 Il faut maintenant modifier le fichier `~/.m2/settings.xml` de la station pour le prendre en compte.
@@ -302,7 +302,7 @@ Plus simplement, vous pourrez le remplacer par une adresse IP, éventuellement.
 De plus je fais donc en sorte qu'Archiva soit mon proxy pour tous les artefacts issus de Maven Central.
 Cette déclaration se fait dans la partie `<mirror> ... </mirror>`
 
-```
+```xml
   <mirrors>
     <mirror>
       <id>archiva.default</id>
@@ -324,13 +324,14 @@ Cette déclaration se fait dans la partie `<mirror> ... </mirror>`
     </server>
   </servers>
 ```
+
 ## Configuration des "pom.xml"
 
 Bien sûr, je n'oublie pas de modifier les POM de mes projets Java, car ce sera le "goal" `install` de maven qui ira publier les artefacts. D'ailleurs sur ce point, la documentation officielle d'Apache Archiva est fausse, car les URL de publication sont éronnées. 
 
 Voici une configuration correcte :
 
-```
+```xml
 <distributionManagement>
 	<repository>
 		<id>archiva.internal</id>
@@ -353,8 +354,8 @@ et après publication de mon projet, tout est bien présent dans Archiva dans `f
 
 > J'adore quand un plan se déroule sans accroc ...
 
-<iframe class="video mini" width="560" height="315" src="https://www.youtube.com/embed/HzRF2622m9A?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+{%include video.html youtube-id="HzRF2622m9A?rel=0&amp;showinfo=0"  size="normal" %}
 
-Pour achever le tout il me faudra activer une redirection de port sur la FREEBOX pour pouvoir y accéder quand je suis en déplacement ou, mieux, un VPN (mais cela dépasse le cadre de ce petit tuto) et le tour sera joué ...
+Pour achever le tout, il me faudra activer une redirection de port sur la BOX pour pouvoir y accéder quand je suis en déplacement ou, mieux, un VPN (mais cela dépasse le cadre de ce petit tuto) et le tour sera joué ...
 
 Encore un truc qui **devait** prendre 15 minutes ...

@@ -514,7 +514,7 @@ nous même. J'ai préféré cette approche pour ne pas chambouler toutes les pra
 Enfin, le référencement pourra se faire de manière automatique au démarrage au moyen
 d'un singleton dédié. Par exemple :
 * un EJB Singleton annoté avec `@Singleton` et `@Startup` 
-* ou un Bean CDI annoté avec `@ApplicationScoped` avec un observateur sur `ApplicationScoped.class` : https://rmannibucau.wordpress.com/2015/03/10/cdi-and-startup/
+* ou un Bean CDI annoté avec `@ApplicationScoped` avec un observateur sur `ApplicationScoped.class` : <https://rmannibucau.wordpress.com/2015/03/10/cdi-and-startup/>
 
 **Enfin cela me permettra d'embrayer sur un nouveau post relatif à "Spring Data JPA" versus "CDI DeltaSpike Data Module", pour voir que finalement on peut presque se passer de la définition de `@NamedQuery` à l'ancienne avec ces deux bibliothèques ! Nom de Zeus !**
 

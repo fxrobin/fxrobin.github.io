@@ -116,6 +116,4 @@ Commentaires :
 
 > "Etonnant non" ? Pierre Desprogres, Dix minutes nécessaires de M. Cyclopède.
 
-<iframe class="video mini" width="560" height="315" src="https://www.youtube.com/embed/zcIa4wP-wtA?rel=0&amp;start=4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-   
+{%include video.html youtube-id="zcIa4wP-wtA?rel=0&amp;start=4"  size="normal" %}
