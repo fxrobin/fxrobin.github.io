@@ -17,8 +17,9 @@ allant de *Java classique* jusqu'à *Bean Validation* et JAX-RS, en passant par 
 </div>
 
 <!--excerpt-->
-Cet article a été aussi publié sur "developpez.com" :
-<https://fxrobin.developpez.com/tutoriels/java/preconditions-methodes-api/>
+> Cet article a été aussi publié sur "developpez.com" :
+>
+> <https://fxrobin.developpez.com/tutoriels/java/preconditions-methodes-api/>
 
 ## La problématique
 
@@ -246,7 +247,7 @@ public static void executeOldSchoolJava(String name, Integer age, byte[] photo, 
 
 On est d'accord, c'est long et ennuyant ... voire carrément lourdingue, pour ne pas dire pire.
 
-Qu'existe-t-il pour nous faciliter tout cela ? 
+Qu'existe-t-il pour nous faciliter tout cela ?
 
 ## Solutions
 
