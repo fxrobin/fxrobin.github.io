@@ -17,6 +17,8 @@ allant de *Java classique* jusqu'à *Bean Validation* et JAX-RS, en passant par 
 </div>
 
 <!--excerpt-->
+Cet article a été aussi publié sur "developpez.com" :
+<https://fxrobin.developpez.com/tutoriels/java/preconditions-methodes-api/>
 
 ## La problématique
 
@@ -37,7 +39,7 @@ Ce gentil monsieur représentera notre jeu de test :
   * NINJA,  
   * HACKING
   * JUSTICE
-  * GROSSE BAFFE 
+  * GROSSE BAFFE
   * BOOMERANG
   * CLUEDO LE WEEK-END AVEC ALFRED
 
