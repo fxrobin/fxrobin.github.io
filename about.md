@@ -20,7 +20,7 @@ A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz 
 
 Un petit exemple pour la route (dont je ne suis pas l'auteur) :
 
-```assembly
+```
 USERAF      EQU     $2070
 PUTCH       EQU     2
 CHDRAW      EQU     $2036
