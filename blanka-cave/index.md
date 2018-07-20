@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: Blanka Cave
 subtitle:  Quand Blanka pas content, Blanka écrire ici
 logo: blanka.png

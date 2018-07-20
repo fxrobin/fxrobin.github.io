@@ -1,10 +1,48 @@
 ---
 layout: default
 ---
-
 <article class="post">
+ 
+  <img src="{{ site.baseurl }}/images/logos/{{  page.logo }}" class="logo-in-page hvr-buzz-out""/>
   <h1>{{ page.title }}</h1>
+  <div class="accroche">{{ page.subtitle }}</div>
+
+  
+  <aside>
+    <h3>Sommaire</h3>
+  	{% include toc.html html=content %}
+  	
+  	  <div class="share-page">
+  	 Partager cet article sur <br />
+  	    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title }}&summary={{ page.subtitle }}&s">LinkedIn</a>
+	    <a href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.url }}{{ page.url }}&via={{ site.twitter_username }}&related={{ site.twitter_username }}" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
+	    <br />
+	    <a href="https://facebook.com/sharer.php?u={{ site.url }}{{ page.url }}" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
+	    <a href="https://plus.google.com/share?url={{ site.url }}{{ page.url }}" rel="nofollow" target="_blank" title="Share on Google+">Google+</a>
+	    </div>
+  </aside>
+  
   <div class="entry">
     {{ content }}
-  </div>
+  </div> 
 </article>
+
+<div class="disqus">
+  <h2>Vos commentaires</h2>
+  {% include disqus.html %}
+</div>  
+
+<div class="article-list-footer">
+   <div class="article-list-header"><i class="fa fa-newspaper-o"></i> Mes autres articles</div>
+ 	{% for post in site.posts %}
+ 	 {% if post != page %}
+	 <div class="article-list-entry">   
+	   <span class="article-list-entry-date">  		
+	   		{{post.date | date: "%d/%m/%Y" }}
+	   </span>
+	   <i class="fa fa-chevron-circle-right"></i>
+	   <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+	 </div>  
+	 {% endif %}
+	{% endfor %}
+</div>
