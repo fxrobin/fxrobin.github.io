@@ -3,7 +3,7 @@ layout: post
 title: Testing CDI 2.0 DeltaSpike Data in Java EE 8
 subtitle: with Payara 5 Embedded, Arquillian and JUnit 5
 logo: delta-spike-payara.png
-category: JAVAEE
+category: JAVA_EE
 tags: [JavaEE, Payara, Arquillian, JUnit 5]
 ---
 
