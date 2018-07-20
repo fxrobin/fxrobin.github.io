@@ -10,8 +10,8 @@ category: blanka
 J'héberge à titre gracieux sur ce site tous les billets d'humeur de Blanka. Le connaissant depuis de nombreuses années et connaissant aussi à quel point il peut s'énerver facilement, je n'ai pas refusé quand il m'a envoyer le mail suivant :
 
 ```
-from blanka@streetfighters.com
-to fx@fxjavadevblog.fr*
+from blanka@streetfighters.cap.com
+to fx@fxjavadevblog.fr
  
 Blanka t'avoir souvent écraser crâne, mais toi vieil ami,
 Blanka vouloir espace internet, Blanka vouloir dire rage,
