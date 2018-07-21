@@ -7,7 +7,7 @@ category: blanka
 ---
 
 <div class="intro" markdown='1'>
-J'héberge à titre gracieux sur ce site tous les billets d'humeur de Blanka. Le connaissant depuis de nombreuses années et connaissant aussi à quel point il peut s'énerver facilement, je n'ai pas refusé quand il m'a envoyer le mail suivant :
+J'héberge à titre gracieux sur ce site tous les billets d'humeur de Blanka. Le connaissant depuis de nombreuses années et connaissant aussi à quel point il peut s'énerver facilement, je n'ai pas refusé quand il m'a envoyé le mail suivant :
 
 ```
 from blanka@streetfighters.cap.com
