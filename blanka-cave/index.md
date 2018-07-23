@@ -15,7 +15,7 @@ to fx@fxjavadevblog.fr
  
 Blanka t'avoir souvent écraser crâne, mais toi vieil ami,
 Blanka vouloir espace internet, Blanka vouloir dire rage,
-Blanka connaitre Markdown, Markdown ami blanka aussi
+Blanka connaitre Markdown, Markdown ami Blanka aussi.
 Blanka attendre reponse rapide, sinon Blanka te casser crâne
 
 Blanka ami.
