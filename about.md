@@ -123,6 +123,10 @@ Voici ma version "encore BETA", je ne l'ai jamais fini, mais c'était jouable à
 
 J'ai toujours le code source (C++ et Assembleur), mais comme c'est "crade", je ne veux pas le montrer. A cette occasion je développe l'IA (c'est un bien grand mot) pour le joueur adverse.
 
+J'y développe une interface graphique complète avec animations (60 FPS de mémoire), des animations de sprites, des effets de transparences (plateaux de droite, chiffres sur les cases) et un gestionnaire d'événéments. Les routines graphiques sont en partie en assembleur.
+
+J'y inclus MIKMOD pour y lire des `.mod` et `.xm` (tracker Atari et Amiga).
+
 > Peut-être qu'un jour, je referai un clone du clone en Java.
 
 Je fais alors du Pascal, du COBOL, du C++, de l'ADA et ... fin 1996 du **JAVA** ! C'est la révélation. Et pourtant à l'époque "*Java c'est moche*", "*Java c'est lent*".
