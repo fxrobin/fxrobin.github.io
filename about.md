@@ -8,9 +8,9 @@ permalink: /about/
 
 <div class="intro" markdown='1'>
 
-Je m'appelle François-Xavier Robin et suis passionné de développement depuis mon plus jeune âge et voici un bref résumé de mon petit parcours de développeur / administrateur / architecte  ...
+Je m'appelle François-Xavier Robin et suis passionné de développement depuis mon plus jeune âge.
 
-Voici brièvement mon parcours, de manière chronologique.
+Voici un bref résumé chronologique de mon petit parcours de développeur / administrateur / architecte  ...
 
 </div>
 
@@ -18,11 +18,19 @@ Voici brièvement mon parcours, de manière chronologique.
 
 ## 1984 - 1989 : Découverte pendant mon enfance
 
-En 1984, à 9 ans (les plus forts d'entre vous auront ainsi découvert mon année de naissance au moyen de l'outil mathématique nommé "soustraction") j'ai découvert le développement grâce au THOMSON TO7-70 au fond de la classe de mon école primaire.
+En 1984, à 9 ans (les plus forts d'entre vous auront ainsi découvert mon année de naissance au moyen de l'outil mathématique nommé "soustraction") j'ai découvert le développement grâce au THOMSON TO7-70 au fond de la classe de mon école primaire. C'est le déclic grâce au LOGO au BASIC 1.0, le crayon optique, les cartouches ! Je demande même à l'institutrice de passer quelques récréations sur le TO7 plutôt que d'aller jouer aux billes dans la cours de d'école. 
 
-A 10 ans, mes parents m'offrent un THOMSON M05 : 32 Ko de mémoire, sauvegarde cassette, crayon optique. Quand on est seul avec quelques livres (basic, assembleur) c'est donc l'école de la découverte permanente, des tests, des plantages, des resets et de l'optimisation du code. Et oui 32 Ko et 1 MHz de fréquence, cela nécessite quelques astuces. A ce jour (30 ans plus tard), j'ai toujours ce goût de l'optimisation et de l'octet bien utilisé.
+A 10 ans, mes parents m'offrent un THOMSON MO5 : 32 Ko de mémoire, sauvegarde cassette, crayon optique. Quand on est seul avec quelques livres (basic, assembleur) c'est donc l'école de la découverte permanente, des tests, des plantages, des resets et de l'optimisation du code. Et oui 32 Ko et 1 MHz de fréquence, cela nécessite quelques astuces. A ce jour (30 ans plus tard), j'ai toujours ce goût de l'optimisation et de l'octet bien utilisé.
 
 ![MO5](/images/mo5.png)
+
+Parmis les divers petits programmes réalisés :
+
+* une sorte de chatbot ... précurseur mais limité, vous vous en doutez bien !
+* une gestion d'adhérents pour le club de tennis de mon père (avec sauvegarde cassette)
+* un jeu genre "X-Xwing" où des chasseurs TIE passent dans le viseur (si on pilote bien) et que l'on peut détruire bien sûr.
+
+Malheureusement, je n'ai plus aucun code source de cette époque ...
 
 A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz de fréquence d'horloge, mais 256 Ko de RAM et surtout un lecteur de disquettes double faces. 360 Ko par face ! C'est la profusion d'octets ! Pendant toute cette période mes langages sont donc le BASIC 1.0 puis le BASIC 512 (les deux codés par Microsoft) ainsi que l'assembleur 6809 ! Les fameuses "Routines" ...
 
@@ -53,6 +61,8 @@ SUITE2      LDB     #$80
             JSR      COMPT
 etc ...
 ```
+
+Sur TO8 j'ai surtout perfectionné le logiciel de gestion des adhésions du club de tennis, avec sauvegarde à accès direct sur disquette (pas séquentiel). Ce programme générait aussi les étiquettes à imprimer et coller sur les enveloppes pour les mailings. Je me souviens du casse tête pour que l'impression soit bien alignée ... Là encore, je n'ai plus les codes sources ... (triste je suis).
 
 Sur ces ordinateurs, je voue toujours un culte au jeu [L'Aigle d'Or](https://fr.wikipedia.org/wiki/L%27Aigle_d%27or) de Louis-Marie Rocques.
 
@@ -103,7 +113,19 @@ Je decouvre le Mode X (mode 13h pour les intimes), les interruptions BIOS, le ca
 
 ![Watcom C++](/images/watcom.png)
 
+Je développe un jeu nommé "Red Devil 97", clone de "Blue Angel 69" sur Atari ST et Amiga. 
+
+<iframe class="video normal" src="https://www.youtube.com/embed/zVy3VXSf2yY?rel=0&amp;showinfo=0;start=71" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+J'ai toujours le code source (C++ et Assembleur), mais comme c'est "crade", je ne veux pas le montrer. A cette occasion je développe l'IA (c'est un bien grand mot) pour le joueur adverse.
+
+> Peut-être qu'un jour, je referai un clone du clone en Java.
+
 Je fais alors du Pascal, du COBOL, du C++, de l'ADA et ... fin 1996 du **JAVA** ! C'est la révélation. Et pourtant à l'époque "*Java c'est moche*", "*Java c'est lent*".
+
+En C++ je réalise un moteur de résolution "faits / conséquences" appelé "Système Expert" avec un camarade étudiant (David Rideau, si tu me lis ...). C'est du pattern "Oberver / Observable" mais sans le savoir, on l'invente. De manière réactive, les changements sont propagés : sur du Reactive Programming avant l'heure ...
+
+Je participe à un concours international d'algorithmes pour trouver des solutions à de nombreuses contraintes. On choisit alors les algorithmes génétiques dont j'élabore le moteur avec mon chargé de TD à la fac de Versailles-Saint-Quentin, Franck Quessette. J'adore, c'est magique et ça marche déjà bien pour l'époque (1996).
 
 ## 1996 : Mon histoire (d'amour ?) avec Java
 
@@ -125,7 +147,20 @@ Puis en 1999 :
 - Quoi ? JBuilder c'est PAS gratuit ... 
 - Quoi ? Je peux me connecter à n'importe quelle base de données (ah bah oui parce que je sais aussi faire du SQL hein ...) ?
 
-To be continued (quand je ferai l'effort de tout me souvenir)
+## Mes principales réalisations en Java entre 1996 et 2002
+
+- Un interpréteur / compilateur de requêtes SQL
+- Un moteur de stockage SGBDR distribué 
+- Un framework de templating web fondé sur des servlets
+- Un framework de templating et de développement d'appplications fondés sur des servlets (ressemblait à JSF) en XML
+- Un extracteur et intégrateur de données avec un format XML pivot
+- Un plugin pour Apache VFS pour stocker en base de données MySQL
+- Une application pour commander l'apéro (choisir ses boissons) pour mes collègues (et moi-même) avant de se rendre au bar ...
+- Une GED avec indexation (Lucene) et gestion des versions
+
+## To be continued
+
+Quand je ferai l'effort de tout me souvenir
 
 <div style="text-align : center">
   <a href="{{ site.baseurl }}">
@@ -135,6 +170,6 @@ To be continued (quand je ferai l'effort de tout me souvenir)
 </div>
 
 
-### Contactez moi ...
+## Contactez moi ...
 
 Le mieux c'est grâce à [LinkedIn](https://www.linkedin.com/in/fxrobin).
