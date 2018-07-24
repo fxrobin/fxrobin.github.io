@@ -117,6 +117,10 @@ Je développe un jeu nommé "Red Devil 97", clone de "Blue Angel 69" sur Atari S
 
 <iframe class="video normal" src="https://www.youtube.com/embed/zVy3VXSf2yY?rel=0&amp;showinfo=0;start=71" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
+Voici ma version "encore BETA", je ne l'ai jamais fini, mais c'était jouable à deux ou contre l'ordi.
+
+![Red Devil 97](/images/rdevil_001.png)
+
 J'ai toujours le code source (C++ et Assembleur), mais comme c'est "crade", je ne veux pas le montrer. A cette occasion je développe l'IA (c'est un bien grand mot) pour le joueur adverse.
 
 > Peut-être qu'un jour, je referai un clone du clone en Java.
