@@ -3,7 +3,7 @@ layout: post
 title: "Contribuer à l'Eclipse Foundation : DONE"
 subtitle: plutôt que d'attendre en pestant sur sa chaise ...
 logo: eclipse.png
-category: JAVA
+category: articles
 tags: [OpenSource, Eclipse, Java, GlassFish, GlasFishTools]
 ---
 

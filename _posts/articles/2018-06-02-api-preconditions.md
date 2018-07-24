@@ -3,7 +3,7 @@ layout: post
 title: Préconditions des méthodes d'une API
 subtitle: Parce qu'il faudrait toujours vérifier les arguments
 logo: api-preconditions.png
-category: JAVA
+category: articles
 tags: [Java, Guava, Apache Preconditions, Spring, Bean Validation, CleanCode, JAX-RS, REST]
 ---
 

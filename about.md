@@ -1,10 +1,20 @@
 ---
 layout: page
 title: A propos de l'auteur
+subtitle: parce qu'il y a quand-même un humain qui rédige ...
+logo: xenon-reborn.png
 permalink: /about/
 ---
 
-Je suis passionné de développement depuis mon plus jeune âge et voici un bref résumé de mon petit parcours de développeur / administrateur / architecte  ...
+<div class="intro" markdown='1'>
+
+Je m'appelle François-Xavier Robin et suis passionné de développement depuis mon plus jeune âge et voici un bref résumé de mon petit parcours de développeur / administrateur / architecte  ...
+
+Voici brièvement mon parcours, de manière chronologique.
+
+</div>
+
+<!--excerpt-->
 
 ## 1984 - 1989 : Découverte pendant mon enfance
 

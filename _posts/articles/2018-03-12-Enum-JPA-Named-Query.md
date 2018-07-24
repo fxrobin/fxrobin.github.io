@@ -3,7 +3,7 @@ layout: post
 title: Où définir au mieux une NamedQuery JPA ?
 subtitle: Parce que les mécanismes par défaut ne sont pas terribles ...
 logo: java-jpa.png
-category: JAVA_EE
+category: articles
 tags: [java_ee, jpa]
 ---
 

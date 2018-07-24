@@ -3,7 +3,7 @@ layout: post
 title: Apache Archiva sur Raspberry PI
 subtitle: pour centraliser ses artefacts et autres archetypes ...
 logo: archiva-rpi.png
-category: JAVA
+category: articles
 tags: [OpenSource, Maven, Archiva, Raspberry]
 ---
 

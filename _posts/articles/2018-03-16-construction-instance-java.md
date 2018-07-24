@@ -2,6 +2,7 @@
 layout: post
 title: Connaissez-vous bien l'instanciation ?
 subtitle: Afin de (re)découvrir quelques subtilités de ce mécanisme en Java ...
+category: articles
 logo: brain-logo.png
 ---
 

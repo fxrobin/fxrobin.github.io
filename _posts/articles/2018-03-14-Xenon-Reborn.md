@@ -3,7 +3,7 @@ layout: post
 title: Développer en s'amusant et réciproquement
 subtitle: Ou comment apprendre à coder en réalisant un jeu vidéo ...
 logo: xenon-reborn.png
-category: JAVA
+category: articles
 tags: [algo, LibGDX, java]
 ---
 

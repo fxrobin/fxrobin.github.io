@@ -3,7 +3,7 @@ layout: post
 title: Serveur minimal HTTP avec JShell en Java_10
 subtitle: Histoire de troller sur NodeJS versus Java
 logo: jshell-http-server.png
-category: JAVA
+category: articles
 tags: [Java_10, JShell, HttpServer, HttpHandler]
 ---
 
