@@ -23,7 +23,6 @@ Blanka ami.
 </pre>
 </div>
 
-
 <p>J'étais ravi d'avoir de ses nouvelles. Visiblement, il va bien et il a du succès aussi bien professionnellement que personnellement. Cela fait plaisir.</p>
 
 <p>Devant cet élan d'amitié, je ne pouvais donc pas refuser, les sections suivantes contiennent les articles de mon ami Blanka.</p>
@@ -31,14 +30,10 @@ Blanka ami.
 <blockquote>Cela étant, je ne suis pas responsable du nombre de trolls lancés par Blanka ...</blockquote>
 </div>
 
+{% for post in site.categories.blanka %}
+	
+	<h2 id="{{ post.url }}" class="blanka-item">{{ post.title }}</h2>
+	<div class="front-date">Envoyé par Blanka le {{post.date | date: "%d/%m/%Y" }}</div>
+	<div class="entry" style="margin-bottom : 5em;">{{ post.content }} </div>
 
-	  {% for post in site.categories.blanka %}
-	   
-	      
-	      <h2 id="{{ post.url }}" class="blanka-item">{{ post.title }}</h2>
-	      <div class="front-date">Envoyé par Blanka le {{post.date | date: "%d/%m/%Y" }}</div>
-	      <div class="entry" style="margin-bottom : 5em;">{{ post.content }} </div>
-	  
-	  {% endfor %}
-
-
+{% endfor %}
