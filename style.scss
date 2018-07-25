@@ -60,6 +60,13 @@
   font-style: normal;        
 }
 
+@mixin crt($color1, $color2)
+{
+  background: linear-gradient($color1, 50%,$color2 50%);
+  background-size: 100% 4px;
+  background-repeat: repeat-y ;
+}
+
 // Syntax highlighting @import is at the bottom of this file
 
 /**************/
@@ -364,15 +371,17 @@ img {
   margin-top : 0.5em;
   margin-right : 0.5em;
   padding : 0.5em;
-  border : solid blue 1px;
+
   float : right;
   width : 100%;
- 
-  border : solid #555599 2px;
+
+  border : solid darkblue 2px;
   border-radius : 0.5em;
   box-shadow: 2px 2px 2px #555555;
-  background-color : #F2F2FF;
 
+
+  @include crt(#F2F2FF, #EEEEFA); 
+  
   .article-list-header 
   {
     font-family : "atari";
