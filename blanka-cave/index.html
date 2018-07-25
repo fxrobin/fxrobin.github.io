@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Blanka Cave
+title: La grotte de Blanka
 subtitle:  Quand Blanka pas content, Blanka écrire ici
 logo: blanka.png
 category: blanka
@@ -35,9 +35,9 @@ Blanka ami.
 	  {% for post in site.categories.blanka %}
 	   
 	      
-	      <h2 id="{{ post.url }}">{{ post.title }}</h2>
+	      <h2 id="{{ post.url }}" class="blanka-item">{{ post.title }}</h2>
 	      <div class="front-date">Envoyé par Blanka le {{post.date | date: "%d/%m/%Y" }}</div>
-	      <div class="entry">{{ post.content }} </div>
+	      <div class="entry" style="margin-bottom : 5em;">{{ post.content }} </div>
 	  
 	  {% endfor %}
 

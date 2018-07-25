@@ -441,6 +441,23 @@ img {
 }
 
 
+.blanka-item:before
+{
+  content:url('/images/blanka-item.png') !important;
+  position : absolute;
+  margin-top : -32px;
+  margin-left : -50px;
+}
+
+.blanka-item
+{
+  padding-left : 64px !important;
+  background: linear-gradient(#003300, 50%, #001100 50%)  !important;
+  background-size: 100% 4px  !important;
+  background-repeat: repeat-y  !important;
+  color :#00FF00 !important;
+}
+
 #blanka-list:before
 {
   content:url('/images/blanka-face.png');
@@ -492,8 +509,6 @@ img {
     }
     
     A { 	
-       
-
     	display:inline; 
     	padding : 0.2em;
     	-moz-transition: all .2s ease-in;
