@@ -16,4 +16,4 @@ Blanka donner lien en anglais à lire par gens !
 
 Blanka donner TL;DR : Gens devoir utiliser `BigDecimal` avec constructeur `String` !
 
-Blanka prevenir : si Blanka trouver code source avec Float pour montant, Blanka casse Crâne !!!!!
+Blanka prévenir : si Blanka trouver code source avec Float pour montant, Blanka casser Crâne !!!!!
