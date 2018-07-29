@@ -37,7 +37,7 @@ layout: default
 
 <div class="article-list-footer">
    <div class="article-list-header"><i class="fa fa-newspaper-o"></i> Mes autres articles</div>
- 	{% for post in site.posts %}
+ 	{% for post in site.categories[page.category] %}
  	 {% if post != page %}
 	 <div class="article-list-entry">   
 	   <span class="article-list-entry-date">  		

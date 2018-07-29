@@ -3,7 +3,7 @@ layout: post
 title: A la découvert d'Eclipse Collections
 subtitle: pour donner un coup de fouet à vos applis
 logo: eclipse.png
-category: JAVA_SE
+category: articles
 tags: [JAVA_SE, API, Eclipse Foundation, Collections, Collection, List, Set, Map]
 ---
 
@@ -20,8 +20,23 @@ Je vais donc vous présenter **Eclipse Collections**, une API légère, performa
 
 ## A vos marques ! Prêts ? Partez !
 
-On commence donc par un projet Maven classique avec son POM Java 8 SE, ainsi que les dépendances vers Eclipse Collections, auquel on ajoute JUnit 5 pour faire nos
-petits essais.
+On commence donc par un projet Maven classique avec son POM Java 8 SE, ainsi que les dépendances vers Eclipse Collections, auquel on ajoute JUnit 5, SLF4J et Lombok pour faire nos petits essais.
+
+Voici à quoi ressemble notre `pom.xml`
+
+```xml
+<dependency>
+  <groupId>org.eclipse.collections</groupId>
+  <artifactId>eclipse-collections-api</artifactId>
+  <version>9.2.0</version>
+</dependency>
+
+<dependency>
+  <groupId>org.eclipse.collections</groupId>
+  <artifactId>eclipse-collections</artifactId>
+  <version>9.2.0</version>
+</dependency>
+```
 
 ## Petit tour de l'API
 
