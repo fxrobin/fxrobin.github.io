@@ -4,38 +4,77 @@ lang: fr
 ---
 
 <div id="right">
- <div id="article-list">
-  <div class="article-list-header">Articles</div>
- 	{% for post in site.categories.articles %}
-	 <div class="article-list-entry">
-	   <span class="article-list-entry-date">
-	   <i class="fa fa-chevron-circle-right"></i>
-	   		{{post.date | date: "%d/%m/%Y" }}
-	   </span>
-	   <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
-	 </div>
-	{% endfor %}
-
-  </div>
+	<div id="article-list">
+		<div class="article-list-header">Articles</div>
+		{% for post in site.categories.articles %}
+			<div class="article-list-entry">
+				<span class="article-list-entry-date">
+				<i class="fa fa-chevron-circle-right"></i>
+						{{post.date | date: "%d/%m/%Y" }}
+				</span>
+				<a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+			</div>
+		{% endfor %}
+	</div>
   
   <div id="blanka-list">
-  <div class="article-list-header">Grotte de Blanka</div>
- 	{% for post in site.categories.blanka %}
-	 <div class="article-list-entry">
-	   <span class="article-list-entry-date">
-	   <i class="fa fa-chevron-circle-right"></i>
-	   		{{post.date | date: "%d/%m/%Y" }}
-	   </span>
-	   <a href="{{ site.baseurl }}/blanka-cave/#{{ post.url }}">{{ post.title }}</a>
-	 </div>
-	{% endfor %}
-	
+  	<div class="article-list-header">Grotte de Blanka</div>
+		{% for post in site.categories.blanka %}
+			<div class="article-list-entry">
+				<span class="article-list-entry-date">
+				<i class="fa fa-chevron-circle-right"></i>
+						{{post.date | date: "%d/%m/%Y" }}
+				</span>
+				<a href="{{ site.baseurl }}/blanka-cave/#{{ post.url }}">{{ post.title }}</a>
+			</div>
+		{% endfor %}
   </div>
-  
-  <div class="social-icons-right">
-	{% include svg-icons.html %}
-  </div>
-	
+
+	{% raw  %}
+		<div id="stackoverflow">
+			<div class="title">StackOverflow</div>
+			<div class="subtitle">Mes réponses à ces sujets</div>
+			<ul>
+					<li v-for="q in questions">
+						<a v-bind:href="q.link" target="_blank" v-html="q.title"></a>
+					</li>
+			</ul>
+		</div>
+	{% endraw  %}
+
+	<script>
+		new Vue({
+			el: '#stackoverflow',
+			data: {
+					questions: 'Loading...'
+			},
+			created() {
+					const BASE_URI = "https://api.stackexchange.com";
+					console.log('start');
+					axios.get(BASE_URI + '/2.2/users/3017541/answers?order=desc&sort=activity&site=stackoverflow')
+					.then(response => {
+							var answers = response.data.items;
+							var answer_ids = answers.map(e => e.question_id).join(';');
+							var newRequest = BASE_URI + '/2.2/questions/' + answer_ids + '?order=desc&sort=activity&site=stackoverflow';
+							axios.get(newRequest)
+							.then(response => {
+								this.questions = response.data.items;
+							})
+							.catch(error => {
+								this.questions = 'There was an error: ' + error.message
+							})
+					})
+					.catch(error => {
+						this.questions = 'There was an error: ' + error.message
+					})
+			}
+    })
+	</script>	
+
+	<div class="social-icons-right">
+			{% include svg-icons.html %}
+	</div>
+
 </div>
 
 <div id="left">
@@ -44,10 +83,7 @@ lang: fr
 	    <article class="front-post">
 	      <span style="float : right">
 					<a href="{{ site.baseurl }}{{ post.url }}" class="hvr-buzz-out">
-						<img src="{{ site.baseurl }}/images/logos/{{ post.logo }}" 
-								class="logo"
-								alt="{{ post.title }}"
-								title="{{ post.title }}" />
+						<img src="{{ site.baseurl }}/images/logos/{{ post.logo }}" class="logo"	alt="{{ post.title }}" title="{{ post.title }}" />
 					</a>
 	      </span>
 	      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
