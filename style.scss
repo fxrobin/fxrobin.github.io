@@ -60,6 +60,17 @@
   font-style: normal;        
 }
 
+@font-face 
+{
+	font-family: "greenberet";
+    src: url('/fonts/computer_pixel-7-webfont.woff2') format('woff2'),
+         url('/fonts/computer_pixel-7-webfont.woff') format('woff'),
+         url('/fonts/computer_pixel-7-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;        
+}
+
+
 @mixin crt($color1, $color2)
 {
   background: linear-gradient($color1, 50%,$color2 50%);
@@ -494,12 +505,12 @@ img {
 
   .article-list-header 
   {
-    font-family : "atari";
+    font-family : "greenberet";
+    font-size : 2.5em;
     text-align : center; 
     text-shadow: 1px 1px 1px #00CC00;
     color : #00FF00;
     margin-bottom : 1em;
-    font-size : 1.4em;
   }
   
   .article-list-entry
