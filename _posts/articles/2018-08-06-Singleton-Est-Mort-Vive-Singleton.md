@@ -12,15 +12,12 @@ tags: [patterns,java,lazy,threadsafe,classloading,holder,permgen,meta]
 > - *Version 1 parue le 16/12/2017*
 > - *Version 2 parue le 06/08/2018 : accès concurrents, PermGen / Meta spaces, Holder interne*
 
-L'objectif de ce billet est de présenter une implémentation simple en Java du pattern Singleton. 
+L'objectif de ce billet est de présenter une implémentation simple en Java du pattern Singleton.
 
 Je ne traiterai donc pas de l'utilité ni des recommandations d'usage liées à celui-ci mais bien de mise en oeuvre (codage pour les intimes) en Java Standard Edition (JSE).
 
-
-
 </div>
 <!--excerpt-->
-
 
 ## Le constat
 
@@ -28,15 +25,13 @@ Il est vraiment frappant en consultant les sites spécialisés en développement
 
 De la même façon, il est encore plus frappant de voir à quel point toutes ces ressources en ligne, toutes ces explications sur l'unicité en mémoire, le double-check-locking prennent une part importante. Même sur des sites pourtant reconnus comme DZONE, on y trouve des articles erronés, car en effet, **rien de plus simple que d'écrire un bon singleton Thread-Safe et Lazy en Java : mais je le garde pour la fin de ce billet ...**
 
-
-
 ## Les origines du Design Pattern Singleton
 
 Au préalable, revenons aux origines du Singleton, alors que Java n'existait pas encore et à ses principales caractéristiques :
 
 - un singleton c'est un objet construit conformément à sa sa classe et dont on a la garantie qu'il n'existe qu'**une seule et une seule instance** en mémoire à un instant donné.
 - en cas d'accès concurrent lors de l'instanciation d'un singleton, il faut veiller à ce que cet aspect soit pris en compte par un **mécanisme de verrous.**
-- en général on souhaite que le singleton ne s'initialise pas entièrement, mais seulement à son premier appel, afin d'économiser de la mémoire. On appelle cela le mécanisme "*lazy*".
+- en général on souhaite que le singleton ne s'initialise pas entièrement, mais seulement à son premier appel, afin d'économiser de la mémoire. On appelle cela le mécanisme « *lazy* ».
 
 Ainsi le GoF, propose son pattern singleton. Et certains l'appliquent alors en C++.
 
@@ -45,26 +40,25 @@ Ainsi le GoF, propose son pattern singleton. Et certains l'appliquent alors en C
 Java arrive alors sur le marché, ressemblant tellement à C++ sur sa syntaxe que le singleton du GoF, façon C++, est tout simplement imité sans prendre en compte les spécificités de la plateforme Java :
 
 - une classe n'est chargée que lors de son premier appel.
-- le chargement d'une classe est *thread-safe*, c'est un mécanisme garanti par la hiérarchie de *ClassLoader*s de la JVM. 
+- le chargement d'une classe est *thread-safe*, c'est un mécanisme garanti par la hiérarchie de *ClassLoader*s de la JVM.
 
 Ce qui permet d'envisager déjà que :
 
 - le singleton version Java, sera forcément Lazy
 - l'instanciation statique du singleton version Java, sera forcément ThreadSafe
 - toute autre tentative de ne pas se reposer sur ces caractéristiques apportera un code plus lourd, inutile et potentiellement buggué. (Less Code, Less Bug !)
-- un singleton version Java SE avec une seule hiérarchie de ClassLoader sera seul en mémoire JVM. 
+- un singleton version Java SE avec une seule hiérarchie de ClassLoader sera seul en mémoire JVM.
 
-
-## Et "un lazy thread-safe, un ..."
+## Et « un lazy thread-safe, un ... »
 
 Le voilà, notre beau Singleton Lazy Thread-Safe :
 
 ```java
-public class LazySingleton 
+public class LazySingleton
 {
     private static final LazySingleton instance = new LazySingleton();
 
-    private LazySingleton() 
+    private LazySingleton()
     {
         System.out.println("Construction du Singleton au premier appel");
     }
@@ -75,7 +69,7 @@ public class LazySingleton
     }
    
     @Override
-    public String toString() 
+    public String toString()
     {
        return String.format("Je suis le LazySingleton : %s", super.toString());
     }
@@ -85,10 +79,10 @@ public class LazySingleton
 Voici un programme qui en obtient une instance :
 
 ```java
-public class MainProg 
+public class MainProg
 {
 
-    public static void main(String[] args) 
+    public static void main(String[] args)
     {
         System.out.println("Démarrage du programme");
         System.out.println("Mon singleton n'est toujours pas chargé ...");
@@ -100,7 +94,7 @@ public class MainProg
 }
 ```
 
-et voici son résultat de son exécution qui prouve bien son chargement "*lazy*" :
+et voici son résultat de son exécution qui prouve bien son chargement « *lazy* » :
 
 ```
 Démarrage du programme
@@ -111,10 +105,9 @@ Et maintenant je l'affiche ...
 Je suis le LazySingleton : demo.LazySingleton@7852e922
 ```
 
-
 ## Et depuis Java 5, ça donne quoi ?
 
-Enfin, depuis Java 5, c'est à dire fin 2004, une éternité, un singleton peut s'implémenter au moyen d'une "enum". Petite limitation dans ce cas : on ne peut pas en hériter, mais en a-t-on souvent besoin ?
+Enfin, depuis Java 5, c'est à dire fin 2004, une éternité, un singleton peut s'implémenter au moyen d'une « enum ». Petite limitation dans ce cas : on ne peut pas en hériter, mais en a-t-on souvent besoin ?
 
 Version enum Java 5 :
 
@@ -166,10 +159,10 @@ On peut aussi l'appeler directement :
 Je suis le LazySingleton : INSTANCE
 ```
 
-## Et la "serialization" entre en jeu ...
+## Et la « serialization » entre en jeu ...
 
-Je n'ai pas non plus abordé un autre problème : souvent un Singleton a besoin d'être "Serializable", mais de fait, la déserialisation d'un singleton permet de créer plusieurs instances.
-Ceci "casse" le principe du Singleton qui doit être unique.
+Je n'ai pas non plus abordé un autre problème : souvent un Singleton a besoin d'être « Serializable », mais de fait, la déserialisation d'un singleton permet de créer plusieurs instances.
+Ceci « casse » le principe du Singleton qui doit être unique.
 
 Pour résoudre ce problème, il suffit de définir `readResolve()` dans le singleton lui-même.
 
@@ -201,8 +194,7 @@ public class Singleton implements Serializable
 
 ## Petit détour du côté des Servlets
 
-Ce petit paragraphe sort du cadre de ce billet, puisque je ne souhaitais évoquer que le cas de Java SE et non
-pas Java EE.
+Ce petit paragraphe sort du cadre de ce billet, puisque je ne souhaitais évoquer que le cas de Java SE et non pas Java EE.
 
 Mais pour illustrer, et pour ceux qui connaissent, voici ce que sont chacune des servlets déclarées dans une WebApp Java : un singleton ! Et oui, *chaque Servlet est un singleton* ! Lazy de surcroit ! Ce qui vallait d'ailleurs au premier déclencheur (un navigateur via URL par exemple) d'avoir un temps d'attente un peu plus long que les clients suivants qui avaient alors la servlet de chargée en mémoire prête à répondre à la requête au moyen d'un Thread.
 
@@ -213,7 +205,7 @@ Pour éviter ces effets d'attente et charger chaque servlet (singleton) dès le 
 ```xml
 <load-on-startup>1</load-on-startup>
 ```
-Cette configuration de la servlet dans le `web.xml` permet ainsi de la passer en mode "EAGER" (inverse de LAZY).
+Cette configuration de la servlet dans le `web.xml` permet ainsi de la passer en mode « EAGER » (inverse de LAZY).
 
 ## Un singleton ça offre quoi ?
 
@@ -232,7 +224,7 @@ Il faut donc faire très attention, tous les chargements, modifications, suppres
 
 Une question devrait vous tarauder :
 
-> Mais jusqu'ici pourquoi avions besoin d'un Singleton en lieu de place de simples champs `static` ? 
+> Mais jusqu'ici pourquoi avions besoin d'un Singleton en lieu de place de simples champs `static` ?
   
 Il s'agit d'une question de zone de mémoire de la JVM. Sans rentrer dans trop de détails, il faut simplement savoir que jusqu'à Java 7 inclus, les classes et les type primitifs `static` ainsi que les références `static` à des instances étaient stockées dans la zone nommée *Permanent Generation Space*.
 
@@ -242,11 +234,11 @@ Celà a conduit bon nombre de sites fonctionnant sous Java EE à observer le fam
 
 En Java 8, bim, paf, badaboum, adieu le *PermGen Space*, bienvenue au **Meta Space**.
 
-Cette zone appartient désormais au HEAP. De ce fait, elle est aussi *garbage collectée* suivant différents algorithmes que le HEAP classique : il est nettoyé quand des classes de ne sont plus utilisées depuis un moment et les champs statiques sont libérés eux-aussi. La zone est de surcroit dynamique en terme de taille : finies les limitations. Donc un champ statique n'est plus coûteux "comme avant".
+Cette zone appartient désormais au HEAP. De ce fait, elle est aussi *garbage collectée* suivant différents algorithmes que le HEAP classique : il est nettoyé quand des classes de ne sont plus utilisées depuis un moment et les champs statiques sont libérés eux-aussi. La zone est de surcroit dynamique en terme de taille : finies les limitations. Donc un champ statique n'est plus coûteux « comme avant ».
 
 Pourquoi alors s'enquiquiner avec un Singleton depuis Java 8 puisque maintenant que les champs statiques ne posent plus de problème ?
 
-Voici un "vieux" singleton Java 7 et son adaptation Java 8 qui offrent les mêmes fonctionnalités, sans impact mémoire.
+Voici un « vieux » singleton Java 7 et son adaptation Java 8 qui offrent les mêmes fonctionnalités, sans impact mémoire.
 
 Version Java 7 et - :
 
@@ -309,11 +301,11 @@ Mais justement, c'est assez intéressant ! Bon nombre de vieux singleton offrant
 
 ## Grosse paresse ! (double lazyness)
 
-On vient donc de voir que, par défaut, un singleton était "lazy" en Java. Pourquoi aller donc chercher encore plus loin la paresse avec la fameuse technique du **Holder interne** ?
+On vient donc de voir que, par défaut, un singleton était « lazy » en Java. Pourquoi aller donc chercher encore plus loin la paresse avec la fameuse technique du **Holder interne** ?
 
-Il peut arriver que l'on veuille un peu "discuter" avec le singleton avant le réel usage de celui-ci et donc économiser le RAM jusqu'au dernier moment.
+Il peut arriver que l'on veuille un peu « discuter » avec le singleton avant le réel usage de celui-ci et donc économiser le RAM jusqu'au dernier moment.
 
-Reprenons l'exemple précédent que ce soit en version singleton Java 7 et répose donc sur la définition d'une classe interne, chargée elle aussi par la JVM qu'à son premier appel, donc par le singleton lui-même, au moment des appels des méthodes "métiers" :
+Reprenons l'exemple précédent que ce soit en version singleton Java 7 et répose donc sur la définition d'une classe interne, chargée elle aussi par la JVM qu'à son premier appel, donc par le singleton lui-même, au moment des appels des méthodes « métiers » :
 
 ```java
 public class VisitCounter 
@@ -349,7 +341,7 @@ public class VisitCounter
 }
 ```
 
-En Java 8, c'est même encore plus simple, puisque le Holder contient les champs "utiles" :
+En Java 8, c'est même encore plus simple, puisque le Holder contient les champs « utiles » :
 
 ```java
 public final class VisitCounter
@@ -381,8 +373,9 @@ Je viens d'écrire ce que je m'étais pourtant interdit de faire : un n-ième bi
 
 Ce qu'il faut retenir : vous n'aurez JAMAIS la garantie d'avoir une instance unique d'une classe en Java. Par introspection, par AOP, vous aurez toujours un moyen de casser l'unicité mémoire qu'on attend pourtant d'un singleton. Il suffit juste de faire un peu attention.
 
-En guise de réelle conclusion, utilisez : 
-* `@ApplicationScoped` de CDI, que vous pouvez utiliser même en Java SE si vous prenez "Weld" dans vos dépendances 
-* `@Singleton` de la spec EJB en environnement Java EE et vous serez définitivement tranquille.
+En guise de réelle conclusion, utilisez :
+
+- `@ApplicationScoped` de CDI, que vous pouvez utiliser même en Java SE si vous prenez « Weld » dans vos dépendances ;
+- `@Singleton` de la spec EJB en environnement Java EE et vous serez définitivement tranquille.
 
 Mais, de grâce, arrêtez de faire du double-check locking ! A part des ennuis vous n'aurez rien à gagner !
