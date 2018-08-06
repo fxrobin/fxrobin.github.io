@@ -4,13 +4,20 @@ title: Le singleton est mort, vive le singleton !
 subtitle: Encore un post sur le Singleton ?
 logo: brain-logo.png
 category: articles
-tags: [patterns,java,lazy,threadsafe,classloading]
+tags: [patterns,java,lazy,threadsafe,classloading,holder,permgen,meta]
 ---
 
 <div class="intro" markdown='1'>
+
+> - *Version 1 parue le 16/12/2017*
+> - *Version 2 parue le 06/08/2018 : accès concurrents, PermGen / Meta spaces, Holder interne*
+
 L'objectif de ce billet est de présenter une implémentation simple en Java du pattern Singleton. 
 
-Je ne traiterai donc pas de l'utilité ni des recommandations d'usage liées à celui-ci mais bien de mise en oeuvre (codage pour les intimes) en Java Standard Edition (JSE). 
+Je ne traiterai donc pas de l'utilité ni des recommandations d'usage liées à celui-ci mais bien de mise en oeuvre (codage pour les intimes) en Java Standard Edition (JSE).
+
+
+
 </div>
 <!--excerpt-->
 
@@ -208,8 +215,165 @@ Pour éviter ces effets d'attente et charger chaque servlet (singleton) dès le 
 ```
 Cette configuration de la servlet dans le `web.xml` permet ainsi de la passer en mode "EAGER" (inverse de LAZY).
 
+## Un singleton ça offre quoi ?
 
-## Il faut conclure ...
+Et mainteant que nous avons notre beau singleton, unique en mémoire, il faudrait quand même qu'il nous serve à quelque chose.
+
+En général, on y conserve de l'information, partagée par l'ensemble des utilisateurs du système et/ou par l'ensemble des *threads*, accessible donc par n'importe quel code qu'il soit `static` ou d'instance au sein de méthodes.
+
+Il faut donc faire très attention, tous les chargements, modifications, suppressions  d'informations doivent être *thread-safe* ! Cela dépasse un peu l'objectif de ce billet, mais il va vous falloir gérer la synchronisation avec des verrous avec des `synchronized` ou, mieux, n'utiliser que des classes thread-safe et celle de la *concurrency API* comme par exemple :
+
+- `AtomicInteger`
+- `Lock` et `ReentrantLock`
+- `Collections.synchronizedList()` ou `Collections.synchronizedMap()`
+- etc.
+
+## Et depuis Java 8 alors ?
+
+Une question devrais vous tarauder :
+
+> Mais jusqu'ici pourquoi avions besoin d'un Singleton en lieu de place de simples champs `static` ? 
+  
+Il s'agit d'une question de zone de mémoire de la JVM. Sans rentrer dans trop de détails, il faut simplement savoir que jusqu'à Java 7 inclus, les classes et les type primitifs `static` ainsi que les références `static` à des instances étaient stockées dans la zone nommée *Permanent Generation Space*.
+
+Cette zone était limitée au démarrage de JVM, et bien que paramétrable, elle ne pouvait pas s'étendre dynamiquement. Aussi, il fallait prévoir au mieux : ni trop, ni trop peu.
+
+Ceci a conduit bon nombre de sites fonctionnant sous Java EE à observer le fameux `OutOfMemory : PermGen space`. On triturait alors quelques paramètres de JVM (`PermSize`, `MaxPermSize`), mais au fil des redéploiments d'applications (surtout en DEV), le *Permanent Generation Space* se saturait et il fallait tout vider en relançant le serveur d'applications et donc en redémarrant la JVM : PAS BIEN.
+
+En Java 8, bim, paf, badaboum, adieu le *PermGen Space*, bienvenue à au **Meta Space**.
+
+Cette zone appartient désormais au HEAP. De ce fait, elle est aussi *garbage collectée* suivant différents algorithmes que le HEAP classique : il est nettoyé quand des classes de ne sont plus utilisées depuis un moment et les champs statiques sont libérés eux-aussi. La zone est de surcroit dynamique en terme de taille : finies les limitations. Donc un champ statique n'est plus coûteux "comme avant".
+
+Pourquoi alors s'enquiquiner avec un Singleton depuis Java 8 puisque maintenant que les champs statiques ne posent plus de problème. Attention, je n'ai pas dit qu'il fallait un accès public, mais voici un "vieux" singleton Java 7 et son adaptation Java 8 qui offrent les mêmes fonctionnalités, sans impact mémoire.
+
+Version Java 7 et - :
+
+```java
+public class VisitCounter 
+{
+    // implémenté sous forme de singleton //
+
+    private static VisitCounter singleton = new VisitCounter();
+
+    private AtomicInteger visitCounter = new AtomicInteger();
+
+    private VisitCounter() 
+    {
+       // protection 
+    }
+
+    public static VisitCounter getInstance()
+    {
+      return singleton;
+    }
+
+    public int getCounter()
+    {
+        return visitCounter.get();
+    }
+
+    public int increment()
+    {
+        return visitCounter.incrementAndGet();
+    }
+}
+```
+
+Version Java 8 et + :
+
+```java
+public final class VisitCounter
+{
+    private static AtomicInteger visitCounter = new AtomicInteger();
+
+    public static int getCounter()
+    {
+        return visitCounter.get();
+    }
+
+    public static int increment()
+    {
+        return visitCounter.incrementAndGet();
+    }
+}
+```
+
+Il faut quand même préciser les inconvénients :
+
+- les informations ne sont pas sérialisables ;
+- les méthodes ne sont pas rédéfinissables.
+
+Mais justement, c'est assez intéressant ! Bon nombre de vieux singleton offrant des services devraient se voir refactoriser de la sorte ! Simplicité, efficacité. Mais seulement en Java 8 et + !
+
+## Grosse paresse ! (double lazyness)
+
+On vient donc de voir que, par défaut, un singleton était "lazy" en Java. Pourquoi aller donc chercher encore plus loin la paresse avec la fameuse technique du **Holder interne** ?
+
+Il peut arriver que l'on veuille un peu "discuter" avec le singleton avant le réel usage de celui-ci et donc économiser le RAM jusqu'au dernier moment.
+
+Reprenons l'exemple précédent que ce soit en version singleton Java 7 et répose donc sur la définition d'une classe interne, chargée elle aussi par la JVM qu'à son premier appel, donc par le singleton lui-même, au moment des appels des méthodes "métiers" :
+
+```java
+public class VisitCounter 
+{
+    // implémenté sous forme de singleton //
+
+    private static class Holder
+    {
+        private static final VisitCounter singleton = new VisitCounter();
+    }
+
+    private AtomicInteger visitCounter = new AtomicInteger();
+
+    private VisitCounter() 
+    {
+       // protection 
+    }
+
+    public static Singleton getInstance()
+    {
+      return Holder.singleton;
+    }
+
+    public int getCounter()
+    {
+        return visitCounter.get();
+    }
+
+    public int increment()
+    {
+        return visitCounter.incrementAndGet();
+    }
+}
+```
+
+En Java 8 c'est même encore plus simple, puisque le Holder contient les champs "utiles" :
+
+```java
+public final class VisitCounter
+{
+    private static class Holder
+    {
+        private static final AtomicInteger visitCounter = new AtomicInteger();
+    }
+
+    public static int getCounter()
+    {
+        return Holder.visitCounter.get();
+    }
+
+    public static int increment()
+    {
+        return Holder.visitCounter.incrementAndGet();
+    }
+}
+```
+
+Ainsi un `VisitCounter.class`, ou une introspection de premier niveau de cette classe n'ira pas charger le Holder et donc n'ira pas initialiser les champs nécessaire au fonctionnement. D'ailleurs on peut mixer "lazy" classique, avec le holder pour les données les plus coûteuses.
+
+J'appelle cela de la très grosse paresse ...
+
+## Il faut conclure
 
 Je viens d'écrire ce que je m'étais pourtant interdit de faire : un n-ième billet sur le Singleton en Java venant s'ajouter à la quantité déjà astronomique de ceux qui existent sur le net.
 
@@ -218,3 +382,5 @@ Ce qu'il faut retenir : vous n'aurez JAMAIS la garantie d'avoir une instance uni
 En guise de réelle conclusion, utilisez : 
 * `@ApplicationScoped` de CDI, que vous pouvez utiliser même en Java SE si vous prenez "Weld" dans vos dépendances 
 * `@Singleton` de la spec EJB en environnement Java EE et vous serez définitivement tranquille.
+
+Mais, arrêtez de faire du double-check locking ! A part des ennuis vous n'aurez rien à gagner !
