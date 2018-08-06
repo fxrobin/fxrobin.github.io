@@ -221,7 +221,7 @@ Et mainteant que nous avons notre beau singleton, unique en mémoire, il faudrai
 
 En général, on y conserve de l'information, partagée par l'ensemble des utilisateurs du système et/ou par l'ensemble des *threads*, accessible donc par n'importe quel code qu'il soit `static` ou d'instance au sein de méthodes.
 
-Il faut donc faire très attention, tous les chargements, modifications, suppressions  d'informations doivent être *thread-safe* ! Cela dépasse un peu l'objectif de ce billet, mais il va vous falloir gérer la synchronisation avec des verrous avec des `synchronized` ou, mieux, n'utiliser que des classes thread-safe et celle de la *concurrency API* comme par exemple :
+Il faut donc faire très attention, tous les chargements, modifications, suppressions  d'informations doivent être *thread-safe* ! Cela dépasse un peu l'objectif de ce billet, mais il va vous falloir gérer la synchronisation avec des verrous, des `synchronized` ou, mieux, n'utiliser que des classes thread-safe et celles de la *concurrency API* comme par exemple :
 
 - `AtomicInteger`
 - `Lock` et `ReentrantLock`
@@ -230,21 +230,23 @@ Il faut donc faire très attention, tous les chargements, modifications, suppres
 
 ## Et depuis Java 8 alors ?
 
-Une question devrais vous tarauder :
+Une question devrait vous tarauder :
 
 > Mais jusqu'ici pourquoi avions besoin d'un Singleton en lieu de place de simples champs `static` ? 
   
 Il s'agit d'une question de zone de mémoire de la JVM. Sans rentrer dans trop de détails, il faut simplement savoir que jusqu'à Java 7 inclus, les classes et les type primitifs `static` ainsi que les références `static` à des instances étaient stockées dans la zone nommée *Permanent Generation Space*.
 
-Cette zone était limitée au démarrage de JVM, et bien que paramétrable, elle ne pouvait pas s'étendre dynamiquement. Aussi, il fallait prévoir au mieux : ni trop, ni trop peu.
+Cette zone était limitée au démarrage de JVM, et bien que paramétrable, elle ne pouvait pas s'étendre dynamiquement. Ainsi, il fallait prévoir au mieux : ni trop, ni trop peu. De plus, et il s'agit du point clé : il fallait optimiser cet espace en y mettant le moins d'éléments `static` posssible. D'où la nécessité d'un singleton avec comme seule partie `static`, la référence vers son instance.
 
-Ceci a conduit bon nombre de sites fonctionnant sous Java EE à observer le fameux `OutOfMemory : PermGen space`. On triturait alors quelques paramètres de JVM (`PermSize`, `MaxPermSize`), mais au fil des redéploiments d'applications (surtout en DEV), le *Permanent Generation Space* se saturait et il fallait tout vider en relançant le serveur d'applications et donc en redémarrant la JVM : PAS BIEN.
+Celà a conduit bon nombre de sites fonctionnant sous Java EE à observer le fameux `OutOfMemory : PermGen space`. On triturait alors quelques paramètres de JVM (`PermSize`, `MaxPermSize`), mais au fil des redéploiments d'applications (surtout en DEV), le *Permanent Generation Space* se saturait et il fallait tout vider en relançant le serveur d'applications et donc en redémarrant la JVM : PAS BIEN.
 
-En Java 8, bim, paf, badaboum, adieu le *PermGen Space*, bienvenue à au **Meta Space**.
+En Java 8, bim, paf, badaboum, adieu le *PermGen Space*, bienvenue au **Meta Space**.
 
 Cette zone appartient désormais au HEAP. De ce fait, elle est aussi *garbage collectée* suivant différents algorithmes que le HEAP classique : il est nettoyé quand des classes de ne sont plus utilisées depuis un moment et les champs statiques sont libérés eux-aussi. La zone est de surcroit dynamique en terme de taille : finies les limitations. Donc un champ statique n'est plus coûteux "comme avant".
 
-Pourquoi alors s'enquiquiner avec un Singleton depuis Java 8 puisque maintenant que les champs statiques ne posent plus de problème. Attention, je n'ai pas dit qu'il fallait un accès public, mais voici un "vieux" singleton Java 7 et son adaptation Java 8 qui offrent les mêmes fonctionnalités, sans impact mémoire.
+Pourquoi alors s'enquiquiner avec un Singleton depuis Java 8 puisque maintenant que les champs statiques ne posent plus de problème ?
+
+Voici un "vieux" singleton Java 7 et son adaptation Java 8 qui offrent les mêmes fonctionnalités, sans impact mémoire.
 
 Version Java 7 et - :
 
@@ -347,7 +349,7 @@ public class VisitCounter
 }
 ```
 
-En Java 8 c'est même encore plus simple, puisque le Holder contient les champs "utiles" :
+En Java 8, c'est même encore plus simple, puisque le Holder contient les champs "utiles" :
 
 ```java
 public final class VisitCounter
@@ -383,4 +385,4 @@ En guise de réelle conclusion, utilisez :
 * `@ApplicationScoped` de CDI, que vous pouvez utiliser même en Java SE si vous prenez "Weld" dans vos dépendances 
 * `@Singleton` de la spec EJB en environnement Java EE et vous serez définitivement tranquille.
 
-Mais, arrêtez de faire du double-check locking ! A part des ennuis vous n'aurez rien à gagner !
+Mais, de grâce, arrêtez de faire du double-check locking ! A part des ennuis vous n'aurez rien à gagner !
