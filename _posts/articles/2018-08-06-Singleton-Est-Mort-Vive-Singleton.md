@@ -375,6 +375,7 @@ Ce qu'il faut retenir : vous n'aurez JAMAIS la garantie d'avoir une instance uni
 En guise de réelle conclusion, utilisez :
 
 - `@ApplicationScoped` de CDI, que vous pouvez utiliser même en Java SE si vous prenez « Weld » dans vos dépendances ;
-- `@Singleton` de la spec EJB en environnement Java EE et vous serez définitivement tranquille.
+- `@Scope("singleton")` si vous utilisez Spring ;
+- `@Singleton` de la spec EJB en environnement Java EE et vous serez définitivement tranquille ;
 
 Mais, de grâce, arrêtez de faire du double-check locking ! A part des ennuis vous n'aurez rien à gagner !
