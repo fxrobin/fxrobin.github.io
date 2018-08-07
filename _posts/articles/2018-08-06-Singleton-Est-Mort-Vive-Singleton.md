@@ -67,7 +67,7 @@ public class LazySingleton
     {
         return instance;
     }
-   
+
     @Override
     public String toString()
     {
@@ -81,7 +81,6 @@ Voici un programme qui en obtient une instance :
 ```java
 public class MainProg
 {
-
     public static void main(String[] args)
     {
         System.out.println("Démarrage du programme");
@@ -135,7 +134,7 @@ public enum LazySingletonEnum
 
 et son usage :
 
-```
+```java
 System.out.println("Démarrage du programme");
 System.out.println("Mon singleton n'est toujours pas chargé ...");
 System.out.println("Bon allez, je me décide à l'appeler ...");
@@ -161,27 +160,26 @@ Je suis le LazySingleton : INSTANCE
 
 ## Et la « serialization » entre en jeu ...
 
-Je n'ai pas non plus abordé un autre problème : souvent un Singleton a besoin d'être « Serializable », mais de fait, la déserialisation d'un singleton permet de créer plusieurs instances.
-Ceci « casse » le principe du Singleton qui doit être unique.
+Je n'ai pas non plus abordé un autre problème : souvent un Singleton a besoin d'être `Serializable`, mais de fait, la déserialisation d'un singleton permet de créer plusieurs instances.Ceci « casse » le principe du Singleton qui doit être unique.
 
 Pour résoudre ce problème, il suffit de définir `readResolve()` dans le singleton lui-même.
 
 ```java
-public class Singleton implements Serializable 
+public class Singleton implements Serializable
 {
-    private static Singleton singleton = new Singleton( );
+    private static Singleton singleton = new Singleton();
 
-    private Singleton() 
+    private Singleton()
     {
-       // protection 
+       // protection
     }
 
-    public static Singleton getInstance( ) 
+    public static Singleton getInstance( )
     {
       return singleton;
     }
 
-    public Object readResolve() 
+    public Object readResolve()
     {
        return Singleton.getInstance( );
     }  
@@ -205,11 +203,12 @@ Pour éviter ces effets d'attente et charger chaque servlet (singleton) dès le 
 ```xml
 <load-on-startup>1</load-on-startup>
 ```
+
 Cette configuration de la servlet dans le `web.xml` permet ainsi de la passer en mode « EAGER » (inverse de LAZY).
 
 ## Un singleton ça offre quoi ?
 
-Et mainteant que nous avons notre beau singleton, unique en mémoire, il faudrait quand même qu'il nous serve à quelque chose.
+Et maintenant que nous avons notre beau singleton, unique en mémoire, il faudrait quand même qu'il nous serve à quelque chose.
 
 En général, on y conserve de l'information, partagée par l'ensemble des utilisateurs du système et/ou par l'ensemble des *threads*, accessible donc par n'importe quel code qu'il soit `static` ou d'instance au sein de méthodes.
 
@@ -224,17 +223,17 @@ Il faut donc faire très attention, tous les chargements, modifications, suppres
 
 Une question devrait vous tarauder :
 
-> Mais jusqu'ici pourquoi avions besoin d'un Singleton en lieu de place de simples champs `static` ?
+> Mais jusqu'ici pourquoi avions nous besoin d'un Singleton en lieu de place de simples champs `static` ?
   
-Il s'agit d'une question de zone de mémoire de la JVM. Sans rentrer dans trop de détails, il faut simplement savoir que jusqu'à Java 7 inclus, les classes et les type primitifs `static` ainsi que les références `static` à des instances étaient stockées dans la zone nommée *Permanent Generation Space*.
+Il s'agit d'une question de zone de mémoire de la JVM. Sans rentrer dans trop de détails, il faut simplement savoir que jusqu'à Java 7 inclus, les classes et les types primitifs `static` ainsi que les références `static` à des instances étaient stockées dans la zone nommée *Permanent Generation Space*.
 
-Cette zone était limitée au démarrage de JVM, et bien que paramétrable, elle ne pouvait pas s'étendre dynamiquement. Ainsi, il fallait prévoir au mieux : ni trop, ni trop peu. De plus, et il s'agit du point clé : il fallait optimiser cet espace en y mettant le moins d'éléments `static` posssible. D'où la nécessité d'un singleton avec comme seule partie `static`, la référence vers son instance.
+Cette zone était limitée au démarrage de JVM, et bien que paramétrable, elle ne pouvait pas s'étendre dynamiquement. Ainsi, il fallait prévoir au mieux : ni trop, ni trop peu. De plus, et il s'agit du point clé : il fallait optimiser cet espace en y mettant le moins d'éléments `static`. D'où la nécessité d'un singleton avec, comme seule partie `static`, la référence vers son instance.
 
 Celà a conduit bon nombre de sites fonctionnant sous Java EE à observer le fameux `OutOfMemory : PermGen space`. On triturait alors quelques paramètres de JVM (`PermSize`, `MaxPermSize`), mais au fil des redéploiments d'applications (surtout en DEV), le *Permanent Generation Space* se saturait et il fallait tout vider en relançant le serveur d'applications et donc en redémarrant la JVM : PAS BIEN.
 
 En Java 8, bim, paf, badaboum, adieu le *PermGen Space*, bienvenue au **Meta Space**.
 
-Cette zone appartient désormais au HEAP. De ce fait, elle est aussi *garbage collectée* suivant différents algorithmes que le HEAP classique : il est nettoyé quand des classes de ne sont plus utilisées depuis un moment et les champs statiques sont libérés eux-aussi. La zone est de surcroit dynamique en terme de taille : finies les limitations. Donc un champ statique n'est plus coûteux « comme avant ».
+Cette zone appartient désormais au HEAP. De ce fait, elle est aussi *garbage collectée* suivant différents algorithmes que le HEAP classique : il est nettoyé quand des classes de ne sont plus utilisées depuis un moment et les champs statiques sont libérés eux-aussi. La zone est dynamique de surcroit en terme de taille : finies les limitations. Donc un champ statique n'est plus coûteux « comme avant ».
 
 Pourquoi alors s'enquiquiner avec un Singleton depuis Java 8 puisque maintenant que les champs statiques ne posent plus de problème ?
 
