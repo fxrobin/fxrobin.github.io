@@ -8,10 +8,12 @@ tags: [algo, LibGDX, java]
 ---
 
 <div class="intro" markdown='1'>
+
 Dans mon parcours professionnel, j'ai été formateur de jeunes développeurs pendant sept années.
-Ces derniers venaient d'horizons différents, parfois sans aucune compétence en terme de programmation. 
+Ces derniers venaient d'horizons différents, parfois sans aucune compétence en terme de programmation.
 
 Afin de rendre ludique l'apprentissage des fondamentaux de l'algorithmique et de Java, je les ai fait participer à la création d'un jeu video : **Xenon Reborn**.
+
 </div>
 
 <!--excerpt-->
@@ -108,13 +110,13 @@ Je me suis appuyé sur LibGDX, décliné exclusivement en mode « Client Lourd 
 
 Je n'ai pas utilisé les classes offertes par la partie Scene2D (`Actor`, `Stage`, etc.) : j'ai préféré recoder mes propres éléments comme `AnimatedSprite`, mais au final cela y ressemble fortement. Si je devais refactoriser ce point je m'appuierais sur les classes offertes en prenant le temps de les étudier un peu mieux.
 
-Je me suis contraint à coder toute une infrastructure, notamment MVC, pour la gestion des écrans et des évenements clavier, afin de ne pas trop complexifier la tâche de mes développeurs : l'objectif étant de leur faire pratiquer « boucle, conditions, variables, méthodes".
+Je me suis contraint à coder toute une infrastructure, notamment MVC, pour la gestion des écrans et des évenements clavier, afin de ne pas trop complexifier la tâche de mes développeurs : l'objectif étant de leur faire pratiquer « boucle, conditions, variables, méthodes ».
 
 ### Musiques et Sons
 
 Jouer du MP3, rien de plus facile avec LibGDX. Trop facile même.
 
-Pour rendre vraiment hommage aux RetroGames, j'ai donc utilisé une bibliothèque de lecture de « MOD".
+Pour rendre vraiment hommage aux RetroGames, j'ai donc utilisé une bibliothèque de lecture de « MOD ».
 Les nostalgiques comme moi se rappeleront alors des différents *Sound Tracker* utilisés sur ST et AMIGA
 qui jouaient des musiques digitalisées « de dingues » alors que le poids des fichiers était très faibles.
 
@@ -411,7 +413,7 @@ A ce jour voici les statistiques d'analyse de code (CODACY et CODEFACTOR) :
 * CODEFACTOR : rated A ;
 * CODACY: rated A.
 
-Je sais que certains aiment bien les statistiques de « production de code". Grosso modo, cela représente  140 LoC par heure. Comme une classe c'est en moyenne 50 LoC, cela fait 3 classes par heure. Ces statistiques ne veulent pas dire grand chose, mais je les laisse quand même.
+Je sais que certains aiment bien les statistiques de « production de code ». Grosso modo, cela représente  140 LoC par heure. Comme une classe c'est en moyenne 50 LoC, cela fait 3 classes par heure. Ces statistiques ne veulent pas dire grand chose, mais je les laisse quand même.
 
 Voici les points du jeu sur lesquels j'ai passé le plus de temps, souvent sur des détails d'ailleurs :
 
