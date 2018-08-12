@@ -4,6 +4,24 @@ lang: fr
 ---
 
 <div id="right">
+
+	<div id="search">
+			<div class="title">Rechercher sur ce site</div>
+			<script>
+					(function() {
+					  var cx = '011993730579911903160:17ronej8jdw';
+					  var gcse = document.createElement('script');
+					  gcse.type = 'text/javascript';
+					  gcse.async = true;
+					  gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+					  var s = document.getElementsByTagName('script')[0];
+					  s.parentNode.insertBefore(gcse, s);
+					})();
+			</script>
+			<gcse:search></gcse:search>
+	</div>
+	
+
 	<div id="article-list">
 		<div class="article-list-header">Articles</div>
 		{% for post in site.categories.articles %}

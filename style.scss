@@ -606,6 +606,37 @@ img {
   a, a:hover { color : orange}
 }
 
+#search:before
+{
+  content:url('/images/floppy-stack.png');
+  position : absolute;
+  margin-top : -50px;
+}
+
+#search
+{
+  clear : right;
+  margin-top : 2em;
+  margin-right : 0.5em;
+  margin-bottom : 1em;
+  padding : 0.5em;
+  float : right;
+  width : 100%;
+
+  color : orange;
+
+  .title { font-family : 'volter'; text-align : center ; font-size : 1em; margin-bottom : 1em;}
+
+  border : solid orange 2px;
+  border-radius : 0.5em;
+  box-shadow: 2px 2px 2px #555555;
+  background: linear-gradient(#003300, 50%, #001100 50%);
+  background-size: 100% 4px;
+  background-repeat: repeat-y;
+
+  a, a:hover { color : orange}
+}
+
 .social-icons-right
 {
   clear : right;
