@@ -18,36 +18,36 @@ Afin de rendre ludique l'apprentissage des fondamentaux de l'algorithmique et de
 
 ## Contexte
 
-Coder des applications "professionnelles" nécessite un background technique assez important tant les éléments à prendre en compte sont nombreux, surtout quand il s'agit d'applications web, multi-utilisateurs, transactionnelles et sécurisées.
+Coder des applications « professionnelles » nécessite un background technique assez important tant les éléments à prendre en compte sont nombreux, surtout quand il s'agit d'applications web, multi-utilisateurs, transactionnelles et sécurisées.
 
 Cela ne peut pas se faire sans une bonne maîtrise des fondamentaux.
 
-> "Science sans conscience n’est que ruine de l’âme", François Rabelais, Pantagruel. 
+> « Science sans conscience n’est que ruine de l’âme », François Rabelais, Pantagruel.
 
 A mon sens, ces fondamentaux sont :
 
-* la représentation des données, l'adressage ;
-* l'exécution d'un programme ;
-* l'ordonnancement des tâches et des instructions ;
-* le fonctionnement d'un ordinateur ;
-* ré-utiliser les fonctionnalités existantes (libs, BIOS, jar, etc.) ;
-* l'utilisation des ressources ;
+* la représentation des données, l'adressage ;
+* l'exécution d'un programme ;
+* l'ordonnancement des tâches et des instructions ;
+* le fonctionnement d'un ordinateur ;
+* ré-utiliser les fonctionnalités existantes (libs, BIOS, jar, etc.) ;
+* l'utilisation des ressources ;
 * la factorisation du code.
 
-Lassé par les TP/TD un peu trop conventionnels, j'ai donc réalisé une infrastructure de jeu vidéo de type "Shoot Them Up" (Shm'up pour les intimes) à scrolling vertical, digne des années 1990, nostalgie oblige ...
+Lassé par les TP/TD un peu trop conventionnels, j'ai donc réalisé une infrastructure de jeu vidéo de type « Shoot Them Up » (Shm'up pour les intimes) à scrolling vertical, digne des années 1990, nostalgie oblige ...
 
 C'est cette infrastructure sur laquelle sont venus s'appuyer mes stagiaires pour développer telle ou telle partie du jeu comme par exemple la gestion des collisions ou encore l'attribution de bonus et la gestion de l'état du vaisseau spatial.
 
-Car oui, sous des allures "peu sérieuses", coder un jeu vidéo permet de mettre en oeuvre des concepts de Design Patterns (Singleton, Facade, Factory), de polymorphisme, de découplage, de complexité algorithmique. Ces concepts seront toujours valables sur des applications professionnelles. 
+Car oui, sous des allures « peu sérieuses », coder un jeu vidéo permet de mettre en oeuvre des concepts de Design Patterns (Singleton, Facade, Factory), de polymorphisme, de découplage, de complexité algorithmique. Ces concepts seront toujours valables sur des applications professionnelles. 
 
-Ce projet "fil rouge" s'incrivait dans un cours de "Java Bases" où les notions suivantes n'avaient pas encore été abordées, ce qui représentait un sacré challenge pour faire un jeu vidéo :
+Ce projet « fil rouge » s'incrivait dans un cours de « Java Bases » où les notions suivantes n'avaient pas encore été abordées, ce qui représentait un sacré challenge pour faire un jeu vidéo :
 
-* les collections (toutes) : ils n'avaient étudier que `List` et `ArrayList` ;
-* les fichiers ;
-* les interfaces graphiques ;
-* le multi-threading ;
-* les lambdas de Java 8 ;
-* Maven ;
+* les collections (toutes) : ils n'avaient étudier que `List` et `ArrayList` ;
+* les fichiers ;
+* les interfaces graphiques ;
+* le multi-threading ;
+* les lambdas de Java 8 ;
+* Maven ;
 * JUnit.
 
 De plus, mes stagiaires découvraient Eclipse, ayant fait des cours d'Algo pur en pseudo-langage et avec [Java's Cool](http://javascool.gforge.inria.fr/). Parallèlement ils avaient des cours de POO, menés avec [Bluej](https://www.bluej.org/).
@@ -64,7 +64,7 @@ Si vous ne l'aviez pas encore [compris ou lu](/about), je suis nostalgique des j
 ![ATARI-ST](/images/atari-st.png)
 ![AMIGA](/images/amiga.png)
 
-J'ai donc souhaité rendre hommage, à mon humble niveau, à ces deux "hits" de l'informatique micro-ludique 1980-2000 ...
+J'ai donc souhaité rendre hommage, à mon humble niveau, à ces deux « hits » de l'informatique micro-ludique 1980-2000 ...
 
 ## Au résultat
 
@@ -104,21 +104,21 @@ Voici différents diagrammes, afin de vous rendre compte d'une partie du systèm
 
 Le projet a été réalisé en Java, parce que la formation de mes stagiaires a comme objectif la maitrise de ce langage et notamment, au final, de la plateforme Java EE 7. Cela passe donc par l'apprentissage de Java SE 8.
 
-Je me suis appuyé sur LibGDX, décliné exclusivement en mode "Client Lourd Java" (pas de client Android), qui est une bibliothèque avec laquelle j'avais déjà fait quelques essais et qui m'avait semblé robuste. 60 FPS pour un jeu sensé être "retro", c'est beaucoup trop ...
+Je me suis appuyé sur LibGDX, décliné exclusivement en mode « Client Lourd Java » (pas de client Android), qui est une bibliothèque avec laquelle j'avais déjà fait quelques essais et qui m'avait semblé robuste. 60 FPS pour un jeu sensé être « retro », c'est beaucoup trop ...
 
 Je n'ai pas utilisé les classes offertes par la partie Scene2D (`Actor`, `Stage`, etc.) : j'ai préféré recoder mes propres éléments comme `AnimatedSprite`, mais au final cela y ressemble fortement. Si je devais refactoriser ce point je m'appuierais sur les classes offertes en prenant le temps de les étudier un peu mieux.
 
-Je me suis contraint à coder toute une infrastructure, notamment MVC, pour la gestion des écrans et des évenements clavier, afin de ne pas trop complexifier la tâche de mes développeurs : l'objectif étant de leur faire pratiquer "boucle, conditions, variables, méthodes".
+Je me suis contraint à coder toute une infrastructure, notamment MVC, pour la gestion des écrans et des évenements clavier, afin de ne pas trop complexifier la tâche de mes développeurs : l'objectif étant de leur faire pratiquer « boucle, conditions, variables, méthodes".
 
 ### Musiques et Sons
 
 Jouer du MP3, rien de plus facile avec LibGDX. Trop facile même.
 
-Pour rendre vraiment hommage aux RetroGames, j'ai donc utilisé une bibliothèque de lecture de "MOD".
+Pour rendre vraiment hommage aux RetroGames, j'ai donc utilisé une bibliothèque de lecture de « MOD".
 Les nostalgiques comme moi se rappeleront alors des différents *Sound Tracker* utilisés sur ST et AMIGA
-qui jouaient des musiques digitalisées "de dingues" alors que le poids des fichiers était très faibles.
+qui jouaient des musiques digitalisées « de dingues » alors que le poids des fichiers était très faibles.
 
-Je m'y suis donc contraint, ne serait-ce que pour retrouver "le son d'autrefois" ...
+Je m'y suis donc contraint, ne serait-ce que pour retrouver « le son d'autrefois » ...
 
 Le reste des effets sonores (tirs, explosions) sont généralement joués à partir de fichier WAV directement
 par LibGDX.
@@ -127,16 +127,16 @@ par LibGDX.
 
 Ici le terme d'algorithme est un bien grand nom. En effet, il s'agissait surtout de mettre en oeuvre les fondamentaux du développement :
 
-* variables,
-* boucles,
+* variables ;
+* boucles ;
 * conditions.
 
-Puis d'enchainer sur les concepts fondamentaux de la programmation orientée "objets" :
+Puis d'enchainer sur les concepts fondamentaux de la programmation orientée « objets » :
 
-* responsabilité,
-* découplage,
-* encapsulation,
-* héritage;
+* responsabilité ;
+* découplage ;
+* encapsulation ;
+* héritage.
 
 Le tout étant toujours vu sous l'angle de la factorisation du code : **dupliquer du source, c'est mal !**
 
@@ -405,26 +405,26 @@ Je me suis forcé aussi à ne pas utiliser Lombok, qui aurait pourtant bien acce
 
 A ce jour voici les statistiques d'analyse de code (CODACY et CODEFACTOR) :
 
-* LineOfCode : 2897
-* Java Files : 61
-* Issues : 0%, Complex Files : 0%, Duplicated Code : 0%
-* CODEFACTOR : rated A
-* CODACY: rated A
+* LineOfCode : 2897 ;
+* Java Files : 61 ;
+* Issues : 0%, Complex Files : 0%, Duplicated Code : 0% ;
+* CODEFACTOR : rated A ;
+* CODACY: rated A.
 
-Je sais que certains aiment bien les statistiques de "production de code". Grosso modo, cela représente  140 LoC par heure. Comme une classe c'est en moyenne 50 LoC, cela fait 3 classes par heure. Ces statistiques ne veulent pas dire grand chose, mais je les laisse quand même.
+Je sais que certains aiment bien les statistiques de « production de code". Grosso modo, cela représente  140 LoC par heure. Comme une classe c'est en moyenne 50 LoC, cela fait 3 classes par heure. Ces statistiques ne veulent pas dire grand chose, mais je les laisse quand même.
 
 Voici les points du jeu sur lesquels j'ai passé le plus de temps, souvent sur des détails d'ailleurs :
 
-* enchainement par fade-in, fade-out des écrans (rien dans LibGDX pour cette chose pourtant nécessaire !)
-* scrolling parallax perso versus TileMap
-* affichage en channel Alpha du niveau de bouclier à gauche, parce que il faut prendre en compte les particularités du SpriteBatch
-* gestion des ressources au moyen d'enum (Jean-Jacques, spéciale dédicasse si tu as lu jusque là ...)
+* enchainement par fade-in, fade-out des écrans (rien dans LibGDX pour cette chose pourtant nécessaire !) ;
+* scrolling parallax perso versus TileMap ;
+* affichage en channel Alpha du niveau de bouclier à gauche, parce que il faut prendre en compte les particularités du SpriteBatch ;
+* gestion des ressources au moyen d'enum (Jean-Jacques, spéciale dédicasse si tu as lu jusque là ...) ;
 * Découplage de l'affichage du vaisseau en fonction de son état et des traitements des inputs.
 
 Vu des stagiaires, se rendre compte  :
 
-* que développer un jeu vidéo ce n'est pas simple et finalement revoir à la baisse leurs prétentions de recoder Call Of Duty ...
-* qu'avec quelques lignes de codes, quelques boucles, on fait des choses sympatiques
+* que développer un jeu vidéo ce n'est pas simple et finalement revoir à la baisse leurs prétentions de recoder Call Of Duty... ;
+* qu'avec quelques lignes de codes, quelques boucles, on fait des choses sympatiques ;
 * que reprendre du code qu'on a pas écrit, ce n'est pas simple.
 
 Cela m'a permis surtout, en fonction du niveau individuel de chacun de mes développeurs, de leur faire faire des choses plus au moins complexes et même d'en initier certains aux lambdas Java 8 et à la Stream API.
@@ -443,8 +443,8 @@ On a pu aborder, sans les étudier en profondeur, la gestion des fichiers en res
 
 Il reste encore pas mal de choses à coder, comme par exemple la scénarisation des niveaux, décrite dans des fichiers (XML par exemple) car pour l'instant les ennemis son générés alétoirement, indéfinement, par vague successives.
 
-Si c'était à refaire, je le referais, mais en y consacrant plus que 20 heures et en jalonnant un peu plus les étapes de réalisation pour ne pas en "perdre" certains. Je pense au final m'être plus amusé qu'eux ...
+Si c'était à refaire, je le referais, mais en y consacrant plus que 20 heures et en jalonnant un peu plus les étapes de réalisation pour ne pas en « perdre » certains. Je pense au final m'être plus amusé qu'eux ...
 
-S'ils lisent cet article, je les invite d'ailleurs à faire part de leurs commentaires sur cette partie "ludique" de l'apprentissage du développement.
+S'ils lisent cet article, je les invite d'ailleurs à faire part de leurs commentaires sur cette partie « ludique » de l'apprentissage du développement.
 
 Le code source du projet est disponible sur mon repository GitHub : <https://github.com/fxrobin/Xenon_Reborn>
