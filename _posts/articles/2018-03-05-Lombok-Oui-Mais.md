@@ -16,9 +16,9 @@ J'en donne une : **n'utilisez pas** `@Data` et je vais vous expliquer pourquoi. 
 
 ## Lombok, à quoi cela sert ?
 
-A part être visiblement une très belle île d'Indonésie, encore, il s'agit d'une bibliothèque qui va géréner pour vous, en respectant de nombreuses bonnes pratiques, ce qu'on appelle du « *boiler plate*".
+A part être visiblement une très belle île d'Indonésie, encore, il s'agit d'une bibliothèque qui va géréner pour vous, en respectant de nombreuses bonnes pratiques, ce qu'on appelle du « *boiler plate* ».
 
-En Java, dans la catégorie « Boiler plate", voici les nominés :
+En Java, dans la catégorie « Boiler plate », voici les nominés :
 
 * getters / setters ;
 * equals  / hashCode ;
@@ -36,9 +36,9 @@ Prenez par exemple les classes métiers suivantes :
 
 ### Implémentation sans Lombok
 
-Pour montrer ce qu'il faudrait faire en Java « sans Lombok", je vais simplement coder la classe `Vehicule` afin qu'elle respecte les conventions Java Beans.
+Pour montrer ce qu'il faudrait faire en Java « sans Lombok », je vais simplement coder la classe `Vehicule` afin qu'elle respecte les conventions Java Beans.
 
-Pour l'exemple, l'unicité sera portée par les champs « numeroMoteur, numeroChassis".
+Pour l'exemple, l'unicité sera portée par les champs « numeroMoteur, numeroChassis ».
 Dans la réalité, l'unicité d'un véhicule est bien plus complexe et dans tous les cas
 ne doit pas reposer sur l'immatriculation.
 
@@ -242,7 +242,7 @@ Cela étant, après 4 ans d'usage, je préfère quand même faire figurer les mo
 
 > Vous noterez que j'ai reporté l'instanciation de la liste au niveau de la déclaration du champs `interventions`. Cette instanciation figurait, dans l'exemple précédent, au niveau du constructeur.
 
-Et voilà comment passer de plus de 100 lignes de code à 16 lignes ! C'est quand même bien plus clair et quel temps gagné ! Mais on ne va pas en rester là. Lombok peut nous apporter plus encore. 
+Et voilà comment passer de plus de 100 lignes de code à 16 lignes ! C'est quand même bien plus clair et quel temps gagné ! Mais on ne va pas en rester là. Lombok peut nous apporter plus encore.
 
 Avant celà, détaillons un peu les annotations utilisées :
 
@@ -254,8 +254,7 @@ Avant celà, détaillons un peu les annotations utilisées :
 * `@EqualsAndHashCode(of=...)` : génère `equals` et `hashCode` (et d'autres méthodes) sur les champs donnés ;
 * `@ToString(of=...)` : génère `toString` sur les champs donnés.
 
-C'est quand même bien pratique mais on peut aller encore plus loin. D'ailleurs il y a un petit problème avec le `@AllArgsConstructor` qui permet ainsi de passer une liste qui ira supplanter la liste initiale ... Bof bof. On va
-régler cela bientôt.
+C'est quand même bien pratique mais on peut aller encore plus loin. D'ailleurs il y a un petit problème avec le `@AllArgsConstructor` qui permet ainsi de passer une liste qui ira supplanter la liste initiale ... Bof bof. On va régler cela bientôt.
 
 ## Le Pattern « Factory Method » avec Lombok
 
@@ -287,13 +286,12 @@ public class Vehicule implements Serializable
 }
 ```
 
-L'exemple devient un peu plus « sympa". Je vais détailler ses particularités.
+L'exemple devient un peu plus « sympa ». Je vais détailler ses particularités.
 
 * Le constructeur public par défaut sans argument a disparu. En fait il est bien là, mais il a été passé `private` par l'annotation `@RequiredArgsConstructor`. Cela empèche donc l'instanciation sans argument : ce n'est plus un Java Bean, mais ce n'est pas forcément grave. Attention toutefois aux specs comme CDI, JSF, JPA, qui réclame pourtant ce constructeur.  
 * une méthode statique « factory method » est générée et est nommée `of(...)` au moyen de l'annotation `@RequiredArgsConstructor(staticName="of")`. Ici la convention « of » est utilisée, comme pour les nouvelles API de Java 8, mais j'aurais pu utiliser les vieilles conventions comme `newInstance(...)`. La méthode prendra en argument tous les champs marqués `final` ou les champs annotés avec `@NonNull` de Lombok. Attention à ne pas confondre avec `@NotNull` de Bean Validation ou de Guava.
 * `equals`, `hashCode` et `toString` ne changent pas.
 * Cette fois-ci un contrôle plus fin sur les getters / setters est mis en place : seule l'immatriculation peut changer.
-
 
 Usage de cette classe :
 
@@ -309,7 +307,7 @@ Et son résultat dans la console grâce à la méthode `toString` générée par
 Vehicule(numeroMoteur=AABBCC123, numeroChassis=X06123, dateMiseEnCirculation=1989-01-18, numeroImmatriculation=AA-123-BB)
 ```
 
-Ca commence déjà à faire des choses plutôt agréables, mais ce n'est pas fini ! Loin de là ... 
+Ca commence déjà à faire des choses plutôt agréables, mais ce n'est pas fini ! Loin de là ...
 
 ## Le Pattern « Builder » avec Lombok
 
@@ -416,7 +414,7 @@ Intervention(dateIntervention=2017-12-10, kilometrage=1820000, libelle=Pneus, pr
 
 Il est parfois, voire souvent, nécessaire d'avoir un peu plus de contrôle pour la création des instances,
 notamment dans le Builder, ce qui va nous permettre de mettre en place une solution fondée sur Lombok pour
-le Design Pattern « Factory".
+le Design Pattern « Factory ».
 
 Avec Lombok, cela reste assez simple, en utilisant toujours la même annotation `@Builder` mais cette fois-ci
 sur des méthodes :
@@ -488,7 +486,7 @@ Je les jette en vrac, avec une petite justification quand même.
 * Ne pas utiliser `@Data` : comme annoncé en préambule, cela génère EqualsAndHashCode sur tous les champs, pareil pour ToString, ce qui peut occasioner des exécutions cycliques quand on a des relations bi-directionnelles entre les classes.
 * Toujours utiliser `@EqualsAndHashCode` et `@ToString` en précisant les champs avec l'attribut `of=...`
 * Spécifier les `Getter / Setter` sur les champs, et non pas sur la classe (en gros, pas comme dans tous les exemples que je viens de donner)
-* Attention au Builder : intégrer un Builder sera possible, mais JPA, JSF ou CDI attendront que le constructeur sans argument soit présent avec le niveau « protected".
+* Attention au Builder : intégrer un Builder sera possible, mais JPA, JSF ou CDI attendront que le constructeur sans argument soit présent avec le niveau « protected ».
 * Attention aux logiciels de revue de code qui n'analysent pas le ByteCode mais que le code source : ils sont perdus...
 
 ## En guise de conclusion
