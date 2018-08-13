@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Mot de passe en clair en base de donnée
+title: Mot de passe en clair en base de données
 logo: blanka.png
 category: blanka
 ---
