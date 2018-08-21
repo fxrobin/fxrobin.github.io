@@ -4,6 +4,7 @@ title: Astuces diverses en vrac
 logo: toolbox.png
 date: 2018-06-04
 permalink: /astuces/
+lang: fr
 ---
 
 <div class="intro" markdown='1'>

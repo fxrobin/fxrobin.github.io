@@ -1,0 +1,99 @@
+.front-post {
+    border-bottom: solid #DDDDDD 2px;
+    margin: 2em;
+    padding-bottom: 2em;
+    &:last-child {
+        border-bottom: none;
+    }
+    @include mobile {
+        margin: 0.5em;
+    }
+    H1 {
+        @include mobile {
+            font-size: 1.5em;
+            text-shadow: none;
+            text-align: center;
+        }
+    }
+    H2 {
+        font-family: "Oswald";
+        A {
+            color: black;
+        }
+        @include mobile {
+            text-align: center;
+        }
+    }
+    P {
+        font-size: 1.1em;
+        @include mobile {
+            font-size: 1em;
+        }
+    }
+    .logo {
+        float: right;
+        margin-left: 1em;
+        margin-top: 0em;
+        @include mobile {
+            // width : 25%;
+            float: none;
+            margin: auto;
+            text-align: center;
+            display: block;
+        }
+    }
+
+    .front-date {
+      font-style: italic;
+      text-align: left;
+      color: $gray;
+      @include mobile {
+          margin-top: 1em;
+      }
+  }
+
+    .entry A {
+        color: $darkGray;
+    }
+
+    .entry {
+        A {
+            color: $darkGray;
+        }
+        P>IMG {
+            margin: 1em;
+        }
+        UL>LI {
+            margin-left: 1.5em;
+        }
+    }
+    
+    .read-more {
+        font-size: 1em;
+        text-align: left;
+        color: $blue;
+        margin: 1em;
+        A,
+        A:visited {
+            color: white;
+            background-color: $blue;
+            padding: 0.5em;
+            border-radius: 1em;
+            -moz-transition: all .2s ease-in;
+            -o-transition: all .2s ease-in;
+            -webkit-transition: all .2s ease-in;
+            transition: all .2s ease-in;
+        }
+        A:hover {
+            color: #FFFF00;
+            background-color: #000080;
+            border-radius: 0.5em;
+            font-size: 16px;
+            font-family: "amiga";
+        }
+        A:hover:after {
+            content: '\2589';
+            font-size: 16px;
+        }
+    }
+}

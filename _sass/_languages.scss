@@ -1,0 +1,38 @@
+.language-selector {
+    li {
+        display: inline
+    }
+}
+
+#upper-languages {
+    border: solid darkblue 2px;
+    border-radius: 0.25em;
+    box-shadow: 2px 2px 2px #555555;
+    background: linear-gradient(#000088, 50%, #000055 50%);
+    background-size: 100% 4px;
+    background-repeat: repeat-y;
+    color: white;
+    margin: 1em;
+    padding: 0.5em;
+    text-align: center;
+    font-family: 'amiga';
+    font-size: 1.5em;
+    A,
+    A:visited {
+        color: yellow
+    }
+}
+
+.flag {
+    background-repeat: no-repeat;
+    background-position: 4px 4px;
+    padding-left: 32px;
+}
+
+.fr {
+    background-image: url('/images/flags/fr.png');
+}
+
+.en {
+    background-image: url('/images/flags/en.png');
+}

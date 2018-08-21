@@ -3,20 +3,40 @@ layout: default
 ---
 
 <article class="post">
- 
-  <img src="{{ site.baseurl }}/images/logos/{{  page.logo }}" class="logo-in-page hvr-buzz-out""/>
+	<img src="{{ site.baseurl }}/images/logos/{{  page.logo }}" class="logo-in-page hvr-buzz-out""/>
   <h1>{{ page.title }}</h1>
-  <div class="accroche">{{ page.subtitle }}</div>
-  <div class="date">
-    Publié le {{page.date | date: "%d/%m/%Y" }}
-  </div>
-  
+	<div class="accroche">{{ page.subtitle }}</div>
+	<div class="metadata">
+			<span class="language-selector">
+					{{ site.t[page.lang].available_languages }}
+					{% assign posts=site.posts | where:"ref", page.ref | sort: 'lang' %}
+					{% for post in posts %}
+							<a href="{{ post.url }}"><img src="/images/flags/{{ post.lang }}.png" /></a>	
+					{% endfor %}	
+					{% assign pages=site.pages | where:"ref", page.ref | sort: 'lang' %}
+					{% for page in pages %}			
+							<a href="{{ page.url }}" class="{{ page.lang }}"><img src="/images/flags/{{ post.lang }}.png" /></a>		
+					{% endfor %}
+			</span>
+		<span class="date" style="margin-left: 1em;">
+			{{ site.t[page.lang].published }}
+
+			{% if page.lang == 'fr' %}
+				{{ page.date | date: "%d/%m/%Y" }}
+			{% endif %}
+
+			{% if page.lang == 'en' %}
+				{{ page.date | date: "%Y-%m-%d" }}
+			{% endif %}
+		</span>	
+	</div>
+	
   <aside>
-    <h3>Sommaire</h3>
+    <h3>{{ site.t[page.lang].table_of_contents }}</h3>
   	{% include toc.html html=content %}
   	
   	  <div class="share-page">
-  	 Partager cet article sur <br />
+					{{ site.t[page.lang].share_article }} <br />
   	    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title }}&summary={{ page.subtitle }}&s">LinkedIn</a>
 	    <a href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.url }}{{ page.url }}&via={{ site.twitter_username }}&related={{ site.twitter_username }}" rel="nofollow" target="_blank" title="Share on Twitter">Twitter</a>
 	    <br />
@@ -31,17 +51,22 @@ layout: default
 </article>
 
 <div class="disqus">
-  <h2>Vos commentaires</h2>
+  <h2>{{ site.t[page.lang].comments }}</h2>
   {% include disqus.html %}
 </div>  
 
 <div class="article-list-footer">
-   <div class="article-list-header"><i class="fa fa-newspaper-o"></i> Mes autres articles</div>
+   <div class="article-list-header"><i class="fa fa-newspaper-o"></i> {{ site.t[page.lang].other_articles }}</div>
  	{% for post in site.categories[page.category] %}
  	 {% if post != page %}
 	 <div class="article-list-entry">   
 	   <span class="article-list-entry-date">  		
-	   		{{post.date | date: "%d/%m/%Y" }}
+			{% if page.lang == 'fr' %}
+				{{ page.date | date: "%d/%m/%Y" }}
+			{% endif %}
+			{% if page.lang == 'en' %}
+				{{ page.date | date: "%Y-%m-%d" }}
+			{% endif %}
 	   </span>
 	   <i class="fa fa-chevron-circle-right"></i>
 	   <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>

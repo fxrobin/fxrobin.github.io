@@ -1,0 +1,101 @@
+.blanka-item:before
+{
+  content:url('/images/blanka-item.png') !important;
+  position : absolute;
+  margin-top : -32px;
+  margin-left : -50px;
+}
+
+.blanka-item
+{
+  padding-left : 64px !important;
+  background: linear-gradient(#003300, 50%, #001100 50%)  !important;
+  background-size: 100% 4px  !important;
+  background-repeat: repeat-y  !important;
+  color :#00FF00 !important;
+}
+
+#blanka-list:before
+{
+  content:url('/images/blanka-face.png');
+  position : absolute;
+  margin-top : -32px;
+  margin-left : -6px;
+}
+
+#blanka-list
+{   
+  clear : right;
+  margin-top : 2em;
+  margin-right : 0.5em;
+  padding : 0.5em;
+  border : solid green 2px;
+  float : right;
+  width : 100%;
+ 
+  border : solid green 2px;
+  border-radius : 0.5em;
+  box-shadow: 2px 2px 2px #555555;
+  background: linear-gradient(#003300, 50%, #001100 50%);
+  background-size: 100% 4px;
+  background-repeat: repeat-y;
+
+  .article-list-header 
+  {
+    font-family : "greenberet";
+    font-size : 2.5em;
+    text-align : center; 
+    text-shadow: 1px 1px 1px #00CC00;
+    color : #00FF00;
+    margin-bottom : 1em;
+  }
+  
+  .article-list-entry
+  {
+   	font-size :1em;
+    border-top : solid #00CC00 1px;
+    margin-bottom : 0.5em;
+    padding-top : 0.5em;
+    font-family : "volter";
+    
+    .article-list-entry-date 
+    { 
+	    font-family : "Oswald"; 
+	    display: block; 
+	    font-size : 0.8em; 
+	    color : #00FF00 
+    }
+    
+    A { 	
+    	display:inline; 
+    	padding : 0.2em;
+    	-moz-transition: all .2s ease-in;
+    	-o-transition: all .2s ease-in;
+    	-webkit-transition: all .2s ease-in;
+    	transition: all .2s ease-in;
+      }
+    
+    A, A:visited 
+    {
+      color :  #00EE00;
+    }
+    
+    A:hover 
+    {
+      color : #FFFF00;
+      background-color : #000080;
+      border-radius : 0.5em;
+      
+    }
+    A:hover:after
+    {
+      margin-left : 0.2em;
+      content : '\2588';
+    }
+  }
+  
+  .article-list-entry:last-child
+  {
+     margin-bottom : 0.5em;
+  }
+}

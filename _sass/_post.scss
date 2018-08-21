@@ -1,0 +1,128 @@
+.post {
+    .date {
+        font-style: italic;
+        text-align: left;
+        color: $gray;
+        @include mobile {
+            text-align: center;
+        }
+    }
+    .logo-in-page {
+        float: left;
+        display: block;
+        margin-left: auto;
+        margin-right: 1em;
+        margin-top: 1em;
+        @include mobile {
+            float: none;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+    margin-top: 1em;
+    ul,
+    ol {
+        margin-left: 1em;
+    }
+    .accroche {
+        color: $darkGray;
+        text-align: left;
+        font-size: 1.5em;
+        @include mobile {
+            text-align: center;
+        }
+    }
+    blockquote {
+        margin: 1.8em .8em;
+        border-left: 2px solid $gray;
+        padding: 0.1em 1em;
+        color: $gray;
+        font-size: 15px;
+        font-style: italic;
+    }
+    h1 {
+        padding-top: 0.5em;
+        margin-left: 1em;
+        text-shadow: 1px 1px 2px #999999;
+        @include mobile {
+            text-align: center;
+        }
+    }
+    h2 {
+        border-bottom: solid #DDDDDD 2px;
+        font-family: "Russo One";
+    }
+    h2::before {
+        // color : #33FF33;
+        // padding-left : 0.5em;
+        font-size: 1.5em;
+        content: " > ";
+        @include mobile {
+            content: '';
+        }
+    }
+}
+
+.post>.entry>.intro {
+    margin: 1em;
+    font-size: 1.2em;
+    font-family: "Monda";
+    color: $darkGray;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 0.5em;
+    padding: 0.5em;
+    margin-right: 1em;
+    box-shadow: 0px 2px 5px #DDDDDD;
+}
+
+.entry>TABLE {
+    margin: 2em;
+    TD {
+        border: solid #DDDDDD 1px;
+        padding: 0.5em;
+    }
+    TH {
+        border: solid #DDDDDD 1px;
+        background-color: #444444;
+        color: white;
+    }
+}
+
+.entry {
+    h2 {
+        font-family: "amiga";
+        margin-top: 1em;
+        padding: 0.75em;
+        color: #FFFFFF;
+        background: linear-gradient(#000066, 50%, #0000bb 50%);
+        background-size: 100% 4px;
+        background-repeat: repeat-y;
+        border-radius: 0.25em;
+        font-size: 1.25em;
+        box-shadow: 2px 2px 2px #555555;
+    }
+    h2:before {
+        margin-right: 0.25em;
+        content: '>';
+        font-size: 1em;
+    }
+    h2:after {
+        margin-left: 0.25em;
+        content: '_';
+    }
+    h3 {
+        margin-top: 1em;
+        font-size: 1.5em;
+    }
+    h3:before {
+        margin: 0.25em;
+        content: url('/images/bullet-amiga.png');
+    }
+    P>IMG {
+        margin: 1em;
+    }
+    UL>LI {
+        margin-left: 1.5em;
+    }
+}

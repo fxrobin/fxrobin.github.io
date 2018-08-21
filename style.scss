@@ -1,214 +1,14 @@
----
+--- 
 ---
 
-//
 // IMPORTS
 //
-
-@import "https://fonts.googleapis.com/css?family=Share+Tech+Mono";
-@import "https://fonts.googleapis.com/css?family=Open+Sans";
-@import "https://fonts.googleapis.com/css?family=Oswald";
-@import "https://fonts.googleapis.com/css?family=Press+Start+2P";
-@import "https://fonts.googleapis.com/css?family=Monda";
-@import "https://fonts.googleapis.com/css?family=Russo+One";
-
-
+@import "fonts";
 @import "reset";
 @import "variables";
 @import "back-to-top";
-
-@font-face {
-    font-family: 'volter';
-    src: url('/fonts/volter.eot');
-    src: url('/fonts/volter.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/volter.woff2') format('woff2'),
-         url('/fonts/volter.woff') format('woff'),
-         url('/fonts/volter.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'amstrad';
-    src: url('/fonts/amstrad-cpc-extended.eot');
-    src: url('/fonts/amstrad-cpc-extended.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/amstrad-cpc-extended.woff2') format('woff2'),
-         url('/fonts/amstrad-cpc-extended.woff') format('woff'),
-	       url('/fonts/amstrad.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'atari';
-    src: url('/fonts/atari-st.eot');
-    src: url('/fonts/atari-st.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/atari-st.woff2') format('woff2'),
-         url('/fonts/atari-st.woff') format('woff'),
-		     url('/fonts/atari-st.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face 
-{
-	font-family: "amiga";
-    src: url('/fonts/amiga.woff2') format('woff2'),
-         url('/fonts/amiga.woff') format('woff'),
-         url('/fonts/amiga.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;        
-}
-
-@font-face 
-{
-	font-family: "greenberet";
-    src: url('/fonts/computer_pixel-7-webfont.woff2') format('woff2'),
-         url('/fonts/computer_pixel-7-webfont.woff') format('woff'),
-         url('/fonts/computer_pixel-7-webfont.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;        
-}
-
-
-@mixin crt($color1, $color2)
-{
-  background: linear-gradient($color1, 50%,$color2 50%);
-  background-size: 100% 4px;
-  background-repeat: repeat-y ;
-}
-
-// Syntax highlighting @import is at the bottom of this file
-
-/**************/
-/* BASE RULES */
-/**************/
-
-html {
-  font-size: 100%;
-}
-
-body {
-  background: url('/images/3132.jpg') no-repeat center center fixed;
-  background-size : cover;
-  font: 1em $helvetica;
-  color: $darkGray;
-  cursor: url("/images/mouse-pointer-atari.png"), auto;
-  
-  @include mobile {
-    font-size: 0.8em;
-    line-height: 1.4;
-  }
-}
-
-.container {
-  margin: 0 auto;
-  max-width: 1366px;
-  padding: 0 10px;
-  width: 100%;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Oswald", $helveticaNeue;
-  color: $darkerGray;
-  // margin: 0.5em 0 0.5px;
-  padding: 0;
-  
-
-  @include mobile {
-    line-height: 1.4;
-    font-family: "Oswald"
-  }
-}
-
-h1 {
-  font-family: "Russo One", $helveticaNeue;
-  font-size: 2em;
-  a {
-    color: inherit;
-  }
-}
-
-h2 {
-  font-size: 1.5em;;
-}
-
-h3 {
-  font-size: 1.25em;
-}
-
-h4 {
-  font-size: 1.10em;
-  color: $gray;
-}
-
-p {
-  margin: 1em 1em;
-  text-align : justify;
-  
-}
-
-a {
-  color: $blue;
-  text-decoration: none;
-	cursor: pointer;
-  &:hover, &:active {
-    color: $blue;
-  }
-}
-
-ul, ol {
-  margin: 15px 0;
-  padding-left: 30px;
-}
-
-ul {
-  list-style-type: disc;
-}
-
-ol {
-  list-style-type: decimal;
-}
-
-ol ul, ul ol, ul ul, ol ol {
-  margin: 0;
-}
-
-ul ul, ol ul {
-  list-style-type: circle;
-}
-
-em, i {
-  font-style: italic;
-}
-
-strong, b {
-  font-weight: bold;
-}
-
-img {
-  max-width: 100%;
-}
-
-// Fixes images in popup boxes from Google Translate
-.gmnoprint img {
-  max-width: none;
-}
-
-
-
-
-
-// Specify the color of the selection
-::-moz-selection {
-  color: $black;
-  background: $lightGray;
-}
-::selection {
-  color: $black;
-  background: $lightGray;
-}
-
+@import "base-rules";
+@import "mixins";
 // Nicolas Gallagher's micro clearfix hack
 // http://nicolasgallagher.com/micro-clearfix-hack/
 .clearfix:before,
@@ -225,835 +25,141 @@ img {
 /* LAYOUT / SECTIONS */
 /*********************/
 
+.container {
+    margin: 0 auto;
+    max-width: 1366px;
+    padding: 0 10px;
+    width: 100%;
+}
+
 //
 // .masthead
 //
-
 .wrapper-masthead {
-  background-image : url('/images/scanline.jpg');
-  background-size : cover ;
-  margin : 0px 0px 0px 0px;
-  padding-bottom :10px;
-  width : 100%;
-  box-shadow: 0px 5px 5px black;
-  
-   @include mobile {
-     padding-bottom : 5px;
-  }
+    background-image: url('/images/scanline.jpg');
+    background-size: cover;
+    margin: 0px 0px 0px 0px;
+    padding-bottom: 10px;
+    width: 100%;
+    box-shadow: 0px 5px 5px black;
+    @include mobile {
+        padding-bottom: 5px;
+    }
 }
 
 .masthead {
-  
-  @include mobile {
-    text-align: center;
-  }
-  
+    @include mobile {
+        text-align: center;
+    }
 }
 
-
-
 .site-avatar {
-  float: left;
-  width: 70px;
-  height: 70px;
-  margin : 5px;
-  
-
-  @include mobile {
-    float: none;
-    width: 50px;
-    height: 50px;
-    display: block;
-    padding-top:0.5em;
-    margin: 0 auto;
-    margin-bottom : 0.5em;
-  }
+    float: left;
+    width: 70px;
+    height: 70px;
+    margin: 5px;
+    @include mobile {
+        float: none;
+        width: 50px;
+        height: 50px;
+        display: block;
+        padding-top: 0.5em;
+        margin: 0 auto;
+        margin-bottom: 0.5em;
+    }
 }
 
 .site-info {
-
-  @include mobile {
-    float: none;
-    display: block;
-    margin: 0 auto;
-  }
+    @include mobile {
+        float: none;
+        display: block;
+        margin: 0 auto;
+    }
 }
 
 .site-name {
-  margin-top : 10px;
-  margin-bottom : 0.5em;
-  color: #00FF00;
-  cursor: pointer;
-  font-family: "amiga", "Press Start 2P", $helveticaNeue;
-  font-size: 2em;
-  letter-spacing: 1px;
-   
-   @include mobile {
-      margin-top : 0px;
-      font-size: 1.5em;
-      text-align: center;
-  }
- 
+    margin-top: 10px;
+    margin-bottom: 0.5em;
+    color: #00FF00;
+    cursor: pointer;
+    font-family: "amiga", "Press Start 2P", $helveticaNeue;
+    font-size: 2em;
+    letter-spacing: 1px;
+    @include mobile {
+        margin-top: 0px;
+        font-size: 1.5em;
+        text-align: center;
+    }
 }
 
 .site-description {
-  margin: -15px 0 0 0;
-  color: $white;
-  font-size: 1.5em;
-  font-family : 'atari';
-
-  @include mobile {
-    font-size: 1em;
-    margin: 3px 3px;
-    text-align: center;
-  }
+    margin: -15px 0 0 0;
+    color: $white;
+    font-size: 1.5em;
+    font-family: 'atari';
+    @include mobile {
+        font-size: 1em;
+        margin: 3px 3px;
+        text-align: center;
+    }
 }
 
 @import "nav";
+#left {
+    margin-right: 450px;
+    @include mobile {
+        margin-right: inherit
+    }
+}
+
+#right {
+    @include mobile {
+        display: none;
+    }
+    float: right;
+    width: 450px;
+    .social-icons-right {
+        clear: right;
+        padding-top: 2em;
+        text-align: center;
+        width: 100%
+    }
+}
+
+.wrapper-footer {
+    margin-top: 50px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: $lightGray;
+    footer {
+        padding: 20px 0;
+        text-align: center;
+    }
+    .legal {
+        margin-top: 1em;
+        display: block;
+        clear: both;
+        font-family: 'volter';
+        font-size: 9px;
+    }
+}
 
 //
 // .main
 //
-
-
-
-.read-more  {
-    font-size: 1em;
-    text-align : left;
-    color: $blue;
-    margin : 1em;
-    
-    A, A:visited { 
-    
-    color : white;
-    background-color : $blue;
-    padding : 0.5em; 
-    border-radius : 1em;
-    
-    	-moz-transition: all .2s ease-in;
-    	-o-transition: all .2s ease-in;
-    	-webkit-transition: all .2s ease-in;
-    	transition: all .2s ease-in;
-    
-    }
-    
-     A:hover 
-    {
-      color : #FFFF00;
-      background-color : #000080;
-      border-radius : 0.5em;
-      font-size : 16px;
-      font-family : "amiga";  
-    }
-    
-    A:hover:after
-    {
-      content : '\2589';
-      font-size : 16px;
-    }
-    
-}
-
-#left
-{
-  margin-right : 450px;
-  @include mobile { margin-right : inherit }
-}
-
-#article-list:before
-{
-  content:url('/images/croco-amstrad.gif');
-  position : absolute;
-  margin-top : -32px;
-  margin-left : -32px;
-}
-
-#right
-{
-  @include mobile { display : none; }
-  float : right;
-   width : 450px;
-}
-
-
-#article-list
-{   
-  clear : right;
-  margin-top : 0.5em;
-  margin-right : 0.5em;
-  padding : 0.5em;
-
-  float : right;
-  width : 100%;
-
-  border : solid darkblue 2px;
-  border-radius : 0.5em;
-  box-shadow: 2px 2px 2px #555555;
-
-
-  @include crt(#F2F2FF, #EEEEFA); 
-  
-  .article-list-header 
-  {
-    font-family : "atari";
-    text-align : center; 
-    text-shadow: 1px 1px 1px #DDDDDD;
-    color : #3333AA;
-    margin-bottom : 1em;
-    font-size : 1.4em;
-  }
-  
-  .article-list-entry
-  {
-   	font-size :1em;
-    border-top : solid #9999AA 1px;
-    margin-bottom : 0.5em;
-    padding-top : 0.5em;
-    
-    .article-list-entry-date 
-    { 
-	    font-family : "Oswald"; 
-	    display: block; 
-	    font-size : 0.8em; 
-	    color : #AAAAAA; 
-    }
-    
-    A { 	
-       
-    	font-size :1.1em; 
-    	display:inline; 
-    	padding : 0.2em;
-    	-moz-transition: all .2s ease-in;
-    	-o-transition: all .2s ease-in;
-    	-webkit-transition: all .2s ease-in;
-    	transition: all .2s ease-in;
-      }
-    
-    A, A:visited 
-    {
-      color :  #2222BB;
-    }
-    
-    A:hover 
-    {
-      color : #FFFF00;
-      background-color : #000080;
-      border-radius : 0.5em;
-      
-    }
-    A:hover:after
-    {
-      margin-left : 0.2em;
-      content : '\2588';
-    }
-    
-
-    
-  }
-  
-  .article-list-entry:last-child
-  {
-     margin-bottom : 0.5em;
-  }
-  
- 
-
-}
-
-
-.blanka-item:before
-{
-  content:url('/images/blanka-item.png') !important;
-  position : absolute;
-  margin-top : -32px;
-  margin-left : -50px;
-}
-
-.blanka-item
-{
-  padding-left : 64px !important;
-  background: linear-gradient(#003300, 50%, #001100 50%)  !important;
-  background-size: 100% 4px  !important;
-  background-repeat: repeat-y  !important;
-  color :#00FF00 !important;
-}
-
-#blanka-list:before
-{
-  content:url('/images/blanka-face.png');
-  position : absolute;
-  margin-top : -32px;
-  margin-left : -6px;
-}
-
-#blanka-list
-{   
-  clear : right;
-  margin-top : 2em;
-  margin-right : 0.5em;
-  padding : 0.5em;
-  border : solid green 2px;
-  float : right;
-  width : 100%;
- 
-  border : solid green 2px;
-  border-radius : 0.5em;
-  box-shadow: 2px 2px 2px #555555;
-  background: linear-gradient(#003300, 50%, #001100 50%);
-  background-size: 100% 4px;
-  background-repeat: repeat-y;
-
-  .article-list-header 
-  {
-    font-family : "greenberet";
-    font-size : 2.5em;
-    text-align : center; 
-    text-shadow: 1px 1px 1px #00CC00;
-    color : #00FF00;
-    margin-bottom : 1em;
-  }
-  
-  .article-list-entry
-  {
-   	font-size :1em;
-    border-top : solid #00CC00 1px;
-    margin-bottom : 0.5em;
-    padding-top : 0.5em;
-    font-family : "volter";
-    
-    .article-list-entry-date 
-    { 
-	    font-family : "Oswald"; 
-	    display: block; 
-	    font-size : 0.8em; 
-	    color : #00FF00 
-    }
-    
-    A { 	
-    	display:inline; 
-    	padding : 0.2em;
-    	-moz-transition: all .2s ease-in;
-    	-o-transition: all .2s ease-in;
-    	-webkit-transition: all .2s ease-in;
-    	transition: all .2s ease-in;
-      }
-    
-    A, A:visited 
-    {
-      color :  #00EE00;
-    }
-    
-    A:hover 
-    {
-      color : #FFFF00;
-      background-color : #000080;
-      border-radius : 0.5em;
-      
-    }
-    A:hover:after
-    {
-      margin-left : 0.2em;
-      content : '\2588';
-    }
-    
-
-    
-  }
-  
-  .article-list-entry:last-child
-  {
-     margin-bottom : 0.5em;
-  }
-  
- 
-
-}
-
-#stackoverflow:before
-{
-  content:url('/images/stack-overflow.png');
-  position : absolute;
-  margin-top : -36px;
-}
-
-#stackoverflow
-{
-  clear : right;
-  margin-top : 2em;
-  margin-right : 0.5em;
-  padding : 0.5em;
-  float : right;
-  width : 100%;
-
-  color : orange;
-  .subtitle { text-align : center ; font-size : 1em; padding : 0.2em; background-color : orange; color : black; font-family : 'volter'}
-  .title { text-align : center ; font-size : 2em;}
-
- 
-
-  ul {
-    list-style-type: square;
-    padding-left : 1em;
-  }
-
-  border : solid orange 2px;
-  border-radius : 0.5em;
-  box-shadow: 2px 2px 2px #555555;
-  background: linear-gradient(#003300, 50%, #001100 50%);
-  background-size: 100% 4px;
-  background-repeat: repeat-y;
-
-  a, a:hover { color : orange}
-}
-
-#search:before
-{
-  content:url('/images/floppy.png');
-  position : absolute;
-  margin-top : -30px;
-}
-
-#search
-{
-  clear : right;
-  margin-top : 2em;
-  margin-right : 0.5em;
-  margin-bottom : 1em;
-  padding : 0.5em;
-  float : right;
-  width : 100%;
-
-  color : orange;
-
-  .title { font-family : 'volter'; text-align : center ; font-size : 1em; margin-bottom : 1em;}
-
-  border : solid orange 2px;
-  border-radius : 0.5em;
-  box-shadow: 2px 2px 2px #555555;
-  background: linear-gradient(#003300, 50%, #001100 50%);
-  background-size: 100% 4px;
-  background-repeat: repeat-y;
-
-  a, a:hover { color : orange}
-}
-
-.social-icons-right
-{
-  clear : right;
-  padding-top : 2em;
-  text-align : center;
-  width : 100%
-}
-
-.front-date 
-{
-  font-style: italic;
-  text-align: left;
-  color: $gray; 
-   @include mobile
-  {
- 	 margin-top : 1em;
-  }
-}
-
-.front-post .entry A
-{
-  color : $darkGray;
-}
-
-.front-post P
-{
-  font-size : 1.1em;
-  
-   @include mobile {
-    font-size : 1em;
-   }
-}
-
-.front-post 
-{
-  border-bottom : solid #DDDDDD 2px;
-  margin : 2em;
-  
-  @include mobile
-  {
-    margin : 0.5em;
-  }
-  
-  padding-bottom : 2em;
-}
-
-.front-post H1
-{
-  @include mobile
-  {
- 	 font-size:1.5em;
- 	 text-shadow: none;
- 	 text-align : center;
-  }
-}
-
-.front-post H2
-{
-  font-family : "Oswald";
-  A { color : black; }
-   @include mobile
-  {
- 	 text-align : center;
-  }
-}
-
-.front-post:last-child {
-  border-bottom: none;
-}
-
-.post {
-
-  .date {
-	  font-style: italic;
-	  text-align: left;
-	  color: $gray; 
-	  @include mobile
-		 {
-		  text-align : center;
-		 }
-	}
-
-  .logo-in-page
-	{
-	 	float : left;
-		display: block;
-	    margin-left: auto;
-	    margin-right: 1em;
-	    margin-top : 1em;
-	    
-	     @include mobile
-		 {
-		 	 float : none;
-			display: block;
-	   	 	margin-left: auto;
-	   		 margin-right: auto;
-		 }    
-	}
-  
-
-  margin-top : 1em;
-
-  ul, ol { margin-left : 1em; }
-
-  .accroche 
-  { 
-     color : $darkGray ; 
-     text-align : left; 
-     font-size : 1.5em; 
-     
-     	@include mobile
-		 {
-		 	text-align : center;
-		 }
-     
-  }
-  
-  blockquote {
-    margin: 1.8em .8em;
-    border-left: 2px solid $gray;
-    padding: 0.1em 1em;
-    color: $gray;
-    font-size: 15px;
-    font-style: italic;
-  }
-  
-  h1
-  {
-    padding-top : 0.5em;
-    margin-left : 1em;
-  	text-shadow: 1px 1px 2px #999999;  	
-  	
-  	@include mobile
-		 {
-		 	text-align : center;
-		 }
-  	
-  }
- 
-  h2 
-  { 
-  	border-bottom : solid #DDDDDD 2px; 
-  	font-family : "Russo One";
-  }
-  
-  
-    
-  h2::before {
-    // color : #33FF33;
-    // padding-left : 0.5em;
-    font-size : 1.5em;
-    content: " > ";
-    @include mobile {
-      content: '';
-    }
-  }
-
-}
-
-.comments {
-    margin-top: 1em;
-    margin-left : 1em;
-  }
-
-.post > .entry > .intro
-{
-  margin : 1em;
-  font-size : 1.2em;
-  font-family : "Monda";
-  color : $darkGray;
-  background-color : rgba(0, 0, 0, 0.1) ;
-  border-radius : 0.5em;
-  padding : 0.5em;
-  margin-right : 1em;
-  box-shadow: 0px 2px 5px #DDDDDD;
-}
-
-
-
-.entry > P > IMG
-{
-  margin : 1em;
-}
-
-.entry > UL > LI
-{
-  margin-left : 1.5em;
-}
-
-.wrapper-footer {
-  margin-top: 50px;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  background-color: $lightGray;
-}
-
-footer {
-  padding: 20px 0;
-  text-align: center;
-}
-
-aside
-{
-  border : solid #3333AA 2px;
-  border-radius : 1em;
-  float : right;
-  margin-top : 1em;
-  margin-left : 1em;
-  margin-bottom : 1em;
-  box-shadow: 2px 2px 2px #555555;
-  background-color : #F2F2FF;
-  
-  h3 { font-family : "Russo One"; text-align : center; text-shadow: 1px 1px 1px #555555;}
-  
-  ul
-  {
-   list-style-type: square
-  }
-  
-  li {
-    padding-right : 1em; 
-    color : darkblue;
-  }
-  
-   @include mobile {
-      float : none;
-      margin-left : 0em;
-      margin-bottom : 0.5em;
-   }
-  
-}
-
-aside A, aside A:visited, aside A:hover 
-{
-  color : darkblue;
-}
-
-.logo
-{
- float  : right;
- margin-left : 1em;
- margin-top : 0em;
-	 @include mobile {
-	    // width : 25%;
-	    float : none;
-	    margin : auto;
-	    text-align : center;
-	    display :block;
-
-  }
-}
-
-
-
-.share-page
-{
-   box-shadow: 5px 5px 5px black;
-   text-align : center;
-   text-shadow: 1px 1px 1px #555555;
-   margin : 1em;
-   padding : 0.5em;
-   border-radius : 1em;
-   background-color : #000066;
-   color : yellow ;
-}
-
- .share-page  a, .share-page a:visited, .share-page a:hover 
-   { 
-   color: white !important; 
-   text-shadow: 1px 1px 1px white !important;
-   }
- 
- .share-page a:before
- {
-   content : '>';
-   color : yellow;
- }  
- 
-  .video
- {
- 	margin-left : 2em;
-    width : 800px;
-    height : 450px;
-    border : solid black 3px;
-    border-radius : 0.5em;
-    box-shadow: 2px 2px 2px #555555;
-    
-     @include mobile {
-        margin-left : 2em;
-	    width : 320px;
-	    height : 180px;	   
-  }
-    
- }
- 
- .mini
- {
-   width : 320px;
-   height : 180px;
- }
- 
- .normal
- {
-   width : 640px;
-   height : 360px;
-   
-     @include mobile {
-        margin-left : 2em;
-	    width : 320px;
-	    height : 180px;	   
-  }
- }
- 
- 
- .legal
- { 
-    margin-top : 1em;
- 	display : block;
- 	clear : both;
- 	font-family : 'volter';
- 	font-size : 9px;
- }
- 
- .entry > TABLE
- {
- 	margin : 2em;
- 	TD { border : solid #DDDDDD 1px; padding : 0.5em; }
- 	TH { border : solid #DDDDDD 1px; background-color : #444444; color : white; }
- }
- 
- .entry
- {
-    h2
-    {
-      font-family : "amiga";
-      margin-top : 1em;
-      padding : 0.75em;
-      color : #FFFFFF;
-      background: linear-gradient(#000066, 50%, #0000bb 50%);
-      background-size: 100% 4px;
-      background-repeat: repeat-y;
-      border-radius : 0.25em; 
-      font-size : 1.25em;
-      box-shadow: 2px 2px 2px #555555;
-      
-    } 
-    
-    h2:before
-    {
-        margin-right : 0.25em;
-        content : '>';
-        font-size : 1em;
-    }
-    
-
-
-    h2:after
-    {
-        margin-left : 0.25em;
-      	content : '_';
-    }
-
-    h3 
-    {
-      margin-top : 1em;
-      font-size : 1.5em;
-    }
-    
-    h3:before
-    {
-      margin : 0.25em;
-      content : url('/images/bullet-amiga.png') ;
-    }
-  
- }
- 
- .disqus
- {
-   
- h2 
-  { 
-  	border-bottom : solid #DDDDDD 2px; 
-  	font-family : "Russo One";
-  }
-  
-  
-    
-  h2::before {
-    // color : #33FF33;
-    // padding-left : 0.5em;
-    font-size : 1.5em;
-    content: " > ";
-    @include mobile {
-      content: '';
-    }
-  }
- 
- }
- 
- .article-list-footer
- {
-    margin-top: 1em;
-    
-    .article-list-header
-    {
-    	color : #000066;
-  		border-bottom : solid #DDDDDD 2px; 
-  		font-family : "Russo One";
-  		font-size : 1.5em;
-  	}
-  	
-  	.article-list-entry
-  	{
-  	  margin-left : 1em;
-  	}
- 
- }
+@import "article-list";
+@import "blanka";
+@import "stackoverflow";
+@import "search";
+@import "front-post";
+@import "post";
+@import "table-of-content";
+@import "share";
+@import "video";
+@import "disqus";
+@import "languages";
+@import "article-list-post-footer";
+@import "gurumeditation";
 
 // Settled on moving the import of syntax highlighting to the bottom of the CSS
 // ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start

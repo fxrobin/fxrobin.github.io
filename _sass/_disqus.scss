@@ -1,0 +1,20 @@
+.disqus {
+    h2 {
+        border-bottom: solid #DDDDDD 2px;
+        font-family: "Russo One";
+    }
+    h2::before {
+        // color : #33FF33;
+        // padding-left : 0.5em;
+        font-size: 1.5em;
+        content: " > ";
+        @include mobile {
+            content: '';
+        }
+    }
+
+    .comments {
+        margin-top: 1em;
+        margin-left: 1em;
+    }
+}

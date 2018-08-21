@@ -1,0 +1,40 @@
+{% raw  %}
+<div id="stackoverflow">
+    <div class="title">StackOverflow</div>
+    <div class="subtitle">Mes réponses à ces sujets</div>
+    <ul>
+            <li v-for="q in questions">
+                <a v-bind:href="q.link" target="_blank" v-html="q.title"></a>
+            </li>
+    </ul>
+</div>
+{% endraw  %}
+
+<script>
+new Vue({
+    el: '#stackoverflow',
+    data: {
+            questions: 'Loading...'
+    },
+    created() {
+            const BASE_URI = "https://api.stackexchange.com";
+            console.log('start');
+            axios.get(BASE_URI + '/2.2/users/3017541/answers?order=desc&sort=activity&site=stackoverflow')
+            .then(response => {
+                    var answers = response.data.items;
+                    var answer_ids = answers.map(e => e.question_id).join(';');
+                    var newRequest = BASE_URI + '/2.2/questions/' + answer_ids + '?order=desc&sort=activity&site=stackoverflow';
+                    axios.get(newRequest)
+                    .then(response => {
+                        this.questions = response.data.items;
+                    })
+                    .catch(error => {
+                        this.questions = 'There was an error: ' + error.message
+                    })
+            })
+            .catch(error => {
+                this.questions = 'There was an error: ' + error.message
+            })
+    }
+})
+</script>

@@ -1,0 +1,22 @@
+.share-page {
+    box-shadow: 5px 5px 5px black;
+    text-align: center;
+    text-shadow: 1px 1px 1px #555555;
+    margin: 1em;
+    padding: 0.5em;
+    border-radius: 1em;
+    background-color: #000066;
+    color: yellow;
+}
+
+.share-page a,
+.share-page a:visited,
+.share-page a:hover {
+    color: white !important;
+    text-shadow: 1px 1px 1px white !important;
+}
+
+.share-page a:before {
+    content: '>';
+    color: yellow;
+}

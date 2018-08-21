@@ -1,38 +1,21 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ page.lang }}">
   <head>
     {% include meta.html %}
     <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }}</title>
-
     <!--[if lt IE 9]>
       <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-	<link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-icon-57x57.png" />
-	<link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-icon-60x60.png" />
-	<link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-icon-72x72.png" />
-	<link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-icon-76x76.png" />
-	<link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-icon-114x114.png" />
-	<link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-icon-120x120.png" />
-	<link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-icon-144x144.png" />
-	<link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-icon-152x152.png" />
-	<link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-icon-180x180.png" />
-	<link rel="icon" type="image/png" sizes="192x192"  href="/images/favicons/android-icon-192x192.png" />
-	<link rel="icon" type="image/png" sizes="32x32" href="/images/favicons/favicon-32x32.png" />
-	<link rel="icon" type="image/png" sizes="96x96" href="/images/favicons/favicon-96x96.png" />
-	<link rel="icon" type="image/png" sizes="16x16" href="/images/favicons/favicon-16x16.png" />
-	<link rel="manifest" href="/manifest.json" />
-	<meta name="msapplication-TileColor" content="#ffffff" />
-	<meta name="msapplication-TileImage" content="/images/favicons/ms-icon-144x144.png" />
-  <meta name="theme-color" content="#ffffff" />
-  <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
-  <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/blink.css" />
-  <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/hover/hover.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/TypewriterJS/1.0.0/typewriter.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
+    {% include favicon.html %}
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/blink.css" />
+    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/hover/hover.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/TypewriterJS/1.0.0/typewriter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
   </head>
 
   <body>
@@ -43,14 +26,12 @@
 
           <div class="site-info">
             <h1 id="site-name" class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }} </a></h1>
-            <p class="site-description">{{ site.description }}</p>
+            <p class="site-description">{{ site.t[page.lang].description }}</p>
           </div>
-
           <nav>
-            <a href="{{ site.baseurl }}/" class="hvr-bob">Articles</a>
-            <a href="{{ site.baseurl }}/blanka-cave" class="hvr-bob">Grotte de Blanka</a>
-            <a href="{{ site.baseurl }}/astuces" class="hvr-bob">Astuces</a>
-            <a href="{{ site.baseurl }}/about" class="hvr-bob">A propos</a>
+              {% for menu in site.t[page.lang].menu %}       
+                <a href="{{ menu[1].url }}" class="hvr-bob">{{ menu[1].text }}</a></li>
+              {% endfor %}
           </nav>
         </header>
       </div>
@@ -78,43 +59,61 @@
     <script src="/js/main.js"></script>
 
     <script>
+     <!-- numerotation des portions de code -->
     (function() {
-  var pre = document.getElementsByTagName('pre'),
-    pl = pre.length;
-  for (var i = 0; i < pl; i++) {
-    pre[i].innerHTML = '<span class="line-number"></span>' + pre[i].innerHTML + '<span class="cl"></span>';
-    var num = pre[i].innerHTML.split(/\n/).length;
-    for (var j = 0; j < (num - 1); j++) {
-      var line_num = pre[i].getElementsByTagName('span')[0];
-      line_num.innerHTML += '<span>' + (j + 1) + '</span>';
-    }
-  }
-})();
+        var pre = document.getElementsByTagName('pre'), pl = pre.length;
+        for (var i = 0; i < pl; i++) 
+        {
+          pre[i].innerHTML = '<span class="line-number"></span>' + pre[i].innerHTML + '<span class="cl"></span>';
+          var num = pre[i].innerHTML.split(/\n/).length;
+          for (var j = 0; j < (num - 1); j++) 
+          {
+            var line_num = pre[i].getElementsByTagName('span')[0];
+            line_num.innerHTML += '<span>' + (j + 1) + '</span>';
+          }
+        }
+      })();
     </script>
 
     {% include analytics.html %}
 
     <script>
-    var app = document.getElementById('site-name');
+      var app = document.getElementById('site-name');
 
-    var typewriter = new Typewriter(app, {
-        loop: true,
-        cursor: '_'
-    });
+      var typewriter = new Typewriter(app, {
+          loop: true,
+          cursor: '_'
+      });
 
-    typewriter.typeString('FX JavaDevBlog >')
-        .pauseFor(2500)
-        .typeString('réflexions sur Java')
-        .pauseFor(2500)
-        .typeString(" SE")
-        .pauseFor(2500)
-        .deleteChars(2)
-        .typeString(" EE")
-        .pauseFor(2500)
-        .deleteChars(8)
-        .typeString("l'archi. SI")
-        .pauseFor(2500)
-        .start();
+      {% if page.lang == "fr" %}
+        typewriter.typeString('FX JavaDevBlog >')
+            .pauseFor(2500)
+           .typeString('réflexions sur Java')
+            .pauseFor(2500)
+            .typeString(" SE")
+            .pauseFor(2500)
+            .deleteChars(2)
+            .typeString(" EE")
+            .pauseFor(2500)
+            .deleteChars(8)
+            .typeString("l'archi. SI")
+            .pauseFor(2500)
+            .start();
+      {% else %}
+        typewriter.typeString('FX JavaDevBlog >')
+            .pauseFor(2500)
+           .typeString('thoughts about Java')
+            .pauseFor(2500)
+            .typeString(" SE")
+            .pauseFor(2500)
+            .deleteChars(2)
+            .typeString(" EE")
+            .pauseFor(2500)
+            .deleteChars(8)
+            .typeString("IT Architecture")
+            .pauseFor(2500)
+            .start();
+      {% endif %}
     </script>  
   </body>
 </html>
