@@ -1,0 +1,36 @@
+// sommaire dans les articles
+
+aside
+{
+  border : solid #3333AA 2px;
+  border-radius : 1em;
+  float : right;
+  margin-top : 1em;
+  margin-left : 1em;
+  margin-bottom : 1em;
+  box-shadow: 2px 2px 2px #555555;
+  background-color : #F2F2FF;
+  
+  h3 { font-family : "Russo One"; text-align : center; text-shadow: 1px 1px 1px #555555;}
+  
+  ul
+  {
+   list-style-type: square
+  }
+  
+  li {
+    padding-right : 1em; 
+    color : darkblue;
+  }
+  
+   @include mobile {
+      float : none;
+      margin-left : 0em;
+      margin-bottom : 0.5em;
+   }
+
+   A, A:visited, A:hover
+   {
+    color : darkblue;
+   } 
+}

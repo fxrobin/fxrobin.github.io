@@ -1,0 +1,64 @@
+// fonts from Google
+
+@import "https://fonts.googleapis.com/css?family=Share+Tech+Mono";
+@import "https://fonts.googleapis.com/css?family=Open+Sans";
+@import "https://fonts.googleapis.com/css?family=Oswald";
+@import "https://fonts.googleapis.com/css?family=Press+Start+2P";
+@import "https://fonts.googleapis.com/css?family=Monda";
+@import "https://fonts.googleapis.com/css?family=Russo+One";
+
+
+// custom fonts
+
+@font-face {
+    font-family: 'volter';
+    src: url('/fonts/volter.eot');
+    src: url('/fonts/volter.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/volter.woff2') format('woff2'),
+         url('/fonts/volter.woff') format('woff'),
+         url('/fonts/volter.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'amstrad';
+    src: url('/fonts/amstrad-cpc-extended.eot');
+    src: url('/fonts/amstrad-cpc-extended.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/amstrad-cpc-extended.woff2') format('woff2'),
+         url('/fonts/amstrad-cpc-extended.woff') format('woff'),
+	       url('/fonts/amstrad.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'atari';
+    src: url('/fonts/atari-st.eot');
+    src: url('/fonts/atari-st.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/atari-st.woff2') format('woff2'),
+         url('/fonts/atari-st.woff') format('woff'),
+		     url('/fonts/atari-st.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face 
+{
+	font-family: "amiga";
+    src: url('/fonts/amiga.woff2') format('woff2'),
+         url('/fonts/amiga.woff') format('woff'),
+         url('/fonts/amiga.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;        
+}
+
+@font-face 
+{
+	font-family: "greenberet";
+    src: url('/fonts/computer_pixel-7-webfont.woff2') format('woff2'),
+         url('/fonts/computer_pixel-7-webfont.woff') format('woff'),
+         url('/fonts/computer_pixel-7-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;        
+}

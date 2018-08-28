@@ -1,0 +1,88 @@
+#article-list:before
+{
+  content:url('/images/croco-amstrad.gif');
+  position : absolute;
+  margin-top : -32px;
+  margin-left : -32px;
+}
+
+#article-list
+{   
+  clear : right;
+  margin-top : 0.5em;
+  margin-right : 0.5em;
+  padding : 0.5em;
+
+  float : right;
+  width : 100%;
+
+  border : solid darkblue 2px;
+  border-radius : 0.5em;
+  box-shadow: 2px 2px 2px #555555;
+
+  @include crt(#F2F2FF, #EEEEFA); 
+  
+  .article-list-header 
+  {
+    font-family : "atari";
+    text-align : center; 
+    text-shadow: 1px 1px 1px #DDDDDD;
+    color : #3333AA;
+    margin-bottom : 1em;
+    font-size : 1.4em;
+  }
+  
+  .article-list-entry
+  {
+   	font-size :1em;
+    border-top : solid #9999AA 1px;
+    margin-bottom : 0.5em;
+    padding-top : 0.5em;
+    
+    .article-list-entry-date 
+    { 
+	    font-family : "Oswald"; 
+	    display: block; 
+	    font-size : 0.8em; 
+	    color : #AAAAAA; 
+    }
+    
+    .article-list-title { 	
+       
+    	font-size :1.1em; 
+    	display:inline; 
+    	padding : 0.2em;
+    	-moz-transition: all .2s ease-in;
+    	-o-transition: all .2s ease-in;
+    	-webkit-transition: all .2s ease-in;
+    	transition: all .2s ease-in;
+      }
+    
+      .article-list-title:visited 
+    {
+      color :  #2222BB;
+    }
+    
+    .article-list-title:hover 
+    {
+      color : #FFFF00;
+      background-color : #000080;
+      border-radius : 0.5em;
+      
+    }
+    .article-list-title:hover:after
+    {
+      margin-left : 0.2em;
+      content : '\2588';
+    }
+    
+
+    
+  }
+  
+  .article-list-entry:last-child
+  {
+     margin-bottom : 0.5em;
+  }
+  
+}

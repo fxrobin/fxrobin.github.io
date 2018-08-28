@@ -1,0 +1,23 @@
+@keyframes blink_guru {
+    50% {
+        border-color: #ff0000;
+    }
+}
+
+.gurumeditation {
+    /*or other element you want*/
+    animation: blink_guru .5s step-end infinite alternate;
+    font-family: "amiga";
+    margin-left: 3em;
+    margin-right: 3em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding: 1em;
+    color: red;
+    border: solid black 6px;
+    border-radius: 0.25em;
+    box-shadow: 2px 2px 2px #555555;
+    background: linear-gradient(#003300, 50%, #001100 50%);
+    background-size: 100% 4px;
+    background-repeat: repeat-y;
+}

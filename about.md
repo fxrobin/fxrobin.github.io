@@ -4,6 +4,7 @@ title: A propos de l'auteur
 subtitle: parce qu'il y a quand-même un humain qui rédige ...
 logo: xenon-reborn.png
 permalink: /about/
+lang: fr
 ---
 
 <div class="intro" markdown='1'>
@@ -16,7 +17,7 @@ Voici un bref résumé chronologique de mon petit parcours de développeur / adm
 
 <!--excerpt-->
 
-## 1984 - 1989 : Découverte pendant mon enfance
+## 1984-1989 : Découverte pendant mon enfance
 
 En 1984, à 9 ans (les plus forts d'entre vous auront ainsi découvert mon année de naissance au moyen de l'outil mathématique nommé "soustraction") j'ai découvert le développement grâce au THOMSON TO7-70 au fond de la classe de mon école primaire. C'est le déclic grâce au LOGO, au BASIC 1.0, le crayon optique, les cartouches ! Je demande même à l'institutrice de passer quelques récréations sur le TO7 plutôt que d'aller jouer aux billes dans la cours d'école.
 
@@ -82,7 +83,7 @@ Je m'occupe aussi du club informatique de mon collège : le professeur d'EMT me 
 
 C'est l'époque où on "déplombait" les logiciels protégés avec un `POKE 8699,57`. On ne savait pas trop ce que ça faisait, mais ça le faisait ... (ndlr:  désactiver la protection anti-copie, c'est mal ...)
 
-## 1989 - 1993 : Un peu d'acné, mais beaucoup plus de RAM
+## 1989-1993 : Un peu d'acné, mais beaucoup plus de RAM
 
 A 14 ans, je bascule dans le monde du 68000, avec un ATARI 1040 STE ! 1 Mo de RAM, 8 Mhz. Ce n'est plus de la profusion, c'est de la décadence. Je tripote aussi l'Amiga d'un copain (Frédéric, si tu me lis, merci !) et on commence enfin à coder en C (et oui déjà), en Omikron, en GFA Basic, en STOS.
 
@@ -102,7 +103,7 @@ Le projet hébergé sur GitHub est ici : [https://github.com/fxrobin/Xenon_Rebor
 
 Un article y est consacré : [Développer en s'amusant et réciproquement : Xenon-Reborn](/Xenon-Reborn)
 
-## 1993 - 1996 : Le permis, une voiture, mais surtout un 486 DX2 66 Mhz Turbo
+## 1993-1996 : Le permis, une voiture, mais surtout un 486 DX2 66 Mhz Turbo
 
 A 18 ans, patatra ..., je bascule avec un 486 DX2 66 (avec un bouton "turbo") et me voilà dans le monde du x86, du QBASIC et de l'assembleur toujours.
 
@@ -140,46 +141,45 @@ Je fais alors du Pascal, du COBOL, du C++, de l'ADA et ... fin 1996 du **JAVA** 
 ## 1996 : Mon histoire (d'amour ?) avec Java
 
 ![I LOVE JAVA](/images/i-love-java.png)
+{: style="text-align : center"}
 
 Et voilà toutes les questions qui me sont venues en 1996 :
 
-- Quoi ? Je peux enfin avoir du code portable et ne pas avoir à le recompiler ?
-- Quoi ? Le JDK est gratuit ?
-- Quoi ? Je peux faire des interfaces graphiques portables (bon c'était AWT ... argh) ?
-- Quoi ? Je peux embarquer tout ça dans Netscape (les jeunes ne comprendront pas) ?
-- Quoi ? Quand je mets à jour mon application sur le serveur c'est téléchargé automatiquement ?
-- Quoi ? C'est multithread ?
+* Quoi ? Je peux enfin avoir du code portable et ne pas avoir à le recompiler ?
+* Quoi ? Le JDK est gratuit ?
+* Quoi ? Je peux faire des interfaces graphiques portables (bon c'était AWT ... argh) ?
+* Quoi ? Je peux embarquer tout ça dans Netscape (les jeunes ne comprendront pas) ?
+* Quoi ? Quand je mets à jour mon application sur le serveur c'est téléchargé automatiquement ?
+* Quoi ? C'est multithread ?
 
 Puis en 1999 :
 
-- Quoi ? Je peux générer des pages web côté serveur à la place de mes scripts CGI (les jeunes ne comprendront pas) avec des Servlets ?
-- Quoi ? Tomcat c'est gratuit ?
-- Quoi ? JBuilder c'est PAS gratuit ... 
-- Quoi ? Je peux me connecter à n'importe quelle base de données (ah bah oui parce que je sais aussi faire du SQL hein ...) ?
+* Quoi ? Je peux générer des pages web côté serveur à la place de mes scripts CGI (les jeunes ne comprendront pas) avec des Servlets ?
+* Quoi ? Tomcat c'est gratuit ?
+* Quoi ? JBuilder c'est PAS gratuit ... 
+* Quoi ? Je peux me connecter à n'importe quelle base de données (ah bah oui parce que je sais aussi faire du SQL hein ...) ?
 
 ## Mes principales réalisations en Java entre 1996 et 2002
 
-- Un interpréteur / compilateur de requêtes SQL
-- Un moteur de stockage SGBDR distribué 
-- Un framework de templating web fondé sur des servlets
-- Un framework de templating et de développement d'appplications fondés sur des servlets (ressemblait à JSF) en XML
-- Un extracteur et intégrateur de données avec un format XML pivot
-- Un plugin pour Apache VFS pour stocker en base de données MySQL
-- Une application pour commander l'apéro (choisir ses boissons) pour mes collègues (et moi-même) avant de se rendre au bar ...
-- Une GED avec indexation (Lucene) et gestion des versions
+* Un interpréteur / compilateur de requêtes SQL
+* Un moteur de stockage SGBDR distribué
+* Un framework de templating web fondé sur des servlets
+* Un framework de templating et de développement d'appplications fondés sur des servlets (ressemblait à JSF) en XML
+* Un extracteur et intégrateur de données avec un format XML pivot
+* Un plugin pour Apache VFS pour stocker en base de données MySQL
+* Une application pour commander l'apéro (choisir ses boissons) pour mes collègues (et moi-même) avant de se rendre au bar ...
+* Une GED avec indexation (Lucene) et gestion des versions
 
 ## To be continued
 
-Quand je ferai l'effort de tout me souvenir
+Quand je ferai l'effort de tout me souvenir ...
 
-<div style="text-align : center">
-  <a href="{{ site.baseurl }}">
-  	<img src="{{ site.baseurl }}/images/guru-meditation.gif" alt="Guru Meditation Amiga" /> <br/>
-  	<img src="{{ site.baseurl }}/images/bombs.png" alt="Bombing Crash Atari ST" />
-  </a>
-</div>
+![Guru Meditation](/images/guru-meditation.gif) 
+{: style="text-align : center"}
 
+![Atari ST Bombs](/images/bombs.png)
+{: style="text-align : center"}
 
-## Contactez moi ...
+## Contactez moi
 
 Le mieux c'est grâce à [LinkedIn](https://www.linkedin.com/in/fxrobin).

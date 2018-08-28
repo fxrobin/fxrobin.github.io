@@ -1,0 +1,28 @@
+.video {
+    margin-left: 2em;
+    width: 800px;
+    height: 450px;
+    border: solid black 3px;
+    border-radius: 0.5em;
+    box-shadow: 2px 2px 2px #555555;
+    @include mobile {
+        margin-left: 2em;
+        width: 320px;
+        height: 180px;
+    }
+}
+
+.mini {
+    width: 320px;
+    height: 180px;
+}
+
+.normal {
+    width: 640px;
+    height: 360px;
+    @include mobile {
+        margin-left: 2em;
+        width: 320px;
+        height: 180px;
+    }
+}

@@ -1,0 +1,34 @@
+#stackoverflow:before
+{
+  content:url('/images/stack-overflow.png');
+  position : absolute;
+  margin-top : -36px;
+}
+
+#stackoverflow
+{
+  clear : right;
+  margin-top : 2em;
+  margin-right : 0.5em;
+  padding : 0.5em;
+  float : right;
+  width : 100%;
+
+  color : orange;
+  .subtitle { text-align : center ; font-size : 1em; padding : 0.2em; background-color : orange; color : black; font-family : 'volter'}
+  .title { text-align : center ; font-size : 2em;}
+
+  ul {
+    list-style-type: square;
+    padding-left : 1em;
+  }
+
+  border : solid orange 2px;
+  border-radius : 0.5em;
+  box-shadow: 2px 2px 2px #555555;
+  background: linear-gradient(#003300, 50%, #001100 50%);
+  background-size: 100% 4px;
+  background-repeat: repeat-y;
+
+  a, a:hover { color : orange}
+}

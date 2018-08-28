@@ -1,6 +1,4 @@
 // prefix declarations
-
-
 @mixin prefixed($property, $value) {
   @if $webkit == true {
     -webkit-#{$property}: #{$value};
@@ -50,4 +48,12 @@
   @keyframes #{$name} {
     @content;
   }
+}
+
+// CRT effect
+@mixin crt($color1, $color2)
+{
+  background: linear-gradient($color1, 50%,$color2 50%);
+  background-size: 100% 4px;
+  background-repeat: repeat-y ;
 }

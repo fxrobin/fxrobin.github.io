@@ -1,0 +1,7 @@
+{% assign posts = site.categories.blanka | where:"lang", page.lang %}
+
+{% for post in site.categories.blanka %}	
+<h2 id="{{ post.url }}" class="blanka-item">{{ post.title }}</h2>
+<div class="front-date">Envoyé par Blanka le {{post.date | date: "%d/%m/%Y" }}</div>
+<div class="entry" style="margin-bottom : 5em;">{{ post.content }} </div>
+{% endfor %}

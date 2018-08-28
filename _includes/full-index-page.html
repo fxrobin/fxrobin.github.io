@@ -1,0 +1,30 @@
+{% include languages.html %}
+
+<div id="right">
+    {% include search.html %}
+    {% include article-list.html %}
+    {% include blanka-list.html %}
+    {% include stackoverflow-list.html %}
+    <div class="social-icons-right">
+            {% include svg-icons.html %}
+    </div>
+</div>
+    
+<div id="left">
+    <div class="posts">
+        {% for post in posts %}
+        <article class="front-post">
+            <span style="float : right; margin : 0.25em;">
+                    <a href="{{ site.baseurl }}{{ post.url }}" class="hvr-buzz-out">
+                        <img src="{{ site.baseurl }}/images/logos/{{ post.logo }}" class="logo"	alt="{{ post.title }}" title="{{ post.title }}" />
+                    </a>
+            </span>
+            <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+            <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.subtitle }}</a></h2>
+            <div class="front-date">Le {{post.date | date: "%d/%m/%Y" }}</div>    
+            <div class="entry"><a href="{{ site.baseurl }}{{ post.url }}">{{ post.excerpt }}</a></div>
+            <div class="read-more"><a href="{{ site.baseurl }}{{ post.url }}" >{{ site.t[page.lang].read_more }}</a></div>
+        </article>
+        {% endfor %}
+    </div>
+</div>
