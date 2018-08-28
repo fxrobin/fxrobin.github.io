@@ -18,31 +18,32 @@ As an excerpt, here is my best : don't use `@Data` but you'll need to be patient
 
 ## Lombok, à quoi cela sert ?
 
-A part être visiblement une très belle île d'Indonésie, encore, il s'agit d'une bibliothèque qui va géréner pour vous, en respectant de nombreuses bonnes pratiques, ce qu'on appelle du « *boiler plate* ».
+Lombok is not only a beautiful island of Indonesia, it's also a great and small Java library which will generate what is called *boiler plate* in your classes while taking care about good practises.
 
-En Java, dans la catégorie « Boiler plate », voici les nominés :
+Here are the perfect candidates in the "Boiler plate" category:
 
-* getters / setters ;
-* equals  / hashCode ;
-* toString ;
-* constructeurs ;
-* modificateurs d'accès (private, protected, etc.).
+* getters / setters
+* equals  / hashCode
+* toString
+* constructors
+* access modifiers (private, protected, etc.).
 
-*And the winner is* : égalité entre `getter/setters` et `equals/hashCode`. `toString` n'est vraiment pas loin derrière.
+*And the winner is* : "deuce" between `getter/setters` and `equals/hashCode`. `toString` is not far behind the winners.
 
-## Démonstration par l'exemple
+## Simple classic Java example
 
-Prenez par exemple les classes métiers suivantes :
+Let's take this simple UML class diagram as our input:
 
 ![Diag Classes](/images/lombok/lombok-uml.png)
 
-### Implémentation sans Lombok
+### Implementation without Lombok
 
-Pour montrer ce qu'il faudrait faire en Java « sans Lombok », je vais simplement coder la classe `Vehicule` afin qu'elle respecte les conventions Java Beans.
+In order to show you what you need to code in standard Java, I'll code the `Vehicule` class as a classical Java Bean.
 
-Pour l'exemple, l'unicité sera portée par les champs « numeroMoteur, numeroChassis ».
-Dans la réalité, l'unicité d'un véhicule est bien plus complexe et dans tous les cas
-ne doit pas reposer sur l'immatriculation.
+In this example, unicity will rely on theses fields "motorNumber" and "bodyNumber".
+In the real world, vehicule unicity is much more complex and can not anyway rely on the immatriculation plate.
+
+!!! TODO exemple à traduire !!!
 
 ```java
 public class Vehicule implements Serializable
@@ -177,23 +178,17 @@ public class Vehicule implements Serializable
 }
 ```
 
-*Constat* : déjà plus de 100 lignes de code pour une classe pourtant « mini-rikiki » à la base.
+*First impression*: more than 100 lines of code for a such tiny class!
 
-Le code généré par Eclipse est convenable. J'ai choisi dans cet exemple l'option « StringBuilder chaining » pour `toString` mais souvent je préfère la méthode `String.format` que je trouve plus maintenable au détriment peut-être d'un peu de performance.
+Eclipse has generated an acceptable code. Here I choosed the StringBuilder strategy of the toString assistant, but I often prefer using `String.format` which is more maintenable to me although it is meant to be slower.
 
-Mais celà reste du code source généré : *tout code source, même généré doit être maintenable et maintenu !*
+The trouble is that it's generated code! Any generated code must be maintainable and maintained! After more than 30 years of software development I feel like source code generation is quite an anti-pattern!
 
-### Implémentation avec Lombok
+### Implementation with Lombok
 
-Pour utiliser Lombok, il faut déclarer les éléments suivants dans le fichier `pom.xml` de votre projet MAVEN.
+To use Lombok, you only need to declare this dependency in your classical `pom.xml`:
 
 ```xml
-<properties>
-	<maven.compiler.source>1.8</maven.compiler.source>
-	<maven.compiler.target>1.8</maven.compiler.target>
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-</properties>
-
 <dependencies>
 	<dependency>
 		<groupId>org.projectlombok</groupId>
@@ -204,18 +199,17 @@ Pour utiliser Lombok, il faut déclarer les éléments suivants dans le fichier 
 </dependencies>
 ```
 
-Là où Lombok va se différencier d'un générateur de code source, c'est que dans son cas il va générer du ByteCode. Donc rien à maintenir, rien de visible. Cette stratégie est bien différente des assistants de génération de code d'Eclipse ou Netbeans.
+Just have a look at the scope : `provided`. That means that this is just a dependency while compiling and that there is no need of `Lombok.jar` in your classpath in production. Lombok relies on a JDK mecanism which launches an annotation processor if it's referenced in a file in META-INF. For more information read this <https://projectlombok.org/contributing/lombok-execution-path>
 
-D'ailleurs il faut déclarer l'agent Lombok dans le fichier eclipse.ini, ou alors laisser faire l'installeur intégré au fichier
-`lombok.jar`. L'installeur place d'ailleurs lombok.jar dans le répertoire racine d'Eclipse.
+As I said earlier you must wonder why I don't like source code generation but I love lombok. It seems antinomic. In fact it's not as Lombok doesn't generate source code : it generates ByteCode which a different concept. Many frameworks and libraries use ByteCode generation, like Spring, CDI, EJB, etc. Java itself generates ByteCode when creating Dynamic Proxies. Nowadays, This technic is widely used by the raise of annotations usage in Java since Java 5!
+
+Eclipse (or Netbeans or IntelliJ) can also benefit of Lombok by installing a Java Agent thanks to its installer. You can do it by yourself as well by editing the "eclipse.ini" file:
 
 ```
 -javaagent:/opt/eclipse/lombok.jar
 ```
 
-> Cela fonctionne de la même manière avec NetBeans.
-
-On va pouvoir se concentrer uniquement sur ce qui est important dans notre classe : *ses données et leur représentation*. Le reste sera généré par Lombok au moyen de ses annotations.
+Now we can focus only on what's really important in our class: its fields and their types! All the boiler plate will be dynamically generated into ByteCode by Lombok.
 
 ```java
 @FieldDefaults(level=AccessLevel.PRIVATE)
@@ -238,30 +232,29 @@ public class Vehicule implements Serializable
 }
 ```
 
-Dans cet exemple, pour montrer la puissance de Lombok, j'ai volontairement omis les modificateurs `private` devant chacun
-des champs. Les champs sont pourtant bien `private` grâce à l'annotation `@FieldDefaults(level=AccessLevel.PRIVATE)`.
-Cela étant, après 4 ans d'usage, je préfère quand même faire figurer les modificateurs d'accès au niveau des champs.
+> "It's a kind of magic", Queen
 
-> Vous noterez que j'ai reporté l'instanciation de la liste au niveau de la déclaration du champs `interventions`. Cette instanciation figurait, dans l'exemple précédent, au niveau du constructeur.
+In this example, I intentionnaly omitted the private modifiers in front of every field as they are generated by `@FieldDefaults(level=AccessLevel.PRIVATE)`. But after 4 years using Lombok, I prefer to keep the modifiers visibles and to write them.
 
-Et voilà comment passer de plus de 100 lignes de code à 16 lignes ! C'est quand même bien plus clair et quel temps gagné ! Mais on ne va pas en rester là. Lombok peut nous apporter plus encore.
+> You shall notice that the instanciation of the list `interventions` figuresjkl close its declaration. In the previous example, this instanciation was written in the constructor.
 
-Avant celà, détaillons un peu les annotations utilisées :
+This is how to transform a 100 lines of code class into a 16 lines only class! It's not only about saving time, as IDE tools can do it as fast as well, but it's about clean code and clarity. But we will not end up our journey with Lombok as it can go much further!
 
-* `@FieldDefaults(level=AccessLevel.PRIVATE)` : passe tous les champs en `private` ;
-* `@NoArgsConstructor` : génère le constructeur sans argument et `public` ;
-* `@AllArgsConstructor` : génère le constructeur avec tous arguments et `public` (pour l'exemple) ;
-* `@Getter` : génère tous les getters sur les champs ;
-* `@Setter` : génère tous les setters sur les champs ;
-* `@EqualsAndHashCode(of=...)` : génère `equals` et `hashCode` (et d'autres méthodes) sur les champs donnés ;
-* `@ToString(of=...)` : génère `toString` sur les champs donnés.
+Before that, let's have a look at the annotations that I'm using :
 
-C'est quand même bien pratique mais on peut aller encore plus loin. D'ailleurs il y a un petit problème avec le `@AllArgsConstructor` qui permet ainsi de passer une liste qui ira supplanter la liste initiale ... Bof bof. On va régler cela bientôt.
+* `@FieldDefaults(level=AccessLevel.PRIVATE)` : set all fields to `private` visibility
+* `@NoArgsConstructor` : generates a `public` constructor without arguments
+* `@AllArgsConstructor` : generates a `public` constructor with all arguments mapped to all fields
+* `@Getter` : generates getter for every field;
+* `@Setter` : generates stter for every field;
+* `@EqualsAndHashCode(of=...)` : generatse `equals` and `hashCode` (en some protected method) on the given fields
+* `@ToString(of=...)` : generates `toString` on the given fields
 
-## Le Pattern « Factory Method » avec Lombok
+It's really convenient but we still can go further. There is a small issue here with `@AllArgsConstructor` which allows to change the reference of the list, breaking the encapsulation principle. We will fix that in the next section.
 
-Reprenons l'exemple précédent et avec quelques ajustements nous aurons une classe uniquement instanciable au moyen
-d'une « factory method » statique.
+## Factory Method Pattern with Lombok
+
+Let's take the previous example and change the classic constructor into a factory method thanks to the argument `staticName="of"` of the existing annotation `@RequiredArgsConstructor`.
 
 ```java
 @FieldDefaults(level=AccessLevel.PRIVATE)
@@ -288,7 +281,7 @@ public class Vehicule implements Serializable
 }
 ```
 
-L'exemple devient un peu plus « sympa ». Je vais détailler ses particularités.
+Here are some explanations :
 
 * Le constructeur public par défaut sans argument a disparu. En fait il est bien là, mais il a été passé `private` par l'annotation `@RequiredArgsConstructor`. Cela empèche donc l'instanciation sans argument : ce n'est plus un Java Bean, mais ce n'est pas forcément grave. Attention toutefois aux specs comme CDI, JSF, JPA, qui réclame pourtant ce constructeur.  
 * une méthode statique « factory method » est générée et est nommée `of(...)` au moyen de l'annotation `@RequiredArgsConstructor(staticName="of")`. Ici la convention « of » est utilisée, comme pour les nouvelles API de Java 8, mais j'aurais pu utiliser les vieilles conventions comme `newInstance(...)`. La méthode prendra en argument tous les champs marqués `final` ou les champs annotés avec `@NonNull` de Lombok. Attention à ne pas confondre avec `@NotNull` de Bean Validation ou de Guava.

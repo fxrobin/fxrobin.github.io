@@ -5,6 +5,7 @@ subtitle:  Quand Blanka pas content, Blanka écrire ici
 logo: blanka.png
 category: blanka
 lang: fr
+ref: blanka
 ---
 
 <div class="intro" markdown='1'>

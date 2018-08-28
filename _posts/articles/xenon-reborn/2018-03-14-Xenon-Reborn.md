@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Développer en s'amusant et réciproquement
+title: Xenon Reborn, développer en s'amusant et réciproquement
 subtitle: Ou comment apprendre à coder en réalisant un jeu vidéo ...
 logo: xenon-reborn.png
 category: articles
@@ -13,7 +13,7 @@ lang: fr
 Dans mon parcours professionnel, j'ai été formateur de jeunes développeurs pendant sept années.
 Ces derniers venaient d'horizons différents, parfois sans aucune compétence en terme de programmation.
 
-Afin de rendre ludique l'apprentissage des fondamentaux de l'algorithmique et de Java, je les ai fait participer à la création d'un jeu video : **Xenon Reborn**.
+Afin de rendre ludique l'apprentissage des fondamentaux de l'algorithmique et de Java, je les ai fait participer à la création d'un jeu video : **Xenon Reborn**, inspiré du célèbre jeu **Xenon** des Bitmap Brothers.
 
 </div>
 

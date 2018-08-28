@@ -31,9 +31,6 @@
         }
     }
     .logo {
-        float: right;
-        margin-left: 1em;
-        margin-top: 0em;
         @include mobile {
             // width : 25%;
             float: none;

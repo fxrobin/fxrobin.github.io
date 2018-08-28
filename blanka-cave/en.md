@@ -5,6 +5,7 @@ subtitle:  When blanka angry, Blanka writes here
 logo: blanka.png
 category: blanka
 lang: en
+ref: blanka
 ---
 
 <div class="intro" markdown='1'>

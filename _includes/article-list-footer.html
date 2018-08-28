@@ -1,0 +1,24 @@
+<div class="article-list-footer">
+    <div class="article-list-header"><i class="fa fa-newspaper-o"></i> {{ site.t[page.lang].other_articles }}</div>
+        {% assign posts = site.categories[page.category] | where:"lang", page.lang %}
+        {% for post in posts] %}
+        {% if post != page %}
+        <div class="article-list-entry">   
+        <span class="article-list-entry-date">  		
+            {% if page.lang == 'fr' %}
+                {{ page.date | date: "%d/%m/%Y" }}
+            {% endif %}
+            {% if page.lang == 'en' %}
+                {{ page.date | date: "%Y-%m-%d" }}
+            {% endif %}
+        </span>
+            <i class="fa fa-chevron-circle-right"></i>
+            {% assign _posts=site.posts | where:"ref", post.ref | sort: 'lang' %}
+            {% for _post in _posts %}
+                    <a href="{{ _post.url }}"><img src="/images/flags/{{ _post.lang }}.png" /></a>	
+            {% endfor %}
+            <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+        </div>  
+        {% endif %}
+    {% endfor %}
+</div>
