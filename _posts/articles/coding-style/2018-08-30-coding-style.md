@@ -12,7 +12,7 @@ lang: fr
 
 Cela fait des années que je place différemment mes accolades `{ }`, à contre-courant de ce qui se fait généralement en Java, faisant ainsi ressembler mon code à du C/C++. Ce billet est l'occasion de faire une sorte d'introspection sur ma pratique : Est-elle bonne ? Est-elle désuette ? Pourquoi je n'aime pas le style *SUN* ? Est-ce que mon style est utile ou inutile ?
 
-Que de questions auxquelles de billet va tenter de répondre.
+Que de questions auxquelles ce billet va tenter de répondre.
 
 </div>
 <!--excerpt-->
@@ -33,22 +33,37 @@ C'est parti ...
 
 Bon, je vais argumenter un peu quand même ...
 
-Au lieu de trouver que cela est un défaut comme un grand nombre de personne le pense, j'estime à l'inverse que c'est une force : **des méthodes et des variables bien nommées éviteront à 95% d'avoir besoin de le commenter**.
+Au lieu de trouver que cela est un défaut comme un grand nombre de personne le pense, j'estime à l'inverse que c'est une force : **des packages, des classes, des méthodes  et des variables bien nommés éviteront à 95% d'avoir besoin de le commenter**.
 
 En effet, il suffira de lire le code, suffisamment expressif par lui-même, pour comprendre aisément ce qu'il fait.
 
 Le mot "code" d'ailleurs, est étrange non ? Un développeur "code". Pour qui ? Pour la machine ? Oui et Non !
 
 Récemment, je n'ai jamais vu un développeur coder directement en binaire et pourtant c'est ce que va comprendre la machine.
-En général, un développeur va utiliser un langage qui peut sembler être difficile à lire pour certain, mais c'est bien une langue intermédiaire entre le langage naturel de tous les jours et le langage machine exprimé en binaire. D'ailleurs c'est pour celà que nous avons besoin de traducteurs : les fameux **compilateurs ou interpréteurs**.
 
-Quand je parle de "code" à quelqu'un qui n'est pas de la profession, il pense que je fais de l'hexadécimal façon Matrix toute la journée. C'est un "code", c'est un "truc" **illisible** par essence.
+En général, un développeur va utiliser un langage qui peut sembler être difficile à lire pour certain, mais c'est bien une langue intermédiaire entre le langage naturel de tous les jours et le langage machine exprimé en binaire. D'ailleurs c'est pour celà que nous avons besoin de traducteurs : les fameux **compilateurs ou interpréteurs** ou équivalent.
+
+Quand je parle de "code" à quelqu'un qui n'est pas de la profession, il pense que je fais de l'hexadécimal façon Matrix toute la journée. C'est un "code", c'est un "truc" **illisible** par définition.
 
 ![Coding](/images/coding-blue.gif){: .video .normal }
 
 Cependant le code (le programme), doit être **lisible, compréhensible et maintenable** par d'autres personnes. C'est pour celà que nous avons un langage commun, dans notre cas il s'agit de Java, mais celà vaut pour tous les langages.
 
-Voilà pourquoi Java est verbeux, et **c'est une bonne chose** ! Un développeur écrit un programme qui passera par de nombreuses moulinettes, statiques ou dynamiques, afin d'être exécutable et exécuté. Mais il écrit aussi et surtout **pour lui-même et pour les autres**. C'est aussi l'une des raisons pour lesquelles je ne comprendrai jamais le fameux "Quick & Dirty".
+Voilà pourquoi Java est verbeux, et **c'est une bonne chose** ! Un développeur écrit un programme qui passera par de nombreuses moulinettes, statiques ou dynamiques, afin d'être exécutable et exécuté. Mais il écrit aussi et surtout **pour lui-même et pour les autres**. C'est par ailleurs l'une des raisons pour lesquelles je ne comprendrai jamais le fameux "*Quick & Dirty*".
+
+Attention, quand je dis *verbeux*, il faut toutefois faire attention à ce que l'on fait. Récemment je suis tombé sur ce Slide dans [cette Présentation](https://fr.slideshare.net/dainawill/java-vs-python) :
+
+![Java Verbosity](/images/code-style/java-versus-python.png){: .fakescreen}
+
+Ce n'est pas très flatteur pour Java. Ce qui est mis en cause ici est la conception des API I/O assez complexe ainsi que sa fameuse verbosité ...
+
+On excusera l'auteur de ce Slide, en novembre 2013, Java 8 n'était qu'en "*early access*" puisqu'il est sorti en janvier 2014, mais avec cette version on peut **remplacer tout le code Java ci-dessus** par celui-ci :
+
+```java
+Files.lines(Paths.get("fichier.txt")).forEach(System.out::println);
+```
+
+Pour le coup, cette ligne de code est succincte, mais verbeuse (oui !) et donc expressive.
 
 Le postulat admis "*Java c'est verbeux*" est-il suffisant pour que celà en fasse du code lisible, compréhensible et maintenable ?
 
@@ -105,11 +120,11 @@ Et puis surtout : **cette indentation qui me fait perdre la tête**.
 
 ![Doctor](/images/code-style/doctor.png)
 
-Si j'osais, je dirais que ce code a été fait exprès ainsi pas pour ne pas être maintenable par une tièrce personne.
+Si j'osais, je dirais que ce code a été fait exprès ainsi pas pour ne pas être maintenable par une tièrce personne. Et pour parachever le tout, ce code ne respecte pas non plus les conventions de codage SUN/Oracle, c'est un comble.
 
 ![Doctor](/images/bombs.png)
 
-Je vais maintenant le restructurer "à ma façon", sans changer l'algorithme ni découper le code pour le rendre plus compréhensible.
+Je vais maintenant le restructurer à ma façon au moyen d'accolades `{ ... }`, sans changer pour autant l'algorithme ni découper le code pour le rendre plus compréhensible. Cet aspect sera traité plus loin dans cet article.
 
 L'idée est simplement de structurer sa représentation différement afin d'identifier les portions rapidement et donc de **le rendre plus lisible**.
 
@@ -159,20 +174,20 @@ final Node<K,V> getNode
 
 Alors oui d'accord, **c'est moins compact visuellement**. C'est justement le but : montrer la complexité d'un code quand il l'est. C'est un peu subjectif, mais on obtient ainsi du code plus lisible. Je vais toutefois argumenter un peu pour vous en convaincre.
 
-Quand on code une méthode, c'est à dire la créer, la comprendre et la maintenir, il faut **identifier rapidement les "zones"**. Ces zones en Java ce sont des regroupements, soit exprimés par des `{ ... }` soit par des `( ... )`. Pour être efficace, il faut donc pouvoir :
+Quand on code une méthode, c'est à dire la créer, la comprendre et la maintenir, il faut **identifier rapidement les "zones"**. Ces zones, en Java, sont des regroupements, soit exprimés par des `{ ... }` soit par des `( ... )`. Pour être efficace, il faut donc pouvoir :
 
 - visualiser rapidement son nom et ce qu'elle retourne
 - visualiser d'un seul tenant tous les arguments, leur nombre et leur type : mon oeil préfère compter des sauts de ligne que des virgules.
 - identifier rapidement les portions de code `{ ... }`
 - donner du sens. Le code initial comportait implicitement deux `else` et pourtant ces clauses n'étaient pas visibles. Maintenant elles le sont, rendant certainement le code plus compréhensible.
 - les conditions dans les `if` avec des pré-affectations dans des variables, je préfère les voir sur plusieurs lignes. Je vois ainsi rapidement les clauses restrictives `&&`. Les clauses `||` en revanche je les ai laissées sur la même ligne, donnant une sorte de "soit/soit" qu'on retrouve d'ailleurs dans la syntaxe de l'opérateur ternaire `[condition] ? [true] : [false]`.
-- tous les `if` même s'ils n'avaient qu'une seule ligne de code à déclencher en cas de succès, se retrouvent équipés d'un bloc `{ .. }`. Cela évitera les erreurs de maintenance, quand un autre développeur voudra rajouter une ligne, qui curieusement ne se lancera pas ...
+- tous les `if` même s'ils n'avaient qu'une seule ligne de code à déclencher en cas de succès, se retrouvent équipés d'un bloc `{ .. }`. Cela évitera les erreurs de maintenance, quand un autre développeur voudra rajouter une ligne, qui curieusement ne se lancera pas ... Cette règle est d'ailleurs présente dans de nombreuses conventions et bonnes pratiques.
   
-L'ensemble de ces petites mesures rendent donc le code plus **lisible**.
+L'ensemble de ces petites mesures rendent donc le code plus **lisible**, mais pas nécessairement plus compréhensible encore.
 
 ## Structure visuelle
 
-En m'inspirant d'une présentation de Kevlin Henney, on peut même en faire des blocs et comprendre ainsi les imbrications et les différents cas. 
+En m'inspirant d'une présentation de Kevlin Henney (voir en conclusion), on peut même en faire des blocs et comprendre ainsi les imbrications et les différents cas.
 
 Vous serez supris de voir que vous serez en mesure d'identifier les arguments, les variables, les conditions et les boucles de cet algorithme, d'un seul coup d'oeil :
 
@@ -251,24 +266,24 @@ Maintenant que la structure de l'algorithme est plus lisible, dans sa version Ja
 
 ## Mais il fait quoi ce code ?
 
-Alors, en regardant l'implémentation à la loupe de la méthode `getNode()` :
+Alors, en examinant à la loupe l'implémentation de la méthode `getNode()`, voici ce que l'on peut en comprendre :
 
 ![Bear](/images/code-style/bear.png)
 
-- elle vérifie des préconditions, sinon elle retourne `null`
-- elle prend le premier élément d'une liste chainée et le retourne si c'est lui. Cet élément est atteint au moyen d'un index fonction du hash de la clé de l'élement. C'est peut-être le point le plus délicat de l'algo.
+- elle vérifie des préconditions, sinon elle retourne `null`.
+- elle prend le premier élément d'une liste chainée et le retourne si c'est lui. Cet élément est atteint au moyen d'un index en fonction du hash de la clé de l'élement. C'est peut-être le point le plus délicat de l'algo.
 - elle vérifie ensuite si le `Node` est de type `TreeNode`, si c'est le cas elle délègue la recherche à une autre méthode.
 - sinon elle parcourt la liste chainée pour retourner l'élement voulu quand elle le trouve.
 - sinon elle retourne `null`.
 
-Donc, on va **refactoriser** tout cela pour le rendre plus compréhensible, tout en restant lisible, je l'espère.
+Donc, on va **refactoriser** tout cela pour le rendre plus **compréhensible, tout en restant lisible**, je l'espère.
 
 ## Goldorak ! REFACTORISATION !
 
 ![Actarus](/images/actarus.jpg){: .fakescreen}
 
 Malheureusement, Goldorak ne connait pas cet ordre d'Actarus.
-Il va donc falloir le faire soit même, même si nos IDE préférés peuvent nous y aider.
+Il va donc falloir le faire nous même, même si nos IDE préférés peuvent nous y aider.
 
 Après un peu de réflexion, **TADAAAAA** :
 
@@ -298,6 +313,8 @@ final Node<K,V> getNode
 
 *Believe it or not*, cet algorithme est le reflet exact de la méthode initiale qui a simplement été **décomposée**.
 
+Si vous vous inquiétez des performances liées aux appels de sous-méthodes, sachez que le [JIT (just-in time compiler)](https://aboullaite.me/understanding-jit-compiler-just-in-time-compiler/) et notamment sa fonction de "**method inlining**" fera toujours mieux que toutes les pseudos-optimisations que l'on pourra imaginer. Si vous voulez un peu d'information vulgarisée à ce sujet je vous recommande [cet article](https://techblug.wordpress.com/2013/08/19/java-jit-compiler-inlining/).
+
 De fait, il est maintenant **compréhensible**, enfin je crois.
 
 Si vous le comprenez, vous savez maintenant comment fonctionne un `get` sur une `HashMap` !
@@ -308,7 +325,7 @@ Je me suis donc équipé en méthodes privées. D'ailleurs il y avait de la **re
 
 ### Préconditions
 
-D'abord, de quoi vérifier les préconditions en entrée sur une variable d'instance `table`.
+D'abord, de quoi vérifier les préconditions en entrée sur une variable d'instance nommée `table`.
 
 ```java
 private boolean checkTablePreConditions()
@@ -364,8 +381,10 @@ private Node<K,V> getFirstNode
 
 ### Parcours et recherches
 
-Et enfin de quoi parcourir les structures : dans le premier cas, comme dans l'algorithme initial, on délègue
-à une méthode `getTreeNode()` dont l'implémentation ici n'est pas le sujet :
+Et enfin de quoi parcourir les structures :
+
+- dans le premier cas, comme dans l'algorithme initial, on délègue à une méthode `getTreeNode()` dont l'implémentation ici n'est pas le sujet.
+- dans le second cas, on parcourt la liste chainée jusqu'à trouver le node.
 
 ```java
 private Node <K,V> search
@@ -403,14 +422,14 @@ private Node <K,V> linkedSearch
 
 ## Résumé de la refactorisation
 
-Dans la refactorisation ci-dessus, je n'ai fait que **diviser pour régner** : rien de magique.
+Dans la refactorisation ci-dessus, je n'ai fait que *divide ut regnes* (diviser pour régner) : rien de magique.
 
 - Il n'y plus de variables bizarres.
 - Chaque méthode fait une chose simple, que je pourrais tester facilement avec JUnit.
 - J'ai remplacé le `do { ... } while` en `while` classique, car je préfère ce pattern.
 - J'ai redonné du sens aux arguments et aux variables.
 - Le nommage des méthodes `private` est suffisament explicite.
-- Le code source de l'algorithme principal devient donc plus lisible, plus compréhensible  et plus maitenable.
+- Le code source de l'algorithme principal devient donc plus lisible, plus compréhensible  et plus maintenable.
 
 ## Parlons des accolades "Java Style"
 
@@ -453,9 +472,9 @@ Cela développe en moi une forme de **strabisme**. J'aime bien voir en ligne et 
 
 ![Strabisme](/images/code-style/strabisme.jpg){: .fakescreen}
 
+Cette problématique fait d'ailleurs l'objet d'un paragraphe entier sur Wikipedia : [Losing track of blocks](https://en.wikipedia.org/wiki/Indentation_style#Losing_track_of_blocks). Visiblement, je ne suis pas le seul, c'est rassurant.
+
 ## Mais alors pourquoi ont-ils fait cela chez SUN ?
-
-
 
 ![CompileOldSchool](/images/textpad-compile.gif){: .fakescreen}
 
@@ -471,19 +490,20 @@ Vous vous souvenez de ce que j'ai écrit un peu plus haut sur le "cerveau / les 
 
 ## Autres styles de codage
 
-Mon style de codage, non conventionnel en Java, bien que de nombreux projets Java respectent le même formalisme, ne sort pas non plus de nulle part. C'est une sorte d'adaptation entre :
+Mon style de codage est une sorte d'adaptation entre [différents styles connus](https://en.wikipedia.org/wiki/Indentation_style) et célèbres et notamment :
 
-- Le style C
-- Le style C++
-- Le style GNU
-- Le Horstmann style
-- Le Gangnam style ... ah non pas celui-là
+- le K&R style (C et C++)
+- le pre-ISO C Style
+- l'Allman style (BSD)
+- le style GNU
+- le Horstmann style
+- le Gangnam style ... ah non pas celui-là
 
 ![Gangnam Style](/images/code-style/gangnam.jpg){: .fakescreen}
 
-Vous pouvez aller jeter un oeil aux différents styles de codage recensés : <https://en.wikipedia.org/wiki/Indentation_style>
+Il est certes non conventionnel en Java mais il ne sort donc pas de nulle part.
 
-Je ne suis visiblement pas le seul à revoir ces règles, notamment sur le placement des accolades :
+De plus, Je ne suis visiblement pas le seul à revoir ces règles, notamment sur le placement des accolades :
 
 - Apache Commons Net : <https://commons.apache.org/proper/commons-net/code-standards.html>
 - Java Ranch : <https://javaranch.com/styleLong.jsp#matching_braces>
@@ -491,7 +511,7 @@ Je ne suis visiblement pas le seul à revoir ces règles, notamment sur le place
 - Petroware : <https://petroware.no/javastyle.html>
 - Steve Yohanan : <http://yohanan.org/steve/projects/java-code-conventions/>
 
-D'ailleurs je me demande si je ne vais pas adopter le style PICO "*dérivé FX*", c'est à dire la diagonale inverse de Java :
+Je me demande d'ailleurs si je ne vais pas adopter le style PICO "*dérivé FX*", c'est à dire la diagonale inverse de Java :
 
 ```java
 private Node <K,V>
@@ -512,7 +532,7 @@ Je blague ...
 
 ## Et je fais comment avec mon IDE ?
 
-De nos jours, on est un peu "fainéant", mais c'est pour la bonne cause : **se concentrer sur l'essentiel**.
+De nos jours, nous sommes un peu "fainéants", mais c'est pour la bonne cause : **se concentrer sur l'essentiel**.
 
 Ainsi on laisse souvent le soin à nos IDE de formater correctement notre code source.
 
@@ -533,7 +553,7 @@ J'ai évoqué ici principalement mes conventions sur le placement des accolades 
 - pas de préfixe sur les attributs `aName, aAddress, aEmails` : non seulement c'est inutile mais c'est en plus trompeur sur le sens.
 - pas de préfixe sur les variables locales `_tmp, _i, _dateNaissance` : inutile aussi !
 
-Toutes ces conventions, pourtant pratiquées par de nombreuses équipes, n'ont de raison d'être que quand les classes font plus de 3000 lignes, avec 100 lignes de code par méthode et 20 attributs. Comme je fais tout pour ne pas avoir de telles classes symptomatiques d'un embonpoint historique, **je n'en ai donc pas besoin**.
+Toutes ces conventions, pourtant pratiquées par de nombreuses équipes, n'ont de raison d'être que quand les classes font plus de 3000 lignes, avec 100 lignes de code par méthode et 20 attributs. Comme je fais en sorte de ne pas subir de telles classes symptomatiques d'un embonpoint historique, **je n'en ai donc pas besoin**.
 
 Ma cible :
 
@@ -546,7 +566,7 @@ Il m'arrive d'y déroger, comme toute règle, mais je vous suggère d'aller rega
 
 ## Conclusion
 
-J'espère vous avoir convaincus sur l'ensemble de ces pratiques, au moyen de l'exemple choisi, tout comme j'ai pu être inspiré par **l'excellent talk de Kevlin Henney** : <https://t.co/CkNLPdFGFX>
+J'espère vous avoir convaincus sur l'ensemble de ces pratiques, au moyen de l'exemple choisi.
 
 Cela demande quelques efforts, mais les outils de **refactoring** (extract method, etc.) de vos IDE préférés sont excellents pour celà. N'hésitez pas et pensez à ceux qui passent après vous !
 
@@ -569,5 +589,9 @@ private Node <K,V> linkedSearch(int hash, Object key, Node<K,V> node)
 ```
 
 Enfin, ce qui prime par dessus tout, **il faut que votre équipe de développement accepte de nouvelles conventions**. Ce ne sera pas toujours le plus facile.
+
+Pour compléter, je vous invite à regarder cet **l'excellent talk de Kevlin Henney** qui m'a beaucoup inspiré :
+
+{%include video.html youtube-id="SUIUZ09mnwM"  size="normal" %}
 
 Prochains billets pour trolls : "Une tabulation, deux ou quatre espaces pour l'indentation ? " ...
