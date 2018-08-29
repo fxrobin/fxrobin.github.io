@@ -10,7 +10,7 @@ lang: fr
 
 <div class="intro" markdown='1'>
 
-Cela fait des années que je place différemment mes accolades `{ }`, à contre-courant de ce qui se fait généralement en Java, faisant ainsi ressembler mon code à du C/C++. Ce billet est l'occasion de faire une sorte d'introspection sur ma pratique : Est-elle bonne ? Est-elle désuette ? Pourquoi je n'aime pas le style *SUN* ? Est-ce que mon style est utile ou inutile ?
+Cela fait des années que je place différemment mes accolades `{ }`, à contre-courant de ce qui se fait généralement en Java, faisant ainsi ressembler mon code à du C/C++. Ce billet est l'occasion de faire une sorte d'introspection sur ma pratique : Est-elle bonne ? Est-elle désuète ? Pourquoi je n'aime pas le style *SUN* ? Est-ce que mon style est utile ou inutile ?
 
 Que de questions auxquelles ce billet va tenter de répondre.
 
