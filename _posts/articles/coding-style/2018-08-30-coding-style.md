@@ -330,7 +330,7 @@ D'abord, de quoi vérifier les préconditions en entrée sur une variable d'inst
 ```java
 private boolean checkTablePreConditions()
 {
-   return  (table != null && (table.length) > 0);
+   return  (table != null && table.length > 0);
 }
 ```
 
