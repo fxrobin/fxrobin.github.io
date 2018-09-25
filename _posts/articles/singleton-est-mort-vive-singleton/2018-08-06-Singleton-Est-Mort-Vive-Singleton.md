@@ -234,7 +234,7 @@ Celà a conduit bon nombre de sites fonctionnant sous Java EE à observer le fam
 
 En Java 8, bim, paf, badaboum, adieu le *PermGen Space*, bienvenue au **Meta Space**.
 
-Cette zone appartient désormais au HEAP. De ce fait, elle est aussi *garbage collectée* suivant différents algorithmes que le HEAP classique : il est nettoyé quand des classes de ne sont plus utilisées depuis un moment et les champs statiques sont libérés eux-aussi. La zone est dynamique de surcroit en terme de taille : finies les limitations. Donc un champ statique n'est plus coûteux « comme avant ».
+Le **Meta Space** est une zone mémoire qui appartient à la zone **HEAP**. Cette dans cette zone que l'ensemble des chargements se réalisent depuis Java 8. Elle est *garbage collectée*  ce qui signifie qu'elle est nettoyée quand les classes de ne sont plus utilisées depuis un certain temps et les champs statiques sont libérés eux-aussi par la même occasion. Enfin, la taille de cette zone est dynamique : finies les limitations. En résumé, un champ statique n'est plus coûteux « comme avant ».
 
 Pourquoi alors s'enquiquiner avec un Singleton depuis Java 8 puisque maintenant que les champs statiques ne posent plus de problème ?
 
