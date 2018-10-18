@@ -273,7 +273,7 @@ public class VisitCounter
 }
 ```
 
-Version Java 8 et + :
+Grâce à cette nouvelle gestion de la mémoire en Java 8 et + :
 
 ```java
 public final class VisitCounter
@@ -305,7 +305,7 @@ On vient donc de voir que, par défaut, un singleton était « lazy » en Java
 
 Il peut arriver que l'on veuille un peu « discuter » avec le singleton avant le réel usage de celui-ci et donc économiser le RAM jusqu'au dernier moment.
 
-Reprenons l'exemple précédent que ce soit en version singleton Java 7 et répose donc sur la définition d'une classe interne, chargée elle aussi par la JVM qu'à son premier appel, donc par le singleton lui-même, au moment des appels des méthodes « métiers » :
+Reprenons l'exemple précédent. Quelle que soit la version de Java, la solution repose sur la définition d'une classe interne. Cette classe interne statique sera chargée par le ClassLoader, uniquement au moment des appels des méthodes du singleton : 
 
 ```java
 public class VisitCounter 
@@ -341,7 +341,7 @@ public class VisitCounter
 }
 ```
 
-En Java 8, c'est même encore plus simple, puisque le Holder contient les champs « utiles » :
+Graĉe encore une fois à la nouvelle gestion de la mémoire en Java 8, c'est même encore plus simple, puisque le **holder** contient les champs « utiles » :
 
 ```java
 public final class VisitCounter
@@ -363,7 +363,7 @@ public final class VisitCounter
 }
 ```
 
-Ainsi un `VisitCounter.class`, ou une introspection de premier niveau de cette classe n'ira pas charger le Holder et donc n'ira pas initialiser les champs nécessaire au fonctionnement. D'ailleurs on peut mixer "lazy" classique, avec le holder pour les données les plus coûteuses.
+Ainsi un `VisitCounter.class`, ou une introspection de premier niveau de cette classe n'ira pas charger le **holder** et donc n'ira pas initialiser les champs nécessaire au fonctionnement. D'ailleurs on peut mixer **lazy** classique, avec le **holder** pour les données les plus coûteuses.
 
 J'appelle cela de la très grosse paresse ...
 
