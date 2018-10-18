@@ -305,10 +305,10 @@ On vient donc de voir que, par défaut, un singleton était « lazy » en Java
 
 Il peut arriver que l'on veuille un peu « discuter » avec le singleton avant le réel usage de celui-ci et donc économiser le RAM jusqu'au dernier moment.
 
-Reprenons l'exemple précédent. Quelle que soit la version de Java, la solution repose sur la définition d'une classe interne. Cette classe interne statique sera chargée par le ClassLoader, uniquement au moment des appels des méthodes du singleton : 
+Reprenons l'exemple précédent. Quelle que soit la version de Java, la solution repose sur la définition d'une classe interne. Cette classe interne statique sera chargée par le ClassLoader, uniquement au moment des appels des méthodes du singleton :
 
 ```java
-public class VisitCounter 
+public class VisitCounter
 {
     // implémenté sous forme de singleton //
 
