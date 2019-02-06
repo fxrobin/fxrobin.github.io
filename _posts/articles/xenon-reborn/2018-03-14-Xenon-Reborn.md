@@ -77,18 +77,22 @@ Voici ce que cela donne pour le moment, le jeu commence vraiment vers 48 seconde
 
 Si vous souhaitez y jouer, il vous suffit d'avoir un Java 8 (JRE) d'installé sur votre poste (Windows ou Linux), de dézipper ce fichier :
 
-{%include download.html url="https://github.com/fxrobin/Xenon_Reborn/files/1894717/XenonReborn_0.1.10.zip" title="XenonReborn_0_1_10.zip" %}
+{%include download.html url="https://github.com/fxrobin/XenonReborn/releases/download/v0.1.11/xenon-reborn-0_1_11.jar" title="XenonReborn_0_1_10.zip" %}
 
-Puis, lancez le fichier jar `XenonReborn.jar` situé à la racine.
+Puis, lancez le fichier jar `xenon-reborn-0_1_11.jar` en double cliquant dessus ou en tapant :
+
+```
+$ java -jar xenon-reborn-0_1_11.jar
+```
 
 Pour vous amuser un peu, voici les commandes :
 
 |Touche(s)    					| Action 											|
 |-------------------------------|---------------------------------------------------|
 |`FLECHES DU CURSEUR` 		    | mouvements du vaisseau							|
-|`CTRL-DROIT` 					| tir conventionnel									|
-|`SHIFT-DROIT` 				    | tir destructeur									|
-|`ENTREE` 						| activation/désactivation du bouclier				|
+|`CTRL-GAUCHE` 					| tir conventionnel									|
+|`SHIFT-GAUCHE` 			    | tir destructeur									|
+|`CTRL-DROIT`    				| activation/désactivation du bouclier				|
 |`F1` 							| bascule mode plein écran / fenêtré				|
 |`ESC` 							| retour à l'écran précédent						|
 |`CURSEUR GAUCHE et DROIT`	    | change la musique seulement sur l'écran de menu   |
@@ -450,4 +454,4 @@ Si c'était à refaire, je le referais, mais en y consacrant plus que 20 heures 
 
 S'ils lisent cet article, je les invite d'ailleurs à faire part de leurs commentaires sur cette partie « ludique » de l'apprentissage du développement.
 
-Le code source du projet est disponible sur mon repository GitHub : <https://github.com/fxrobin/Xenon_Reborn>
+Le code source du projet est disponible sur mon repository GitHub : <https://github.com/fxrobin/XenonReborn>
