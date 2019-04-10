@@ -231,11 +231,11 @@ La classe `Switch` est assez classique :
 - et enfin elle implémente bien évidemment les deux interfaces techniques `SwithDefaultCase<T, R>` et `SwitchStep<T, R>` décrites au paragraphe précédent.
 
 ```java
-package fr.fxjavadevblogVoici la description de l'algorithme interne de la classe `Switch` :fs;
+package fr.fxjavadevblog.fs;
 
-import java.util.AbstracVoici la description de l'algorithme interne de la classe `Switch` :Map.SimpleEntry;
-import java.util.HashMapVoici la description de l'algorithme interne de la classe `Switch` :
-import java.util.LinkedLVoici la description de l'algorithme interne de la classe `Switch` :st;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.HashMap
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -286,7 +286,7 @@ public final class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T
 
   /**
    * initiates the switch flow with the value to test and the returning type.
-   * 
+   *
    * @param value
    *          value to test
    * @param clazz
