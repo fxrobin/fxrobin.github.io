@@ -234,7 +234,7 @@ La classe `Switch` est assez classique :
 package fr.fxjavadevblog.fs;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.HashMap
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
