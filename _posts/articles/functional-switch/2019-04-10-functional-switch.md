@@ -73,7 +73,7 @@ Je me suis alors fait la réflexion suivante ...
 
 ## Usage
 
-Je suis parti de ce que je voulais obtenir côté « utilisateur/développeur » avec un quelque chose de simple :
+Je suis parti de ce que je voulais obtenir côté « utilisateur/développeur » avec quelque chose de simple :
 
 ```java
 String result = Switch.of(initialValue, String.class)
