@@ -208,16 +208,17 @@ public interface SwitchStep <T,R>
   
   /**
    * last operation of the switch method chaining which executes the flow
-   * of the rules looking for a matching single value, then predicates, then the
+   * of the rules looking for a matching single value, then the list of predicates, then the
    * default function.
    * 
    * @return
+       the result of the switch flow.
    */
   R resolve();
 }
 ```
 
-Notez les type de retour des méthodes qui assurent le chaînage correct pour le "method-chaining".
+Notez les types de retour des méthodes qui assurent le chaînage correct pour le "method-chaining".
 
 ## La classe Switch
 
@@ -278,7 +279,6 @@ public final class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T
   /**
    * hidden constructor. the "of" method is the only starting point for building
    * an instance.
-   * 
    */
   private Switch()
   {
@@ -358,10 +358,10 @@ public final class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T
 
 > Notez ici l'usage de l'interface `Entry` ainsi que de la classe `SimpleEntry` de l'API Collections de Java pour obtenir une liste de tuples.
 
-En termes d'algorithmique :
+Voici la description de l'algorithme interne de la classe `Switch` :
 
 1. une recherche dans la Map parmis les valeurs simples,
-2. si rien n'est résolu dans première, une recherche parmis la liste de prédicats,
+2. si rien n'est résolu, une recherche parmis la liste des prédicats,
 3. si toujours rien n'est résolu, déclenchement de la fonction par défaut référencée par le champ `defaultCase`.
 
 Cela fonctionne avec des prédicats bien plus évolués que des plages de valeurs, ce qui rend l'ensemble bien plus ouvert qu'un `switch/case` Java 12.
