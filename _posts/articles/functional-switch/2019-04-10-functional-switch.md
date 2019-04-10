@@ -225,7 +225,7 @@ La classe `Switch` est assez classique :
 
 - elle masque son constructeur pour empêcher l'instanciation. Seule la méthode `of(...)` est le point d'entrée.
 - elle conserve dans un attribut `private T value` la valeur à tester.
-- elle détient une `Map<T, Function <T,R>>` pour associer les valeurs simples de type `T` à des fonctions qui retourneront une valeur.
+- elle détient une `Map<T, Function <T,R>>` pour associer les valeurs simples de type `T` à des fonctions qui retourneront un résultat.
 - elle détient une liste de tuples `Predicate<T>, Function<T,R>` pour gérer les cas complexes comme des plages de valeurs.
 - elle détient une réference vers une fonction pour le cas par défaut : `private Function<T, R> defaultCase`,
 - et enfin elle implémente bien évidemment les deux interfaces techniques `SwithDefaultCase<T, R>` et `SwitchStep<T, R>` décrites au paragraphe précédent.
