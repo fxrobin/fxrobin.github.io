@@ -24,7 +24,7 @@ mais je ne renonce pas à la beauté du geste.
 
 ## Mise en jambe
 
-Avec l'arrivé de Java 12, voici comment un nouveau bloc switch/case peut s'écrire :
+Avec l'arrivée de Java 12, voici comment un nouveau bloc switch/case peut s'écrire :
 
 ```java
 int initialValue = ... ; // cet entier contient une valeur arbitraire
@@ -74,7 +74,7 @@ Je me suis alors fait la réflexion suivante ...
 
 ## Usage
 
-Je suis parti de ce que je voulais obtenir côté « utilisateur/développeur » avec un quelquechose de simple :
+Je suis parti de ce que je voulais obtenir côté « utilisateur/développeur » avec un quelque chose de simple :
 
 ```java
 String result = Switch.of(initialValue, String.class)
@@ -87,9 +87,11 @@ String result = Switch.of(initialValue, String.class)
 Dans les points clés :
 
 - obligation de spécifier un cas par défaut, donc on commence par lui,
-- ajout simple de "matching values" en associant une `function<T,R>` : `T` étant le type de la valeur testé, ici Integer (int auto-boxé) et `R` le type de retour, ici `String`.
-- un enchainement infini avec la methode `single` et donc du method-chaining à la mode
-- la méthode finale `resolve()`
+- ajout simple de "matching values" en associant une `function<T,R>` : `T` étant le type de la valeur testée, ici `Integer` (int auto-boxé) et `R` le type de retour, ici `String`.
+- un enchaînement infini avec la methode `single` et donc du method-chaining à la mode
+- la méthode terminale `resolve()` qui déclenche l'exécution globale du `Switch`.
+
+Le type de retour est complètement générique. Dans cet exemple il s'agit d'une instance de la classe `String`.
 
 Avec un usage plus avancé, qui permet de répondre à mon besoin de plage de valeurs, mais pas seulement :
 
@@ -111,17 +113,21 @@ Revenons un peu sur cette ligne :
 
 Elle est composée :
 
-- du prédicat en premier argument, ici exprimée sous forme d'expression lambda `value -> value > 10 && value < 15`
-- puis de la fonction à exécuter le cas échéant, toujours exprimée avec une lamnda `value -> "superior to 10!"`
+- du prédicat en premier argument, ici exprimé sous forme d'expression lambda `value -> value > 10 && value < 15`
+- puis de la fonction à exécuter le cas échéant, toujours exprimée avec une lambda `value -> "superior to 10!"`
 
 ## Les interfaces techniques SwitchDefaultCase et SwitchRule
 
-Pour définir une belle API *fluent*, qui impose un ordre dans l'enchainement des méthodes, voire qui en rend obligatoire certaines,
+Pour définir une belle API *fluent*, qui impose un ordre dans l'enchaînement des méthodes, voire qui en rend obligatoire certaines,
 il faut passer par la définition d'interfaces techniques qui restreignent les appels possibles en fonction du dernier appel de méthode.
 
-Par exemple, la méthode statique `of(...)` sera le point d'entrée et on ne pourra chainer que la méthode `defaultCase` que l'on souhaite obligatoire. La méthode `of(...)` doit par conséquent retourner un ensemble restreint des méthodes autorisées.
+> Hein ? Mais qu'est-ce qu'il dit ?
 
-Il en va de même pour les méthodes `defaultCase(...)`, `predicate(...)` et `single(...)`.
+Par exemple, la méthode statique `of(...)` sera le point d'entrée et on ne pourra chaîner que la méthode `defaultCase` que l'on souhaite obligatoire. La méthode `of(...)` doit, par conséquent, retourner un ensemble restreint des méthodes autorisées.
+
+Il en va de même pour les méthodes `defaultCase(...)`, `predicate(...)` et `single(...)`. On ne pourra pas enchaîner les `single(...)` ou `predicate(...)` tant que l'on a pas utilisé `defaultCase(...)`. De plus, on ne pourra pas déclencher `resolve()` tant que `defaultCase(...)` n'a pas été utilisé non plus. Cela assure un bon usage de la classe Switch, ce qui est le principal intérêt du method-chaining.
+
+> Ok merci c'est plus clair maintenant !
 
 Voici donc la première interface technique qui autorise uniquement la méthode `defaultCase(...)` :
 
@@ -141,13 +147,13 @@ import java.util.function.Function;
 public interface SwitchDefaultCase <T,R>
 {
   /**
-   * set the default function that will be executed if no single value nor predicates matches
+   * set the default function that will be executed if no single value nor predicate matches
    * the current value of the switch instance.
    * 
    * @param function
    *    called function when o single value nor predicates matches the current value.
    * @return
-   *    current instance of the switch which allows method chaining. 
+   *    current instance of the switch which allows method chaining.
    */
   SwitchStep<T, R> defaultCase(Function<T, R> function);
 }
@@ -196,13 +202,13 @@ public interface SwitchStep <T,R>
    * @param function
    *    function that will be executed if the predicate returns true.
    * @return
-   *    current instance of the switch which allows method chaining. 
+   *    current instance of the switch which allows method chaining.
    */
   SwitchStep<T, R> predicate(Predicate<T> predicate, Function<T, R> function);
   
   /**
    * last operation of the switch method chaining which executes the flow
-   * of the rules looking first for single value, then predicates, then the
+   * of the rules looking for a matching single value, then predicates, then the
    * default function.
    * 
    * @return
@@ -211,7 +217,7 @@ public interface SwitchStep <T,R>
 }
 ```
 
-Notez les type de retour des méthodes qui assurent le chainage correct pour le "method-chaining".
+Notez les type de retour des méthodes qui assurent le chaînage correct pour le "method-chaining".
 
 ## La classe Switch
 
@@ -219,7 +225,7 @@ La classe `Switch` est assez classique :
 
 - elle masque son constructeur pour empêcher l'instanciation. Seule la méthode `of(...)` est le point d'entrée.
 - elle conserve dans un attribut `private T value` la valeur à tester.
-- elle détient une `Map<T, Function <T,R>>` pour associé les valeurs simples de type `T` à des fonction qui retourneront une valeur.
+- elle détient une `Map<T, Function <T,R>>` pour associer les valeurs simples de type `T` à des fonctions qui retourneront une valeur.
 - elle détient une liste de tuples `Predicate<T>, Function<T,R>` pour gérer les cas complexes comme des plages de valeurs.
 - elle détient une réference vers une fonction pour le cas par défaut : `private Function<T, R> defaultCase`,
 - et enfin elle implémente bien évidemment les deux interfaces techniques `SwithDefaultCase<T, R>` et `SwitchStep<T, R>` décrites au paragraphe précédent.
@@ -238,7 +244,7 @@ import java.util.function.Predicate;
 
 /**
  * an implementation of a "switch-like" structure which can return a value and
- * allows functional calls. The switch flow is build through method chaining.
+ * allows functional calls. The switch flow is built through method chaining.
  * 
  * @author F.X. Robin
  *
@@ -249,7 +255,6 @@ import java.util.function.Predicate;
  */
 public final class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T, R>
 {
-  
   /**
    * function executed when no value has been found.
    */
@@ -351,15 +356,15 @@ public final class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T
 }
 ```
 
-> Notez ici l'usage de l'interface `Entry` et la classe `SimpleEntry` de l'API Collections de Java pour obtenir une liste de tuples.
+> Notez ici l'usage de l'interface `Entry` ainsi que de la classe `SimpleEntry` de l'API Collections de Java pour obtenir une liste de tuples.
 
 En termes d'algorithmique :
 
-- première étape, une recherche dans la Map parmis les valeurs simples,
-- deuxième étape, si rien n'est résolu dans première, une recherche parmis la liste de prédicats,
-- troisième et dernière étape, si rien n'est toujours résolu, déclenchement de la fonction par défaut référencée par le champ `defaultCase`.
+1. une recherche dans la Map parmis les valeurs simples,
+2. si rien n'est résolu dans première, une recherche parmis la liste de prédicats,
+3. si toujours rien n'est résolu, déclenchement de la fonction par défaut référencée par le champ `defaultCase`.
 
-Cela fonctionne avec des prédicats bien plus évolués que des plages de valeur, ce qui rend l'ensemble très ouvert, bien plus qu'un `switch/case` Java 12.
+Cela fonctionne avec des prédicats bien plus évolués que des plages de valeurs, ce qui rend l'ensemble bien plus ouvert qu'un `switch/case` Java 12.
 
 ## Fin de l'histoire
 
