@@ -45,7 +45,7 @@ Le principal problème, et c'est malheureusement bien dommage que cela n'ait pas
 Typiquement, on aurait bien aimé quelque chose dans ce genre dans l'exemple précedent sur la plage de valeur `2..5` :
 
 ```java
-switch (intialValue)  
+switch (initialValue)  
 {
 	case 1 -> returnedValue = "Too small!";  
 	case 2..5 -> returnedValue = "Good value!";  
@@ -232,11 +232,11 @@ La classe `Switch` est assez classique :
 - et enfin elle implémente bien évidemment les deux interfaces techniques `SwithDefaultCase<T, R>` et `SwitchStep<T, R>` décrites au paragraphe précédent.
 
 ```java
-package fr.fxjavadevblog.fs;
+package fr.fxjavadevblogVoici la description de l'algorithme interne de la classe `Switch` :fs;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.AbstracVoici la description de l'algorithme interne de la classe `Switch` :Map.SimpleEntry;
+import java.util.HashMapVoici la description de l'algorithme interne de la classe `Switch` :
+import java.util.LinkedLVoici la description de l'algorithme interne de la classe `Switch` :st;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
