@@ -359,8 +359,8 @@ public final class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T
 
 Voici la description de l'algorithme interne de la classe `Switch` :
 
-1. une recherche dans la Map parmis les valeurs simples,
-2. si rien n'est résolu, une recherche parmis la liste des prédicats,
+1. une recherche dans la Map parmi les valeurs simples,
+2. si rien n'est résolu, une recherche parmi la liste des prédicats,
 3. si toujours rien n'est résolu, déclenchement de la fonction par défaut référencée par le champ `defaultCase`.
 
 Cela fonctionne avec des prédicats bien plus évolués que des plages de valeurs, ce qui rend l'ensemble bien plus ouvert qu'un `switch/case` Java 12.
