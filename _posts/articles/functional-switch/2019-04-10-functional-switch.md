@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Functional Switch/Case
-subtitle: parce que la sortie de Java m'a donné cette idée saugrenue
+subtitle: parce que le nouveau Switch/Case de Java 12 m'a donné cette idée saugrenue
 logo: code.png
 category: articles
 tags: [Java, Lambda, Functional, Fluent API, Builder]
@@ -10,8 +10,8 @@ lang: fr
 
 <div class="intro" markdown='1'>
 
-Java 12 vient de sortir, apportant une nouvelle façon d'écrire des structures de contrôle "switch/case".
-Cela m'a donné une idée, certes un peu étrange, de revoir le traditionnel "switch/case" mais d'un point de vue
+Java 12 est sorti le 20/03/19, apportant une nouvelle façon d'écrire des structures de contrôle `switch/case`.
+Cela m'a donné une idée, certes un peu étrange, de revoir le traditionnel `switch/case` d'un point de vue
 programmation fonctionnelle, en s'appuyant sur des lambdas et la création d'une *petite* classe `Switch` pour
 remplir un rôle de structure conditionnelle.
 
@@ -24,14 +24,14 @@ mais je ne renonce pas à la beauté du geste.
 
 ## Mise en jambe
 
-Avec l'arrivé de Java 12, voici comment un nouveau bloc switch/case peut s'écrire
+Avec l'arrivé de Java 12, voici comment un nouveau bloc switch/case peut s'écrire :
 
 ```java
-int intialValue = ... ; // cet entier contient une valeur arbitraire
+int initialValue = ... ; // cet entier contient une valeur arbitraire
 
 String returnedValue;  
 
-switch (intialValue)  
+switch (initialValue)  
 {
 	case 1 -> returnedValue = "Too small!";  
 	case 2, 3, 4, 5 -> returnedValue = "Good value!";  
@@ -40,9 +40,9 @@ switch (intialValue)
 }  
 ```
 
-Le problème principal, et c'est malheureusement bien dommage que cela n'ait pas été pris en compte dans la [JEP 325](http://openjdk.java.net/jeps/325), ce sont des plages de valeurs.
+Le principal problème, et c'est malheureusement bien dommage que cela n'ait pas été pris en compte dans la [JEP 325](http://openjdk.java.net/jeps/325), ce sont des **plages de valeurs**.
 
-Typiquement, on aurait bien aimé quelquechose dans ce genre dans l'exemple précedent sur la plage de valeur `2..5` :
+Typiquement, on aurait bien aimé quelque chose dans ce genre dans l'exemple précedent sur la plage de valeur `2..5` :
 
 ```java
 switch (intialValue)  
@@ -54,13 +54,27 @@ switch (intialValue)
 }  
 ```
 
-Ne cherchez pas à compiler le code ci-dessus ! Il est biensûr syntaxiquement incorrect.
+Ne cherchez pas à compiler le code ci-dessus ! Il est **syntaxiquement incorrect**.
 
-Je me suis alors dit : "en réalité, un `switch/case` c'est une valeur, un ensemble de prédicats (simples ou complexes) et une fonction associée à chacun d'entre-eux. *Let's code it in a functional way!*
+![Atari ST Bombs](/images/bombs.png)
+{: style="text-align : center"}
+
+Je me suis alors fait la réflexion suivante ...
+
+![Pensif](/images/thinking.jpg)
+{: style="text-align : center"}
+
+« En vrai, un `switch/case` c'est globalement :
+
+- une valeur à tester,
+- un ensemble de prédicats (simples ou complexes) et une fonction associée à chacun d'entre-eux,
+- un cas par défaut. »
+  
+*Let's code it in a functional way!*
 
 ## Usage
 
-Je suis parti de ce que je voulais obtenir côté "utilisateur/développeur" avec un "truc" simple :
+Je suis parti de ce que je voulais obtenir côté « utilisateur/développeur » avec un quelquechose de simple :
 
 ```java
 String result = Switch.of(initialValue, String.class)
@@ -72,7 +86,7 @@ String result = Switch.of(initialValue, String.class)
 
 Dans les points clés :
 
-- obligation de mettre un cas par défaut, donc on commence par lui,
+- obligation de spécifier un cas par défaut, donc on commence par lui,
 - ajout simple de "matching values" en associant une `function<T,R>` : `T` étant le type de la valeur testé, ici Integer (int auto-boxé) et `R` le type de retour, ici `String`.
 - un enchainement infini avec la methode `single` et donc du method-chaining à la mode
 - la méthode finale `resolve()`
@@ -95,21 +109,21 @@ Revenons un peu sur cette ligne :
 .predicate(value -> value > 10 && value < 15, value -> "superior to 10!")
 ```
 
-La ligne suivante est composée : 
+Elle est composée :
+
 - du prédicat en premier argument, ici exprimée sous forme d'expression lambda `value -> value > 10 && value < 15`
 - puis de la fonction à exécuter le cas échéant, toujours exprimée avec une lamnda `value -> "superior to 10!"`
 
 ## Les interfaces techniques SwitchDefaultCase et SwitchRule
 
-Pour définir une belle API fluent qui impose un ordre dans l'enchainement des méthodes, voire qui rend obligatoire certaines,
-il faut passer par la définition d'interfaces techniques qui restreignent les fonctionnalité en fonction du dernier appel de méthode.
+Pour définir une belle API *fluent*, qui impose un ordre dans l'enchainement des méthodes, voire qui en rend obligatoire certaines,
+il faut passer par la définition d'interfaces techniques qui restreignent les appels possibles en fonction du dernier appel de méthode.
 
 Par exemple, la méthode statique `of(...)` sera le point d'entrée et on ne pourra chainer que la méthode `defaultCase` que l'on souhaite obligatoire. La méthode `of(...)` doit par conséquent retourner un ensemble restreint des méthodes autorisées.
 
 Il en va de même pour les méthodes `defaultCase(...)`, `predicate(...)` et `single(...)`.
 
 Voici donc la première interface technique qui autorise uniquement la méthode `defaultCase(...)` :
-
 
 ```java
 package fr.fxjavadevblog.fs;
@@ -139,7 +153,7 @@ public interface SwitchDefaultCase <T,R>
 }
 ```
 
-Et voici la seconde interface technique qui autorise les méthodes :
+Et voici la seconde interface technique qui autorise exclusivement les méthodes :
 
 - `single(...)`
 - `predicate(...)`
@@ -233,7 +247,7 @@ import java.util.function.Predicate;
  * @param <R>
  *          type of the returned value
  */
-public class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T, R>
+public final class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T, R>
 {
   
   /**
@@ -303,7 +317,7 @@ public class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T, R>
 
   private R findAndApplyFirstPredicate()
   {
-		// algorithm gurus will not like this for-each-returning-first-value loop, but it's efficient, so let's keep it!
+    // algorithm gurus will not like this for-each-returning-first-value loop, but it's efficient, so let's keep it!
     for (Entry<Predicate<T>, Function<T, R>> entry : predicates)
     {
       if (entry.getKey().test(value))
@@ -342,12 +356,14 @@ public class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T, R>
 En termes d'algorithmique :
 
 - première étape, une recherche dans la Map parmis les valeurs simples,
-- si rien n'est résolu, une recherche parmis la liste de prédicats,
-- si rien n'est résolu non plus, déclenchement de la fonction par défaut référencée par le champ `defaultCase`.
+- deuxième étape, si rien n'est résolu dans première, une recherche parmis la liste de prédicats,
+- troisième et dernière étape, si rien n'est toujours résolu, déclenchement de la fonction par défaut référencée par le champ `defaultCase`.
 
-Cela fonctionne avec des prédicats bien plus évolués que des plages de valeur, ce qui rend l'ensemble très modulable,
-bien plus qu'un `switch/case` Java 12.
+Cela fonctionne avec des prédicats bien plus évolués que des plages de valeur, ce qui rend l'ensemble très ouvert, bien plus qu'un `switch/case` Java 12.
 
 ## Fin de l'histoire
 
-Rien à ajouter, sinon qu'il s'agit de la "fin de l'histoire".
+Rien à ajouter, sinon qu'il s'agit de la **« fin de l'histoire »**.
+
+![The end](/images/the-end.png)
+{: style="text-align : center; width : 50%"}
