@@ -380,7 +380,7 @@ Il serait donc intéressant de pouvoir :
 > C'est parti ! Let's have fun!
 
 Première étape, on introduit une nouvelle interface qui permet de faire uniquement un `resolve(T value)`. Initialement `resolve()` n'avait pas besoin de valeur
-puisque celle-ci était fournie à l'appel de la méthode `of(...)`. Cette interface, je décide de l'appeler `SwitchExpression <T, R>`
+puisque celle-ci était fournie à l'appel de la méthode `of(...)`. Cette interface, je décide de l'appeler `SwitchExpression <T, R>`.
 
 ```java
 package fr.fxjavadevblog.fs;
@@ -429,7 +429,7 @@ public SwitchExpression<T, R> build()
 }
 ```  
 
-Et enfin il faut implementer la méthode `resolve(T value)` dans la classe `Switch`. Evidemment, je réutilise la méthode `resolve()` qui existe déjà :
+Et enfin il faut implementer la méthode `resolve(T value)` dans la classe `Switch` puisqu'elle implémente maintenant l'interface `SwitchExpression <T, R>`. Evidemment, je réutilise la méthode `resolve()` qui existe déjà :
 
 ```java
 /**
