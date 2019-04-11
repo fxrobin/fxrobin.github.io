@@ -19,7 +19,7 @@ Cet article a pour objectif de vous donner quelques critères de sélection pour
 
 Je vais poser le décor : je suis de la génération de développeurs Web pour qui le JavaScript était le mal absolu. En effet, entre 1999 et grosso modo 2009, JavaScript était un langage qu'il fallait éviter de part ses piètres performances, son modèle mono-thread et son incompatibilité maladive entre les différents navigateurs. Bref, moins on en faisait, mieux on se portait.
 
-Mais celà a bien changé, depuis l'apparition de NodeJS, d'AngularJS et de React.
+Mais cela a bien changé, depuis l'apparition de NodeJS, d'AngularJS et de React.
 
 > Notez que ce sera la dernière fois que j'écrirai AngularJS dans cet article qui traite bien d'Angular(Pas_JS).
 

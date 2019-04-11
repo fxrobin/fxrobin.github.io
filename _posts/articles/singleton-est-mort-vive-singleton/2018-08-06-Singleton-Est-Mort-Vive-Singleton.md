@@ -230,7 +230,7 @@ Il s'agit d'une question de zone de mémoire de la JVM. Sans rentrer dans trop d
 
 Cette zone était limitée au démarrage de JVM, et bien que paramétrable, elle ne pouvait pas s'étendre dynamiquement. Ainsi, il fallait prévoir au mieux : ni trop, ni trop peu. De plus, et il s'agit du point clé : il fallait optimiser cet espace en y mettant le moins d'éléments `static`. D'où la nécessité d'un singleton avec, comme seule partie `static`, la référence vers son instance.
 
-Celà a conduit bon nombre de sites fonctionnant sous Java EE à observer le fameux `OutOfMemory : PermGen space`. On triturait alors quelques paramètres de JVM (`PermSize`, `MaxPermSize`), mais au fil des redéploiments d'applications (surtout en DEV), le *Permanent Generation Space* se saturait et il fallait tout vider en relançant le serveur d'applications et donc en redémarrant la JVM : PAS BIEN.
+Cela a conduit bon nombre de sites fonctionnant sous Java EE à observer le fameux `OutOfMemory : PermGen space`. On triturait alors quelques paramètres de JVM (`PermSize`, `MaxPermSize`), mais au fil des redéploiments d'applications (surtout en DEV), le *Permanent Generation Space* se saturait et il fallait tout vider en relançant le serveur d'applications et donc en redémarrant la JVM : PAS BIEN.
 
 En Java 8, bim, paf, badaboum, adieu le *PermGen Space*, bienvenue au **Meta Space**.
 

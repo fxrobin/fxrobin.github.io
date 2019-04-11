@@ -41,13 +41,13 @@ Le mot "code" d'ailleurs, est étrange non ? Un développeur "code". Pour qui ? 
 
 Récemment, je n'ai jamais vu un développeur coder directement en binaire et pourtant c'est ce que va comprendre la machine.
 
-En général, un développeur va utiliser un langage qui peut sembler être difficile à lire pour certain, mais c'est bien une langue intermédiaire entre le langage naturel de tous les jours et le langage machine exprimé en binaire. D'ailleurs c'est pour celà que nous avons besoin de traducteurs : les fameux **compilateurs ou interpréteurs** ou équivalent.
+En général, un développeur va utiliser un langage qui peut sembler être difficile à lire pour certain, mais c'est bien une langue intermédiaire entre le langage naturel de tous les jours et le langage machine exprimé en binaire. D'ailleurs c'est pour cela que nous avons besoin de traducteurs : les fameux **compilateurs ou interpréteurs** ou équivalent.
 
 Quand je parle de "code" à quelqu'un qui n'est pas de la profession, il pense que je fais de l'hexadécimal façon Matrix toute la journée. C'est un "code", c'est un "truc" **illisible** par définition.
 
 ![Coding](/images/coding-blue.gif){: .video .normal }
 
-Cependant le code (le programme), doit être **lisible, compréhensible et maintenable** par d'autres personnes. C'est pour celà que nous avons un langage commun, dans notre cas il s'agit de Java, mais celà vaut pour tous les langages.
+Cependant le code (le programme), doit être **lisible, compréhensible et maintenable** par d'autres personnes. C'est pour cela que nous avons un langage commun, dans notre cas il s'agit de Java, mais cela vaut pour tous les langages.
 
 Voilà pourquoi Java est verbeux, et **c'est une bonne chose** ! Un développeur écrit un programme qui passera par de nombreuses moulinettes, statiques ou dynamiques, afin d'être exécutable et exécuté. Mais il écrit aussi et surtout **pour lui-même et pour les autres**. C'est par ailleurs l'une des raisons pour lesquelles je ne comprendrai jamais le fameux "*Quick & Dirty*".
 
@@ -65,7 +65,7 @@ Files.lines(Paths.get("fichier.txt")).forEach(System.out::println);
 
 Pour le coup, cette ligne de code est succincte, mais verbeuse (oui !) et donc expressive.
 
-Le postulat admis "*Java c'est verbeux*" est-il suffisant pour que celà en fasse du code lisible, compréhensible et maintenable ?
+Le postulat admis "*Java c'est verbeux*" est-il suffisant pour que cela en fasse du code lisible, compréhensible et maintenable ?
 
 ## Du code lisible, j'en fais comment ?
 
@@ -237,7 +237,7 @@ Etonnant non ? N'arrivez-vous pas à voir la structure de cette méthode ?
 
 Et pourtant j'ai tout enlevé pour ne laisser que l'indentation, les retours à la ligne et seulement quatre caractères `X $ | /`.
 
-En effet, notre cerveau accorde beaucoup d'attention à la **représentation spatiale des choses, à la leur forme, leur couleur**. La structure d'un programme n'échappe pas à cette caractéristique, c'est pour celà qu'on aime avoir de la colorisation syntaxique dans nos IDE.
+En effet, notre cerveau accorde beaucoup d'attention à la **représentation spatiale des choses, à la leur forme, leur couleur**. La structure d'un programme n'échappe pas à cette caractéristique, c'est pour cela qu'on aime avoir de la colorisation syntaxique dans nos IDE.
 
 Si une voiture avait la forme d'une pomme vous penseriez d'abord à la manger avant de la conduire. C'est après une seconde analyse, certes rapide, que votre cerveau déduit que la pomme est trop grosse et qu'elle circule sur la route ... c'est une voiture. Mais quel effort pour pas grand chose : **DONNEZ DE LA FORME A VOTRE CODE**, votre cerveau vous remerciera !
 
@@ -568,7 +568,7 @@ Il m'arrive d'y déroger, comme toute règle, mais je vous suggère d'aller rega
 
 J'espère vous avoir convaincus sur l'ensemble de ces pratiques, au moyen de l'exemple choisi.
 
-Cela demande quelques efforts, mais les outils de **refactoring** (extract method, etc.) de vos IDE préférés sont excellents pour celà. N'hésitez pas et pensez à ceux qui passent après vous !
+Cela demande quelques efforts, mais les outils de **refactoring** (extract method, etc.) de vos IDE préférés sont excellents pour cela. N'hésitez pas et pensez à ceux qui passent après vous !
 
 Bon allez, comme vous êtes allés jusqu'à la conclusion, j'avoue, je ne fais pas exactement ce que j'ai mis en exemple de code en ce qui concerne les arguments. Voici plutôt ma façon de faire actuelle avec tous les arguments sur la même ligne :
 

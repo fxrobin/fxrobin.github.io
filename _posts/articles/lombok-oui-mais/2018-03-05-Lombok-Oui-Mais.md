@@ -181,7 +181,7 @@ public class Vehicule implements Serializable
 
 Le code généré par Eclipse est convenable. J'ai choisi dans cet exemple l'option « StringBuilder chaining » pour `toString` mais souvent je préfère la méthode `String.format` que je trouve plus maintenable au détriment peut-être d'un peu de performance.
 
-Mais celà reste du code source généré : *tout code source, même généré doit être maintenable et maintenu !*
+Mais cela reste du code source généré : *tout code source, même généré doit être maintenable et maintenu !*
 
 ### Implémentation avec Lombok
 
@@ -246,7 +246,7 @@ Cela étant, après 4 ans d'usage, je préfère quand même faire figurer les mo
 
 Et voilà comment passer de plus de 100 lignes de code à 16 lignes ! C'est quand même bien plus clair et quel temps gagné ! Mais on ne va pas en rester là. Lombok peut nous apporter plus encore.
 
-Avant celà, détaillons un peu les annotations utilisées :
+Avant cela, détaillons un peu les annotations utilisées :
 
 * `@FieldDefaults(level=AccessLevel.PRIVATE)` : passe tous les champs en `private` ;
 * `@NoArgsConstructor` : génère le constructeur sans argument et `public` ;
