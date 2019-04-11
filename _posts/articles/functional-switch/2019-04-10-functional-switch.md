@@ -375,7 +375,7 @@ Il serait donc intéressant de pouvoir :
 
 - construire une instance de `Switch`, sans valeur particulière,
 - conserver une référence de cette instance en `static` par exemple,
-- déclencher le *flow* au moyen de `resolve()` **mais avec une valeur**, le moment venu.
+- déclencher le *flow* au moyen d'une nouvelle méthode `resolve(T value)` qui prendra en argument la valeur à tester.
 
 > C'est parti ! Let's have fun!
 
