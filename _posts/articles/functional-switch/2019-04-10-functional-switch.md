@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Functional Switch/Case
+title: Functional Switch/Case en Java 8 et +
 subtitle: parce que le nouveau Switch/Case de Java 12 m'a donné cette idée saugrenue
 logo: code.png
 category: articles
