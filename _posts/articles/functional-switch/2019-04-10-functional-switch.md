@@ -419,7 +419,7 @@ public static <T, R> SwitchDefaultCase<T, R> start()
 }
 ```
 
-De plus, toujours dans la classe `Switch`, il nous faut une méthode terminale de method-chaining qui retournera l'instance actuelle du `Switch`, sous forme de `SwitchExpression`. Cela imposera l'usage unique de `resolve(T value)`. J'appelle cette méthode `build()` :
+De plus, toujours dans la classe `Switch`, il nous faut maintenant une méthode terminale de method-chaining qui retournera l'instance actuelle du `Switch`, sous forme de `SwitchExpression`. Cela imposera l'usage unique de `resolve(T value)`. J'appelle cette méthode `build()` :
 
 ```java
 @Override
@@ -481,7 +481,7 @@ Cette fois-ci le `Switch` n'est construit qu'une seule fois et peut être décle
 
 ## Fin de l'histoire
 
-Vous pouvez récuperer le code source de cet article ici : [https://github.com/fxrobin/functional-switch](https://github.com/fxrobin/functional-switch)
+Vous pouvez récupérer le code source de cet article ici : [https://github.com/fxrobin/functional-switch](https://github.com/fxrobin/functional-switch)
 
 Rien à ajouter, sinon que je me suis bien (encore) bien amusé et qu'il s'agit de la **« fin de l'histoire »**.
 
