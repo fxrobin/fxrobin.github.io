@@ -12,7 +12,7 @@ lang: fr
 
 Java 12 est sorti le 20/03/19, apportant une nouvelle façon d'écrire des structures de contrôle `switch/case`.
 Cela m'a donné une idée, certes un peu étrange, de revoir le traditionnel `switch/case` d'un point de vue
-programmation fonctionnelle en s'appuyant sur des lambdas et une *petite* classe `Switch`.
+programmation fonctionnelle en s'appuyant sur des lambdas et une *petite* classe `Switch`, **le tout en JAVA 8** !
 
 Attention toutefois, il est *certain* que cette approche est beaucoup moins performante qu'un `switch/case` classique,
 mais je ne renonce pas à la beauté du geste.
