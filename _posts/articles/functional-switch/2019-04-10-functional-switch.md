@@ -365,9 +365,125 @@ Voici la description de l'algorithme interne de la classe `Switch` :
 
 Cela fonctionne avec des prédicats bien plus évolués que des plages de valeurs, ce qui rend l'ensemble bien plus ouvert qu'un `switch/case` Java 12.
 
+## Pour aller encore plus loin, petite optimisation
+
+En l'état, c'est assez satisfaisant, mais le coût de création du Switch à chaque appel peu être très élevé.
+
+Généralement, les différents cas et prédicats sont assez stables et évoluent assez peu au *Runtime*.
+
+Il serait donc intéressant de pouvoir :
+
+- construire une instance de `Switch`, sans valeur particulière,
+- conserver une référence de cette instance en `static` par exemple,
+- déclencher le *flow* au moyen de `resolve()` **mais avec une valeur**, le moment venu.
+
+> C'est parti ! Let's have fun!
+
+Première étape, on introduit une nouvelle interface qui permet de faire uniquement un `resolve(T value)`. Initialement `resolve()` n'avait pas besoin de valeur
+puisque celle-ci était fournie à l'appel de la méthode `of(...)`. Cette interface, je décide de l'appeler `SwitchExpression <T, R>`
+
+```java
+package fr.fxjavadevblog.fs;
+
+/**
+ * represents a fully constructed Switch instance which can resolve a specific value.
+ * 
+ * @author F.X. Robin
+ *
+ * @param <T>
+ * @param <R>
+ */
+public interface SwitchExpression <T, R>
+{
+  /**
+   * last operation of the switch method chaining which executes the flow
+   * of the rules looking for a matching single value, then the list of predicates, then the
+   * default function.
+   * 
+   * @param value
+   *          value to test
+   * @return
+   *          result of the Switch flow.
+   */
+  R resolve(T value);
+}
+```
+
+Ensuite, au sein de classe `Switch`, il nous faut une nouvelle méthode de "démarrage" statique en complément de `of(...)`. 
+En manque d'inspiration, je la nomme `start()`.
+
+```java
+public static <T, R> SwitchDefaultCase<T, R> start()
+{
+  return new Switch<T, R>();
+}
+```
+
+De plus, toujours dans la classe `Switch`, il nous faut une méthode terminale de method-chaining qui retournera l'instance actuelle du `Switch`, sous forme de `SwitchExpression`. Cela imposera l'usage unique de `resolve(T value)`. J'appelle cette méthode `build()` :
+
+```java
+@Override
+public SwitchExpression<T, R> build()
+{
+  return this;
+}
+```  
+
+Et enfin il faut implementer la méthode `resolve(T value)` dans la classe `Switch`. Evidemment, je réutilise la méthode `resolve()` qui existe déjà :
+
+```java
+/**
+* @see {@link SwitchExpression#resolve(T)}
+*/
+@Override
+public R resolve(T value)
+{
+  this.value = value;
+  return resolve();
+}
+```
+
+Tout est prêt pour quelques tests unitaires **JUnit 5** :
+
+```java
+public class SwitchTest
+{
+  public static SwitchExpression<Integer, String> localSwitch;
+
+  @BeforeAll
+  public static void init()
+  {
+    localSwitch = Switch.<Integer, String> start()
+                        .defaultCase(value -> value + " : no case!")
+                        .predicate(value -> value > 10 && value < 15, value -> "superior to 10!")
+                        .predicate(value -> value >= 0 && value <= 10, value -> value + " is between 0 and 10")
+                        .single(10, value -> "10 is the best value!")
+                        .single(3, value -> "3 is an exception!")
+                        .build();
+  }
+
+  @Test
+  public void staticTest3()
+  {
+    assertEquals("3 is an exception!", localSwitch.resolve(3));
+  }
+  
+  @Test
+  public void staticTest5()
+  {
+    assertEquals("5 is between 0 and 10", localSwitch.resolve(5));
+  }
+}
+```  
+
+Cette fois-ci le `Switch` n'est construit qu'une seule fois et peut être déclenché autant de fois que nécessaire avec une valeur différente
+à chaque appel de `resolve(...)`.
+
 ## Fin de l'histoire
 
-Rien à ajouter, sinon qu'il s'agit de la **« fin de l'histoire »**.
+Vous pouvez récuperer le code source de cet article ici : [https://github.com/fxrobin/functional-switch](https://github.com/fxrobin/functional-switch)
+
+Rien à ajouter, sinon que je me suis bien (encore) bien amusé et qu'il s'agit de la **« fin de l'histoire »**.
 
 ![The end](/images/the-end.png)
 {: style="text-align : center; width : 50%"}
