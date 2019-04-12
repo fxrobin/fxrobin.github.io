@@ -483,7 +483,7 @@ Cette fois-ci le `Switch` n'est construit qu'une seule fois et peut être décle
 
 Vous pouvez récupérer le code source de cet article ici : [https://github.com/fxrobin/functional-switch](https://github.com/fxrobin/functional-switch)
 
-Rien à ajouter, sinon que je me suis bien (encore) bien amusé et qu'il s'agit de la **« fin de l'histoire »**.
+Rien à ajouter, sinon que je me suis (encore) bien amusé et qu'il s'agit de la **« fin de l'histoire »**.
 
 ![The end](/images/the-end.png)
 {: style="text-align : center; width : 50%"}
