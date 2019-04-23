@@ -319,6 +319,7 @@ public final class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T
     return singleValuefunctions.containsKey(value) ? singleValuefunctions.get(value).apply(value) : findAndApplyFirstPredicate();
   }
 
+  // only to reduce complexity in this class.
   private R findAndApplyFirstPredicate()
   {
     return predicates.stream()
