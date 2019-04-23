@@ -5,6 +5,7 @@ subtitle: Afin de (re)découvrir quelques subtilités de ce mécanisme en Java .
 category: articles
 logo: brain-logo.png
 lang: fr
+ref: construction-instance-java
 ---
 
 <div class="intro" markdown='1'>

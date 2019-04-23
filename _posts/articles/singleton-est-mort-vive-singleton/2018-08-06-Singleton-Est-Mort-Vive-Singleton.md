@@ -6,6 +6,7 @@ logo: brain-logo.png
 category: articles
 tags: [patterns,java,lazy,threadsafe,classloading,holder,permgen,meta]
 lang: fr
+ref: single-est-mort-vive-singleton
 ---
 
 <div class="intro" markdown='1'>

@@ -6,6 +6,7 @@ logo: xenon-reborn.png
 category: articles
 tags: [algo, LibGDX, java]
 lang: fr
+ref: xenon-reborn
 ---
 
 <div class="intro" markdown='1'>

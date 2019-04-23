@@ -6,6 +6,7 @@ logo: api-preconditions.png
 category: articles
 tags: [Java, Guava, Apache Preconditions, Spring, Bean Validation, CleanCode, JAX-RS, REST]
 lang: fr
+ref: api-preconditions
 ---
 
 <div class="intro" markdown='1'>

@@ -6,6 +6,7 @@ logo: eclipse.png
 category: articles
 tags: [OpenSource, Eclipse, Java, GlassFish, GlasFishTools]
 lang: fr
+ref: contribuer-eclipse-foundation-done
 ---
 
 <div class="intro" markdown='1'>

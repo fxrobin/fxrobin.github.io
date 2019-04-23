@@ -6,6 +6,7 @@ logo: code.png
 category: articles
 tags: [Java, Craftmanship, CleanCode]
 lang: fr
+ref: coding-style
 ---
 
 <div class="intro" markdown='1'>

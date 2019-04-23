@@ -6,6 +6,7 @@ logo: archiva-rpi.png
 category: articles
 tags: [OpenSource, Maven, Archiva, Raspberry]
 lang: fr
+ref: archiva-raspberry
 ---
 
 <div class="intro" markdown='1'>

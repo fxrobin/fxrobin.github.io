@@ -6,6 +6,7 @@ logo: jshell-http-server.png
 category: articles
 tags: [Java_10, JShell, HttpServer, HttpHandler]
 lang: fr
+ref: jshell-http-server
 ---
 
 <div class="intro" markdown='1'>

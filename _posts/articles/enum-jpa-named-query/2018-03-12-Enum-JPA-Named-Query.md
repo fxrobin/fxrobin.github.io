@@ -6,6 +6,7 @@ logo: java-jpa.png
 category: articles
 tags: [java_ee, jpa]
 lang: fr
+ref: enum-jpa-named-query
 ---
 
 <div class="intro" markdown='1'>

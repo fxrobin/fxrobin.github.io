@@ -6,6 +6,7 @@ logo: deltaspike.png
 category: articles
 tags: [Java, CDI, Weld, JUnit, JPA, EclipseLink, H2, Lombok]
 lang: fr
+ref: cdi-deltaspike-junit5
 ---
 
 <div class="intro" markdown='1'>
