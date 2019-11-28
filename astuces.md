@@ -25,8 +25,9 @@ et besoins. Elle ne contient aucun tutoriel mais représente une sorte d'aide-m�
 ### installation
 
 ```
+$ sudo su
 $ apt-get update && apt-get -y upgrade && apt-get –y autoremove
-$ curl -sL https://deb.nodesource.com/setup_4.x | bash -
+$ wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash -
 $ apt-get install -y nodejs
 $ npm install -g browser-sync
 ```
