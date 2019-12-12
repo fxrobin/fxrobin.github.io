@@ -19,6 +19,17 @@ et besoins. Elle ne contient aucun tutoriel mais représente une sorte d'aide-m�
 
 <!--excerpt-->
 
+## VirtualBox : redimensionner un fichier VDI
+
+Fermer la machine virtuelle (shutdown), puis dans un terminal :
+
+```
+$ VBoxManage modifyhd fichier.vdi --resize 20000`
+```
+
+> Dans cet exemple la partition fera 20 Go à l'issue du  re-dimensionnement.
+
+Puis, lancer la VM et ouvrir un gestionnaire de disques (GParted sous Linux par exemple), et allouer tout l'espace à la partition.
 
 ## BrowserSync
 
