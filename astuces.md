@@ -181,33 +181,6 @@ robin:~/git/XenonReborn $ ~/.bin/mdgentree
 | | | | | | | |__RandomUtils.java
 | | | | | | | |__GameControls.java
 | | | | | | | |__DeltaTimeAccumulator.java
-| | | | | | | |__GdxCommons.java
-| | | | | | |__fonts
-| | | | | | | |__ttf
-| | | | | | | | |__GdxTrueTypeString.java
-| | | | | | | | |__TrueTypeFont.java
-| | | | | | | |__bitmap
-| | | | | | | | |__BitmapFont.java
-| | | | | | | | |__FontUtils.java
-| | | | | | | | |__GdxBitmapString.java
-| | | | | | |__Global.java
-| | | | | | |__SingleExecutor.java
-| | | | | | |__libs
-| | | | | | | |__MusicAsset.java
-| | | | | | | |__TextureAsset.java
-| | | | | | | |__ModAsset.java
-| | | | | | | |__FontAsset.java
-| | | | | | | |__AssetLib.java
-| | | | | | | |__AnimationAsset.java
-| | | | | | | |__SoundAsset.java
-| | | | | | |__displays
-| | | | | | | |__Blinker.java
-| | | | | | | |__Displayable.java
-| | | | | | | |__Renderable.java
-| | | | | | | |__Fader.java
-| | | | | | | |__Interpolator.java
-| | | | | | | |__RenderableAdapter.java
-| | | | | | | |__AnimatedSprite.java
 | | | | | |__screens
 | | | | | | |__AbstractScreen.java
 | | | | | | |__loading
@@ -225,38 +198,6 @@ robin:~/git/XenonReborn $ ~/.bin/mdgentree
 | | | | | | |__MainControler.java
 | | | | | | |__XenonScreen.java
 | | | | | | |__XenonScreenFactory.java
-| | | | | |__artefacts
-| | | | | | |__Event.java
-| | | | | | |__ArtefactsScene.java
-| | | | | | |__AbstractArtefact.java
-| | | | | | |__collectables
-| | | | | | | |__BonusType.java
-| | | | | | | |__Bonus.java
-| | | | | | |__managers
-| | | | | | | |__CollisionManager.java
-| | | | | | | |__ProjectileManager.java
-| | | | | | | |__BonusManager.java
-| | | | | | | |__ExplosionManager.java
-| | | | | | | |__EnemyManager.java
-| | | | | | | |__ScoreManager.java
-| | | | | | |__Artefact.java
-| | | | | | |__ArtefactData.java
-| | | | | | |__enemies
-| | | | | | | |__Enemy.java
-| | | | | | | |__EnemyType.java
-| | | | | | | |__Bullet.java
-| | | | | | |__friendly
-| | | | | | | |__addons
-| | | | | | | | |__Shield.java
-| | | | | | | |__ship
-| | | | | | | | |__Ship.java
-| | | | | | | | |__ShipHandler.java
-| | | | | | | | |__ShipRenderer.java
-| | | | | | | | |__ShipInput.java
-| | | | | | | |__weapons
-| | | | | | | | |__ShootType.java
-| | | | | | | | |__Shoot.java
-| | | | | | | | |__SecondWeapon.java
 | |__assets
 | | |__commons
 | | | |__bonus.png
@@ -273,17 +214,6 @@ robin:~/git/XenonReborn $ ~/.bin/mdgentree
 | | | |__space-megamix.mod
 | | | |__faktory.mod
 | | | |__breathtaker.mod
-| | |__fonts
-| | | |__computer_pixel-7.ttf
-| | | |__font-blue.properties
-| | | |__font-xenon-2.properties
-| | | |__font-green.png
-| | | |__font-xenon.png
-| | | |__font-green.properties
-| | | |__PixelOperatorHB.ttf
-| | | |__font-blue.png
-| | | |__ShareTech-Regular.ttf
-| | | |__font-xenon-2.png
 | | |__log4j2.xml
 | | |__ships
 | | | |__ship_noreactor.png
@@ -294,25 +224,6 @@ robin:~/git/XenonReborn $ ~/.bin/mdgentree
 | | | |__shield.png
 | | |__musics
 | | | |__blank.mp3
-| | |__shoots
-| | | |__bullet.png
-| | | |__shoot-anim.png
-| | | |__shoot.png
-| | | |__little-explosion.png
-| | | |__big-shoot.png
-| | | |__explosion-sheet.png
-| | |__enemies
-| | | |__xenon-ship.png
-| | | |__enemy.png
-| | | |__perforator.png
-| | | |__bug.png
-| | | |__rafale.png
-| | | |__big-enemy.png
-| | | |__black-bird.png
-| | |__maps
-| | | |__map.tmx
-| | | |__level01static_resized.png
-| | | |__tiles.tsx
 | | |__backgrounds
 | | | |__right_bg.png
 | | | |__ghostbusters-bzhcamp.png
@@ -331,86 +242,13 @@ robin:~/git/XenonReborn $ ~/.bin/mdgentree
 | | | |__shoot.mp3
 | | | |__ship_explosion.mp3
 | | | |__shield_up.mp3
-| |__out
-| | |__production
-| | | |__classes
-| | | | |__META-INF
-| | | | | |__XenonReborn.core.main.kotlin_module
-| |__.gitignore
-|__.travis.yml
-|__.vscode
-| |__.gitignore
-|__docs
-| |__dclaa-screens.png
-| |__dclaa-game.png
-|__.git
-| |__objects
-| | |__info
-| | |__pack
-| | | |__pack-24494b1384d2955879ae045fb19ce6ec14056cc2.pack
-| | | |__pack-24494b1384d2955879ae045fb19ce6ec14056cc2.idx
-| |__config
-| |__refs
-| | |__tags
-| | |__heads
-| | | |__master
-| | |__remotes
-| | | |__origin
-| | | | |__HEAD
-| |__branches
-| |__index
-| |__hooks
-| | |__pre-rebase.sample
-| | |__pre-commit.sample
-| | |__pre-receive.sample
-| | |__update.sample
-| | |__pre-applypatch.sample
-| | |__prepare-commit-msg.sample
-| | |__commit-msg.sample
-| | |__applypatch-msg.sample
-| | |__pre-push.sample
-| | |__fsmonitor-watchman.sample
-| | |__post-update.sample
-| |__description
-| |__packed-refs
-| |__info
-| | |__exclude
-| |__HEAD
 | |__logs
 | | |__refs
-| | | |__heads
-| | | | |__master
-| | | |__remotes
-| | | | |__origin
-| | | | | |__HEAD
-| | |__HEAD
-|__desktop
-| |__build.gradle
-| |__.travis.yml
-| |__src
-| | |__fr
-| | | |__fxjavadevblog
-| | | | |__xr
-| | | | | |__Launcher.java
-| |__out
-| | |__production
-| | | |__classes
-| | | | |__META-INF
-| | | | | |__XenonReborn.desktop.main.kotlin_module
-|__gradlew
-|__gradlew.bat
-|__libs
-| |__modplayer-1.0.0.jar
-| |__readme.md
-|__project-resources
-| |__regles-code-formatter-eclipse.xml
-|__settings.gradle
-|__.gitignore
 |__gradle.properties
 |__README.md
 ```
 
-autre solution, installer `tree`
+Autre solution, installer `tree` qui génère un résultat bien plus agréable.
 
 ```bash
 $ sudo apt-get install tree
@@ -449,169 +287,6 @@ $ tree --dirsfirst
 │   │   │   ├── font-xenon.png
 │   │   │   ├── PixelOperatorHB.ttf
 │   │   │   └── ShareTech-Regular.ttf
-│   │   ├── maps
-│   │   │   ├── level01static_resized.png
-│   │   │   ├── map.tmx
-│   │   │   └── tiles.tsx
-│   │   ├── mods
-│   │   │   ├── aa_xenon.xm
-│   │   │   ├── breathtaker.mod
-│   │   │   ├── doodle-doo.mod
-│   │   │   ├── faktory.mod
-│   │   │   ├── intro.mod
-│   │   │   ├── space-megamix.mod
-│   │   │   ├── trance-124.mod
-│   │   │   ├── xenon220.xm
-│   │   │   └── xenon2.mod
-│   │   ├── musics
-│   │   │   └── blank.mp3
-│   │   ├── ships
-│   │   │   ├── shield.png
-│   │   │   ├── ship_left.png
-│   │   │   ├── ship_noreactor.png
-│   │   │   ├── ship_normal.png
-│   │   │   ├── ship_old.png
-│   │   │   └── ship_right.png
-│   │   ├── shoots
-│   │   │   ├── big-shoot.png
-│   │   │   ├── bullet.png
-│   │   │   ├── explosion-sheet.png
-│   │   │   ├── little-explosion.png
-│   │   │   ├── shoot-anim.png
-│   │   │   └── shoot.png
-│   │   ├── sounds
-│   │   │   ├── big-shoot.mp3
-│   │   │   ├── bonus.mp3
-│   │   │   ├── clic.mp3
-│   │   │   ├── explosion.mp3
-│   │   │   ├── game-over.mp3
-│   │   │   ├── shield-activated.mp3
-│   │   │   ├── shield_down.mp3
-│   │   │   ├── shield_up.mp3
-│   │   │   ├── ship_explosion.mp3
-│   │   │   └── shoot.mp3
-│   │   └── log4j2.xml
-│   ├── out
-│   │   └── production
-│   │       └── classes
-│   │           └── META-INF
-│   │               └── XenonReborn.core.main.kotlin_module
-│   ├── src
-│   │   └── fr
-│   │       └── fxjavadevblog
-│   │           └── xr
-│   │               ├── artefacts
-│   │               │   ├── collectables
-│   │               │   │   ├── Bonus.java
-│   │               │   │   └── BonusType.java
-│   │               │   ├── enemies
-│   │               │   │   ├── Bullet.java
-│   │               │   │   ├── Enemy.java
-│   │               │   │   └── EnemyType.java
-│   │               │   ├── friendly
-│   │               │   │   ├── addons
-│   │               │   │   │   └── Shield.java
-│   │               │   │   ├── ship
-│   │               │   │   │   ├── ShipHandler.java
-│   │               │   │   │   ├── ShipInput.java
-│   │               │   │   │   ├── Ship.java
-│   │               │   │   │   └── ShipRenderer.java
-│   │               │   │   └── weapons
-│   │               │   │       ├── SecondWeapon.java
-│   │               │   │       ├── Shoot.java
-│   │               │   │       └── ShootType.java
-│   │               │   ├── managers
-│   │               │   │   ├── BonusManager.java
-│   │               │   │   ├── CollisionManager.java
-│   │               │   │   ├── EnemyManager.java
-│   │               │   │   ├── ExplosionManager.java
-│   │               │   │   ├── ProjectileManager.java
-│   │               │   │   └── ScoreManager.java
-│   │               │   ├── AbstractArtefact.java
-│   │               │   ├── ArtefactData.java
-│   │               │   ├── Artefact.java
-│   │               │   ├── ArtefactsScene.java
-│   │               │   └── Event.java
-│   │               ├── commons
-│   │               │   ├── displays
-│   │               │   │   ├── AnimatedSprite.java
-│   │               │   │   ├── Blinker.java
-│   │               │   │   ├── Displayable.java
-│   │               │   │   ├── Fader.java
-│   │               │   │   ├── Interpolator.java
-│   │               │   │   ├── RenderableAdapter.java
-│   │               │   │   └── Renderable.java
-│   │               │   ├── fonts
-│   │               │   │   ├── bitmap
-│   │               │   │   │   ├── BitmapFont.java
-│   │               │   │   │   ├── FontUtils.java
-│   │               │   │   │   └── GdxBitmapString.java
-│   │               │   │   └── ttf
-│   │               │   │       ├── GdxTrueTypeString.java
-│   │               │   │       └── TrueTypeFont.java
-│   │               │   ├── gamepads
-│   │               │   │   ├── ControllerAdapter.java
-│   │               │   │   └── ControllerFactory.java
-│   │               │   ├── libs
-│   │               │   │   ├── AnimationAsset.java
-│   │               │   │   ├── AssetLib.java
-│   │               │   │   ├── FontAsset.java
-│   │               │   │   ├── ModAsset.java
-│   │               │   │   ├── MusicAsset.java
-│   │               │   │   ├── SoundAsset.java
-│   │               │   │   └── TextureAsset.java
-│   │               │   ├── utils
-│   │               │   │   ├── DeltaTimeAccumulator.java
-│   │               │   │   ├── GameControls.java
-│   │               │   │   ├── GdxCommons.java
-│   │               │   │   ├── ModPlayer.java
-│   │               │   │   ├── MusicPlayer.java
-│   │               │   │   └── RandomUtils.java
-│   │               │   ├── Global.java
-│   │               │   ├── SingleExecutor.java
-│   │               │   └── UserControls.java
-│   │               └── screens
-│   │                   ├── game
-│   │                   │   ├── BackgroundParallaxScrolling.java
-│   │                   │   ├── DashBoard.java
-│   │                   │   ├── GamePlayScreen.java
-│   │                   │   ├── ShipStateObserver.java
-│   │                   │   └── TiledMapScrolling.java
-│   │                   ├── loading
-│   │                   │   └── LoadingScreen.java
-│   │                   ├── menu
-│   │                   │   ├── BackgroundTravelling.java
-│   │                   │   └── MenuScreen.java
-│   │                   ├── AbstractScreen.java
-│   │                   ├── MainControler.java
-│   │                   ├── XenonControler.java
-│   │                   ├── XenonScreenFactory.java
-│   │                   └── XenonScreen.java
-│   └── build.gradle
-├── desktop
-│   ├── out
-│   │   └── production
-│   │       └── classes
-│   │           └── META-INF
-│   │               └── XenonReborn.desktop.main.kotlin_module
-│   ├── src
-│   │   └── fr
-│   │       └── fxjavadevblog
-│   │           └── xr
-│   │               └── Launcher.java
-│   └── build.gradle
-├── docs
-│   ├── dclaa-game.png
-│   └── dclaa-screens.png
-├── gradle
-│   └── wrapper
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
-├── libs
-│   ├── modplayer-1.0.0.jar
-│   └── readme.md
-├── project-resources
-│   └── regles-code-formatter-eclipse.xml
 ├── build.gradle
 ├── gradle.properties
 ├── gradlew
@@ -633,6 +308,16 @@ function mkcd {
     mkdir -p $1
     cd $1
 }
+```
+
+### Echoing like a Terminator
+
+Pour afficher le contenu d'un fichier comme dans Terminator.
+Ca sert à rien, mais c'est FUNNY.
+
+```bash
+$ cat myfile.txt | pv -qL50
+$ echo "I'll be back!" | pv -qL10
 ```
 
 ### maven clean recursif sur des projets maven
