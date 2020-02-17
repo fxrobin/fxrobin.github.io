@@ -11,6 +11,7 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 
 ## A rédiger
 
+* ChronoCalls avec Runnable et StopWatchje
 * CMS HeadLess
 * React versus Angular versus Vue versus versus Web Components
 * publication WAR + JSF + EJB + PrimeFaces + JAX-RS + PostGreSQL sur HEROKU

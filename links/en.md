@@ -19,6 +19,7 @@ This is a collection of my best links over the internet.
 ## ASCII ART
 
 - ASCII Art Logo Generator : <http://patorjk.com/software/taag/#p=testall&f=Graffiti&t=XenonReborn> 
+- ASCII Image Generator from image : <https://manytools.org/hacker-tools/convert-images-to-ascii-art/>
 - ASCII Table Generator : <https://ozh.github.io/ascii-tables/>
   
 ## Emulators
