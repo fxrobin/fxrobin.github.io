@@ -35,6 +35,9 @@ t:
             tips: 
                 url: "/astuces/"
                 text: "Astuces"
+            links:
+                url: "/links/en/"     
+                text: "Liens"
             about: 
                 url: "/about/"
                 text: "A Propos"
@@ -61,6 +64,9 @@ t:
             tips: 
                 url: "/astuces/"
                 text: "Tips"
+            links:
+                url: "/links/en/"    
+                text: "Links"
             about: 
                 url: "/about/"
                 text: "About"

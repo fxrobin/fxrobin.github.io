@@ -2,7 +2,7 @@
 layout: post
 title: Astuces diverses en vrac
 logo: toolbox.png
-date: 2018-06-04
+date: 2020-01-12
 permalink: /astuces/
 lang: fr
 ---
