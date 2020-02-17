@@ -21,11 +21,13 @@ et besoins. Elle ne contient aucun tutoriel mais représente une sorte d'aide-m�
 
 ## Maven : forcer l'usage d'un JDK avec .mavenrc
 
-Editer le fichier `~/.mavenrc` et ajouter ce contenu (à adapter en fonction du chemin réel vers le JDK à désigner):
+Pour l'utilisateur courant, éditer le fichier `~/.mavenrc` et ajouter ce contenu (à adapter en fonction du chemin réel vers le JDK à désigner):
 
 ```bash
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
 ```
+
+Pour une modification "system wide" (quel que soit l'utilisateur ), éditer le fichier `/etc/mavenrc` et y faire un `export JAVA_HOME` de la même manière que ci-dessus.
 
 La commande `mvn` lance au démarrage ce script qui affecte donc la bonne valeur à la variable d'environnement `JAVA_HOME`.
 
