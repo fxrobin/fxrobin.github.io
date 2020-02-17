@@ -26,6 +26,10 @@ This is a collection of my best links over the internet.
 
 - Hatari Atari ST Emulator : <https://hatari.tuxfamily.org/>
 - Atari 2600 Emulator in Java : <http://jstella.sourceforge.net/>
+
+## Python
+
+- SCAPI, création de packets : <https://www.youtube.com/watch?v=yD8qrP8sCDs>
   
 ## Fonts  
 
