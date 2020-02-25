@@ -72,4 +72,4 @@ This is a collection of my best links over the internet.
 ## Java
 
 - JD-GUI Java Decompiler (with Java 8): <http://java-decompiler.github.io/>
-- VisuamVM 
+- VisualVM 
