@@ -69,7 +69,8 @@ This is a collection of my best links over the internet.
 - Guake
 - Polo file manager (teejee) <https://launchpad.net/~teejee2008/+archive/ubuntu/ppa>
 
-## Java
+## Java (and more sometimes)
 
 - JD-GUI Java Decompiler (with Java 8): <http://java-decompiler.github.io/>
 - VisualVM 
+- SDK Man : <https://sdkman.io/>
