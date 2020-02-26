@@ -18,6 +18,11 @@ programmation fonctionnelle en s'appuyant sur des lambdas et une *petite* classe
 Attention toutefois, il est *certain* que cette approche est beaucoup moins performante qu'un `switch/case` classique,
 mais je ne renonce pas à la beauté du geste.
 
+Versions de cet article :
+
+- 04/10/2019 : première publication.
+- 26/02/2020 : suite à idée judicieuse postée sur les forums "developpez.com", voir la partie "Let's go further ..."
+
 </div>
 
 <!--excerpt-->
@@ -477,6 +482,125 @@ public class SwitchTest
 
 Cette fois-ci le `Switch` n'est construit qu'une seule fois et peut être déclenché autant de fois que nécessaire avec une valeur différente
 à chaque appel de `resolve(...)`.
+
+## Let's go further ...
+
+Ne nous arrêtons pas en si bon chemin !
+
+Une remarque judicieuse sur les forums de developpez.com après publication de la première version cet article a été formulée :
+
+> Ce serait bien si l'interface `SwitchExpression` héritait de Function <T, R>. On pourrait l'utiliser dans un Stream.map() par exemple.
+> Signé "BugFactory", membre expérimenté depuis 2005.
+
+Mais oui bien évidemment, merveilleuse idée.
+
+Donc, on change un peu l'interface `SwitchExpression` :
+
+```java
+
+public interface SwitchExpression <T, R> extends Function<T, R>
+{
+   // unchanged content ...
+}
+```
+
+Ensuite on implémente la méthode `R apply(T t)` au niveau de la classe `Switch` en ajoutant simplement ceci :
+
+```java
+/**
+  * implementation of Function.apply in order to use it as Function<T,R> in
+  * Stream.map(...) for example.
+  *
+  */
+@Override
+public R apply(T value)
+{
+  return resolve(value);
+}
+```
+
+Et on a plus qu'à tester le comportement, ce qui est le plus compliquer à faire finalement :
+
+```java
+@Test
+public void StreamMapTest()
+{
+  // switcher could have been written in the map method of the Stream.of(), 
+  // but it's defined here for readability only.
+  SwitchExpression<Integer, String> switcher = Switch.<Integer, String> start()
+                                                     .defaultCase(v -> "ODD")
+                                                     .predicate(v -> v % 2 == 0, v -> "EVEN")
+                                                     .build();
+
+  // just to check thats everything is fine
+  assertNotNull(switcher, "cannot build the switcher");
+
+  // let's run the Stream.map which will call the switcher.
+  // the switcher implements Function <R, T> and its apply(T t) method.
+  List<String> result = Stream.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+                              .map(switcher)
+                              .collect(Collectors.toList());
+
+  // few tests on the list
+  assertNotNull(result, "the returned list is null, which is unacceptable!");
+  assertEquals(10, result.size(), "the returned list size is wrong, which is totally unacceptable!");
+  
+  // then lets count the EVEN and the ODD to verify the switcher behavior inside a Stream.map().
+  
+  Map<String, Long> statistics = result.stream().collect(Collectors.groupingBy(String::toString, Collectors.counting()));
+  
+  assertNotNull(statistics, "the returned map is null, which is unbelievable!");
+  assertEquals(5L, statistics.get("ODD").longValue());
+  assertEquals(5L, statistics.get("EVEN").longValue());
+  
+  // it's working!
+  
+}
+```
+
+Et voilà :
+
+```bash
+$ mvn test
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< fr.fxjavadevblog:functional-switch >-----------------
+[INFO] Building functional-switch 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ functional-switch ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ functional-switch ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ functional-switch ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ functional-switch ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.0:test (default-test) @ functional-switch ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running fr.fxjavadevblog.fs.SwitchTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.05 s - in fr.fxjavadevblog.fs.SwitchTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.938 s
+[INFO] Finished at: 2020-02-26T17:54:51+01:00
+[INFO] ------------------------------------------------------------------------
+```
 
 ## Fin de l'histoire
 
