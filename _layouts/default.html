@@ -15,6 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/css-social-buttons/1.3.0/css/zocial.min.css" />
     <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
   </head>
 
@@ -46,10 +47,15 @@
         <footer class="footer">
           {% include svg-icons.html %}
           <div class="legal">
-          <img src="{{ site.baseurl }}/images/creative-commons/by-sa.svg" alt="CC:BY-SA" />
-          <br/>
-          Licence Creative Commons : ATTRIBUTION - PARTAGE DANS LES MEMES CONDITIONS <br/>
-          François-Xavier Robin - 2018-2020 - ref : [{{ page.ref }}] / lang : [{{ page.lang }}]
+            <img src="{{ site.baseurl }}/images/creative-commons/by-sa.svg" alt="CC:BY-SA" />
+            <br/>
+            Licence Creative Commons : ATTRIBUTION - PARTAGE DANS LES MEMES CONDITIONS <br/>
+            François-Xavier Robin - 2018-2020 - ref : [{{ page.ref }}] / lang : [{{ page.lang }}]
+          </div>
+          <div id="social" style="margin-top : 1em">
+            <a class="zocial linkedin" href="https://www.linkedin.com/in/fxrobin/">LinkeIn</a>
+            <a class="zocial stackoverflow" href="https://www.linkedin.com/in/fxrobin/">StackOverflow</a>
+            <a class="zocial github" href="https://github.com/fxrobin/">GitHub</a>     
           </div>
         </footer>
       </div>
