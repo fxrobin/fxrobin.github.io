@@ -22,19 +22,23 @@ This is a collection of my best links over the internet.
 - ASCII Image Generator from image : <https://manytools.org/hacker-tools/convert-images-to-ascii-art/>
 - ASCII Table Generator : <https://ozh.github.io/ascii-tables/>
   
-## Emulators
+## Emulators / RetroComputing
 
 - Hatari Atari ST Emulator : <https://hatari.tuxfamily.org/>
 - Atari 2600 Emulator in Java : <http://jstella.sourceforge.net/>
+- Exxos Atari (Store, etc.) : <https://www.exxoshost.co.uk/atari/>
+- Atari ST Viruses : <https://www.exxoshost.co.uk/atari/mirror/UVK2000/viruses.htm>
 
 ## Python
 
 - SCAPI, création de packets : <https://www.youtube.com/watch?v=yD8qrP8sCDs>
   
-## Fonts  
+## Fonts  / CSS / Themes
 
 - Amiga FONT TTF : <https://www.dafont.com/amiga-forever.font>
 - Multi Plateform Amiga Fonts : <https://github.com/rewtnull/amigafonts>
+- Bootsta.386 : <https://github.com/kristopolous/BOOTSTRA.386>
+- Annoying CRT retro flicker : <https://codepen.io/patrickhlauke/pen/YaoBop>
 
 ## Linux softwares
 

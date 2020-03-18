@@ -56,7 +56,7 @@ Mais, c'est alors que le "vieux" arrive avec son Java et dit :
 
 L'installation de Java 10 est très simple sur distribution fondée sur DEBIAN (Ubuntu, Mint, etc.) :
 
-```
+```bash
 $ sudo add-apt-repository ppa:linuxuprising/java
 $ sudo apt update
 $ sudo apt install oracle-java10-installer
@@ -65,13 +65,13 @@ $ sudo apt install oracle-java10-installer
 Pour disposer automatiquement de Java 10 et de ses outils, dont JShell, sur le PATH,
 il suffit d'installer ce package en plus :
 
-```
+```bash
 $ sudo apt install oracle-java10-set-default
 ```
 
 Ensuite on vérifie que tout va bien et que JShell fonctionne.
 
-```
+```bash
 $ java -version
 java version "10.0.1" 2018-04-17
 Java(TM) SE Runtime Environment 18.3 (build 10.0.1+10)
@@ -85,7 +85,7 @@ jshell> /exit
 |  Goodbye
 ```
 
-## Eh mais JShell c'est quoi donc ?
+## Eh mais JShell, c'est quoi donc ?
 
 Si vous vous posez cette question, c'est que vous n'êtes pas encore passé à Java 9
 et/ou que vous résidez dans une grotte depuis 2014, date d'élaboration de JShell.
@@ -184,11 +184,11 @@ var CONTENT_TYPE = "text/plain; charset=UTF-8";
 var address = new InetSocketAddress(8000);
 
 HttpHandler handler = service -> {
-	var response = "ça marche !".getBytes();
-	service.getResponseHeaders().set("Content-Type", CONTENT_TYPE);
-	service.sendResponseHeaders(200, response.length);
-	service.getResponseBody().write(response);
-	service.close(); };
+   var response = "ça marche !".getBytes();
+   service.getResponseHeaders().set("Content-Type", CONTENT_TYPE)
+   service.sendResponseHeaders(200, response.length);
+   service.getResponseBody().write(response);
+   service.close(); };
 
 var server = HttpServer.create(address,0);
 server.createContext("/test", handler);
@@ -198,7 +198,7 @@ System.out.printf("Serveur démarré : %s%n", address);
 
 et voici ce que l'on reçoit dans les headers HTTP de retour :
 
-```
+```txt
 Content-length	: 12
 Content-type	: text/plain; charset=UTF-8
 Date			: Mon, 23 Apr 2018 11:27:22 GMT
@@ -235,7 +235,7 @@ Asynchrone, et multicores !
 
 Après de multiples `F5`, voici ce que l'on obtient dans le navigateur :
 
-```
+```txt
 ça marche ! Thread[pool-1-thread-1,5,main]
 ça marche ! Thread[pool-1-thread-2,5,main]
 ça marche ! Thread[pool-1-thread-3,5,main]

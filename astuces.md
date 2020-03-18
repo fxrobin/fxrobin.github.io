@@ -74,15 +74,17 @@ Voici la structure minimale d'un POM Java 11 (pom.xml) avec :
 
 ## VirtualBox : redimensionner un fichier VDI
 
-Fermer la machine virtuelle (shutdown), puis dans un terminal :
+Cela doit se faire en plusieurs étapes mais au préalable, il vaut mieux éteindre la machine virtuelle (shutdown).
 
+Ensuite, dans un terminal :
+
+```bash
+$ VBoxManage modifyhd fichier.vdi --resize 20000
 ```
-$ VBoxManage modifyhd fichier.vdi --resize 20000`
-```
 
-> Dans cet exemple la partition fera 20 Go à l'issue du  re-dimensionnement.
+> Dans cet exemple la partition fera 20 Go à l'issue du  re-dimensionnement pour VirtualBOx
 
-Puis, lancer la VM et ouvrir un gestionnaire de disques (GParted sous Linux par exemple), et allouer tout l'espace à la partition.
+Puis, lancer la VM et ouvrir un gestionnaire de disques (GParted sous Linux par exemple) et allouer tout l'espace à la partition à la redimensionnant.
 
 ## BrowserSync
 
