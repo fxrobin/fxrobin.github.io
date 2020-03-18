@@ -84,7 +84,7 @@ $ VBoxManage modifyhd fichier.vdi --resize 20000
 
 > Dans cet exemple la partition fera 20 Go à l'issue du  re-dimensionnement pour VirtualBOx
 
-Puis, lancer la VM et ouvrir un gestionnaire de disques (GParted sous Linux par exemple) et allouer tout l'espace à la partition à la redimensionnant.
+Puis, lancer la VM et ouvrir un gestionnaire de disques (GParted sous Linux par exemple) et allouer tout l'espace à la partition en la redimensionnant.
 
 ## BrowserSync
 
