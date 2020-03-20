@@ -28,7 +28,7 @@ $ sudo apt-get install powerline
 
 Editer le fichier `.bashrc` et ajouter les lignes suivantes :
 
-```txt
+```bash
 if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
 source /usr/share/powerline/bindings/bash/powerline.sh
 fi
@@ -46,7 +46,7 @@ Le répertoire "fonts" peut être supprimés à partir de cette étape.
 
 Ouvrir un nouveau terminal et choisir une police compatible "powerline" parmi celles qui ont été installées :
 
-```txt
+```text
 ======================================= ========================= ====================================
  Powerline Font Family                   Formerly Known As         License
 ======================================= ========================= ====================================
