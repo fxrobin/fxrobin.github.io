@@ -19,6 +19,94 @@ et besoins. Elle ne contient aucun tutoriel mais représente une sorte d'aide-m�
 
 <!--excerpt-->
 
+## Linux : installation de powerline
+
+```bash
+$ sudo apt-get update
+$ sudo apt-get install powerline
+```
+
+Editer le fichier `.bashrc` et ajouter les lignes suivantes :
+
+```txt
+if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
+source /usr/share/powerline/bindings/bash/powerline.sh
+fi
+```
+
+Installer les polices compatibles :
+
+```bash
+$ git clone https://github.com/powerline/fonts.git --depth=1
+$ cd fonts
+$ ./install.sh
+```
+
+Le répertoire "fonts" peut être supprimés à partir de cette étape.
+
+Ouvrir un nouveau terminal et choisir une police compatible "powerline" parmi celles qui ont été installées :
+
+```txt
+======================================= ========================= ====================================
+ Powerline Font Family                   Formerly Known As         License
+======================================= ========================= ====================================
+ 3270                                    3270                      BSD/CCAS 3.0
+ Anonymice Powerline                     Anonymous Pro             SIL Open Font License, Version 1.1
+ Arimo Powerline                         Arimo                     Apache License, Version 2.0
+ Cousine Powerline                       Cousine                   Apache License, Version 2.0
+ D2Coding for Powerline                  D2Coding                  SIL Open Font License, Version 1.1
+ DejaVu Sans Mono for Powerline          DejaVu Sans Mono          DejaVu Fonts License, Version 1.0
+ Droid Sans Mono for Powerline           Droid Sans Mono           Apache License, Version 2.0
+ Droid Sans Mono Dotted for Powerline    Droid Sans Mono Dotted    Apache License, Version 2.0
+ Droid Sans Mono Slashed for Powerline   Droid Sans Mono Slashed   Apache License, Version 2.0
+ Fira Mono for Powerline                 Fira Mono                 SIL OPEN FONT LICENSE Version 1.1
+ Go Mono for Powerline                   Go Mono                   Go's License
+ Hack                                    Hack                      SIL OFL, v1.1 + Bitstream License
+ Inconsolata for Powerline               Inconsolata               SIL Open Font License, Version 1.0
+ Inconsolata-dz for Powerline            Inconsolata-dz            SIL Open Font License, Version 1.0
+ Inconsolata-g for Powerline             Inconsolata-g             SIL Open Font License, Version 1.0
+ Input Mono                              Input Mono                `Input’s license 
+ Liberation Mono Powerline               Liberation Mono           SIL Open Font License, Version 1.1
+ ProFontWindows                          ProFont for Powerline     MIT License
+ Meslo for Powerline                     Meslo                     Apache License, Version 2.0
+ Source Code Pro for Powerline           Source Code Pro           SIL Open Font License, Version 1.1
+ Meslo Dotted for Powerline              Meslo Dotted              Apache License, Version 2.0
+ Meslo Slashed for Powerline             Meslo Dotted              Apache License, Version 2.0
+ Monofur for Powerline                   Monofur                   Freeware
+ Noto Mono for Powerline                 Noto Mono                 SIL Open Font License, Version 1.1
+ Roboto Mono for Powerline               Roboto Mono               Apache License, Version 2.0
+ Symbol Neu Powerline                    Symbol Neu                Apache License, Version 2.0
+ Terminess Powerline                     Terminus                  SIL Open Font License, Version 1.1
+ Tinos Powerline                         Tinos                     Apache License, Version 2.0
+ Ubuntu Mono derivative Powerline        Ubuntu Mono               Ubuntu Font License, Version 1.0
+ Space Mono for Powerline                Space Mono                SIL Open Font License, Version 1.1
+======================================= ========================= ====================================
+```
+
+
+
+
+
+## Linux : snap et snap store
+
+Pour béneficer de snap et de son **store** :
+
+```bash
+$ sudo apt update
+$ sudo apt install snapd
+```
+
+Rebooter ou quitter la session en cours.
+
+Pour le store :
+
+```bash
+$ sudo snap install snap-store
+snap-store 20191114.a9948d5 par Canonical✓ installé
+```
+
+
+
 ## Maven : forcer l'usage d'un JDK avec .mavenrc
 
 Pour l'utilisateur courant, éditer le fichier `~/.mavenrc` et ajouter ce contenu (à adapter en fonction du chemin réel vers le JDK à désigner):
