@@ -389,18 +389,33 @@ $ tree --dirsfirst
 54 directories, 148 files
 ```
 
-### mkcd et cls
+### Bash Alias : mes petites astuces
 
 Petits ajouts pratiques pour les commandes bash à ajouter à `~/.bashrc` :
 
 ```bash
 alias cls='clear'
+alias lh='ls -gFh --group-directories-first --time-style=long-iso'
+alias ..='cd ..'
 
 function mkcd {
     mkdir -p $1
     cd $1
 }
+
+function cl {
+    cd $1
+    lh
+}
 ```
+
+Exemples :
+
+- `cls` : efface l'écran, ça me rappelle mon [MO5 et mon TO8](/about/#1984-1989--découverte-pendant-mon-enfance)
+- `lh` : c'est un `ls -l` un peu optimisé. Il met les répertoires en premier, affiche de jolies dates et les unités de taille des fichiers sont simple à lire.
+- `mkcd mon_repertoire` : va créer un répertoire `mon_repertoire` et se placer automatiquement dedans.
+- `cl mon_repertoire` : va se placer dans le répertoire et afficher son contenu avec un `lh`.
+- `..` : se place dans le répertoire parent, comme un `cd ..` mais on gagne 3 caractères.
 
 ### Echoing like a Terminator
 

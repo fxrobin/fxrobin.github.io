@@ -11,6 +11,8 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 
 ## A rédiger
 
+* Shell Program en JAVA https://picocli.info/ + GraalVM
+* Property<T> ? à réfléchir
 * ChronoCalls avec Runnable et StopWatchje
 * CMS HeadLess
 * React versus Angular versus Vue versus versus Web Components

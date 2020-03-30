@@ -456,3 +456,7 @@ Si c'était à refaire, je le referais, mais en y consacrant plus que 20 heures 
 S'ils lisent cet article, je les invite d'ailleurs à faire part de leurs commentaires sur cette partie « ludique » de l'apprentissage du développement.
 
 Le code source du projet est disponible sur mon repository GitHub : <https://github.com/fxrobin/XenonReborn>
+
+Voici la marche à suivre pour le cloner, le compiler et générer une distribution JAR exécutable :
+
+{%include asciinema.html cast-file="/casts/xenonreborn.cast" %}

@@ -11,6 +11,13 @@
 // custom fonts
 
 @font-face {
+    font-family: 'profont-powerline';
+    src: url('/fonts/profont-powerline.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: 'volter';
     src: url('/fonts/volter.eot');
     src: url('/fonts/volter.eot?#iefix') format('embedded-opentype'),
