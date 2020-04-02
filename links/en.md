@@ -72,6 +72,7 @@ This is a collection of my best links over the internet.
 - Docker
 - Guake
 - Polo file manager (teejee) <https://launchpad.net/~teejee2008/+archive/ubuntu/ppa>
+- Ack : file search better than grep <https://beyondgrep.com/>
 
 ## Java (and more sometimes)
 

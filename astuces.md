@@ -83,10 +83,6 @@ Ouvrir un nouveau terminal et choisir une police compatible "powerline" parmi ce
 ======================================= ========================= ====================================
 ```
 
-
-
-
-
 ## Linux : snap et snap store
 
 Pour béneficer de snap et de son **store** :
