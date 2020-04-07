@@ -1,6 +1,6 @@
 ---
 layout: post
-title: REST API with Quarkus-JPA-PostGreSQL et GraalVM
+title: REST API avec Quarkus, JPA, PostGreSQL et GraalVM
 subtitle: réduire l'empreinte serveur d'une API REST en JAVA sans perdre en productivité
 logo: graal.png
 category: articles
@@ -10,6 +10,7 @@ ref: quarkus-jpa-graalvm
 ---
 
 <div class="intro" markdown='1'>
+
 Ce tutorial Quarkus-JPA-PostgreSQL met en oeuvre :
 
 - une API Rest partielle (GET) avec JAX-RS et Quarkus sur une source de données JPA
@@ -37,11 +38,14 @@ On équipera le projet de diverses bibliothèques pour accéler le développemen
 - Lombok : pour réduire le *boiler plate*. ([> Voir mon article sur Lombok](/Lombok-Oui-Mais))
 - Commons Lang : car on a toujours besoin de son meilleur ami Commons Lang.
 
+Le projet au complet est diponible sur GitHub : {%include github.html repository="fxrobin/quarkus-tuto" %}
+
 ## Structure globale du projet
 
 Avant de commencer à entrer dans le détail des divers éléments, voici la structure du projet Maven :
 
-<div class="preformatted" >[quarkus-tuto]
+{:.preformatted}
+[quarkus-tuto]
 ├── src
 │   ├── main
 │   │   ├── java
@@ -82,7 +86,6 @@ Avant de commencer à entrer dans le détail des divers éléments, voici la str
 │       └── resources
 │           └── application.properties
 └── pom.xml
-</div>
 
 La structure du projet de décompose ainsi :
 
@@ -92,7 +95,8 @@ La structure du projet de décompose ainsi :
 
 La partie JAVA se décompose en 3 packages :
 
-<div class="preformatted">fr.fxjavadevblog.qjg
+{:.preformatted}
+fr.fxjavadevblog.qjg
 ├── ping
 │   └── PingService.java          : pour vérifier que JAX-RS est bien opérationnel
 ├── utils
@@ -104,23 +108,20 @@ La partie JAVA se décompose en 3 packages :
     ├── VideoGame.java            : classe métier, persistante via JPA (Hibernate)
     ├── VideoGameRepository.java  : un repository CRUD JPA généré par Spring Data JPA
     └── VideoGameResource.java    : le point d'accès REST via JAX-RS aux jeux vidéo.
-</div>
-
-- 
 
 La partie tests unitaires est consituée des éléments suivants :
 
-<div class="preformatted">test
+{:.preformatted}
+test
 ├── java
 │   └── fr
 │       └── fxjavadevblog
 │           └── qjg
 │               └── utils
-│                   ├── CDITest.java   : permet de vérifier que CDI est opérationnel et que l'injection de dépendances fonctionne.  
+│                   ├── CDITest.java   : permet de vérifier que CDI est opérationnel.
 │                   └── DummyTest.java : un test vide
 └── resources
     └── application.properties         : fichier de paramétrage de Quarkus spécifique pour les tests unitaires.
-</div>
 
 > `DummyTest.java` : un test *vide* afin de vérifier que les tests unitaires s'exécutent correctement (un méta-test, lol)
 

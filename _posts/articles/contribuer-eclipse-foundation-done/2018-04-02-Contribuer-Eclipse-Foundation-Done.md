@@ -22,11 +22,12 @@ Il était donc temps, au lieu d'attendre *en ronchonnant* qu'un patch ne soit d�
 
 Je vais faire court : Payara 5, dérivé supporté de GlassFish 5 est sorti officiellement le 22/03/2018. Son numéro de version `5.181` contenu dans le fichier MANIFEST du module `glassfish-api.jar` n'est pas compatible avec le plugin "GlassFish Tools" d'Eclipse. Ce dernier se fonde sur une expression régulière qui refuse que le second numéro comporte plus d'un chiffre.
 
-Exemples : 
+Exemples :
+
 * `4.1.1` : OK
 * `4.0` : OK
 * `5.9` : OK
-*  `5.181` (Payara): **NOK** !
+* `5.181` (Payara): **NOK** !
 
 ![Payara](/images/payara.png)
 
@@ -38,14 +39,13 @@ Confiant, je me lance donc dans la correction, son test et sa publication, ayant
 
 > À bien y réfléchir, peut-être que si, un peu quand même.
 
-
 ## Eclipse Bugzilla
 
 En réalité, je passe un peu de temps sur le Bugzilla de la fondation Eclipse.
 Je cherche éventuellement le bug dans le système pour y ajouter un commentaire, mais d'emblée je ne le trouve pas.
 
 > Note : je ne sais pas trop comment j'ai fait pour ne rien trouver, car après coup, on y trouve
-> tout de suite une *issue* en tapant "GlassFish Tools" dans le moteur de recherche. 
+> tout de suite une *issue* en tapant "GlassFish Tools" dans le moteur de recherche.
 
 Je me décide alors à créer une *issue*, mais lors de la saisie, il me propose un *duplicate* qui correspond.
 En fait je ne l'avais pas trouvé car cette *issue* n'avait pas été encore validée et *OPEN*.
