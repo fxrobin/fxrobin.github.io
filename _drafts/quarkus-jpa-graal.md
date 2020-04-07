@@ -10,33 +10,119 @@ ref: quarkus-jpa-graalvm
 ---
 
 <div class="intro" markdown='1'>
+Ce tutorial Quarkus-JPA-PostgreSQL met en oeuvre :
 
-L'objectif de cet article est de faire tourner une API REST fonctionnant en Java en privilégiant les spécifications JSR :
+- une API Rest partielle (GET) avec JAX-RS et Quarkus sur une source de données JPA
+- des tests unitaires
+- des tests d'intégration au niveau API (http) avec un PostGreSQL lancé par un plugin maven Docker.
+- une distribution native, compilée avec Graal VM et une image docker de l'application compilée
+
+> Réalisé sous Linux Mint 19 mais devrait convenir à de nombreuses distributions, voire à Windows.
+
+</div>
+<!--excerpt-->
+
+## Choix techniques
+
+L'objectif de cet article est de faire tourner une API REST avec Quarkus fonctionnant avec :
 
 - JAX-RS 2 : Avec RESTEasy
 - CDI 2 : avec l'implémentation interne partielle de QUARKUS.
 - JPA 2 : avec Hibernate
 - Bean Validation : avev Hibernate Validator
 
-On équipera le projet de diverses bibliothèques pour accéler le développement :
+On équipera le projet de diverses bibliothèques pour accéler le développement
 
 - Spring Data JPA : pour ses `Repository` CRUD JPA
-- Lombok : pour réduire le boiler plate.
-- LogBack : pour la gestion des logs
+- Lombok : pour réduire le *boiler plate*. ([> Voir mon article sur Lombok](/Lombok-Oui-Mais))
 - Commons Lang : car on a toujours besoin de son meilleur ami Commons Lang.
 
-Ce tutorial est réalisé sous Linux Mint 19 mais devrait convenir à de nombreuses distributions, voire à Windows.
+## Structure globale du projet
 
-On obtiendra à la fin de ce tutorial :
+Avant de commencer à entrer dans le détail des divers éléments, voici la structure du projet Maven :
 
-- une API Rest
-- une distribution native, compilée avec Graal VM
-- une image docker de l'application compilée
-- un conteneur docker pour stocker les données avec PostgreSQL
-- des tests unitaires au niveau API (http)
-
+<div class="preformatted" >[quarkus-tuto]
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── fr
+│   │   │       └── fxjavadevblog
+│   │   │           └── qjg
+│   │   │               ├── ping
+│   │   │               │   └── PingService.java
+│   │   │               ├── utils
+│   │   │               │   ├── InjectedUUID.java
+│   │   │               │   └── Producers.java
+│   │   │               └── videogame
+│   │   │                   ├── Genre.java
+│   │   │                   ├── VideoGameFactory.java
+│   │   │                   ├── VideoGame.java
+│   │   │                   ├── VideoGameRepository.java
+│   │   │                   └── VideoGameResource.java
+│   │   └── resources
+│   │       ├── application.properties
+│   │       └── import.sql
+│   ├── test
+│   │   ├── java
+│   │   │   └── fr
+│   │   │       └── fxjavadevblog
+│   │   │           └── qjg
+│   │   │               └── utils
+│   │   │                   ├── CDITest.java
+│   │   │                   └── DummyTest.java
+│   │   └── resources
+│   │       └── application.properties
+│   └── test-integration
+│       ├── java
+│       │   └── fr
+│       │       └── fxjavadevblog
+│       │           └── qjg
+│       │               ├── IT_DummyTest.java
+│       │               └── IT_VideoGameResource.java
+│       └── resources
+│           └── application.properties
+└── pom.xml
 </div>
-<!--excerpt-->
+
+La structure du projet de décompose ainsi :
+
+- `src/main` : contient les sources JAVA `main/java` et les ressources pour Quarkus `main\resources` : `application.properties` et `import.sql`.
+- `src/test` : contient les tests unitaires `test/java` et les ressources pour les tests unitaires sans base de données PostgreSQL `test\resources`
+- `src/test-integration` : contient les tests d'intégration `test-integration/java` et les ressources pour les tests unitaires avec PostgreSQL `test-integration\resources`
+
+La partie JAVA se décompose en 3 packages :
+
+<div class="preformatted">fr.fxjavadevblog.qjg
+├── ping
+│   └── PingService.java          : pour vérifier que JAX-RS est bien opérationnel
+├── utils
+│   ├── InjectedUUID.java         : annotation pour injecter des UUID sous forme de String
+│   └── Producers.java            : Générateur de UUID
+└── videogame
+    ├── Genre.java                : enum qui contient tous les genres de jeux vidéo
+    ├── VideoGameFactory.java     : factory de création de VideoGame via CDI
+    ├── VideoGame.java            : classe métier, persistante via JPA (Hibernate)
+    ├── VideoGameRepository.java  : un repository CRUD JPA généré par Spring Data JPA
+    └── VideoGameResource.java    : le point d'accès REST via JAX-RS aux jeux vidéo.
+</div>
+
+- 
+
+La partie tests unitaires est consituée des éléments suivants :
+
+<div class="preformatted">test
+├── java
+│   └── fr
+│       └── fxjavadevblog
+│           └── qjg
+│               └── utils
+│                   ├── CDITest.java   : permet de vérifier que CDI est opérationnel et que l'injection de dépendances fonctionne.  
+│                   └── DummyTest.java : un test vide
+└── resources
+    └── application.properties         : fichier de paramétrage de Quarkus spécifique pour les tests unitaires.
+</div>
+
+> `DummyTest.java` : un test *vide* afin de vérifier que les tests unitaires s'exécutent correctement (un méta-test, lol)
 
 ## Maven et son pom.xml
 
@@ -55,14 +141,12 @@ D'abord il nous faut quelques paramétrages classiques MAVEN :
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.target>8</maven.compiler.target>
-        <maven.compiler.source>8</maven.compiler.source>
-        <lombok.version>1.18.10</lombok.version>
-        <logback.version>1.2.3</logback.version>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <lombok.version>1.18.12</lombok.version>
         <commons-lang.version>3.9</commons-lang.version>
         <quarkus-version>1.3.1.Final</quarkus-version>
-        <docker-plugin.version>0.28.0</docker-plugin.version>
-        <surefire-plugin.version>2.22.1</surefire-plugin.version>
+        <surefire-plugin.version>2.22.2</surefire-plugin.version>
     </properties>
 
 </project>
@@ -79,12 +163,6 @@ On ajoute les dépendences classiques :
               <artifactId>lombok</artifactId>
               <version>${lombok.version}</version>
               <scope>provided</scope>
-       </dependency>
-
-       <dependency>
-              <groupId>ch.qos.logback</groupId>
-              <artifactId>logback-classic</artifactId>
-              <version>${logback.version}</version>
        </dependency>
 </dependencies>
 ```
@@ -148,7 +226,8 @@ puis :
 Attention, ils sont nombreux, mais ce n'est pas rare pour des projets MAVEN. Il nous faut de quoi :
 
 - générer tout ce qui est traité par Quarkus
-- lancer notre base de données PostgreSQL avec docker pendant les tests JUnit 5. On est ainsi à mi-chemin entre des tests unitaires et des tests d'intégration. Je préfère cette solution plutôt que de *mocker* les tests. Cela nécessite évidemment que docker soit installé sur l'environnement.
+- lancer les tests unitaires sans base de données.
+- lancer notre base de données PostgreSQL avec docker pendant les tests d'intégration JUnit 5. On est ainsi à mi-chemin entre des tests unitaires et des tests d'intégration. Je préfère cette solution plutôt que de *mocker* les tests. Cela nécessite évidemment que docker soit installé sur l'environnement.
 
 ```xml
 <build>
@@ -156,16 +235,6 @@ Attention, ils sont nombreux, mais ce n'est pas rare pour des projets MAVEN. Il 
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire-plugin.version}</version>
-        <configuration>
-          <systemProperties>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-          </systemProperties>
-        </configuration>
       </plugin>
 
       <plugin>
@@ -182,11 +251,101 @@ Attention, ils sont nombreux, mais ce n'est pas rare pour des projets MAVEN. Il 
       </plugin>
 
       <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <overwrite>true</overwrite>
+              <outputDirectory>${basedir}/target/test-classes</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/test-integration/resources</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- tests unitaires -->
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${surefire-plugin.version}</version>
+        <configuration>
+          <excludes>
+            <exclude>**/IT_*.java</exclude>
+          </excludes>
+          <systemProperties>
+            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+          </systemProperties>
+          <skipTests>${skip.surefire.tests}</skipTests>
+        </configuration>
+      </plugin>
+
+      <!-- tests d'integration -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${surefire-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>add-integration-test-sources</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/test-integration/java</source>
+              </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-integration-test-resource</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>add-test-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>src/test-integration/resources</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
+
+      <plugin>
         <groupId>io.fabric8</groupId>
         <artifactId>docker-maven-plugin</artifactId>
         <version>0.33.0</version>
         <configuration>
-          <skip>${skipTests}</skip>
+          <skip>${skip.integration.tests}</skip>
           <images>
             <image>
               <name>postgres:12.2</name>
@@ -220,15 +379,15 @@ Attention, ils sont nombreux, mais ce n'est pas rare pour des projets MAVEN. Il 
         </configuration>
         <executions>
           <execution>
-            <id>docker-start</id>
-            <phase>test-compile</phase>
+            <id>docker:start</id>
+            <phase>pre-integration-test</phase>
             <goals>
               <goal>stop</goal>
               <goal>start</goal>
             </goals>
           </execution>
           <execution>
-            <id>docker-stop</id>
+            <id>docker:stop</id>
             <phase>post-integration-test</phase>
             <goals>
               <goal>stop</goal>
@@ -237,7 +396,7 @@ Attention, ils sont nombreux, mais ce n'est pas rare pour des projets MAVEN. Il 
         </executions>
       </plugin>
     </plugins>
-</build>
+  </build>
 ```
 
 Et enfin, pour atteindre le Graal du code Java compilé en binaire natif, il nous faut rajouter un petit profile MAVEN :
@@ -566,7 +725,6 @@ Dans la configuration MAVEN on a paramétré une image Docker de PostgreSQL 12 q
 
 Pendant la phase de développement, il faut donc une instance de PostgreSQL qui tourne avec la base de données. Je vais utiliser encore une fois Docker pour cela.
 
-
 ```bash
 $ docker run --ulimit memlock=-1:-1 -it --rm=true --memory-swappiness=0 --name quarkus_tuto -e POSTGRES_USER=quarkus_tuto -e POSTGRES_PASSWORD=quarkus_tuto -e POSTGRES_DB=quarkus_tuto -p 5432:5432 postgres:12.2
 Unable to find image 'postgres:12.2' locally
@@ -651,28 +809,26 @@ Laissons PostgreSQL fonctionner dans son terminal.
 Il faut créer un fichier `application.properties` comme ressource du projet MAVEN dans la partie JAVA.
 
 ```text
-# configuration de l'accès aux données
+# CDI 
+quarkus.arc.remove-unused-beans=false
 
-# Type de base de données
-quarkus.datasource.db-kind=postgresql
+# DEV with PostgreSQL
+%dev.quarkus.datasource.db-kind=postgresql
+%dev.quarkus.datasource.jdbc.url=jdbc:postgresql:quarkus_tuto
+%dev.quarkus.datasource.username=quarkus_tuto
+%dev.quarkus.datasource.password=quarkus_tuto
+%dev.quarkus.datasource.jdbc.max-size=8
+%dev.us.datasource.jdbc.min-size=2
+%dev.quarkus.hibernate-orm.log.sql=true
+%dev.quarkus.hibernate-orm.database.generation=drop-and-create
+%dev.quarkus.hibernate-orm.sql-load-script=import.sql
 
-# Chaine JDBC classique
-quarkus.datasource.jdbc.url=jdbc:postgresql:quarkus_tuto
-
-# Authentification vers la base de données
-quarkus.datasource.username=quarkus_tuto
-quarkus.datasource.password=quarkus_tuto
-
-# Configuration du pool de connexions
-quarkus.datasource.jdbc.max-size=8
-quarkus.datasource.jdbc.min-size=2
-
-# Stratégie JPA de génération des tables.
-quarkus.hibernate-orm.database.generation=drop-and-create
+# PROD
+%prod.quarkus.datasource.db-kind=postgresql
+%prod.quarkus.datasource.jdbc.url=jdbc:postgresql:quarkus_tuto
+%prod.quarkus.datasource.username=quarkus_tuto
+%prod.quarkus.datasource.password=quarkus_tuto
 %prod.quarkus.hibernate-orm.database.generation=drop-and-create
-
-# Chargement de données initiales
-quarkus.hibernate-orm.sql-load-script=import.sql
 %prod.quarkus.hibernate-orm.sql-load-script=import.sql
 ```
 
@@ -682,6 +838,8 @@ quarkus.hibernate-orm.sql-load-script=import.sql
 > `prod` la création de la base de données et l'import du script SQL.
 > Dans le fichier ci-dessus, ce sont les ligne `%prod.*` qui s'activent en production AUSSI.
 > Je le redis : à ne pas faire dans un vrai projet !
+
+Pour les tests unitaires et les tests d'intégration, nous auront deux autres fichiers `application.properties` différents.
 
 ## Des entités à persister
 
@@ -696,18 +854,21 @@ Bien évidemment, il nous faut au moins une classe persistente. J'ai repris ici 
 ### VideoGame et Genre
 
 ```java
-package fr.fxjavadevblog.qjg;
+package fr.fxjavadevblog.qjg.videogame;
 
 import java.io.Serializable;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Version;
 
+import fr.fxjavadevblog.qjg.utils.InjectedUUID;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -725,67 +886,49 @@ import lombok.ToString;
 
 // JPA Annotation
 @Entity
+@Table(name = "VIDEO_GAME")
 public class VideoGame implements Serializable
 {
     @Id
     @Inject
-    @InjectedUUID // ask CDI to inject an brand new UUID via the UUID Producer.
+    @InjectedUUID
     @Getter
-    private String id;
+    @Column(length = 36)
+    String id;
 
     @Getter
     @Setter
+    @Column(name = "NAME", nullable = false, unique = true)
     private String name;
 
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
+    @Column(name = "GENRE", nullable = false)
     private Genre genre;
 
     @Version
     @Getter
+    @Column(name = "VERSION")
     private Long version;
 }
+
 ```
 
 ```java
-package fr.fxjavadevblog.qjg;
+package fr.fxjavadevblog.qjg.videogame;
 
 public enum Genre
 {
-   PLATEFORM, RACE, SHOOTER;
+   ARCADE, EDUCATION, FIGHTING, PINBALL, PLATEFORM, REFLEXION, RPG, SHOOT_THEM_UP, SIMULATION, SPORT;
 }
 ```
 
 ### Producers CDI et annotation 
 
+L'annotation `@InjectedUUID` qui est utilisée sur la classe `VideoGame`.
+
 ```java
-package fr.fxjavadevblog.qjg;
-
-import java.util.UUID;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-
-@ApplicationScoped
-public class Producers
-{
-    /**
-     * produces randomly generated UUID for primary keys.
-     *
-     * @return UUID as a HEXA-STRING
-     *
-     */
-    @Produces
-    @InjectedUUID
-    @SuppressWarnings("unused")
-    public String produceUUIDAsString()
-    {
-        return UUID.randomUUID().toString();
-    }
-}
-```
-
 ```java
 package fr.fxjavadevblog.qjg;
 
@@ -804,3 +947,32 @@ public @interface InjectedUUID
 {
 }
 ```
+
+Et son "traitement" par le Producer CDI suivant :
+
+```java
+package fr.fxjavadevblog.qjg.utils;
+
+import java.util.UUID;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
+
+@ApplicationScoped
+public class Producers
+{
+    /**
+     * produces randomly generated UUID for primary keys.
+     *
+     * @return UUID as a HEXA-STRING
+     *
+     */
+    @Produces
+    @InjectedUUID
+    public String produceUUIDAsString()
+    {
+        return UUID.randomUUID().toString();
+    }
+}
+```
+

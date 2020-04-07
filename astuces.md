@@ -101,8 +101,6 @@ $ sudo snap install snap-store
 snap-store 20191114.a9948d5 par Canonical✓ installé
 ```
 
-
-
 ## Maven : forcer l'usage d'un JDK avec .mavenrc
 
 Pour l'utilisateur courant, éditer le fichier `~/.mavenrc` et ajouter ce contenu (à adapter en fonction du chemin réel vers le JDK à désigner):
@@ -228,6 +226,88 @@ $ sudo usermod -aG docker $USER
 La commande `sudo groupadd docker` est optionnelle car il se peut que le groupe existe déjà.
 
 * source : [nickjanetakis.com : docker-tip-20-running-docker-without-sudo-on-linux](https://nickjanetakis.com/blog/docker-tip-20-running-docker-without-sudo-on-linux)
+
+### Démarrer et arrêter les services Docker
+
+Ce script permet d'arrêter ou lancer les services liés à Docker :
+
+```bash
+#!/bin/bash
+# Author : FX ROBIN - 2020-04-06
+
+
+if [ "$1" = "--help" ]
+then
+  echo "Starts or stops Docker services"
+  echo "Usage : dctl [start|stop]"
+  exit 0
+fi
+
+# inclusion des affichages en couleur avec printc
+RESTORE='\033[0m'
+
+RED='\e[91m'
+GREEN='\e[92m'
+YELLOW='\033[00;33m'
+BLUE='\033[00;34m'
+PURPLE='\033[00;35m'
+CYAN='\033[00;36m'
+LIGHTGRAY='\033[00;37m'
+
+function printc()
+{
+ echo -e "$1$2"
+ echo -en "${RESTORE}"
+}
+
+#inclusion de la vérification des droits super-utilisateur
+if [ "$EUID" -ne 0 ]; then
+  printc $RED "This script must be run as super user. Try this : sudo dctl start|stop"
+  exit 2
+fi  
+
+if [[ "start stop" != *"$1"* ]]; then
+  printc $RED "Bad parameter. Should be 'start' or 'stop'."
+  exit 2
+fi
+
+# STARTING
+
+case $1 in
+	start)
+		printc $GREEN ">_Starting Docker ..."
+		systemctl enable docker.socket
+		systemctl enable docker.service
+
+		systemctl start docker.socket
+		systemctl start docker.service
+		;;
+	stop)
+		printc $RED ">_Stoping Docker ..."
+		systemctl stop docker.service
+		systemctl stop docker.socket
+
+		systemctl disable docker.socket
+		systemctl disable docker.service
+		;;
+esac		
+		
+systemctl --no-pager status docker.service | grep "Active:"
+```
+
+
+Usage :
+
+```bash
+$ dctl start
+>_Starting Docker ...
+Created symlink /etc/systemd/system/sockets.target.wants/docker.socket → /lib/systemd/system/docker.socket.
+Synchronizing state of docker.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable docker
+insserv: warning: current start runlevel(s) (empty) of script `docker' overrides LSB defaults (2 3 4 5).
+insserv: warning: current stop runlevel(s) (0 1 2 3 4 5 6) of script `docker' overrides LSB defaults (0 1 6).
+   Active: active (running) since Mon 2020-04-06 14:57:00 CEST; 6ms ago
+```
 
 ## Scripting Linux
 

@@ -1,3 +1,22 @@
+.preformatted
+{
+  font-family: atari;
+  color: #00ff00;
+  background-color: #111133;
+  padding: 7px 7px 7px 10px;
+  border: 2px solid #339933;
+  border-radius: 0.5em;
+  box-shadow: 2px 2px 2px #555555;
+  margin: 1em;
+  white-space: pre;
+  overflow: auto;
+  overflow-y: auto;
+  overflow-y: hidden;
+  tab-size: 4;
+  -moz-tab-size: 4;  
+}
+
+
 // FAKESCREEN
 .fakescreen {
     margin-left: 2em;
