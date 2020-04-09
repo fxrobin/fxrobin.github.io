@@ -38,6 +38,8 @@ On équipera le projet de diverses bibliothèques pour accéler le développemen
 - Lombok : pour réduire le *boiler plate*. ([> Voir mon article sur Lombok](/Lombok-Oui-Mais))
 - Commons Lang : car on a toujours besoin de son meilleur ami Commons Lang.
 
+<< A COMPLETER >>
+
 Le projet au complet est diponible sur GitHub : {%include github.html repository="fxrobin/quarkus-tuto" %}
 
 ## Structure globale du projet
@@ -55,12 +57,12 @@ Avant de commencer à entrer dans le détail des divers éléments, voici la str
 │   │   │               ├── ping
 │   │   │               │   └── PingService.java
 │   │   │               ├── utils
-│   │   │               │   ├── InjectedUUID.java
-│   │   │               │   └── Producers.java
+│   │   │               │   ├── InjectUUID.java
+│   │   │               │   └── UUIDProducer.java
 │   │   │               └── videogame
 │   │   │                   ├── Genre.java
-│   │   │                   ├── VideoGameFactory.java
 │   │   │                   ├── VideoGame.java
+│   │   │                   ├── VideoGameFactory.java
 │   │   │                   ├── VideoGameRepository.java
 │   │   │                   └── VideoGameResource.java
 │   │   └── resources
@@ -71,6 +73,10 @@ Avant de commencer à entrer dans le détail des divers éléments, voici la str
 │   │   │   └── fr
 │   │   │       └── fxjavadevblog
 │   │   │           └── qjg
+│   │   │               ├── global
+│   │   │               │   └── TestingGroups.java
+│   │   │               ├── ping
+│   │   │               │   └── PingTest.java
 │   │   │               └── utils
 │   │   │                   ├── CDITest.java
 │   │   │                   └── DummyTest.java
@@ -81,11 +87,14 @@ Avant de commencer à entrer dans le détail des divers éléments, voici la str
 │       │   └── fr
 │       │       └── fxjavadevblog
 │       │           └── qjg
-│       │               ├── IT_DummyTest.java
-│       │               └── IT_VideoGameResource.java
+│       │               ├── utils
+│       │               │   └── IT_DummyTest.java
+│       │               └── videogame
+│       │                   └── IT_VideoGameResource.java
 │       └── resources
 │           └── application.properties
 └── pom.xml
+
 
 La structure du projet de décompose ainsi :
 
@@ -96,18 +105,20 @@ La structure du projet de décompose ainsi :
 La partie JAVA se décompose en 3 packages :
 
 {:.preformatted}
-fr.fxjavadevblog.qjg
-├── ping
-│   └── PingService.java          : pour vérifier que JAX-RS est bien opérationnel
-├── utils
-│   ├── InjectedUUID.java         : annotation pour injecter des UUID sous forme de String
-│   └── Producers.java            : Générateur de UUID
-└── videogame
-    ├── Genre.java                : enum qui contient tous les genres de jeux vidéo
-    ├── VideoGameFactory.java     : factory de création de VideoGame via CDI
-    ├── VideoGame.java            : classe métier, persistante via JPA (Hibernate)
-    ├── VideoGameRepository.java  : un repository CRUD JPA généré par Spring Data JPA
-    └── VideoGameResource.java    : le point d'accès REST via JAX-RS aux jeux vidéo.
+fxjavadevblog
+└── qjg
+    ├── ping
+    │   └── PingService.java             : pour vérifier que JAX-RS est bien opérationnel
+    ├── utils
+    │   ├── InjectUUID.java              : annotation pour injecter des UUID sous forme de String
+    │   └── UUIDProducer.java            : générateur de UUID
+    └── videogame
+        ├── Genre.java                : enum qui contient tous les genres de jeux vidéo
+        ├── VideoGameFactory.java     : factory de création de VideoGame via CDI
+        ├── VideoGame.java            : classe métier, persistante via JPA (Hibernate)
+        ├── VideoGameRepository.java  : un repository CRUD JPA généré par Spring Data JP
+        └── VideoGameResource.java    : le point d'accès REST via JAX-RS aux jeux vidéo.
+
 
 La partie tests unitaires est consituée des éléments suivants :
 
@@ -117,11 +128,15 @@ test
 │   └── fr
 │       └── fxjavadevblog
 │           └── qjg
+│               ├── global
+│               │   └── TestingGroups.java   : définitions de contantes pour les groupes de tests JUnit 5
+│               ├── ping
+│               │   └── PingTest.java
 │               └── utils
-│                   ├── CDITest.java   : permet de vérifier que CDI est opérationnel.
-│                   └── DummyTest.java : un test vide
+│                   ├── CDITest.java         : permet de vérifier que CDI est opérationnel.
+│                   └── DummyTest.java       : un test vide
 └── resources
-    └── application.properties         : fichier de paramétrage de Quarkus spécifique pour les tests unitaires.
+    └── application.properties               : fichier de paramétrage de Quarkus spécifique pour les tests unitaires.
 
 > `DummyTest.java` : un test *vide* afin de vérifier que les tests unitaires s'exécutent correctement (un méta-test, lol)
 
@@ -461,18 +476,25 @@ Il est temps de coder quelques classes Quarkus dans votre IDE favori.
 Pour que vérifier que tout va bien, on va faire un simple endpoint HTTP Rest avec JAX-RS qui va répondre à `/api/ping/v1`.
 
 ```java
-package fr.fxjavadevblog.qjg;
+package fr.fxjavadevblog.qjg.ping;
 
-import javax.ws.rs.Path;
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+
+/**
+ * Simple JAX-WS endoint to check if the application is running.
+ * 
+ * @author robin
+ *
+ */
 
 @Path("/api/ping")
 public class PingService
 {
     @Path("/v1")
     @GET
-    @Produces("application/json")
+    @Produces("text/plain")
     public String ping()
     {
         return "pong";
@@ -892,7 +914,7 @@ public class VideoGame implements Serializable
 {
     @Id
     @Inject
-    @InjectedUUID
+    @InjectUUID
     @Getter
     @Column(length = 36)
     String id;
@@ -913,23 +935,25 @@ public class VideoGame implements Serializable
     @Column(name = "VERSION")
     private Long version;
 }
-
 ```
 
 ```java
-package fr.fxjavadevblog.qjg.videogame;
-
+/**
+ * Enumeration of genres of Video Games for Atari ST.
+ * 
+ * @author robin
+ *
+ */
 public enum Genre
 {
    ARCADE, EDUCATION, FIGHTING, PINBALL, PLATEFORM, REFLEXION, RPG, SHOOT_THEM_UP, SIMULATION, SPORT;
 }
 ```
 
-### Producers CDI et annotation 
+### Producers CDI et annotation
 
 L'annotation `@InjectedUUID` qui est utilisée sur la classe `VideoGame`.
 
-```java
 ```java
 package fr.fxjavadevblog.qjg;
 
@@ -941,10 +965,17 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
+/**
+ * annotation to mark a field to be injected by CDI with a UUID.
+ * 
+ * @author robin
+ *
+ */
+
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE})
-public @interface InjectedUUID
+@Target({ElementType.FIELD, ElementType.METHOD})
+public @interface InjectUUID
 {
 }
 ```
@@ -977,3 +1008,94 @@ public class Producers
 }
 ```
 
+### Le repository CRUD avec Spring Data JPA
+
+```java
+package fr.fxjavadevblog.qjg.videogame;
+
+import java.util.List;
+
+import org.springframework.data.repository.CrudRepository;
+
+/**
+ * CRUD repository for the VideoGame class. Primary key is a UUID represented by a String.
+ * This repository is created by Hibernate Data JPA.
+ * 
+ * @author robin
+ *
+ */
+
+public interface VideoGameRepository extends CrudRepository<VideoGame, String>
+{
+    /**
+     * gets every Video Game filtered by the given Genre.
+     * 
+     * @param genre
+     *    genre of video game
+     *    @see Genre
+     *    
+     * @return
+     *    a list of video games
+     */
+    List<VideoGame> findByGenre(Genre genre);
+}
+```
+
+## Le endpoint REST JAX-WS
+
+Et enfin de quoi servir le tout sur HTTP avec JAX-WS qui répond à l'URL `/api/videogames/v1` :
+
+```java
+package fr.fxjavadevblog.qjg.videogame;
+
+import java.util.List;
+
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+
+import org.apache.commons.lang3.StringUtils;
+
+/**
+ * JAX-WS endpoint for Video Games.
+ * 
+ * @author robin
+ *
+ */
+
+@Path("/api/videogames/v1")
+public class VideoGameResource
+{
+    private final VideoGameRepository videoGameRepository;
+
+    public VideoGameResource(VideoGameRepository videoGameRepository)
+    {
+        this.videoGameRepository = videoGameRepository;
+    }
+
+    @GET
+    @Produces("application/json")
+    public Iterable<VideoGame> findAll()
+    {
+        return videoGameRepository.findAll();
+    }
+
+    @GET
+    @Path("/genre/{genre}")
+    @Produces("application/json")
+    public List<VideoGame> findByGenre(@PathParam(value = "genre") String genre)
+    {
+        try
+        {
+            Genre realGenre = Genre.valueOf(StringUtils.replace(genre, "-", "_").toUpperCase());
+            return videoGameRepository.findByGenre(realGenre);
+        }
+        catch (java.lang.IllegalArgumentException e)
+        {
+            throw new BadRequestException("Genre " + genre + "does not exist.");
+        }
+    }
+}
+```

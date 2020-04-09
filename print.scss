@@ -1,0 +1,130 @@
+--- 
+---
+
+// IMPORTS
+//
+@import "fonts";
+@import "reset";
+@import "variables";
+@import "back-to-top";
+@import "base-rules";
+@import "mixins";
+// Nicolas Gallagher's micro clearfix hack
+// http://nicolasgallagher.com/micro-clearfix-hack/
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/*********************/
+/* LAYOUT / SECTIONS */
+/*********************/
+
+.container {
+    margin: 1em;
+    width : 100%;
+    max-width: none;
+}
+
+
+
+//
+// .masthead
+//
+.wrapper-masthead {
+    display : none;
+}
+
+
+.wrapper-footer , .disqus , .article-list-footer, .share-page {
+    display : none ;
+}
+
+
+
+//
+// .main
+//
+@import "article-list";
+@import "blanka";
+@import "stackoverflow";
+@import "search";
+@import "front-post";
+@import "post";
+@import "table-of-content";
+@import "share";
+@import "video";
+@import "disqus";
+@import "languages";
+@import "article-list-post-footer";
+@import "gurumeditation";
+
+// Settled on moving the import of syntax highlighting to the bottom of the CSS
+// ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
+@import "highlights";
+@import "svg-icons";
+@import "fx";
+
+body {
+    background : white;
+}
+
+
+
+.post > aside, aside 
+{
+    display : block;
+    float : none;
+    width: 80%;
+    border : none ;
+    border-radius : none;
+    box-shadow : none;   
+}
+
+.post > aside h3
+{
+   text-shadow: none;
+   padding : 1em;
+   text-align: left;
+   font-size: 1.2em;
+   border-bottom : solid darkblue 1px;
+}
+
+.entry h2 {
+    background : white ;
+    color : black;
+    border : none;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.entry h2:after { display : none }
+
+.entry h3::before { content : '- '; }
+
+.preformatted, pre.highlight, .line-number { color : black; background-color : white}
+
+.highlight .na, 
+.highlight .nt, 
+.highlight .s, 
+.highlight .nd, 
+.highlight .o,
+.highlight .kd,
+.highlight .n, 
+.highlight .nf,
+.highlight .nv,
+.highlight .nb,
+.highlight .k  { color : black; }
+
+pre.highlight .line-number span { color : darkgrey ; border-right : 1px solid darkgrey;}
+
+.post > .entry > .intro
+{
+    background-color: lightgrey;
+    font-size: 1em;
+}
