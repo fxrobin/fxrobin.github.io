@@ -27,20 +27,39 @@ Ce tutorial Quarkus-JPA-PostgreSQL met en oeuvre :
 
 L'objectif de cet article est de faire tourner une API REST avec Quarkus fonctionnant avec :
 
-- JAX-RS 2 : Avec RESTEasy
-- CDI 2 : avec l'implémentation interne partielle de QUARKUS.
+- JAX-RS 2 : Avec RESTEasy et Jackson pour la sérialization JSON
+- CDI 2 : avec l'implémentation interne partielle de QUARKUS
 - JPA 2 : avec Hibernate
-- Bean Validation : avev Hibernate Validator
+- Bean Validation : avec Hibernate Validator
 
 On équipera le projet de diverses bibliothèques pour accéler le développement
 
 - Spring Data JPA : pour ses `Repository` CRUD JPA
 - Lombok : pour réduire le *boiler plate*. ([> Voir mon article sur Lombok](/Lombok-Oui-Mais))
-- Commons Lang : car on a toujours besoin de son meilleur ami Commons Lang.
+- Open API avec Swagger 2 (mais ce n'est pas l'objet de ce tutorial)
 
-<< A COMPLETER >>
+> Nativement Quarkus est fourni avec Google Guava, ce qui servira dans le cadre de ce tutoriel.
 
 Le projet au complet est diponible sur GitHub : {%include github.html repository="fxrobin/quarkus-tuto" %}
+
+## Qu'est-ce que Quarkus
+
+![Quarkus-Logo](/images/quarkus-logo.svg)
+
+Sur la page d'accueil de [Quarkus](https://quarkus.io/), on peut lire :
+
+> Quarkus : Supersonic Subatomic Java
+> A Kubernetes Native Java stack tailored for OpenJDK HotSpot and GraalVM, crafted from the best of breed Java libraries and standards.
+
+Jolie *punch line* !
+
+En substance, c'est un framework constitué des meilleurs standards et bibliothèques Java pour réaliser de applications pour le cloud en mode REST.
+
+Ses concurrents directs sont les fameux :
+
+- SpringBoot (et toute la plateforme Spring),
+- Micronaut,
+- dans une moindre mesure, Payara-micro.
 
 ## Structure globale du projet
 
@@ -50,21 +69,29 @@ Avant de commencer à entrer dans le détail des divers éléments, voici la str
 [quarkus-tuto]
 ├── src
 │   ├── main
+│   │   ├── docker
+│   │   │   ├── Dockerfile.jvm
+│   │   │   └── Dockerfile.native
 │   │   ├── java
 │   │   │   └── fr
 │   │   │       └── fxjavadevblog
 │   │   │           └── qjg
+│   │   │               ├── genre
+│   │   │               │   ├── Genre.java
+│   │   │               │   ├── GenreConverterProvider.java
+│   │   │               │   └── GenreResource.java
 │   │   │               ├── ping
 │   │   │               │   └── PingService.java
 │   │   │               ├── utils
+│   │   │               │   ├── GenericEnumConverter.java
 │   │   │               │   ├── InjectUUID.java
 │   │   │               │   └── UUIDProducer.java
-│   │   │               └── videogame
-│   │   │                   ├── Genre.java
-│   │   │                   ├── VideoGame.java
-│   │   │                   ├── VideoGameFactory.java
-│   │   │                   ├── VideoGameRepository.java
-│   │   │                   └── VideoGameResource.java
+│   │   │               ├── videogame
+│   │   │               │   ├── VideoGame.java
+│   │   │               │   ├── VideoGameFactory.java
+│   │   │               │   ├── VideoGameRepository.java
+│   │   │               │   └── VideoGameResource.java
+│   │   │               └── ApiDefinition.java
 │   │   └── resources
 │   │       ├── application.properties
 │   │       └── import.sql
@@ -79,7 +106,8 @@ Avant de commencer à entrer dans le détail des divers éléments, voici la str
 │   │   │               │   └── PingTest.java
 │   │   │               └── utils
 │   │   │                   ├── CDITest.java
-│   │   │                   └── DummyTest.java
+│   │   │                   ├── DummyTest.java
+│   │   │                   └── GenericEnumConverterTest.java
 │   │   └── resources
 │   │       └── application.properties
 │   └── test-integration
@@ -93,32 +121,44 @@ Avant de commencer à entrer dans le détail des divers éléments, voici la str
 │       │                   └── IT_VideoGameResource.java
 │       └── resources
 │           └── application.properties
+├── target
+│   ├── classes
+│   │   ├── application.properties
+│   │   └── import.sql
+│   └── test-classes
+│       └── application.properties
+├── .dockerignore
+├── README.md
 └── pom.xml
 
-
-La structure du projet de décompose ainsi :
+La structure du projet se décompose ainsi :
 
 - `src/main` : contient les sources JAVA `main/java` et les ressources pour Quarkus `main\resources` : `application.properties` et `import.sql`.
 - `src/test` : contient les tests unitaires `test/java` et les ressources pour les tests unitaires sans base de données PostgreSQL `test\resources`
 - `src/test-integration` : contient les tests d'intégration `test-integration/java` et les ressources pour les tests unitaires avec PostgreSQL `test-integration\resources`
+- `src/main/docker` : contient les Dockerfile nécessaires à la génération de l'image conteneurisée de l'application
 
 La partie JAVA se décompose en 3 packages :
 
 {:.preformatted}
 fxjavadevblog
 └── qjg
+    ├── genre
+    │   ├── Genre.java                    : enum qui contient tous les genres de jeux vidéo
+    │   ├── GenreConverterProvider.java   : fournisseur de conversion de Genre pour les paramètres JAX-RS
+    │   └── GenreResource.java            : point d'accès REST via JAX-RS aux genres de jeux vidéo
     ├── ping
-    │   └── PingService.java             : pour vérifier que JAX-RS est bien opérationnel
+    │   └── PingService.java              : pour vérifier que JAX-RS est bien opérationnel
     ├── utils
-    │   ├── InjectUUID.java              : annotation pour injecter des UUID sous forme de String
-    │   └── UUIDProducer.java            : générateur de UUID
-    └── videogame
-        ├── Genre.java                : enum qui contient tous les genres de jeux vidéo
-        ├── VideoGameFactory.java     : factory de création de VideoGame via CDI
-        ├── VideoGame.java            : classe métier, persistante via JPA (Hibernate)
-        ├── VideoGameRepository.java  : un repository CRUD JPA généré par Spring Data JP
-        └── VideoGameResource.java    : le point d'accès REST via JAX-RS aux jeux vidéo.
-
+    │   ├── GenericEnumConverter.java     : convertisseur générique d'enum en Json
+    │   ├── InjectUUID.java               : annotation pour injecter des UUID sous forme de String
+    │   └── UUIDProducer.java             : générateur de UUID
+    ├── videogame
+    │   ├── VideoGame.java                : classe métier, persistante via JPA (Hibernate)
+    │   ├── VideoGameFactory.java
+    │   ├── VideoGameRepository.java      : un repository CRUD JPA généré par Spring Data JPA
+    │   └── VideoGameResource.java        : le point d'accès REST via JAX-RS aux jeux vidéo
+    └── ApiDefinition.java                : pour les informations de l'API via Swagger
 
 La partie tests unitaires est consituée des éléments suivants :
 
@@ -133,8 +173,9 @@ test
 │               ├── ping
 │               │   └── PingTest.java
 │               └── utils
-│                   ├── CDITest.java         : permet de vérifier que CDI est opérationnel.
-│                   └── DummyTest.java       : un test vide
+│                   ├── CDITest.java                    : permet de vérifier que CDI est opérationnel.
+│                   ├── DummyTest.java                  : un test vide
+│                   └── GenericEnumConverterTest.java   : vérification de la conversion générique d'enum.
 └── resources
     └── application.properties               : fichier de paramétrage de Quarkus spécifique pour les tests unitaires.
 
@@ -208,19 +249,21 @@ puis :
 </dependency>
 <dependency>
     <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-resteasy-jsonb</artifactId>
+    <artifactId>quarkus-jackson</artifactId>
 </dependency>
 <dependency>
     <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-hibernate-validator</artifactId>
+    <artifactId>quarkus-resteasy-jackson</artifactId>
 </dependency>
 <dependency>
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-jdbc-postgresql</artifactId>
 </dependency>
+
+<!-- OPEN API via Swagger 2 -->
 <dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-lang3</artifactId>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-smallrye-openapi</artifactId>
 </dependency>
 
 <!-- for testing -->
@@ -473,7 +516,7 @@ Il est temps de coder quelques classes Quarkus dans votre IDE favori.
 
 ## Un simple /ping
 
-Pour que vérifier que tout va bien, on va faire un simple endpoint HTTP Rest avec JAX-RS qui va répondre à `/api/ping/v1`.
+Pour vérifier que tout va bien, on va faire un simple endpoint HTTP Rest avec JAX-RS qui va répondre à `/api/ping/v1`.
 
 ```java
 package fr.fxjavadevblog.qjg.ping;
@@ -571,11 +614,9 @@ __  ____  __  _____   ___  __ ____  ______
 2020-04-02 11:26:09,816 INFO  [io.quarkus] (main) quarkus-tuto 0.0.1-SNAPSHOT (powered by Quarkus 1.3.1.Final) started in 1.415s. Listening on: http://0.0.0.0:8080
 2020-04-02 11:26:09,818 INFO  [io.quarkus] (main) Profile dev activated. Live Coding activated.
 2020-04-02 11:26:09,819 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, hibernate-validator, jdbc-postgresql, narayana-jta, resteasy, resteasy-jsonb, spring-data-jpa, spring-di]
-
 ```
 
-
-Quakus se lance en très peu de temps déjà, en mode JVM classique pourtant. 
+> Quakus se lance en très peu de temps alors qu'il est *simplement* en mode JVM classique. Vivement le build GraalVM natif ... patience.
 
 On peut tester le service manuellement :
 
@@ -744,7 +785,7 @@ Pour l'arrêter, il suffit de *tuer* le process ou simplement avec un `CTRL+C` d
 
 ### Lancement de PostgreSQL via Docker
 
-Dans la configuration MAVEN on a paramétré une image Docker de PostgreSQL 12 qui se lance pendant la phase de tests.
+Dans la configuration MAVEN, on a paramétré une image Docker de PostgreSQL 12 qui se lance pendant la phase de tests d'intégration.
 
 Pendant la phase de développement, il faut donc une instance de PostgreSQL qui tourne avec la base de données. Je vais utiliser encore une fois Docker pour cela.
 
@@ -835,6 +876,10 @@ Il faut créer un fichier `application.properties` comme ressource du projet MAV
 # CDI 
 quarkus.arc.remove-unused-beans=false
 
+%dev.quarkus.smallrye-openapi.path=/openapi
+%dev.quarkus.swagger-ui.always-include=true
+%dev.quarkus.swagger-ui.path=/openapi-ui
+
 # DEV with PostgreSQL
 %dev.quarkus.datasource.db-kind=postgresql
 %dev.quarkus.datasource.jdbc.url=jdbc:postgresql:quarkus_tuto
@@ -842,9 +887,12 @@ quarkus.arc.remove-unused-beans=false
 %dev.quarkus.datasource.password=quarkus_tuto
 %dev.quarkus.datasource.jdbc.max-size=8
 %dev.us.datasource.jdbc.min-size=2
-%dev.quarkus.hibernate-orm.log.sql=true
+%dev.quarkus.hibernate-orm.log.sql=false
 %dev.quarkus.hibernate-orm.database.generation=drop-and-create
 %dev.quarkus.hibernate-orm.sql-load-script=import.sql
+%dev.quarkus.log.level=INFO
+%dev.quarkus.log.category."org.hibernate".level=INFO
+%dev.quarkus.log.category."fr.fxjavadevblog".level=DEBUG
 
 # PROD
 %prod.quarkus.datasource.db-kind=postgresql
@@ -862,7 +910,7 @@ quarkus.arc.remove-unused-beans=false
 > Dans le fichier ci-dessus, ce sont les ligne `%prod.*` qui s'activent en production AUSSI.
 > Je le redis : à ne pas faire dans un vrai projet !
 
-Pour les tests unitaires et les tests d'intégration, nous auront deux autres fichiers `application.properties` différents.
+Pour les tests unitaires et les tests d'intégration, nous auront donc des fichiers `application.properties` différents.
 
 ## Des entités à persister
 
@@ -891,7 +939,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import fr.fxjavadevblog.qjg.utils.InjectedUUID;
+import fr.fxjavadevblog.qjg.utils.InjectUUID;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -900,6 +948,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 @SuppressWarnings("serial")
+
+//
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 @ToString(of = { "id", "name" })
@@ -917,7 +967,7 @@ public class VideoGame implements Serializable
     @InjectUUID
     @Getter
     @Column(length = 36)
-    String id;
+    private String id;
 
     @Getter
     @Setter
@@ -952,7 +1002,7 @@ public enum Genre
 
 ### Producers CDI et annotation
 
-L'annotation `@InjectedUUID` qui est utilisée sur la classe `VideoGame`.
+L'annotation `@InjectUUID` qui est utilisée sur la classe `VideoGame`.
 
 ```java
 package fr.fxjavadevblog.qjg;
@@ -1000,7 +1050,7 @@ public class Producers
      *
      */
     @Produces
-    @InjectedUUID
+    @InjectUUID
     public String produceUUIDAsString()
     {
         return UUID.randomUUID().toString();
@@ -1056,8 +1106,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * JAX-WS endpoint for Video Games.
  * 
@@ -1089,8 +1137,8 @@ public class VideoGameResource
     {
         try
         {
-            Genre realGenre = Genre.valueOf(StringUtils.replace(genre, "-", "_").toUpperCase());
-            return videoGameRepository.findByGenre(realGenre);
+            Genre convertedGenre = Genre.valueOf(genre.replace("-", "_").toUpperCase());
+            return videoGameRepository.findByGenre(convertedGenre);
         }
         catch (java.lang.IllegalArgumentException e)
         {
@@ -1099,3 +1147,854 @@ public class VideoGameResource
     }
 }
 ```
+
+Il suffit ensuite de déclencher la requête REST suivante pour obtenir tous les jeux vidéo :
+
+```bash
+$ curl http://localhost:8080//api/videogames/v1
+[
+    {
+        "id": "896b9c77-4f6d-4bd6-b681-2791acfa0d51",
+        "name": "100 4 1",
+        "genre": "RELEXION",
+        "version": 1
+    },
+    {
+        "id": "6bf157fa-bd95-46ce-bbca-58afb87ebb9b",
+        "name": "10TH FRAME",
+        "genre": "SPORT",
+        "version": 1
+    },
+    {
+        "id": "e603e430-0853-46b0-9f44-d4f662f56c51",
+        "name": "1943 : THE BATTLE OF MIDWAY",
+        "genre": "SHOOT_THEM_UP",
+        "version": 1
+    },
+    {
+        "id": "61ec5869-d9f5-497a-9ffc-8e3612892c4b",
+        "name": "1ST DIVISION MANAGER",
+        "genre": "SPORT",
+        "version": 1
+    },
+    {
+        "id": "ed1233c4-c130-49f4-b329-314a6dd957a3",
+        "name": "1ST SERVE TENNIS",
+        "genre": "SPORT",
+        "version": 1
+    },
+    {
+        "id": "85d071ca-95bc-488a-afdc-494c430f03d9",
+        "name": "20000 LEAGUES UNDER THE SEA",
+        "genre": "RPG",
+        "version": 1
+    },
+
+    ... etc ...
+```
+
+De la même manière pour filtrer sur le genre de jeu :
+
+```bash
+$ curl http://localhost:8080/api/videogames/v1/genre/SHOOT_THEM_UP
+[
+    {
+        "id": "e603e430-0853-46b0-9f44-d4f662f56c51",
+        "name": "1943 : THE BATTLE OF MIDWAY",
+        "genre": "SHOOT_THEM_UP",
+        "version": 1
+    },
+    {
+        "id": "fa02815b-f6d2-4ba1-9f63-5c8f575d06b6",
+        "name": "AIR SUPPLY",
+        "genre": "SHOOT_THEM_UP",
+        "version": 1
+    },
+    {
+        "id": "07638287-8f45-4be8-a887-c57f350a9ce7",
+        "name": "ALBEDO",
+        "genre": "SHOOT_THEM_UP",
+        "version": 1
+    },
+    {
+        "id": "56417168-1e57-4197-a490-56258e5405eb",
+        "name": "ALCON",
+        "genre": "SHOOT_THEM_UP",
+        "version": 1
+    },
+    {
+        "id": "d5bd6aaa-674d-4e7f-ae8e-53118de897c6",
+        "name": "ALIEN BLAST",
+        "genre": "SHOOT_THEM_UP",
+        "version": 1
+    },
+    {
+        "id": "2589d502-4619-4728-b688-9cece2a8a3ab",
+        "name": "ALIEN BUSTERS IV",
+        "genre": "SHOOT_THEM_UP",
+        "version": 1
+    }
+
+    ... etc ...
+```
+
+Cela fonctionne, mais je trouve que ce n'est pas satisfaisant concernant les URL d'invocation pour les genres, ainsi que le résultat JSON qui sérialise en majuscles les valeurs de l'enum. C'est normal, mais ce n'est pas très "HTTP Friendly".
+
+On va y rémédier dans le paragraphe qui suit !
+
+## Convertisseur générique pour les valeurs de l'enum
+
+Pour résumer le problème, les URLs d'appel ainsi que le contenu du retour JSON ne respectent pas les conventions de nommage classique de REST.
+
+> En plus, les manipulations comme `Genre.valueOf(genre.replace("-", "_").toUpperCase());` ce n'est pas très joli, à mon goût.
+
+Ce que l'on souhaite pour les URLs d'appel et les retours JSON :
+
+- utiliser des "-" au lieu des "_" pour séparer les mots clés
+- basculer tout en minuscules
+
+Vous pouvez retrouver ces recommandations ici : [https://restfulapi.net/resource-naming/](https://restfulapi.net/resource-naming/)
+
+Exemple : l'appel de `/api/videogames/v1/genre/shoot-them-up` doit retourner :
+
+```json
+[
+  ...
+  ...
+    {
+        "id": "d5bd6aaa-674d-4e7f-ae8e-53118de897c6",
+        "name": "ALIEN BLAST",
+        "genre": "shoot-them-up",
+        "version": 1
+    },
+  ...
+  ...
+]
+```
+
+Mais, on ne veut pas toucher aux conventions de nommage de l'enum `Genre` ! C'est du Java et on doit pouvoir garder les choses ainsi !
+
+Il y a plein de solution pour cela. Celle que je vais privilégier est l'usage de l'annotation @JsonProperty de Jackson que l'on va placer sur chacune des valeurs de l'enum :
+
+```java
+public enum Genre
+{
+   @JsonProperty(value = "arcade")
+   ARCADE, 
+   
+   @JsonProperty(value = "education")
+   EDUCATION, 
+   
+   @JsonProperty(value = "fighting")
+   FIGHTING, 
+   
+   @JsonProperty(value = "pinball")
+   PINBALL, 
+   
+   @JsonProperty(value = "plateform")
+   PLATEFORM, 
+   
+   @JsonProperty(value = "reflexion")
+   REFLEXION, 
+   
+   @JsonProperty(value = "rpg")
+   RPG, 
+   
+   @JsonProperty(value = "shoot-them-up")
+   SHOOT_THEM_UP, 
+   
+   @JsonProperty(value = "simulation")
+   SIMULATION,
+   
+   @JsonProperty(value = "sport")
+   SPORT;
+}
+```
+
+Avec cela, on règle déjà un premier problème : le contenu du retour JSON !
+
+```bash
+$ curl http://localhost:8080//api/videogames/v1/genre/SHOOT_THEM_UP
+[
+    {
+        "id": "e603e430-0853-46b0-9f44-d4f662f56c51",
+        "name": "1943 : THE BATTLE OF MIDWAY",
+        "genre": "shoot-them-up",
+        "version": 1
+    },
+
+    ... etc ...
+
+ ```
+
+Mais le problème persiste pour l'URL ! Il faut donc créer un ParamConverter JAX-RS !
+
+> Un quoi ?????
+
+Un `ParamConverter<T>` est un convertisseur JAX-RS qui va être invoqué à différent moment du traitement de la requête. Son travail est de fournir une conversion bidrectionnelle de `<T>` vers `String` et de `String` vers `<T>`.
+
+Mais on va en créer un générique qui va aller chercher la valeur de l'annotation Jackson `@JsonProperty`.
+
+```java
+package fr.fxjavadevblog.qjg.utils;
+
+import java.util.EnumSet;
+import java.util.Optional;
+
+import javax.ws.rs.ext.ParamConverter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
+/**
+ * Generic JAX-RS Enum converter based on the jackson JsonProperty annotation to
+ * get the mapping.
+ * 
+ * @author François-Xavier Robin
+ *
+ * @param <T>
+ */
+
+public class GenericEnumConverter<T extends Enum<T>> implements ParamConverter<T>
+{
+    private static final Logger log = LoggerFactory.getLogger(GenericEnumConverter.class);
+    
+    /**
+     * bi-directionnal Map to store enum value as key and its string representation as value.
+     * The string representation is retrieved through the JsonProperty annotation put on the enum constant. 
+     */
+    private final BiMap<T, String> biMap =  HashBiMap.create();
+
+    /**
+     * returns a Generic converter for an enum class in the context of JAX-RS ParamConverter.
+     * 
+     * @param <T>
+     *    enum type
+     * @param t
+     *    enum type class
+     * @return
+     *    a generic converter used by JAX-RS.
+     */
+    public static <T extends Enum<T>> ParamConverter<T> of(Class<T> t)
+    {
+        return new GenericEnumConverter<>(t);
+    }
+    
+    private GenericEnumConverter(Class<T> t)
+    {
+        log.debug("Generating conversion map for enum {}", t);
+        EnumSet.allOf(t).forEach(v -> {
+            try
+            {
+                String enumValue = v.name();
+                JsonProperty annotation =  v.getClass().getDeclaredField(enumValue).getAnnotation(JsonProperty.class);
+                // get the annotation if exists or take the classic enum representation
+                String result = Optional.ofNullable(annotation).map(JsonProperty::value).orElse(enumValue);
+                log.debug("Enum value {}.{} is mapped to \"{}\"", t.getSimpleName(), v.name(), result);
+                biMap.put(v, result);
+            }
+            catch (NoSuchFieldException | SecurityException e)
+            {
+                log.error("Error while populating BiMap of enum {}", t.getClass());
+                log.error("Thrown by ", e);
+            }
+        });
+    }
+
+    /**
+     * returns the enum type constant from this string representation.
+     */
+    @Override
+    public T fromString(String value)
+    {
+        T returnedValue = biMap.inverse().get(value); 
+        log.debug("Converting String \"{}\" to {}.{}", value, returnedValue.getClass(), returnedValue);
+        return returnedValue;
+    }
+
+    /**
+     * returns the string represenation from this enum type constant.
+     */
+    @Override
+    public String toString(T t)
+    {
+        String returnedValue = biMap.get(t);
+        log.debug("Converting Enum {}.{} to String \"{}\"", t.getClass(), t, returnedValue);
+        return returnedValue;
+    }
+}
+```
+
+Les concepts de cette classe sont les suivants :
+
+- elle est instanciée en prenant une enum comme argument : `ParamConverter<Genre> converter = GenericEnumConverter.of(Genre.class);`
+- elle instrospecte l'enum pendant sa construction à la recherche des annotations `@JsonProperty` sur chaque valeur.
+- pour chaque valeur, elle récupère le contenu de l'annotation `@JsonProperty` et peuple une BiMap (Map bidrectionnele Guava, incluse dans Quarkus).
+- si l'annotation n'est pas présente (on ne sait jamais), la valeur `toString()` de l'enum sera prise par défaut.
+
+La partie "générique" permet de s'adapter à n'importe quelle *enum*.
+
+A la fin de la construction de cette classe, la BiMap contient les tuples suivants :
+
+```text
+Generating conversion map for enum class fr.fxjavadevblog.qjg.genre.Genre
+Enum value Genre.ARCADE is mapped to "arcade"
+Enum value Genre.EDUCATION is mapped to "education"
+Enum value Genre.FIGHTING is mapped to "fighting"
+Enum value Genre.PINBALL is mapped to "pinball"
+Enum value Genre.PLATEFORM is mapped to "plateform"
+Enum value Genre.REFLEXION is mapped to "reflexion"
+Enum value Genre.RPG is mapped to "rpg"
+Enum value Genre.SHOOT_THEM_UP is mapped to "shoot-them-up"
+Enum value Genre.SIMULATION is mapped to "simulation"
+Enum value Genre.SPORT is mapped to "sport"
+```
+
+Ensuite il faut *enregistrer* ce convertisseur automatique auprès de JAX-RS : cela se fait au moyen d'une classe qui implémente l'interface `ParamConverterProvider` et d'une annotation `@Provider` :
+
+```java
+package fr.fxjavadevblog.qjg.genre;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
+
+import javax.ws.rs.ext.ParamConverter;
+import javax.ws.rs.ext.ParamConverterProvider;
+import javax.ws.rs.ext.Provider;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.fxjavadevblog.qjg.utils.GenericEnumConverter;
+
+/**
+ * JAX-RS provider for Genre conversion. This converter is registered because of
+ * the Prodiver annotation.
+ * 
+ * @author robin
+ */
+
+@Provider
+public class GenreConverterProvider implements ParamConverterProvider
+{
+    private final Logger log = LoggerFactory.getLogger(GenreConverterProvider.class);
+    private final ParamConverter<Genre> converter = GenericEnumConverter.of(Genre.class);
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations)
+    {
+        log.debug("Registering GenreConverter");
+        return (Genre.class.equals(rawType)) ? (ParamConverter<T>) converter : null;
+    }
+}
+```
+
+Le endpoint REST de la classe `VideoGameResource` change légèrement pour se simplifier :
+
+```java
+@GET
+@Path("/genre/{genre}")
+public List<VideoGame> findByGenre(@PathParam("genre") Genre genre)
+{
+    return videoGameRepository.findByGenre(genre);
+}
+```
+
+> Notez, ici l'appel au convertisseur générique précédemment codé.
+
+Grâce à tout ceci, on obtient le comportement souhaité :
+
+```bash
+$ curl http://localhost:8080//api/videogames/v1/genre/shoot-them-up
+[
+    {
+        "id": "e603e430-0853-46b0-9f44-d4f662f56c51",
+        "name": "1943 : THE BATTLE OF MIDWAY",
+        "genre": "shoot-them-up",
+        "version": 1
+    },
+    {
+        "id": "fa02815b-f6d2-4ba1-9f63-5c8f575d06b6",
+        "name": "AIR SUPPLY",
+        "genre": "shoot-them-up",
+        "version": 1
+    },
+    {
+        "id": "07638287-8f45-4be8-a887-c57f350a9ce7",
+        "name": "ALBEDO",
+        "genre": "shoot-them-up",
+        "version": 1
+    },
+    {
+        "id": "56417168-1e57-4197-a490-56258e5405eb",
+        "name": "ALCON",
+        "genre": "shoot-them-up",
+        "version": 1
+    },
+    {
+        "id": "d5bd6aaa-674d-4e7f-ae8e-53118de897c6",
+        "name": "ALIEN BLAST",
+        "genre": "shoot-them-up",
+        "version": 1
+    },
+    {
+        "id": "2589d502-4619-4728-b688-9cece2a8a3ab",
+        "name": "ALIEN BUSTERS IV",
+        "genre": "shoot-them-up",
+        "version": 1
+    }
+
+    ... etc ...
+
+ ```  
+
+De plus, quand on invoque l'URL avec un genre qui ne peut pas être mappé, on obtient une erreur 404. Ce comportement est très satisfaisant.
+
+```bash
+$ curl -s -o /dev/null -D - http://localhost:8080//api/videogames/v1/genre/SHOOT_THEM_UP
+HTTP/1.1 404 Not Found
+Content-Length: 0
+Content-Type: application/json
+```
+
+## Tests
+
+### Tests unitaires
+
+Ces tests sont classiquement dans le répertoire "test". Les points particuliers sont les suivants :
+
+- la base de données n'est pas créée dans ce cas.
+- `@QuarkusTest` est présent sur quelques classes de tests unitaires pour vérifier le comporte de CDI
+- les tests unitaires nommés `IT_*` sont ignorés par convention (tests d'intégration)
+- le profil `test` de Quarkus est automatique, un fichier spécifique `application.properties` est utilisé à cet effet
+- la propriété `quarkus.arc.remove-unused-beans=false` permet de conserver dans le contexte CDI tous les beans injectables
+
+Pour lancer les tests unitaires :
+
+```bash
+$ mvn clean test
+...
+...
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ quarkus-tuto ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running fr.fxjavadevblog.qjg.ping.PingTest
+2020-04-14 19:25:27,022 INFO  [io.quarkus] (main) Quarkus 1.3.1.Final started in 4.701s. Listening on: http://0.0.0.0:8081
+2020-04-14 19:25:27,030 INFO  [io.quarkus] (main) Profile test activated. 
+2020-04-14 19:25:27,031 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, hibernate-validator, jdbc-postgresql, narayana-jta, resteasy, resteasy-jackson, smallrye-openapi, spring-data-jpa, spring-di, swagger-ui]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.947 s - in fr.fxjavadevblog.qjg.ping.PingTest
+[INFO] Running fr.fxjavadevblog.qjg.utils.GenericEnumConverterTest
+[INFO] Tests run: 100, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.174 s - in fr.fxjavadevblog.qjg.utils.GenericEnumConverterTest
+[INFO] Running fr.fxjavadevblog.qjg.utils.CDITest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in fr.fxjavadevblog.qjg.utils.CDITest
+[INFO] Running fr.fxjavadevblog.qjg.utils.DummyTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 s - in fr.fxjavadevblog.qjg.utils.DummyTest
+2020-04-14 19:25:28,697 INFO  [io.quarkus] (main) Quarkus stopped in 0.056s
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 105, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  13.888 s
+[INFO] Finished at: 2020-04-14T19:25:29+02:00
+[INFO] ------------------------------------------------------------------------
+```
+
+### Tests d'intégration
+
+Ces tests sont placés dans le répertoire "test-integration". Les points particulier sont les suivants :
+
+- une image Docker PostgreSQL pour les tests d'intégration est lancée
+- `@QuarkusTest` est présent sur tous les tests afin de disposer de l'environnement complet
+- Les tests sont *assurés* avec *Rest Assured*
+
+```java
+package fr.fxjavadevblog.qjg.videogame;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.containsString;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+
+import fr.fxjavadevblog.qjg.global.TestingGroups;
+import io.quarkus.test.junit.QuarkusTest;
+
+@QuarkusTest
+@Tag(TestingGroups.INTEGRATION_TESTING)
+class IT_VideoGameResource
+{
+    public static final String ENDPOINT = "/api/videogames/v1";
+
+    @Test
+    @DisplayName("Get " + ENDPOINT)
+    void testGetAllVideoGames()
+    {        
+        given().when()
+               .get(ENDPOINT + "/")
+               .then()
+               .statusCode(200)
+               .assertThat().body(containsString("XENON"), 
+                                  containsString("RICK"), 
+                                  containsString("LOTUS"));
+    }
+}
+```
+
+Pour lancer les tests d'intégration :
+
+- s'assurer que le PostgreSQL de dev n'est pas lancé
+- lancer la commande `$ mvn -Dskip.surefire.tests verify`
+
+```bash
+$ mvn -Dskip.surefire.tests verify
+canning for projects...
+[INFO] 
+[INFO] -------------------< fr.fxjavadevblog:quarkus-tuto >--------------------
+[INFO] Building Quarkus-JPA-PostgreSQL 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ quarkus-tuto ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 2 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ quarkus-tuto ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- build-helper-maven-plugin:3.1.0:add-test-source (add-integration-test-sources) @ quarkus-tuto ---
+[INFO] Test Source directory: /home/robin/git/quarkus-tuto/src/test-integration/java added.
+[INFO] 
+[INFO] --- build-helper-maven-plugin:3.1.0:add-test-resource (add-integration-test-resource) @ quarkus-tuto ---
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ quarkus-tuto ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ quarkus-tuto ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ quarkus-tuto ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ quarkus-tuto ---
+[INFO] 
+[INFO] --- quarkus-maven-plugin:1.3.1.Final:build (default) @ quarkus-tuto ---
+[INFO] [org.jboss.threads] JBoss Threads version 3.0.1.Final
+[INFO] [org.hibernate.Version] HHH000412: Hibernate ORM core version 5.4.12.Final
+[INFO] [io.quarkus.deployment.pkg.steps.JarResultBuildStep] Building thin jar: /home/robin/git/quarkus-tuto/target/quarkus-tuto-0.0.1-SNAPSHOT-runner.jar
+[INFO] [io.quarkus.deployment.QuarkusAugmentor] Quarkus augmentation completed in 1647ms
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:copy-resources (copy-resources) @ quarkus-tuto ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- docker-maven-plugin:0.33.0:stop (docker:start) @ quarkus-tuto ---
+[INFO] 
+[INFO] --- docker-maven-plugin:0.33.0:start (docker:start) @ quarkus-tuto ---
+[INFO] DOCKER> [postgres:12.2] "postgresql": Start container ca6a77a7d1e3
+[INFO] DOCKER> [postgres:12.2] "postgresql": Waiting for mapped ports [5432] on host localhost
+[INFO] DOCKER> [postgres:12.2] "postgresql": Waited on tcp port '[localhost/127.0.0.1:5432]' 4 ms
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:integration-test (default) @ quarkus-tuto ---
+19:29:19.154 PostgreSQL Server :The files belonging to this database system will be owned by user "postgres".
+19:29:19.154 PostgreSQL Server :This user must also own the server process.
+19:29:19.154 PostgreSQL Server :
+19:29:19.154 PostgreSQL Server :The database cluster will be initialized with locale "en_US.utf8".
+19:29:19.154 PostgreSQL Server :The default database encoding has accordingly been set to "UTF8".
+19:29:19.154 PostgreSQL Server :The default text search configuration will be set to "english".
+19:29:19.154 PostgreSQL Server :
+19:29:19.154 PostgreSQL Server :Data page checksums are disabled.
+19:29:19.154 PostgreSQL Server :
+19:29:19.154 PostgreSQL Server :fixing permissions on existing directory /var/lib/postgresql/data ... ok
+19:29:19.155 PostgreSQL Server :creating subdirectories ... ok
+19:29:19.155 PostgreSQL Server :selecting dynamic shared memory implementation ... posix
+19:29:19.171 PostgreSQL Server :selecting default max_connections ... 100
+19:29:19.197 PostgreSQL Server :selecting default shared_buffers ... 128MB
+19:29:19.243 PostgreSQL Server :selecting default time zone ... Etc/UTC
+19:29:19.244 PostgreSQL Server :creating configuration files ... ok
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+19:29:19.393 PostgreSQL Server :running bootstrap script ... ok
+19:29:20.011 PostgreSQL Server :performing post-bootstrap initialization ... ok
+[INFO] Running fr.fxjavadevblog.qjg.utils.IT_DummyTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.032 s - in fr.fxjavadevblog.qjg.utils.IT_DummyTest
+[INFO] Running fr.fxjavadevblog.qjg.videogame.IT_VideoGameResource
+19:29:20.174 PostgreSQL Server :syncing data to disk ... ok
+19:29:20.174 PostgreSQL Server :
+19:29:20.174 PostgreSQL Server :
+19:29:20.174 PostgreSQL Server :Success. You can now start the database server using:
+19:29:20.174 PostgreSQL Server :
+19:29:20.174 PostgreSQL Server :    pg_ctl -D /var/lib/postgresql/data -l logfile start
+19:29:20.174 PostgreSQL Server :
+19:29:20.174 PostgreSQL Server :initdb: warning: enabling "trust" authentication for local connections
+19:29:20.174 PostgreSQL Server :You can change this by editing pg_hba.conf or using the option -A, or
+19:29:20.174 PostgreSQL Server :--auth-local and --auth-host, the next time you run initdb.
+19:29:20.201 PostgreSQL Server :waiting for server to start....2020-04-14 17:29:20.201 UTC [47] LOG:  starting PostgreSQL 12.2 (Debian 12.2-2.pgdg100+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 8.3.0-6) 8.3.0, 64-bit
+19:29:20.203 PostgreSQL Server :2020-04-14 17:29:20.203 UTC [47] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+19:29:20.218 PostgreSQL Server :2020-04-14 17:29:20.218 UTC [48] LOG:  database system was shut down at 2020-04-14 17:29:19 UTC
+19:29:20.223 PostgreSQL Server :2020-04-14 17:29:20.223 UTC [47] LOG:  database system is ready to accept connections
+19:29:20.292 PostgreSQL Server : done
+19:29:20.292 PostgreSQL Server :server started
+19:29:20.418 PostgreSQL Server :CREATE DATABASE
+19:29:20.419 PostgreSQL Server :
+19:29:20.419 PostgreSQL Server :
+19:29:20.419 PostgreSQL Server :/usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+19:29:20.419 PostgreSQL Server :
+19:29:20.420 PostgreSQL Server :2020-04-14 17:29:20.420 UTC [47] LOG:  received fast shutdown request
+19:29:20.422 PostgreSQL Server :waiting for server to shut down....2020-04-14 17:29:20.422 UTC [47] LOG:  aborting any active transactions
+19:29:20.423 PostgreSQL Server :2020-04-14 17:29:20.423 UTC [47] LOG:  background worker "logical replication launcher" (PID 54) exited with exit code 1
+19:29:20.424 PostgreSQL Server :2020-04-14 17:29:20.424 UTC [49] LOG:  shutting down
+19:29:20.437 PostgreSQL Server :2020-04-14 17:29:20.436 UTC [47] LOG:  database system is shut down
+19:29:20.520 PostgreSQL Server : done
+19:29:20.520 PostgreSQL Server :server stopped
+19:29:20.520 PostgreSQL Server :
+19:29:20.520 PostgreSQL Server :PostgreSQL init process complete; ready for start up.
+19:29:20.520 PostgreSQL Server :
+19:29:20.537 PostgreSQL Server :2020-04-14 17:29:20.537 UTC [1] LOG:  starting PostgreSQL 12.2 (Debian 12.2-2.pgdg100+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 8.3.0-6) 8.3.0, 64-bit
+19:29:20.538 PostgreSQL Server :2020-04-14 17:29:20.537 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+19:29:20.538 PostgreSQL Server :2020-04-14 17:29:20.537 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+19:29:20.541 PostgreSQL Server :2020-04-14 17:29:20.541 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+19:29:20.555 PostgreSQL Server :2020-04-14 17:29:20.555 UTC [65] LOG:  database system was shut down at 2020-04-14 17:29:20 UTC
+19:29:20.560 PostgreSQL Server :2020-04-14 17:29:20.560 UTC [1] LOG:  database system is ready to accept connections
+Hibernate: 
+    
+    drop table if exists VIDEO_GAME cascade
+Hibernate: 
+    
+    create table VIDEO_GAME (
+       id varchar(36) not null,
+        GENRE varchar(255) not null,
+        NAME varchar(255) not null,
+        VERSION int8,
+        primary key (id)
+    )
+Hibernate: 
+    
+    alter table if exists VIDEO_GAME 
+       add constraint UK_jg5tlrbpecd0wd8c9vjo6b429 unique (NAME)
+
+Hibernate: 
+    INSERT INTO VIDEO_GAME(ID,NAME,GENRE,VERSION) VALUES ('896b9c77-4f6d-4bd6-b681-2791acfa0d51','100 4 1','REFLEXION',1)
+Hibernate: 
+    INSERT INTO VIDEO_GAME(ID,NAME,GENRE,VERSION) VALUES ('6bf157fa-bd95-46ce-bbca-58afb87ebb9b','10TH FRAME','SPORT',1)
+Hibernate: 
+    INSERT INTO VIDEO_GAME(ID,NAME,GENRE,VERSION) VALUES ('e603e430-0853-46b0-9f44-d4f662f56c51','1943 : THE BATTLE OF MIDWAY','SHOOT_THEM_UP',1)
+Hibernate: 
+    INSERT INTO VIDEO_GAME(ID,NAME,GENRE,VERSION) VALUES ('61ec5869-d9f5-497a-9ffc-8e3612892c4b','1ST DIVISION MANAGER','SPORT',1)       
+
+... etc ...
+
+Hibernate: 
+    select
+        videogame0_.id as id1_0_,
+        videogame0_.GENRE as genre2_0_,
+        videogame0_.NAME as name3_0_,
+        videogame0_.VERSION as version4_0_ 
+    from
+        VIDEO_GAME videogame0_ limit ?
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.89 s - in fr.fxjavadevblog.qjg.videogame.IT_VideoGameResource
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- docker-maven-plugin:0.33.0:stop (docker:stop) @ quarkus-tuto ---
+19:29:29.455 PostgreSQL Server :2020-04-14 17:29:29.454 UTC [1] LOG:  received smart shutdown request
+19:29:29.460 PostgreSQL Server :2020-04-14 17:29:29.459 UTC [1] LOG:  background worker "logical replication launcher" (PID 71) exited with exit code 1
+19:29:29.460 PostgreSQL Server :2020-04-14 17:29:29.460 UTC [66] LOG:  shutting down
+19:29:29.496 PostgreSQL Server :2020-04-14 17:29:29.496 UTC [1] LOG:  database system is shut down
+[INFO] DOCKER> [postgres:12.2] "postgresql": Stop and removed container ca6a77a7d1e3 after 0 ms
+[INFO] 
+[INFO] --- maven-failsafe-plugin:2.22.2:verify (default) @ quarkus-tuto ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+```
+
+## Version native et image Docker
+
+Pour générer l'image Docker de l'application native, rien de plus facile que de lancer :
+
+```bash
+$ mvn clean package -Pnative -Dquarkus.native.container-build=true -Dskip.surefire.tests
+
+...
+...
+[INFO] [io.quarkus.deployment.pkg.steps.NativeImageBuildStep] Pulling image quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11
+19.3.1-java11: Pulling from quarkus/ubi-quarkus-native-image
+57de4da701b5: Pull complete 
+cf0f3ebe9f53: Pull complete 
+e9da77aa316d: Pull complete 
+Digest: sha256:b18b701bd6f9d0a7778129f63b9f2dd666be2a2574854b56cd60e3cbd42b73d3
+Status: Downloaded newer image for quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11
+quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11
+[INFO] [io.quarkus.deployment.pkg.steps.NativeImageBuildStep] Running Quarkus native-image plugin on GraalVM Version 19.3.1 CE
+[INFO] [io.quarkus.deployment.pkg.steps.NativeImageBuildStep] docker run -v /home/robin/git/quarkus-tuto/target/quarkus-tuto-0.0.1-SNAPSHOT-native-image-source-jar:/project:z --env LANG=C --user 1000:1000 --rm quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11 -J-Djava.util.logging.manager=org.jboss.logmanager.LogManager -J-Dsun.nio.ch.maxUpdateArraySize=100 -J-DCoordinatorEnvironmentBean.transactionStatusManagerEnable=false -J-Dvertx.logger-delegate-factory-class-name=io.quarkus.vertx.core.runtime.VertxLogDelegateFactory -J-Dvertx.disableDnsResolver=true -J-Dio.netty.leakDetection.level=DISABLED -J-Dio.netty.allocator.maxOrder=1 -J-Duser.language=fr -J-Dfile.encoding=UTF-8 --initialize-at-build-time= -H:InitialCollectionPolicy=com.oracle.svm.core.genscavenge.CollectionPolicy$BySpaceAndTime -H:+JNI -jar quarkus-tuto-0.0.1-SNAPSHOT-runner.jar -H:FallbackThreshold=0 -H:+ReportExceptionStackTraces -H:-AddAllCharsets -H:-IncludeAllTimeZones -H:EnableURLProtocols=http,https --enable-all-security-services --no-server -H:-UseServiceLoaderFeature -H:+StackTrace quarkus-tuto-0.0.1-SNAPSHOT-runner
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]    classlist:  10 740,32 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]        (cap):     793,01 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]        setup:   2 161,94 ms
+08:35:25,649 INFO  [org.hib.Version] HHH000412: Hibernate ORM core version 5.4.12.Final
+08:35:25,663 INFO  [org.hib.ann.com.Version] HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+08:35:25,705 INFO  [org.hib.dia.Dialect] HHH000400: Using dialect: io.quarkus.hibernate.orm.runtime.dialect.QuarkusPostgreSQL10Dialect
+08:35:25,848 INFO  [org.hib.val.int.uti.Version] HV000001: Hibernate Validator 6.1.2.Final
+08:35:27,547 INFO  [org.jbo.threads] JBoss Threads version 3.0.1.Final
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]   (typeflow):  47 866,54 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]    (objects):  33 462,47 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]   (features):   1 692,11 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     analysis:  87 791,76 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     (clinit):   1 211,71 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     universe:   5 195,59 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]      (parse):   6 258,47 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     (inline):   8 432,95 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]    (compile):  55 066,12 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]      compile:  74 232,51 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]        image:   5 742,28 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]        write:   1 469,31 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]      [total]: 187 812,32 ms
+[INFO] [io.quarkus.deployment.QuarkusAugmentor] Quarkus augmentation completed in 223001ms
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  03:50 min
+[INFO] Finished at: 2020-04-15T10:38:21+02:00
+[INFO] ------------------------------------------------------------------------
+```
+
+Cette commande a réalisée un chose essentielle : elle a compilé en une version native LINUX, quel que soit votre environnement de travail au moyen d'un conteneur dédié à la compilation.
+
+Pour faire simple, un conteneur docker `ubi-quarkus-native-image:19.3.1-java11` a été récupéré puis lancé pour compiler l'application au format LINUX même si vous êtes sous Windows. Cela nécessite toutefois d'avoir GraalVM d'installé nativement, mais cela peut-être contourné (cf : <https://quarkus.io/guides/building-native-image>)
+
+Une fois compilée, il faut maintenant créer l'image du conteneur docker. Cette création est possible en ayant préalablement créé 2 fichiers dans `/src/main/docker` :
+
+- `/src/main/docker/Dockerfile.native` : fichier pour la génération en mode natif
+- `.dockerignore` : fichier pour la génération en mode JVM *normal* à la racine du projet MAVEN
+
+> Il peut aussi exister un fichier `Dockerfile.jvm` mais ce n'est pas l'objet de ce tutorial.
+
+Voici le contenu de ces fichiers :
+
+**Dockerfile.native** :
+
+```text
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+WORKDIR /work/
+COPY target/*-runner /work/application
+RUN chmod 775 /work
+EXPOSE 8080
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
+```
+
+**.dockerignore** :
+
+```text
+*
+!target/*-runner
+!target/*-runner.jar
+```
+
+On peut alors lancer la création de l'image docker :
+
+```bash
+$ docker build -f src/main/docker/Dockerfile.native -t quarkus-tuto .
+Sending build context to Docker daemon  102.9MB
+Step 1/6 : FROM registry.access.redhat.com/ubi8/ubi-minimal
+latest: Pulling from ubi8/ubi-minimal
+b26afdf22be4: Pull complete 
+218f593046ab: Pull complete 
+Digest: sha256:df6f9e5d689e4a0b295ff12abc6e2ae2932a1f3e479ae1124ab76cf40c3a8cdd
+Status: Downloaded newer image for registry.access.redhat.com/ubi8/ubi-minimal:latest
+ ---> 91d23a64fdf2
+Step 2/6 : WORKDIR /work/
+ ---> Running in 40a5ee141273
+Removing intermediate container 40a5ee141273
+ ---> 6ab61dca9bf2
+Step 3/6 : COPY target/*-runner /work/application
+ ---> 3aae05f5ee7d
+Step 4/6 : RUN chmod 775 /work
+ ---> Running in 8387b2b6e071
+Removing intermediate container 8387b2b6e071
+ ---> 0c03e70d6326
+Step 5/6 : EXPOSE 8080
+ ---> Running in 1813737fd08e
+Removing intermediate container 1813737fd08e
+ ---> 978251ac9f2b
+Step 6/6 : CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
+ ---> Running in c93ab35754d4
+Removing intermediate container c93ab35754d4
+ ---> 6009aee9381b
+Successfully built 6009aee9381b
+Successfully tagged quarkus-tuto:latest
+```
+
+Une fois le conteneur créé, il suffit de le lancer, en ayant lancé préalablement une instance de PostgreSQL (encore avec Docker, comme en DEV) :
+
+```bash
+$ docker run -i --rm -p 8080:8080 --network="host" quarkus-tuto
+```│   ├── main
+│   │   ├── docker
+│   │   │   ├── Dockerfile.jvm
+│   │   │   └── Dockerfile.native
+│   │   ├── java
+│   │   │   └── fr
+│   │   │       └── fxjavadevblog
+
+
+```bash
+$ curl http://localhost:8080/api/videogames/v1/genre/rpg
+[
+    {
+        "id": "75a9b985-c5a9-40a0-87ba-086850683bfc",
+        "name": "20000 LIEUES SOUS LES MERS",
+        "genre": "rpg",
+        "version": 1
+    },
+    {
+        "id": "2b412dd7-d090-4328-8180-869b60bbc106",
+        "name": "ADVENTURE",
+        "genre": "rpg",
+        "version": 1
+    },
+    {
+        "id": "885a3475-63c9-49f3-b120-e218ce9c9510",
+        "name": "ADVENTURER, THE",
+        "genre": "rpg",
+        "version": 1
+    },
+    {
+        "id": "a500c1a6-6008-45d4-b3f4-5b668b77499a",
+        "name": "ADVENTURES OF ROBIN HOOD, THE",
+        "genre": "rpg",
+        "version": 1
+    },
+ ... etc ...
+]
+```
+
+## Conclusions
+
+Quarkus est, à mon humble avis, un framework de développement de Web Services REST très intéressant sur de nombreux aspects :
+
+- il est facile à prendre en main.
+- le mode *dev* et le *hot reload* offrent un gain de temps important, même si l'usage conjoint de Lombok n'est pas encore optimum.
+- la documentation est claire et il y a de nombreux exemples officiels sur GitHub.
+- la conformité aux specs Java EE et Microprofile est très intéressante et rassurante : JAX-RS, etc. Pas de nouvelle API propriétaire à apprendre.
+- le plugin de compilation native avec GraalVM est fourni et le résultat est à la hauteur des espérances.
+- il est facile de rajouter la gestion de token JWT et la liaison avec KeyCloak.
+- la communauté semble très active.
+
+Je vous encourage donc vivement à vous pencher sur Quarkus !
