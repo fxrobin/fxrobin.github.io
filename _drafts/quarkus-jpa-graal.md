@@ -155,7 +155,7 @@ fxjavadevblog
     │   └── UUIDProducer.java             : générateur de UUID
     ├── videogame
     │   ├── VideoGame.java                : classe métier, persistante via JPA (Hibernate)
-    │   ├── VideoGameFactory.java
+    │   ├── VideoGameFactory.java   : TODO
     │   ├── VideoGameRepository.java      : un repository CRUD JPA généré par Spring Data JPA
     │   └── VideoGameResource.java        : le point d'accès REST via JAX-RS aux jeux vidéo
     └── ApiDefinition.java                : pour les informations de l'API via Swagger
@@ -169,15 +169,15 @@ test
 │       └── fxjavadevblog
 │           └── qjg
 │               ├── global
-│               │   └── TestingGroups.java   : définitions de contantes pour les groupes de tests JUnit 5
+│               │   └── TestingGroups.java   : définitions de constantes pour les groupes de tests JUnit 5
 │               ├── ping
-│               │   └── PingTest.java
+│               │   └── PingTest.java  : TODO
 │               └── utils
-│                   ├── CDITest.java                    : permet de vérifier que CDI est opérationnel.
+│                   ├── CDITest.java                    : permet de vérifier que CDI est opérationnel
 │                   ├── DummyTest.java                  : un test vide
-│                   └── GenericEnumConverterTest.java   : vérification de la conversion générique d'enum.
+│                   └── GenericEnumConverterTest.java   : vérification de la conversion générique d'enum
 └── resources
-    └── application.properties               : fichier de paramétrage de Quarkus spécifique pour les tests unitaires.
+    └── application.properties               : fichier de paramétrage de Quarkus spécifique pour les tests unitaires
 
 > `DummyTest.java` : un test *vide* afin de vérifier que les tests unitaires s'exécutent correctement (un méta-test, lol)
 
@@ -209,7 +209,7 @@ D'abord il nous faut quelques paramétrages classiques MAVEN :
 </project>
 ```
 
-> Pour ce tutorial l'usage de Java 8 sera effectué.
+> Pour ce tutoriel l'usage de Java 8 sera effectué.
 
 On ajoute les dépendences classiques :
 
@@ -285,8 +285,8 @@ puis :
 Attention, ils sont nombreux, mais ce n'est pas rare pour des projets MAVEN. Il nous faut de quoi :
 
 - générer tout ce qui est traité par Quarkus
-- lancer les tests unitaires sans base de données.
-- lancer notre base de données PostgreSQL avec docker pendant les tests d'intégration JUnit 5. On est ainsi à mi-chemin entre des tests unitaires et des tests d'intégration. Je préfère cette solution plutôt que de *mocker* les tests. Cela nécessite évidemment que docker soit installé sur l'environnement.
+- lancer les tests unitaires sans base de données
+- lancer notre base de données PostgreSQL avec Docker pendant les tests d'intégration JUnit 5. On est ainsi à mi-chemin entre des tests unitaires et des tests d'intégration. Je préfère cette solution plutôt que de *mocker* les tests. Cela nécessite évidemment que Docker soit installé sur l'environnement.
 
 ```xml
 <build>
@@ -458,7 +458,7 @@ Attention, ils sont nombreux, mais ce n'est pas rare pour des projets MAVEN. Il 
   </build>
 ```
 
-Et enfin, pour atteindre le Graal du code Java compilé en binaire natif, il nous faut rajouter un petit profile MAVEN :
+Et enfin, pour atteindre le Graal du code Java compilé en binaire natif, il nous faut rajouter un petit profil MAVEN :
 
 ```xml
 <profiles>
@@ -616,7 +616,7 @@ __  ____  __  _____   ___  __ ____  ______
 2020-04-02 11:26:09,819 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, hibernate-validator, jdbc-postgresql, narayana-jta, resteasy, resteasy-jsonb, spring-data-jpa, spring-di]
 ```
 
-> Quakus se lance en très peu de temps alors qu'il est *simplement* en mode JVM classique. Vivement le build GraalVM natif ... patience.
+> Quakus se lance en très peu de temps alors qu'il est *simplement* en mode JVM classique. Vivement le build GraalVM natif... patience.
 
 On peut tester le service manuellement :
 
@@ -625,7 +625,7 @@ $ curl http://localhost:8080/api/ping/v1
 pong
 ```
 
-Si on modifie le code java et qu'on le sauvegarde, il se recompile automatiquement grâce au mode **dev** de de quarkus.
+Si on modifie le code java et qu'on le sauvegarde, il se recompile automatiquement grâce au mode **dev** de Quarkus.
 Par exemple : on change le `return "pong";` par `return PONG;` et on sauvegarde le fichier.
 
 ```bash
@@ -640,7 +640,7 @@ C'est vraiment très pratique ce *live reload* !
 
 ## Compilation en binaire avec GraalVM
 
-En pré-requis, il faut d'assurer que GraalVM est bien installé. Je vous conseille d'utilser SDKMAN pour cela. SDKMAN est une plateforme pour gérer plusieurs outils de développement présents sur votre poste en plusieurs versions et vous permet de les activer simplement et rapidement, même le temps d'une session shell.
+En pré-requis, il faut s'assurer que GraalVM est bien installé. Je vous conseille d'utilser SDKMAN pour cela. SDKMAN est une plateforme pour gérer plusieurs outils de développement présents sur votre poste en plusieurs versions et vous permet de les activer simplement et rapidement, même le temps d'une session shell. (TODO, pas bien compris)
 
 ### Installation de SDKMAN
 
@@ -723,14 +723,14 @@ Tout est prêt pour pouvoir compiler notre application en code natif.
 
 ### Compilation en code natif
 
-Il suffit de lancer maven avec le profile *native* qui est présent de le pom XML.
+Il suffit de lancer maven avec le profil *native* qui est présent dans le pom XML.
 C'est un peu long, c'est normal, mais le résultat en vaut la chandelle.
 
 ```bash
 $ mvn package -Pnative
 ...
 ...
-... (vous pouvez allez  vous aérer la compilation est assez longue ...)
+... (vous pouvez allez vous aérer la compilation est assez longue ...)
 ...
 ...
 ...
@@ -905,12 +905,12 @@ quarkus.arc.remove-unused-beans=false
 
 > Remarque importante : quand on construit l'image native de l'application, Quarkus se met automatiquement en mode `prod`.
 > Cela signifie que certains paramètres sont ignorés par défaut comme le `drop-and-create` et le `sql-load-script`.
-> C'est une très bonne pratique, cependant dans le cadre de ce tutoriel où les données ne persistent pas, je force même en mode 
-> `prod` la création de la base de données et l'import du script SQL.
-> Dans le fichier ci-dessus, ce sont les ligne `%prod.*` qui s'activent en production AUSSI.
+> C'est une très bonne pratique, cependant dans le cadre de ce tutoriel où les données ne persistent pas, je force, même en mode 
+> `prod`, la création de la base de données et l'import du script SQL.
+> Dans le fichier ci-dessus, ce sont les lignes `%prod.*` qui s'activent en production AUSSI.
 > Je le redis : à ne pas faire dans un vrai projet !
 
-Pour les tests unitaires et les tests d'intégration, nous auront donc des fichiers `application.properties` différents.
+Pour les tests unitaires et les tests d'intégration, nous aurons donc des fichiers `application.properties` différents.
 
 ## Des entités à persister
 
@@ -918,9 +918,9 @@ Bien évidemment, il nous faut au moins une classe persistente. J'ai repris ici 
 
 - VideoGame : classe persistante JPA
 - Genre : une enum JAVA persistée sous forme de String
-- Producers : des producers CDI pour les UUID qui serviront de `@Id` dans la classe persistance comme clé primaire.
+- Producers : des producers CDI pour les UUID qui serviront de `@Id` dans la classe persistance comme clé primaire
 - VideoGameReposity : le CRUD issu de Spring Data JPA
-- VideoGameFactory : de quoi créer des instances de la classe VideoGame en bénéficiant de l'injection automatique de UUID.
+- VideoGameFactory : de quoi créer des instances de la classe VideoGame en bénéficiant de l'injection automatique de UUID
 
 ### VideoGame et Genre
 
@@ -949,7 +949,7 @@ import lombok.ToString;
 
 @SuppressWarnings("serial")
 
-//
+// TODO
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 @ToString(of = { "id", "name" })
@@ -996,13 +996,13 @@ public class VideoGame implements Serializable
  */
 public enum Genre
 {
-   ARCADE, EDUCATION, FIGHTING, PINBALL, PLATEFORM, REFLEXION, RPG, SHOOT_THEM_UP, SIMULATION, SPORT;
+   ARCADE, EDUCATION, FIGHTING, PINBALL, PLATFORM, REFLEXION, RPG, SHOOT_THEM_UP, SIMULATION, SPORT;
 }
 ```
 
 ### Producers CDI et annotation
 
-L'annotation `@InjectUUID` qui est utilisée sur la classe `VideoGame`.
+L'annotation `@InjectUUID` est utilisée sur la classe `VideoGame`.
 
 ```java
 package fr.fxjavadevblog.qjg;
@@ -1244,11 +1244,11 @@ On va y rémédier dans le paragraphe qui suit !
 
 ## Convertisseur générique pour les valeurs de l'enum
 
-Pour résumer le problème, les URLs d'appel ainsi que le contenu du retour JSON ne respectent pas les conventions de nommage classique de REST.
+Pour résumer le problème, les URL d'appel ainsi que le contenu du retour JSON ne respectent pas les conventions de nommage classique de REST.
 
 > En plus, les manipulations comme `Genre.valueOf(genre.replace("-", "_").toUpperCase());` ce n'est pas très joli, à mon goût.
 
-Ce que l'on souhaite pour les URLs d'appel et les retours JSON :
+Ce que l'on souhaite pour les URL d'appel et les retours JSON :
 
 - utiliser des "-" au lieu des "_" pour séparer les mots clés
 - basculer tout en minuscules
@@ -1274,7 +1274,7 @@ Exemple : l'appel de `/api/videogames/v1/genre/shoot-them-up` doit retourner :
 
 Mais, on ne veut pas toucher aux conventions de nommage de l'enum `Genre` ! C'est du Java et on doit pouvoir garder les choses ainsi !
 
-Il y a plein de solution pour cela. Celle que je vais privilégier est l'usage de l'annotation @JsonProperty de Jackson que l'on va placer sur chacune des valeurs de l'enum :
+Il y a pleins de solutions pour cela. Celle que je vais privilégier est l'usage de l'annotation @JsonProperty de Jackson que l'on va placer sur chacune des valeurs de l'enum :
 
 ```java
 public enum Genre
@@ -1291,8 +1291,8 @@ public enum Genre
    @JsonProperty(value = "pinball")
    PINBALL, 
    
-   @JsonProperty(value = "plateform")
-   PLATEFORM, 
+   @JsonProperty(value = "platform")
+   PLATFORM, 
    
    @JsonProperty(value = "reflexion")
    REFLEXION, 
@@ -1351,10 +1351,10 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 /**
- * Generic JAX-RS Enum converter based on the jackson JsonProperty annotation to
+ * Generic JAX-RS Enum converter based on the Jackson JsonProperty annotation to
  * get the mapping.
  * 
- * @author François-Xavier Robin
+ * @author robin
  *
  * @param <T>
  */
@@ -1392,7 +1392,7 @@ public class GenericEnumConverter<T extends Enum<T>> implements ParamConverter<T
             {
                 String enumValue = v.name();
                 JsonProperty annotation =  v.getClass().getDeclaredField(enumValue).getAnnotation(JsonProperty.class);
-                // get the annotation if exists or take the classic enum representation
+                // get the annotation if it exists or take the classic enum representation
                 String result = Optional.ofNullable(annotation).map(JsonProperty::value).orElse(enumValue);
                 log.debug("Enum value {}.{} is mapped to \"{}\"", t.getSimpleName(), v.name(), result);
                 biMap.put(v, result);
@@ -1432,9 +1432,9 @@ public class GenericEnumConverter<T extends Enum<T>> implements ParamConverter<T
 Les concepts de cette classe sont les suivants :
 
 - elle est instanciée en prenant une enum comme argument : `ParamConverter<Genre> converter = GenericEnumConverter.of(Genre.class);`
-- elle instrospecte l'enum pendant sa construction à la recherche des annotations `@JsonProperty` sur chaque valeur.
-- pour chaque valeur, elle récupère le contenu de l'annotation `@JsonProperty` et peuple une BiMap (Map bidrectionnele Guava, incluse dans Quarkus).
-- si l'annotation n'est pas présente (on ne sait jamais), la valeur `toString()` de l'enum sera prise par défaut.
+- elle instrospecte l'enum pendant sa construction à la recherche des annotations `@JsonProperty` sur chaque valeur
+- pour chaque valeur, elle récupère le contenu de l'annotation `@JsonProperty` et peuple une BiMap (Map bidrectionnele Guava, incluse dans Quarkus)
+- si l'annotation n'est pas présente (on ne sait jamais), la valeur `toString()` de l'enum sera prise par défaut
 
 La partie "générique" permet de s'adapter à n'importe quelle *enum*.
 
@@ -1446,7 +1446,7 @@ Enum value Genre.ARCADE is mapped to "arcade"
 Enum value Genre.EDUCATION is mapped to "education"
 Enum value Genre.FIGHTING is mapped to "fighting"
 Enum value Genre.PINBALL is mapped to "pinball"
-Enum value Genre.PLATEFORM is mapped to "plateform"
+Enum value Genre.PLATFORM is mapped to "platform"
 Enum value Genre.REFLEXION is mapped to "reflexion"
 Enum value Genre.RPG is mapped to "rpg"
 Enum value Genre.SHOOT_THEM_UP is mapped to "shoot-them-up"
@@ -1473,7 +1473,7 @@ import fr.fxjavadevblog.qjg.utils.GenericEnumConverter;
 
 /**
  * JAX-RS provider for Genre conversion. This converter is registered because of
- * the Prodiver annotation.
+ * the Provider annotation.
  * 
  * @author robin
  */
@@ -1568,8 +1568,8 @@ Content-Type: application/json
 
 Ces tests sont classiquement dans le répertoire "test". Les points particuliers sont les suivants :
 
-- la base de données n'est pas créée dans ce cas.
-- `@QuarkusTest` est présent sur quelques classes de tests unitaires pour vérifier le comporte de CDI
+- la base de données n'est pas créée dans ce cas
+- `@QuarkusTest` est présent sur quelques classes de tests unitaires pour vérifier le comportement de CDI
 - les tests unitaires nommés `IT_*` sont ignorés par convention (tests d'intégration)
 - le profil `test` de Quarkus est automatique, un fichier spécifique `application.properties` est utilisé à cet effet
 - la propriété `quarkus.arc.remove-unused-beans=false` permet de conserver dans le contexte CDI tous les beans injectables
@@ -1612,7 +1612,7 @@ $ mvn clean test
 
 ### Tests d'intégration
 
-Ces tests sont placés dans le répertoire "test-integration". Les points particulier sont les suivants :
+Ces tests sont placés dans le répertoire "test-integration". Les points particuliers sont les suivants :
 
 - une image Docker PostgreSQL pour les tests d'intégration est lancée
 - `@QuarkusTest` est présent sur tous les tests afin de disposer de l'environnement complet
@@ -1876,15 +1876,17 @@ quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11
 ```
 
 Cette commande a réalisée un chose essentielle : elle a compilé en une version native LINUX, quel que soit votre environnement de travail au moyen d'un conteneur dédié à la compilation.
+TODO : elle a compilé quoi ?
 
-Pour faire simple, un conteneur docker `ubi-quarkus-native-image:19.3.1-java11` a été récupéré puis lancé pour compiler l'application au format LINUX même si vous êtes sous Windows. Cela nécessite toutefois d'avoir GraalVM d'installé nativement, mais cela peut-être contourné (cf : <https://quarkus.io/guides/building-native-image>)
+Pour faire simple, un conteneur Docker `ubi-quarkus-native-image:19.3.1-java11` a été récupéré puis lancé pour compiler l'application au format LINUX même si vous êtes sous Windows. Cela nécessite toutefois d'avoir GraalVM installé nativement, mais cela peut-être contourné (cf : <https://quarkus.io/guides/building-native-image>)
 
-Une fois compilée, il faut maintenant créer l'image du conteneur docker. Cette création est possible en ayant préalablement créé 2 fichiers dans `/src/main/docker` :
+Une fois compilée, il faut maintenant créer l'image du conteneur Docker. Cette création est possible en ayant préalablement créé 2 fichiers dans `/src/main/docker` :
+TODO : qui est compilé ?
 
 - `/src/main/docker/Dockerfile.native` : fichier pour la génération en mode natif
 - `.dockerignore` : fichier pour la génération en mode JVM *normal* à la racine du projet MAVEN
 
-> Il peut aussi exister un fichier `Dockerfile.jvm` mais ce n'est pas l'objet de ce tutorial.
+> Il peut aussi exister un fichier `Dockerfile.jvm` mais ce n'est pas l'objet de ce tutoriel.
 
 Voici le contenu de ces fichiers :
 
@@ -1907,7 +1909,7 @@ CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
 !target/*-runner.jar
 ```
 
-On peut alors lancer la création de l'image docker :
+On peut alors lancer la création de l'image Docker :
 
 ```bash
 $ docker build -f src/main/docker/Dockerfile.native -t quarkus-tuto .
@@ -1989,12 +1991,12 @@ $ curl http://localhost:8080/api/videogames/v1/genre/rpg
 
 Quarkus est, à mon humble avis, un framework de développement de Web Services REST très intéressant sur de nombreux aspects :
 
-- il est facile à prendre en main.
-- le mode *dev* et le *hot reload* offrent un gain de temps important, même si l'usage conjoint de Lombok n'est pas encore optimum.
-- la documentation est claire et il y a de nombreux exemples officiels sur GitHub.
-- la conformité aux specs Java EE et Microprofile est très intéressante et rassurante : JAX-RS, etc. Pas de nouvelle API propriétaire à apprendre.
-- le plugin de compilation native avec GraalVM est fourni et le résultat est à la hauteur des espérances.
-- il est facile de rajouter la gestion de token JWT et la liaison avec KeyCloak.
-- la communauté semble très active.
+- il est facile à prendre en main
+- le mode *dev* et le *hot reload* offrent un gain de temps important, même si l'usage conjoint de Lombok n'est pas encore optimum
+- la documentation est claire et il y a de nombreux exemples officiels sur GitHub
+- la conformité aux specs Java EE et Microprofile est très intéressante et rassurante ( JAX-RS, etc) : pas de nouvelle API propriétaire à apprendre
+- le plugin de compilation native avec GraalVM est fourni et le résultat est à la hauteur des espérances
+- il est facile de rajouter la gestion de token JWT et la liaison avec KeyCloak
+- la communauté semble très active
 
 Je vous encourage donc vivement à vous pencher sur Quarkus !
