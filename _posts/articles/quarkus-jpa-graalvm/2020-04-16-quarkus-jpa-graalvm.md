@@ -660,7 +660,9 @@ C'est vraiment très pratique ce *live reload* !
 
 ## Compilation en binaire avec GraalVM
 
-En pré-requis, il faut s'assurer que GraalVM est bien installé. Je vous conseille d'utilser SDKMAN pour cela. SDKMAN est une plateforme pour gérer plusieurs outils de développement présents sur votre poste en plusieurs versions et vous permet de les activer simplement et rapidement, même le temps d'une session shell. (TODO, pas bien compris)
+En pré-requis, il faut s'assurer que GraalVM est bien installé. 
+
+Je vous conseille d'utilser SDKMAN pour cela qui est une plateforme pour gérer plusieurs outils de développement présents sur votre poste en plusieurs versions et vous permet des les activer simplement et rapidement, même le temps d'une session shell (terminal).
 
 ### Installation de SDKMAN
 
@@ -969,7 +971,7 @@ import lombok.ToString;
 
 @SuppressWarnings("serial")
 
-// TODO
+// Lombok
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 @ToString(of = { "id", "name" })
@@ -1895,13 +1897,11 @@ quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11
 [INFO] ------------------------------------------------------------------------
 ```
 
-Cette commande a réalisée un chose essentielle : elle a compilé en une version native LINUX, quel que soit votre environnement de travail au moyen d'un conteneur dédié à la compilation.
-TODO : elle a compilé quoi ?
+Cette commande a réalisée un chose essentielle : elle a compilé en une version native LINUX de toute l'application, quel que soit votre environnement de travail au moyen d'un conteneur dédié à la compilation.
 
 Pour faire simple, un conteneur Docker `ubi-quarkus-native-image:19.3.1-java11` a été récupéré puis lancé pour compiler l'application au format LINUX même si vous êtes sous Windows. Cela nécessite toutefois d'avoir GraalVM installé nativement, mais cela peut-être contourné (cf : <https://quarkus.io/guides/building-native-image>)
 
-Une fois compilée, il faut maintenant créer l'image du conteneur Docker. Cette création est possible en ayant préalablement créé 2 fichiers dans `/src/main/docker` :
-TODO : qui est compilé ?
+Une fois l'application compilée, il faut maintenant créer l'image du conteneur Docker. Cette création est possible en ayant préalablement créé 2 fichiers dans `/src/main/docker` :
 
 - `/src/main/docker/Dockerfile.native` : fichier pour la génération en mode natif
 - `.dockerignore` : fichier pour la génération en mode JVM *normal* à la racine du projet MAVEN
