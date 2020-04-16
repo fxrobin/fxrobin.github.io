@@ -31,6 +31,7 @@ L'objectif de cet article est de faire tourner une API REST avec Quarkus fonctio
 - CDI 2 : avec l'implémentation interne partielle de QUARKUS
 - JPA 2 : avec Hibernate
 - Bean Validation : avec Hibernate Validator
+- Health Check et Metrics : avec SmallRye Health et SmallRye Metrics
 
 On équipera le projet de diverses bibliothèques pour accéler le développement
 
@@ -57,8 +58,9 @@ En substance, c'est un framework constitué des meilleurs standards et biblioth�
 
 Ses concurrents directs sont les fameux :
 
-- SpringBoot (et toute la plateforme Spring),
 - Micronaut,
+- Thorntail,
+- SpringBoot (et toute la plateforme Spring),
 - dans une moindre mesure, Payara-micro.
 
 ## Structure globale du projet
@@ -80,6 +82,8 @@ Avant de commencer à entrer dans le détail des divers éléments, voici la str
 │   │   │               │   ├── Genre.java
 │   │   │               │   ├── GenreConverterProvider.java
 │   │   │               │   └── GenreResource.java
+│   │   │               ├── health
+│   │   │                   └── SimpleHealthCheck.java
 │   │   │               ├── ping
 │   │   │               │   └── PingService.java
 │   │   │               ├── utils
@@ -147,6 +151,8 @@ fxjavadevblog
     │   ├── Genre.java                    : enum qui contient tous les genres de jeux vidéo
     │   ├── GenreConverterProvider.java   : fournisseur de conversion de Genre pour les paramètres JAX-RS
     │   └── GenreResource.java            : point d'accès REST via JAX-RS aux genres de jeux vidéo
+    ├── health
+    │   └── SimpleHealthCheck.java        : retour simple de Health Check (optionnel)
     ├── ping
     │   └── PingService.java              : pour vérifier que JAX-RS est bien opérationnel
     ├── utils
@@ -155,7 +161,7 @@ fxjavadevblog
     │   └── UUIDProducer.java             : générateur de UUID
     ├── videogame
     │   ├── VideoGame.java                : classe métier, persistante via JPA (Hibernate)
-    │   ├── VideoGameFactory.java   : TODO
+    │   ├── VideoGameFactory.java         : Factory de jeux video via CDI pour bénéficier de @InjectUUID en mode programmatique
     │   ├── VideoGameRepository.java      : un repository CRUD JPA généré par Spring Data JPA
     │   └── VideoGameResource.java        : le point d'accès REST via JAX-RS aux jeux vidéo
     └── ApiDefinition.java                : pour les informations de l'API via Swagger
@@ -171,7 +177,7 @@ test
 │               ├── global
 │               │   └── TestingGroups.java   : définitions de constantes pour les groupes de tests JUnit 5
 │               ├── ping
-│               │   └── PingTest.java  : TODO
+│               │   └── PingTest.java        : Vérifie que le "ping" fonctionne
 │               └── utils
 │                   ├── CDITest.java                    : permet de vérifier que CDI est opérationnel
 │                   ├── DummyTest.java                  : un test vide
@@ -264,6 +270,18 @@ puis :
 <dependency>
   <groupId>io.quarkus</groupId>
   <artifactId>quarkus-smallrye-openapi</artifactId>
+</dependency>
+
+<!-- Health Check -->
+<dependency>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-smallrye-health</artifactId>
+</dependency>
+
+<!-- Metrics -->
+<dependency>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-smallrye-metrics</artifactId>
 </dependency>
 
 <!-- for testing -->
@@ -1947,14 +1965,9 @@ Une fois le conteneur créé, il suffit de le lancer, en ayant lancé préalable
 
 ```bash
 $ docker run -i --rm -p 8080:8080 --network="host" quarkus-tuto
-```│   ├── main
-│   │   ├── docker
-│   │   │   ├── Dockerfile.jvm
-│   │   │   └── Dockerfile.native
-│   │   ├── java
-│   │   │   └── fr
-│   │   │       └── fxjavadevblog
+```
 
+> Le paramètre `--network="host"` permet à l'application de se connecter au PostgreSQL exposé par Docker.
 
 ```bash
 $ curl http://localhost:8080/api/videogames/v1/genre/rpg
@@ -1987,6 +2000,94 @@ $ curl http://localhost:8080/api/videogames/v1/genre/rpg
 ]
 ```
 
+## Health Check et Metrics
+
+Quarkus embarque les extensions SmallRye Health et Metrics, qui sont les implémentations respectives de Eclipse MicroProfile Health et Metrics.
+
+Le simple ajout dans le pom de ces deux dépendances rend ces fonctionnalités opérationnelles :
+
+```xml
+<!-- Health Check -->
+<dependency>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-smallrye-health</artifactId>
+</dependency>
+
+<!-- Metrics -->
+<dependency>
+  <groupId>io.quarkus</groupId>
+  <artifactId>quarkus-smallrye-metrics</artifactId>
+</dependency>
+```
+
+Une fois l'application lancée et qu'elle est sollicitée, on peut obtenir un état de son bon fonctionnement :
+
+```bash
+$ curl http://localhost:8080/health
+{
+    "status": "UP",
+    "checks": [
+        {
+            "name": "Application",
+            "status": "UP"
+        },
+        {
+            "name": "Database connections health check",
+            "status": "UP"
+        }
+    ]
+}
+```
+
+On peut obtenir quelques mesures qui auront été calculées au moyen de l'annotation `@Timed` sur les méthodes de la classe `VideoGameResource` :
+
+```java
+@Timed(name = "videogames-find-by-all", absolute = true,
+       description = "A measure of how long it takes to fetch all video games.", 
+       unit = MetricUnits.MILLISECONDS)
+public Iterable<VideoGame> findAll()
+{
+    return videoGameRepository.findAll();
+}
+
+@Timed(name = "videogames-find-by-genre", absolute = true, 
+       description = "A measure of how long it takes to fetch all video games filtered by a given genre.", 
+       unit = MetricUnits.MILLISECONDS)
+public List<VideoGame> findByGenre(@PathParam("genre") Genre genre)
+{
+    return videoGameRepository.findByGenre(genre);
+}
+```
+
+> l'attribut `absolute=true` empêche la concaténation du nom du package et de la classe au nom de la mesure. Ceci sera plus agréable à lire dans les outils de restitution qui exploiteront cette information du retour JSON. Je préfère cette notation car elle aura un impact direct sur les URL d'appels des mesures.
+
+Voici les mesures obtenues après 20 appels de l'URL `/api/videogames/v1/genre/shoot-them-up` :
+
+```bash
+$ curl -H"Accept: application/json" localhost:8080/metrics/application/videogames-find-by-genre
+{
+    "videogames-find-by-genre": {
+        "p99": 10.044791,
+        "min": 2.335977,
+        "max": 10.044791,
+        "mean": 3.6114086322681627,
+        "p50": 3.19797,
+        "p999": 10.044791,
+        "stddev": 1.6164326637605608,
+        "p95": 5.663952,
+        "p98": 10.044791,
+        "p75": 3.752217,
+        "fiveMinRate": 0.06305266722909629,
+        "fifteenMinRate": 0.021812705995763727,
+        "meanRate": 0.008589683736876096,
+        "count": 20,
+        "oneMinRate": 0.252757448780742
+    }
+}
+```
+
+> Il faut ensuite utiliser un collecteur de Metrics comme Prometheus couplé à Grafana pour obtenir de jolis tableaux de bord.
+
 ## Conclusions
 
 Quarkus est, à mon humble avis, un framework de développement de Web Services REST très intéressant sur de nombreux aspects :
@@ -1996,7 +2097,8 @@ Quarkus est, à mon humble avis, un framework de développement de Web Services 
 - la documentation est claire et il y a de nombreux exemples officiels sur GitHub
 - la conformité aux specs Java EE et Microprofile est très intéressante et rassurante ( JAX-RS, etc) : pas de nouvelle API propriétaire à apprendre
 - le plugin de compilation native avec GraalVM est fourni et le résultat est à la hauteur des espérances
+- l'usage du Health Check et des Metrics sont vraiment bien intégrés et facile à mettre en oeuvre
 - il est facile de rajouter la gestion de token JWT et la liaison avec KeyCloak
 - la communauté semble très active
 
-Je vous encourage donc vivement à vous pencher sur Quarkus !
+Je vous encourage donc vivement à vous pencher sérieusement sur Quarkus !
