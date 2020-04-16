@@ -1,7 +1,7 @@
 ---
 layout: post
 title: REST API avec Quarkus, JPA, PostGreSQL et GraalVM
-subtitle: réduire l'empreinte serveur d'une API REST en JAVA sans perdre en productivité
+subtitle: réduire l'empreinte serveur d'une API REST en JAVA en la compilant en code natif !
 logo: graal.png
 category: articles
 tags: [Java, Quarkus, Bean Validation, JAX-RS, REST, GraalVM]
