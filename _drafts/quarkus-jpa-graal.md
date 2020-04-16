@@ -11,11 +11,11 @@ ref: quarkus-jpa-graalvm
 
 <div class="intro" markdown='1'>
 
-Ce tutorial Quarkus-JPA-PostgreSQL met en oeuvre :
+Ce tutoriel Quarkus-JPA-PostgreSQL met en oeuvre :
 
 - une API Rest partielle (GET) avec JAX-RS et Quarkus sur une source de données JPA
 - des tests unitaires
-- des tests d'intégration au niveau API (http) avec un PostGreSQL lancé par un plugin maven Docker.
+- des tests d'intégration au niveau API (http) avec un PostGreSQL lancé par un plugin maven Docker
 - une distribution native, compilée avec Graal VM et une image docker de l'application compilée
 
 > Réalisé sous Linux Mint 19 mais devrait convenir à de nombreuses distributions, voire à Windows.
@@ -35,7 +35,7 @@ L'objectif de cet article est de faire tourner une API REST avec Quarkus fonctio
 On équipera le projet de diverses bibliothèques pour accéler le développement
 
 - Spring Data JPA : pour ses `Repository` CRUD JPA
-- Lombok : pour réduire le *boiler plate*. ([> Voir mon article sur Lombok](/Lombok-Oui-Mais))
+- Lombok : pour réduire le *boiler plate* ([> Voir mon article sur Lombok](/Lombok-Oui-Mais))
 - Open API avec Swagger 2 (mais ce n'est pas l'objet de ce tutorial)
 
 > Nativement Quarkus est fourni avec Google Guava, ce qui servira dans le cadre de ce tutoriel.
@@ -53,7 +53,7 @@ Sur la page d'accueil de [Quarkus](https://quarkus.io/), on peut lire :
 
 Jolie *punch line* !
 
-En substance, c'est un framework constitué des meilleurs standards et bibliothèques Java pour réaliser de applications pour le cloud en mode REST.
+En substance, c'est un framework constitué des meilleurs standards et bibliothèques Java pour réaliser des applications pour le cloud en mode REST.
 
 Ses concurrents directs sont les fameux :
 
@@ -133,7 +133,7 @@ Avant de commencer à entrer dans le détail des divers éléments, voici la str
 
 La structure du projet se décompose ainsi :
 
-- `src/main` : contient les sources JAVA `main/java` et les ressources pour Quarkus `main\resources` : `application.properties` et `import.sql`.
+- `src/main` : contient les sources JAVA `main/java` et les ressources pour Quarkus `main\resources` : `application.properties` et `import.sql`
 - `src/test` : contient les tests unitaires `test/java` et les ressources pour les tests unitaires sans base de données PostgreSQL `test\resources`
 - `src/test-integration` : contient les tests d'intégration `test-integration/java` et les ressources pour les tests unitaires avec PostgreSQL `test-integration\resources`
 - `src/main/docker` : contient les Dockerfile nécessaires à la génération de l'image conteneurisée de l'application
