@@ -1455,7 +1455,7 @@ Les concepts de cette classe sont les suivants :
 
 - elle est instanciée en prenant une enum comme argument : `ParamConverter<Genre> converter = GenericEnumConverter.of(Genre.class);`
 - elle instrospecte l'enum pendant sa construction à la recherche des annotations `@JsonProperty` sur chaque valeur
-- pour chaque valeur, elle récupère le contenu de l'annotation `@JsonProperty` et peuple une BiMap (Map bidrectionnele Guava, incluse dans Quarkus)
+- pour chaque valeur, elle récupère le contenu de l'annotation `@JsonProperty` et peuple une BiMap (Map bidirectionnelle Guava, incluse dans Quarkus)
 - si l'annotation n'est pas présente (on ne sait jamais), la valeur `toString()` de l'enum sera prise par défaut
 
 La partie "générique" permet de s'adapter à n'importe quelle *enum*.
