@@ -300,7 +300,9 @@ puis :
 
 ## Les plugins de build
 
-Attention, ils sont nombreux, mais ce n'est pas rare pour des projets MAVEN. Il nous faut de quoi :
+Attention, ils sont nombreux, mais ce n'est pas rare pour des projets MAVEN.
+
+Il nous faut de quoi :
 
 - générer tout ce qui est traité par Quarkus
 - lancer les tests unitaires sans base de données
@@ -546,7 +548,7 @@ import javax.ws.rs.Produces;
 /**
  * Simple JAX-WS endoint to check if the application is running.
  * 
- * @author robin
+ * @author François-Xavier Robin
  *
  */
 
@@ -1009,7 +1011,7 @@ public class VideoGame implements Serializable
 /**
  * Enumeration of genres of Video Games for Atari ST.
  * 
- * @author robin
+ * @author François-Xavier Robin
  *
  */
 public enum Genre
@@ -1036,7 +1038,7 @@ import javax.inject.Qualifier;
 /**
  * annotation to mark a field to be injected by CDI with a UUID.
  * 
- * @author robin
+ * @author François-Xavier Robin
  *
  */
 
@@ -1089,7 +1091,7 @@ import org.springframework.data.repository.CrudRepository;
  * CRUD repository for the VideoGame class. Primary key is a UUID represented by a String.
  * This repository is created by Hibernate Data JPA.
  * 
- * @author robin
+ * @author François-Xavier Robin
  *
  */
 
@@ -1127,7 +1129,7 @@ import javax.ws.rs.Produces;
 /**
  * JAX-WS endpoint for Video Games.
  * 
- * @author robin
+ * @author François-Xavier Robin
  *
  */
 
@@ -1372,7 +1374,7 @@ import com.google.common.collect.HashBiMap;
  * Generic JAX-RS Enum converter based on the Jackson JsonProperty annotation to
  * get the mapping.
  * 
- * @author robin
+ * @author François-Xavier Robin
  *
  * @param <T>
  */
@@ -1493,7 +1495,7 @@ import fr.fxjavadevblog.qjg.utils.GenericEnumConverter;
  * JAX-RS provider for Genre conversion. This converter is registered because of
  * the Provider annotation.
  * 
- * @author robin
+ * @author François-Xavier Robin
  */
 
 @Provider
