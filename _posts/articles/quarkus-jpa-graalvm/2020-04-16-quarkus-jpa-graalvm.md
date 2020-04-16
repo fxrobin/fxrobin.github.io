@@ -16,7 +16,7 @@ Ce tutoriel Quarkus-JPA-PostgreSQL met en oeuvre :
 - une API Rest partielle (GET) avec JAX-RS et Quarkus sur une source de données JPA
 - des tests unitaires
 - des tests d'intégration au niveau API (http) avec un PostGreSQL lancé par un plugin maven Docker
-- une distribution native, compilée avec Graal VM et une image docker de l'application compilée
+- une distribution native, compilée avec GraalVM et une image docker de l'application compilée
 
 > Réalisé sous Linux Mint 19 mais devrait convenir à de nombreuses distributions, voire à Windows.
 
