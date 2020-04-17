@@ -546,7 +546,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 /**
- * Simple JAX-WS endoint to check if the application is running.
+ * Simple JAX-RS endoint to check if the application is running.
  * 
  * @author François-Xavier Robin
  *
@@ -1113,9 +1113,9 @@ public interface VideoGameRepository extends CrudRepository<VideoGame, String>
 }
 ```
 
-## Le endpoint REST JAX-WS
+## Le endpoint REST JAX-RS
 
-Et enfin de quoi servir le tout sur HTTP avec JAX-WS qui répond à l'URL `/api/videogames/v1` :
+Et enfin de quoi servir le tout sur HTTP avec JAX-RS qui répond à l'URL `/api/videogames/v1` :
 
 ```java
 package fr.fxjavadevblog.qjg.videogame;
@@ -1129,7 +1129,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
- * JAX-WS endpoint for Video Games.
+ * JAX-RS endpoint for Video Games.
  * 
  * @author François-Xavier Robin
  *
