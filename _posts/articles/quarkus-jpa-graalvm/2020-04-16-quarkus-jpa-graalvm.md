@@ -207,7 +207,6 @@ D'abord il nous faut quelques paramétrages classiques MAVEN :
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <lombok.version>1.18.12</lombok.version>
-        <commons-lang.version>3.9</commons-lang.version>
         <quarkus-version>1.3.1.Final</quarkus-version>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
     </properties>
@@ -646,7 +645,7 @@ pong
 ```
 
 Si on modifie le code java et qu'on le sauvegarde, il se recompile automatiquement grâce au mode **dev** de Quarkus.
-Par exemple : on change le `return "pong";` par `return PONG;` et on sauvegarde le fichier.
+Par exemple : on change le `return "pong";` par `return "PONG";` et on sauvegarde le fichier.
 
 ```bash
 $ curl http://localhost:8080/api/ping/v1
@@ -672,6 +671,8 @@ Rien de bien compliqué, sous Linux tout du moins :
 $ curl -s "https://get.sdkman.io" | bash
 $ source "$HOME/.sdkman/bin/sdkman-init.sh"
 $ sdk version
+
+SDKMAN 5.7.4+362
 ```
 
 ### Installation de GraalVM
@@ -701,7 +702,7 @@ Setting java 19.3.1.r11-grl as default.
 
 Dans cet exemple, j'ai choisi de mettre GraalVM en version 19.3.1 et de le déclarer comme JDK par défaut.
 
-GraalVM s'est en fait installé dans le répertoire de SDKMAN `/home/robin/.sdkman/candidates/java/19.3.1.r11-grl`
+GraalVM s'est installé dans le répertoire de SDKMAN `/home/robin/.sdkman/candidates/java/19.3.1.r11-grl`
 et tout a été *linké* correctement pour en faire le JDK par défaut.
 
 ```bash
@@ -1178,7 +1179,7 @@ $ curl http://localhost:8080//api/videogames/v1
     {
         "id": "896b9c77-4f6d-4bd6-b681-2791acfa0d51",
         "name": "100 4 1",
-        "genre": "RELEXION",
+        "genre": "REFLEXION",
         "version": 1
     },
     {
