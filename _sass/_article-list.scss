@@ -37,7 +37,8 @@
    	font-size :1em;
     border-top : solid #9999AA 1px;
     margin-bottom : 0.5em;
-    padding-top : 0.5em;
+    margin-top : 0.5em;
+    font-family : "Oswald";
     
     .article-list-entry-date 
     { 
@@ -51,7 +52,10 @@
        
     	font-size :1.1em; 
     	display:inline; 
-    	padding : 0.2em;
+      margin : 0.2em;
+      padding-left : 0.2em;
+      padding-right : 0.2em;
+      padding-bottom : 0.2em;
     	-moz-transition: all .2s ease-in;
     	-o-transition: all .2s ease-in;
     	-webkit-transition: all .2s ease-in;
@@ -67,7 +71,7 @@
     {
       color : #FFFF00;
       background-color : #000080;
-      border-radius : 0.5em;
+      border-radius : 0.2em;
       
     }
     .article-list-title:hover:after
@@ -75,9 +79,13 @@
       margin-left : 0.2em;
       content : '\2588';
     }
-    
 
-    
+    .article-list-title:hover:before
+    {
+      font-family : "atari";
+      margin-right : 0.2em;
+      content : '>';
+    }   
   }
   
   .article-list-entry:last-child
