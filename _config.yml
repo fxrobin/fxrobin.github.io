@@ -13,7 +13,7 @@ index:
 # Short bio or description (displayed in the header)
 t:
     fr: 
-        description: "Nostalgie et nouvelles technologies mixées ensemble"
+        description: "Java / APIs / Linux / RetroBidules et plus ..."
         name: "FX JavaDevBlog"
         title: "FX JavaDevBlog"
         search: "Chercher sur ce site"
@@ -42,7 +42,7 @@ t:
                 url: "/about/"
                 text: "A Propos"
     en:
-        description: "Nostalgia and new technologies merged together"
+        description: "Java / APIs / Linux / RetroStuffs and more..."
         name: "FX JavaDevBlog"
         title: "FX JavaDevBlog" 
         search: "Search this site"
