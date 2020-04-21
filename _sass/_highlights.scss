@@ -111,3 +111,15 @@ pre.highlight {
 .highlight .vg { color: #00ff00 } /* Name.Variable.Global */
 .highlight .vi { color: #00ff00 } /* Name.Variable.Instance */
 .highlight .il { color: #2AA198 } /* Literal.Number.Integer.Long */
+
+.language-bash pre.highlight
+{
+  font-family: amiga;
+  background-color : darkblue;
+  color : white;
+
+  span.line-number > span {color : #888888;}
+
+  .nv, .o, .k, .nt, .se, .nb { color : white; }
+  
+}

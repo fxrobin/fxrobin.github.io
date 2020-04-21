@@ -1682,7 +1682,7 @@ Pour lancer les tests d'intégration :
 
 ```bash
 $ mvn -Dskip.surefire.tests verify
-canning for projects...
+Scanning for projects...
 [INFO] 
 [INFO] -------------------< fr.fxjavadevblog:quarkus-tuto >--------------------
 [INFO] Building Quarkus-JPA-PostgreSQL 0.0.1-SNAPSHOT
