@@ -90,11 +90,12 @@
 
       var typewriter = new Typewriter(app, {
           loop: true,
-          cursor: '_'
+          delay: 'natural',
+          cursor: '&#x2582;'
       });
 
       {% if page.lang == "fr" %}
-        typewriter.typeString('FX JavaDevBlog >')
+        typewriter.typeString('>FX_JavaDevBlog : ')
             .pauseFor(2500)
            .typeString('réflexions sur Java')
             .pauseFor(2500)
@@ -108,7 +109,7 @@
             .pauseFor(2500)
             .start();
       {% else %}
-        typewriter.typeString('FX JavaDevBlog >')
+        typewriter.typeString('>FX_JavaDevBlog : ')
             .pauseFor(2500)
             .typeString('thoughts about Java')
             .pauseFor(2500)

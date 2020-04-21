@@ -2,6 +2,7 @@
     border-bottom: solid #DDDDDD 2px;
     margin: 2em;
     padding-bottom: 2em;
+  
     &:last-child {
         border-bottom: none;
     }
@@ -9,6 +10,7 @@
         margin: 0.5em;
     }
     H1 {
+        text-shadow: 1px 1px 2px #999999;
         @include mobile {
             font-size: 1.5em;
             text-shadow: none;

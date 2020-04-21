@@ -90,9 +90,15 @@
     }
 }
 
+@keyframes blinker {
+    10% {
+      opacity: 0;
+    }
+  }
+
 .entry {
     h2 {
-        font-family: "amiga";
+        /* font-family: "amiga"; */
         margin-top: 1em;
         padding: 0.75em;
         color: #FFFFFF;
@@ -110,7 +116,8 @@
     }
     h2:after {
         margin-left: 0.25em;
-        content: '_';
+        content: '\2588';
+        animation: blinker 3s ease infinite;
     }
     h3 {
         margin-top: 1em;
