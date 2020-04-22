@@ -83,7 +83,7 @@ Avant de commencer à entrer dans le détail des divers éléments, voici la str
 │   │   │               │   ├── GenreConverterProvider.java
 │   │   │               │   └── GenreResource.java
 │   │   │               ├── health
-│   │   │                   └── SimpleHealthCheck.java
+│   │   │               │   └── SimpleHealthCheck.java
 │   │   │               ├── ping
 │   │   │               │   └── PingService.java
 │   │   │               ├── utils
