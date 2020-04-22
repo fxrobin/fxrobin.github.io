@@ -1,3 +1,5 @@
+/* ARTICLE LIST CSS */
+
 #article-list:before
 {
   content:url('/images/croco-amstrad.gif');
@@ -87,10 +89,9 @@
       content : '>';
     }   
   }
-  
+
   .article-list-entry:last-child
   {
      margin-bottom : 0.5em;
   }
-  
 }
