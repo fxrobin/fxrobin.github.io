@@ -2,7 +2,11 @@
 {
   font-family: atari;
   color: #00ff00;
-  background-color: #111133;
+  background-color: black;
+  background-image: 
+      repeating-linear-gradient(0deg,rgba(black, 0.95),rgba(black, 0.15) 1px, transparent 1px, transparent 2px ),
+      radial-gradient(rgba(0, 150, 0, 0.75), black 120%)
+      ;
   padding: 7px 7px 7px 10px;
   border: 2px solid #339933;
   border-radius: 0.5em;
@@ -13,8 +17,13 @@
   overflow-y: auto;
   overflow-y: hidden;
   tab-size: 4;
+  text-shadow: 0 0 5px #C8C8C8;
   -moz-tab-size: 4;  
-}
+} 
+
+
+
+
 
 
 // FAKESCREEN
@@ -48,6 +57,23 @@
     margin: 0;
   }
   
+.flickering
+{
+  animation-duration: 0.01s;
+  animation-name: textflicker;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+// flicker
+@keyframes textflicker {
+  from {
+    text-shadow: 1px 0 0 #ea36af, -2px 0 0 #75fa69;
+  }
+  to {
+    text-shadow: 2px 0.5px 2px #ea36af, -1px -0.5px 2px #75fa69;
+  }
+}  
 
 // GLITCH TEXT
 .glitch {

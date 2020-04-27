@@ -2,16 +2,19 @@
 
 aside
 {
-  border : solid #3333AA 2px;
+  font-family: "volter";
+  border : solid darkblue 5px;
+  font-size: 0.9em;
   border-radius : 1em;
   float : right;
   margin-top : 1em;
   margin-left : 1em;
+  line-height: 1.5em;
   margin-bottom : 1em;
   box-shadow: 2px 2px 2px #555555;
   background-color : #F2F2FF;
   
-  h3 { font-family : "Russo One"; text-align : center; text-shadow: 1px 1px 1px #555555;}
+  h3 { font-family : "pixeled"; text-align : center; text-shadow: 1px 1px 1px #555555; text-transform: uppercase;}
   
   ul
   {
@@ -21,6 +24,12 @@ aside
   li {
     padding-right : 1em; 
     color : darkblue;
+  }
+
+  li > ul > li 
+  {
+    color: darkblue;
+    list-style-type: circle;
   }
   
    @include mobile {
