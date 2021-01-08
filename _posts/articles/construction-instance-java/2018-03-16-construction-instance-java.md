@@ -8,23 +8,22 @@ lang: fr
 ref: construction-instance-java
 ---
 
-<div class="intro" markdown='1'>
-Ce court billet va vous présenter quelles instructions sont exécutées dans vos
-classes Java, lorsque que vous en réclamez une instance.
-</div>
+# 2018-03-16-construction-instance-java
 
-<!--excerpt-->
+ Ce court billet va vous présenter quelles instructions sont exécutées dans vos classes Java, lorsque que vous en réclamez une instance.
 
 ## Que va-t-on tester ?
 
 Une classe Java, que l'on souhaite pouvoir instancier, peut disposer :
+
 * d'une et unique portion de code `static`;
-* d'une et unique portion de code d'instance (si vous ne savez pas ce que c'est, l'exemple arrive ci-après ...) ; 
+* d'une et unique portion de code d'instance \(si vous ne savez pas ce que c'est, l'exemple arrive ci-après ...\) ; 
 * d'un ou plusieurs constructeurs.
 
 > Pour être un peu plus complet, une classe peut aussi contenir les éléments suivants, mais cet article **ne traite pas de leur instanciation** :
-* une ou plusieurs classes embarquées statiques ;
-* une ou plusieurs classes embarquées d'instance.
+>
+> * une ou plusieurs classes embarquées statiques ;
+> * une ou plusieurs classes embarquées d'instance.
 
 L'idée est donc de tester l'enchainement des lignes de codes lors du mécanisme d'instanciation, pourtant largement utilisé par tous !
 
@@ -32,11 +31,11 @@ L'idée est donc de tester l'enchainement des lignes de codes lors du mécanisme
 
 Nous avons à notre disposition deux classes : `Root` et `Child`.
 
-Comme leur nom l'indique : `Child` hérite de `Root`, ce qui n'est pas toujours évident quand on implémente l'interface `Hallyday` (*humour ...*).
+Comme leur nom l'indique : `Child` hérite de `Root`, ce qui n'est pas toujours évident quand on implémente l'interface `Hallyday` \(_humour ..._\).
 
-Pour faire plaisir à J-Jacques (qui cherche encore une `enum` dans cet article) et Mika, un petit diagramme UML : 
+Pour faire plaisir à J-Jacques \(qui cherche encore une `enum` dans cet article\) et Mika, un petit diagramme UML :
 
-![UML](/images/instance-construction-mecanism/uml.png)
+![UML](../../../.gitbook/assets/uml.png)
 
 On peut difficilement faire plus simple ...
 
@@ -45,22 +44,22 @@ Voici le code source de la classe `Root`
 ```java
 public class Root
 {
-	// <1>
-	static
-	{
-		System.out.printf("static block : %s %n", Root.class);
-	}
-	
-	// <2>
-	{
-		System.out.printf("Root instance block : %s %n",this.getClass());
-	}
-	
-	// <3>
-	public Root()
-	{
-		System.out.println("Root noargs constructor");
-	}
+    // <1>
+    static
+    {
+        System.out.printf("static block : %s %n", Root.class);
+    }
+
+    // <2>
+    {
+        System.out.printf("Root instance block : %s %n",this.getClass());
+    }
+
+    // <3>
+    public Root()
+    {
+        System.out.println("Root noargs constructor");
+    }
 }
 ```
 
@@ -68,44 +67,42 @@ On a rarement fait plus concis, mais cette classe n'est quand même pas banale, 
 
 1. **d'une portion de code statique de classe**, déclenchée lors du chargement de la classe par le ClassLoader, à son premier appel ;
 2. **d'une portion de code d'instance**, déclenchée avant les constructeurs de la classe ;
-3. **d'un constructeur sans argument** (no comment, j'espère que vous savez quand même ce qu'est un constructeur ...)
+3. **d'un constructeur sans argument** \(no comment, j'espère que vous savez quand même ce qu'est un constructeur ...\)
 
 Et voici le code source de la classe `Child` qui est implémentée sur le même principe que la classe `Root` **dont elle hérite**.
 
 ```java
 public class Child extends Root
 {
-	static
-	{
-		System.out.printf("static block : %s %n", Child.class);
-	}
-	
-	{
-		System.out.printf("Child instance block : %s %n",this.getClass());
-	}
-	
-	public Child()
-	{
-		System.out.println("Child noargs constructor");
-	}
+    static
+    {
+        System.out.printf("static block : %s %n", Child.class);
+    }
+
+    {
+        System.out.printf("Child instance block : %s %n",this.getClass());
+    }
+
+    public Child()
+    {
+        System.out.println("Child noargs constructor");
+    }
 }
 ```
 
-Seuls les différents affichages changent afin de pouvoir différencier l'exécution de telle ou telle 
-portion de code.
-
+Seuls les différents affichages changent afin de pouvoir différencier l'exécution de telle ou telle portion de code.
 
 ## Au résultat de l'instanciation
 
 Quand on instancie la classe avec le code suivant : `Child child = new Child()`, voici le résultat :
 
-```
-static block : class fr.fxjavadevblog.articles.Root			 
-static block : class fr.fxjavadevblog.articles.Child		 
-Root instance block : class fr.fxjavadevblog.articles.Child	 
-Root noargs constructor										 
+```text
+static block : class fr.fxjavadevblog.articles.Root             
+static block : class fr.fxjavadevblog.articles.Child         
+Root instance block : class fr.fxjavadevblog.articles.Child     
+Root noargs constructor                                         
 Child instance block : class fr.fxjavadevblog.articles.Child 
-Child noargs constructor									 
+Child noargs constructor
 ```
 
 Commentaires :
@@ -119,4 +116,3 @@ Commentaires :
 
 > "Etonnant non" ? Pierre Desprogres, Dix minutes nécessaires de M. Cyclopède.
 
-{%include video.html youtube-id="zcIa4wP-wtA?rel=0&amp;start=4"  size="normal" %}

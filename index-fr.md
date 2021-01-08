@@ -1,7 +1,2 @@
----
-layout: default
-lang: fr
-permalink: /fr/
----
+# index-fr
 
-{% include full-index-page.html %}
