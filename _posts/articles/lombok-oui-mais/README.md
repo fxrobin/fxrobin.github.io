@@ -1,2 +1,0 @@
-# lombok-oui-mais
-

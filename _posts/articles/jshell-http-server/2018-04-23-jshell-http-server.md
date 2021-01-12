@@ -1,25 +1,34 @@
 ---
 layout: post
+title: Serveur minimal HTTP avec JShell en Java_10
+subtitle: Histoire de troller sur NodeJS versus Java
 logo: jshell-http-server.png
+category: articles
+tags: [Java_10, JShell, HttpServer, HttpHandler]
 lang: fr
 ref: jshell-http-server
-subtitle: Histoire de troller sur NodeJS versus Java
-title: Serveur minimal HTTP avec JShell en Java_10
-tags:
-  - Java_10
-  - JShell
-  - HttpServer
-  - HttpHandler
-category: articles
 ---
 
-# 2018-04-23-jshell-http-server
+<div class="intro" markdown='1'>
+NodeJS se targue de pouvoir monter en quelques lignes
+de code un simple serveur HTTP. Effectivement, créer ce genre de serveur est vraiment simple et particulièrement
+utile pour du déploiement dans le Cloud.
 
- NodeJS se targue de pouvoir monter en quelques lignes de code un simple serveur HTTP. Effectivement, créer ce genre de serveur est vraiment simple et particulièrement utile pour du déploiement dans le Cloud. Et Java dans tout ça ? A la traîne ? Has-Been ? &gt; "Si à 50 ans t'as pas de Rolex et/ou si tu sais pas faire de TypeScript, t'as raté ta vie !" Fort heureusement, je vais vous montrer qu'avec JShell, apparu avec Java 9, en 10 lignes de code environ, vous obtiendrez un serveur HTTP Asynchrone, performant, en ayant à portée de main tout ce que vous offre Java 10, ses modules, ainsi qu'historiquement, toutes les bibliothèques JAR de son écosystème !
+Et Java dans tout ça ? A la traîne ? Has-Been ?
+
+> "Si à 50 ans t'as pas de Rolex et/ou si tu sais pas faire de TypeScript, t'as raté ta vie !"
+
+Fort heureusement, je vais vous montrer qu'avec JShell, apparu avec Java 9, en 10 lignes de code environ,
+vous obtiendrez un serveur HTTP Asynchrone, performant, en ayant à portée de main tout ce que vous offre Java 10,
+ses modules, ainsi qu'historiquement, toutes les bibliothèques JAR de son écosystème !
+</div>
+
+<!--excerpt-->
 
 ## Mais c'est quoi encore cette idée à la c ... saugrenue ?
 
-Attention, ça va troller ... Tout le monde s'extasie devant la beauté du "HelloWorld" NodeJS qui revient à monter un serveur HTTP léger et qui répond à des requêtes.
+Attention, ça va troller ... Tout le monde s'extasie devant la beauté du "HelloWorld" NodeJS qui revient
+à monter un serveur HTTP léger et qui répond à des requêtes.
 
 ```javascript
 var http = require('http');
@@ -35,17 +44,17 @@ C'est vrai que c'est court et minimaliste.
 
 Pour le lancer, il faut disposer de "NodeJS" installé puis dans lancer le script sauvegardé sous `minimal.js`.
 
-```text
+```
 $ node minimal.js
 ```
 
 Mais, c'est alors que le "vieux" arrive avec son Java et dit :
 
-> "Nan mais ... je peux faire _presque_ pareil avec Java et JShell"
+> "Nan mais ... je peux faire *presque* pareil avec Java et JShell"
 
-## Installation de Java 10 \(ou 9\) et JShell
+## Installation de Java 10 (ou 9) et JShell
 
-L'installation de Java 10 est très simple sur distribution fondée sur DEBIAN \(Ubuntu, Mint, etc.\) :
+L'installation de Java 10 est très simple sur distribution fondée sur DEBIAN (Ubuntu, Mint, etc.) :
 
 ```bash
 $ sudo add-apt-repository ppa:linuxuprising/java
@@ -53,7 +62,8 @@ $ sudo apt update
 $ sudo apt install oracle-java10-installer
 ```
 
-Pour disposer automatiquement de Java 10 et de ses outils, dont JShell, sur le PATH, il suffit d'installer ce package en plus :
+Pour disposer automatiquement de Java 10 et de ses outils, dont JShell, sur le PATH,
+il suffit d'installer ce package en plus :
 
 ```bash
 $ sudo apt install oracle-java10-set-default
@@ -77,11 +87,15 @@ jshell> /exit
 
 ## Eh mais JShell, c'est quoi donc ?
 
-Si vous vous posez cette question, c'est que vous n'êtes pas encore passé à Java 9 et/ou que vous résidez dans une grotte depuis 2014, date d'élaboration de JShell.
+Si vous vous posez cette question, c'est que vous n'êtes pas encore passé à Java 9
+et/ou que vous résidez dans une grotte depuis 2014, date d'élaboration de JShell.
 
-Bon d'accord Java 9 n'est sorti officiellement qu'en septembre 2017. Et, vous allez rire, Java 10 vient de sortir fin mars 2018. JShell est donc un outil assez récent mais aussi puissant et précieux.
+Bon d'accord Java 9 n'est sorti officiellement qu'en septembre 2017. Et, vous allez rire,
+Java 10 vient de sortir fin mars 2018. JShell est donc un outil assez récent mais aussi puissant
+et précieux.
 
-Pour faire simple, JShell vous permet d'écrire, à la volée ou dans un script, un programme Java sans avoir à coder tout le cérémonial classique d'une classe et son fameux `public static void main(String... args)`.
+Pour faire simple, JShell vous permet d'écrire, à la volée ou dans un script, un programme
+Java sans avoir à coder tout le cérémonial classique d'une classe et son fameux `public static void main(String... args)`.
 
 Cet article n'a pas vocation à être un tutoriel JShell, mais d'en faire un usage simple.
 
@@ -94,7 +108,6 @@ Java 10 va me permettre d'utiliser le mot clé `var` pour l'inférence de type.
 > Attention, rien à voir avec le `var` de JavaScript ! Un `var` Java 10 reste fortement typé !
 
 Donc les raisons sont les suivantes :
-
 * moi aussi je peux faire un truc à la mode
 * `var` je veux essayer
 * 10 c'est `var i=9; i++;`
@@ -118,10 +131,10 @@ import java.net.InetSocketAddress;
 var address = new InetSocketAddress(8000);
 
 HttpHandler handler = service -> {
-    var response = "It works!".getBytes();
-    service.sendResponseHeaders(200, response.length);
-    service.getResponseBody().write(response);
-    service.getResponseBody().close(); };
+	var response = "It works!".getBytes();
+	service.sendResponseHeaders(200, response.length);
+	service.getResponseBody().write(response);
+	service.getResponseBody().close(); };
 
 var server = HttpServer.create(address,0);
 server.createContext("/test", handler);
@@ -129,7 +142,8 @@ server.start();
 System.out.printf("Serveur démarré : %s%n", address);
 ```
 
-Bon, à part le fait que j'ai l'impression de \(re\)découvrir les Servlets en 1999, cela reste agréable à écrire :
+Bon, à part le fait que j'ai l'impression de (re)découvrir les Servlets en 1999,
+cela reste agréable à écrire :
 
 * `InetSocketAddress` : vous connaissez tous depuis un paquet d'années, sans mauvais jeu de mots.
 * `HttpServer` et `HttpHandler` : cette classe et cette interface sont apparues depuis Java 6 et elles sont bien présentes dans Java 10.
@@ -139,7 +153,7 @@ Bon, à part le fait que j'ai l'impression de \(re\)découvrir les Servlets en 1
 
 Le script est sauvegardé en tant que `minimal.jsh` et il est lancé de cette manière :
 
-```text
+```
 $ jshell --startup minimal.jsh
 Serveur démarré : 0.0.0.0/0.0.0.0:8000
 |  Welcome to JShell -- Version 10.0.1
@@ -148,13 +162,13 @@ Serveur démarré : 0.0.0.0/0.0.0.0:8000
 
 Et voilà. Il manque plus qu'à utiliser son navigateur favori sur `http://localhost:8000/test` et on obtient bien :
 
-```text
+```
 It works!
 ```
 
 Pour l'arrêter :
 
-```text
+```
 jshell> /exit
 ```
 
@@ -184,19 +198,23 @@ System.out.printf("Serveur démarré : %s%n", address);
 
 et voici ce que l'on reçoit dans les headers HTTP de retour :
 
-```text
-Content-length    : 12
-Content-type    : text/plain; charset=UTF-8
-Date            : Mon, 23 Apr 2018 11:27:22 GMT
+```txt
+Content-length	: 12
+Content-type	: text/plain; charset=UTF-8
+Date			: Mon, 23 Apr 2018 11:27:22 GMT
 ```
 
-On voit bien que le caractère `ç` est codé en UTF-8 sur deux octets. Puisque la chaine lisible est composée de 11 caractères, plus un pour ce caractère "spécial".
+On voit bien que le caractère `ç` est codé en UTF-8 sur deux octets. Puisque la chaine
+lisible est composée de 11 caractères, plus un pour ce caractère "spécial".
 
 ## Et si on y mettait tout notre coeur ...
 
-Je me suis "déchiré" sur le titre de cette partie. L'idée est de répartir la charge sur tous les coeurs \(cores\) à notre disposition au moyen d'un pool de Threads. En l'occurence en NodeJS ce point devient dejà un peu moins simple.
+Je me suis "déchiré" sur le titre de cette partie. L'idée est de répartir la charge
+sur tous les coeurs (cores) à notre disposition au moyen d'un pool de Threads.
+En l'occurence en NodeJS ce point devient dejà un peu moins simple.
 
-En JShell \(et donc Java\) cela est extra-supra-simplissimismus grâce au FixedThreadPool offert par la classe `Executors`, que l'on limite ici aux nombre de _cores_ disponibles :
+En JShell (et donc Java) cela est extra-supra-simplissimismus grâce au FixedThreadPool offert
+par la classe `Executors`, que l'on limite ici aux nombre de *cores* disponibles :
 
 ```java
 import com.sun.net.httpserver.*;
@@ -212,11 +230,12 @@ server.start();
 System.out.printf("Serveur démarré : %s%n", address);
 ```
 
-Et bim ! \(comme dirait ma petite soeur\) Asynchrone, et multicores !
+Et bim ! (comme dirait ma petite soeur)
+Asynchrone, et multicores !
 
 Après de multiples `F5`, voici ce que l'on obtient dans le navigateur :
 
-```text
+```txt
 ça marche ! Thread[pool-1-thread-1,5,main]
 ça marche ! Thread[pool-1-thread-2,5,main]
 ça marche ! Thread[pool-1-thread-3,5,main]
@@ -234,17 +253,21 @@ Après de multiples `F5`, voici ce que l'on obtient dans le navigateur :
 
 ## Version Docker
 
-On me dit dans l'oreillette que j'aurais pu être un peu moins flemmard et de conteneuriser le tout avec Docker.
+On me dit dans l'oreillette que j'aurais pu être un peu moins flemmard et de conteneuriser le tout
+avec Docker.
 
-Donc je remercie chaleureusement celui qui est à l'autre bout de l'oreillette, **Mickaël Baron**, pour la version Docker, une fois le script `minimal.jsh` créé bien évidemment \(ici dans le répertoire courant\) :
+Donc je remercie chaleureusement celui qui est à l'autre bout de l'oreillette, **Mickaël Baron**, pour la version Docker, une fois le script `minimal.jsh` créé bien évidemment (ici dans le répertoire courant) :
 
-```text
+```
 $ sudo docker run -it -p 8000:8000 -v $(pwd)/minimal.jsh:/minimal.jsh openjdk:10-jdk /bin/jshell --startup /minimal.jsh
 ```
 
+
 ## Pour conclure ...
 
-Easy, isn't it ? Finalement ce n'est pas si "has-been" que cela Java ...
+Easy, isn't it ?
+Finalement ce n'est pas si "has-been" que cela Java ...
 
-> Cet article contient un certain nombre de blagues pour trolls et geeks. Un cadeau à gagner pour celui qui me donne le nombre exact en commentaires. Attention, il y a un piège.
-
+> Cet article contient un certain nombre de blagues pour trolls et geeks.
+Un cadeau à gagner pour celui qui me donne le nombre exact en commentaires.
+Attention, il y a un piège.

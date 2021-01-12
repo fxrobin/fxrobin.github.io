@@ -2,14 +2,22 @@
 layout: post
 title: Astuces diverses en vrac
 logo: toolbox.png
-date: '2020-01-12T00:00:00.000Z'
+date: 2020-01-12
 permalink: /astuces/
 lang: fr
 ---
 
-# astuces
+<div class="intro" markdown='1'>
 
- &gt; Cette image est volontairement pixélisée ... parce que j'aime le pixel bien gros, bien gras qui bave &gt; sur un CRT. Cette page contient un ensemble d'astuces diverses et variées, collectées en fonction de mes recherches et besoins. Elle ne contient aucun tutoriel mais représente une sorte d'aide-mémoire.
+> Cette image est volontairement pixélisée ... parce que j'aime le pixel bien gros, bien gras qui bave 
+> sur un CRT.
+
+Cette page contient un ensemble d'astuces diverses et variées, collectées en fonction de mes recherches
+et besoins. Elle ne contient aucun tutoriel mais représente une sorte d'aide-mémoire.
+
+</div>
+
+<!--excerpt-->
 
 ## Linux : installation de powerline
 
@@ -95,25 +103,25 @@ snap-store 20191114.a9948d5 par Canonical✓ installé
 
 ## Maven : forcer l'usage d'un JDK avec .mavenrc
 
-Pour l'utilisateur courant, éditer le fichier `~/.mavenrc` et ajouter ce contenu \(à adapter en fonction du chemin réel vers le JDK à désigner\):
+Pour l'utilisateur courant, éditer le fichier `~/.mavenrc` et ajouter ce contenu (à adapter en fonction du chemin réel vers le JDK à désigner):
 
 ```bash
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
 ```
 
-Pour une modification "system wide" \(quel que soit l'utilisateur \), éditer le fichier `/etc/mavenrc` et y faire un `export JAVA_HOME` de la même manière que ci-dessus.
+Pour une modification "system wide" (quel que soit l'utilisateur ), éditer le fichier `/etc/mavenrc` et y faire un `export JAVA_HOME` de la même manière que ci-dessus.
 
 La commande `mvn` lance au démarrage ce script qui affecte donc la bonne valeur à la variable d'environnement `JAVA_HOME`.
 
 ## Minimal POM Java 11
 
-Voici la structure minimale d'un POM Java 11 \(pom.xml\) avec :
+Voici la structure minimale d'un POM Java 11 (pom.xml) avec :
 
-* lombok 1.18.10
-* logback classic 1.2.3 et SLF4J \(transitive dep\)
-* commons-lang 3.9
+- lombok 1.18.10
+- logback classic 1.2.3 et SLF4J (transitive dep)
+- commons-lang 3.9
 
-```markup
+```xml
 <properties>
        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -148,7 +156,7 @@ Voici la structure minimale d'un POM Java 11 \(pom.xml\) avec :
 
 ## VirtualBox : redimensionner un fichier VDI
 
-Cela doit se faire en plusieurs étapes mais au préalable, il vaut mieux éteindre la machine virtuelle \(shutdown\).
+Cela doit se faire en plusieurs étapes mais au préalable, il vaut mieux éteindre la machine virtuelle (shutdown).
 
 Ensuite, dans un terminal :
 
@@ -156,15 +164,15 @@ Ensuite, dans un terminal :
 $ VBoxManage modifyhd fichier.vdi --resize 20000
 ```
 
-> Dans cet exemple la partition fera 20 Go à l'issue du re-dimensionnement pour VirtualBOx
+> Dans cet exemple la partition fera 20 Go à l'issue du  re-dimensionnement pour VirtualBOx
 
-Puis, lancer la VM et ouvrir un gestionnaire de disques \(GParted sous Linux par exemple\) et allouer tout l'espace à la partition en la redimensionnant.
+Puis, lancer la VM et ouvrir un gestionnaire de disques (GParted sous Linux par exemple) et allouer tout l'espace à la partition en la redimensionnant.
 
 ## BrowserSync
 
 ### Installation
 
-```text
+```
 $ sudo su
 $ apt-get update && apt-get -y upgrade && apt-get –y autoremove
 $ wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash -
@@ -174,7 +182,9 @@ $ npm install -g browser-sync
 
 ### Exécution
 
-Dans le cas ci dessous l'application doit être déployée au moins une fois par Eclipse dans le répertoire du serveur d'application. Chaque changement est écouté et la page \(même JSF\) est rechargée à la volée en cas de changement sur le disque.
+Dans le cas ci dessous l'application doit être déployée au moins une fois par Eclipse dans le répertoire
+du serveur d'application. Chaque changement est écouté et la page (même JSF) est rechargée à la volée en 
+cas de changement sur le disque.
 
 ```bash
 $ browser-sync start --proxy "http://localhost:8080/ApplicationDemo " --files "/opt/payara41_171/glassfish/domains/domain1/eclipseApps/ApplicationDemo/**/*"
@@ -184,11 +194,12 @@ En JSF, pour éviter la demande de confirmation de "re-submit POST", il faut ajo
 
 [https://addons.mozilla.org/en-US/firefox/addon/auto-confirm/](https://addons.mozilla.org/en-US/firefox/addon/auto-confirm/)
 
+
 ## Docker
 
-### Installation sous Linux Mint 18
+### Installation sous Linux Mint 18 
 
-source : [https://gist.github.com/Simplesmente/a84343b1f71a46bbeedbb6c9b20fa9c1\#file-install-docker-mint-sh](https://gist.github.com/Simplesmente/a84343b1f71a46bbeedbb6c9b20fa9c1#file-install-docker-mint-sh)
+source : [https://gist.github.com/Simplesmente/a84343b1f71a46bbeedbb6c9b20fa9c1#file-install-docker-mint-sh](https://gist.github.com/Simplesmente/a84343b1f71a46bbeedbb6c9b20fa9c1#file-install-docker-mint-sh)
 
 ```bash
 sudo apt-get update
@@ -263,26 +274,27 @@ fi
 # STARTING
 
 case $1 in
-    start)
-        printc $GREEN ">_Starting Docker ..."
-        systemctl enable docker.socket
-        systemctl enable docker.service
+	start)
+		printc $GREEN ">_Starting Docker ..."
+		systemctl enable docker.socket
+		systemctl enable docker.service
 
-        systemctl start docker.socket
-        systemctl start docker.service
-        ;;
-    stop)
-        printc $RED ">_Stoping Docker ..."
-        systemctl stop docker.service
-        systemctl stop docker.socket
+		systemctl start docker.socket
+		systemctl start docker.service
+		;;
+	stop)
+		printc $RED ">_Stoping Docker ..."
+		systemctl stop docker.service
+		systemctl stop docker.socket
 
-        systemctl disable docker.socket
-        systemctl disable docker.service
-        ;;
-esac        
-
+		systemctl disable docker.socket
+		systemctl disable docker.service
+		;;
+esac		
+		
 systemctl --no-pager status docker.service | grep "Active:"
 ```
+
 
 Usage :
 
@@ -475,15 +487,16 @@ function cl {
 
 Exemples :
 
-* `cls` : efface l'écran, ça me rappelle mon [MO5 et mon TO8](https://github.com/fxrobin/fxrobin.github.io/tree/16c6a31a96269f3288f4c4c39c6179cd29bf1f79/about/README.md#1984-1989--découverte-pendant-mon-enfance)
-* `lh` : c'est un `ls -l` un peu optimisé. Il met les répertoires en premier, affiche de jolies dates et les unités de taille des fichiers sont simple à lire.
-* `mkcd mon_repertoire` : va créer un répertoire `mon_repertoire` et se placer automatiquement dedans.
-* `cl mon_repertoire` : va se placer dans le répertoire et afficher son contenu avec un `lh`.
-* `..` : se place dans le répertoire parent, comme un `cd ..` mais on gagne 3 caractères.
+- `cls` : efface l'écran, ça me rappelle mon [MO5 et mon TO8](/about/#1984-1989--découverte-pendant-mon-enfance)
+- `lh` : c'est un `ls -l` un peu optimisé. Il met les répertoires en premier, affiche de jolies dates et les unités de taille des fichiers sont simple à lire.
+- `mkcd mon_repertoire` : va créer un répertoire `mon_repertoire` et se placer automatiquement dedans.
+- `cl mon_repertoire` : va se placer dans le répertoire et afficher son contenu avec un `lh`.
+- `..` : se place dans le répertoire parent, comme un `cd ..` mais on gagne 3 caractères.
 
 ### Echoing like a Terminator
 
-Pour afficher le contenu d'un fichier comme dans Terminator. Ca sert à rien, mais c'est FUNNY.
+Pour afficher le contenu d'un fichier comme dans Terminator.
+Ca sert à rien, mais c'est FUNNY.
 
 ```bash
 $ cat myfile.txt | pv -qL50
@@ -508,7 +521,7 @@ source : [https://stackoverflow.com/questions/15895805/find-pom-in-subdirectorie
 
 Créer un fichier `files.txt` qui contient tous les fichiers à concaténer, exemple :
 
-```text
+```
 capture-01.mp4
 capture-02.mp4
 capture-03.mp4
@@ -535,7 +548,7 @@ $ ffmpeg -i normal_video.mp4 \
 
 ### Streaming Live de l'écran vers YouTube
 
-Il faut obtenir l'adresse de streaming ainsi que la clé \(cf. compte Youtube, ma chaine, mes vidéos\)
+Il faut obtenir l'adresse de streaming ainsi que la clé (cf. compte Youtube, ma chaine, mes vidéos)
 
 ```bash
 $ ffmpeg -f alsa -ac 2 -i hw:0,0 -f x11grab -framerate 30 -video_size 1280x720 \
@@ -543,4 +556,3 @@ $ ffmpeg -f alsa -ac 2 -i hw:0,0 -f x11grab -framerate 30 -video_size 1280x720 \
          -vf "format=yuv420p" -g 60 -c:a libvo_aacenc -b:a 128k -ar 44100 \
          -f flv rtmp://example.rtmp.address.youtube/example-key
 ```
-

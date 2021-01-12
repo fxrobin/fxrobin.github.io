@@ -1,2 +1,0 @@
-# enum-jpa-named-query
-

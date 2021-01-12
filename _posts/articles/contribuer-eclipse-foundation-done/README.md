@@ -1,2 +1,0 @@
-# contribuer-eclipse-foundation-done
-

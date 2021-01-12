@@ -1,2 +1,0 @@
-# construction-instance-java
-

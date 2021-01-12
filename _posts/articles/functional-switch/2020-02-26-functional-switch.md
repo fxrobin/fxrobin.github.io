@@ -1,22 +1,31 @@
 ---
 layout: post
+title: Functional Switch/Case en Java 8 et +
+subtitle: parce que le nouveau Switch/Case de Java 12 m'a donné cette idée saugrenue
 logo: code.png
+category: articles
+tags: [Java, Lambda, Functional, Fluent API, Builder]
 lang: fr
 ref: functional-switch
-subtitle: parce que le nouveau Switch/Case de Java 12 m'a donné cette idée saugrenue
-title: Functional Switch/Case en Java 8 et +
-tags:
-  - Java
-  - Lambda
-  - Functional
-  - Fluent API
-  - Builder
-category: articles
 ---
 
-# 2020-02-26-functional-switch
+<div class="intro" markdown='1'>
 
- Java 12 est sorti le 20/03/19, apportant une nouvelle façon d'écrire des structures de contrôle \`switch/case\`. Cela m'a donné une idée, certes un peu étrange, de revoir le traditionnel \`switch/case\` d'un point de vue programmation fonctionnelle en s'appuyant sur des lambdas et une \*petite\* classe \`Switch\`, \*\*le tout en JAVA 8\*\* ! Attention toutefois, il est \*certain\* que cette approche est beaucoup moins performante qu'un \`switch/case\` classique, mais je ne renonce pas à la beauté du geste. Versions de cet article : - 04/10/2019 : première publication. - 26/02/2020 : suite à idée judicieuse postée sur les forums "developpez.com", voir la partie "Let's go further ..."
+Java 12 est sorti le 20/03/19, apportant une nouvelle façon d'écrire des structures de contrôle `switch/case`.
+Cela m'a donné une idée, certes un peu étrange, de revoir le traditionnel `switch/case` d'un point de vue
+programmation fonctionnelle en s'appuyant sur des lambdas et une *petite* classe `Switch`, **le tout en JAVA 8** !
+
+Attention toutefois, il est *certain* que cette approche est beaucoup moins performante qu'un `switch/case` classique,
+mais je ne renonce pas à la beauté du geste.
+
+Versions de cet article :
+
+- 04/10/2019 : première publication.
+- 26/02/2020 : suite à idée judicieuse postée sur les forums "developpez.com", voir la partie "Let's go further ..."
+
+</div>
+
+<!--excerpt-->
 
 ## Mise en jambe
 
@@ -29,11 +38,11 @@ String returnedValue;
 
 switch (initialValue)  
 {
-    case 1 -> returnedValue = "Too small!";  
-    case 2, 3, 4, 5 -> returnedValue = "Good value!";  
-    case 6 -> returnedValue = "Too big!";  
-    default -> returnedValue = "Not applicable!";  
-}
+	case 1 -> returnedValue = "Too small!";  
+	case 2, 3, 4, 5 -> returnedValue = "Good value!";  
+	case 6 -> returnedValue = "Too big!";  
+	default -> returnedValue = "Not applicable!";  
+}  
 ```
 
 Le principal problème, et c'est malheureusement bien dommage que cela n'ait pas été pris en compte dans la [JEP 325](http://openjdk.java.net/jeps/325), ce sont des **plages de valeurs**.
@@ -43,32 +52,34 @@ Typiquement, on aurait bien aimé quelque chose dans ce genre dans l'exemple pr�
 ```java
 switch (initialValue)  
 {
-    case 1 -> returnedValue = "Too small!";  
-    case 2..5 -> returnedValue = "Good value!";  
-    case 6 -> returnedValue = "Too big!";  
-    default -> returnedValue = "Not applicable!";  
-}
+	case 1 -> returnedValue = "Too small!";  
+	case 2..5 -> returnedValue = "Good value!";  
+	case 6 -> returnedValue = "Too big!";  
+	default -> returnedValue = "Not applicable!";  
+}  
 ```
 
 Ne cherchez pas à compiler le code ci-dessus ! Il est **syntaxiquement incorrect**.
 
-![Atari ST Bombs](../../../.gitbook/assets/bombs.png) {: style="text-align : center"}
+![Atari ST Bombs](/images/bombs.png)
+{: style="text-align : center"}
 
 Je me suis alors fait la réflexion suivante ...
 
-![Pensif](../../../.gitbook/assets/thinking.jpg) {: style="text-align : center"}
+![Pensif](/images/thinking.jpg)
+{: style="text-align : center"}
 
-« En vrai, un `switch/case` c'est globalement :
+« En vrai, un `switch/case` c'est globalement :
 
-* une valeur à tester,
-* un ensemble de prédicats \(simples ou complexes\) et une fonction associée à chacun d'entre-eux,
-* un cas par défaut. »
-
-_Let's code it in a functional way!_
+- une valeur à tester,
+- un ensemble de prédicats (simples ou complexes) et une fonction associée à chacun d'entre-eux,
+- un cas par défaut. »
+  
+*Let's code it in a functional way!*
 
 ## Usage
 
-Je suis parti de ce que je voulais obtenir côté « utilisateur/développeur » avec quelque chose de simple :
+Je suis parti de ce que je voulais obtenir côté « utilisateur/développeur » avec quelque chose de simple :
 
 ```java
 String result = Switch.of(initialValue, String.class)
@@ -80,10 +91,10 @@ String result = Switch.of(initialValue, String.class)
 
 Dans les points clés :
 
-* obligation de spécifier un cas par défaut, donc on commence par lui,
-* ajout simple de "matching values" en associant une `function<T,R>` : `T` étant le type de la valeur testée, ici `Integer` \(int auto-boxé\) et `R` le type de retour, ici `String`.
-* un enchaînement infini avec la methode `single` et donc du method-chaining à la mode
-* la méthode terminale `resolve()` qui déclenche l'exécution globale du `Switch`.
+- obligation de spécifier un cas par défaut, donc on commence par lui,
+- ajout simple de "matching values" en associant une `function<T,R>` : `T` étant le type de la valeur testée, ici `Integer` (int auto-boxé) et `R` le type de retour, ici `String`.
+- un enchaînement infini avec la methode `single` et donc du method-chaining à la mode
+- la méthode terminale `resolve()` qui déclenche l'exécution globale du `Switch`.
 
 Le type de retour est complètement générique. Dans cet exemple il s'agit d'une instance de la classe `String`.
 
@@ -107,12 +118,13 @@ Revenons un peu sur cette ligne :
 
 Elle est composée :
 
-* du prédicat en premier argument, ici exprimé sous forme d'expression lambda `value -> value > 10 && value < 15`
-* puis de la fonction à exécuter le cas échéant, toujours exprimée avec une lambda `value -> "superior to 10!"`
+- du prédicat en premier argument, ici exprimé sous forme d'expression lambda `value -> value > 10 && value < 15`
+- puis de la fonction à exécuter le cas échéant, toujours exprimée avec une lambda `value -> "superior to 10!"`
 
 ## Les interfaces techniques SwitchDefaultCase et SwitchRule
 
-Pour définir une belle API _fluent_, qui impose un ordre dans l'enchaînement des méthodes, voire qui en rend obligatoire certaines, il faut passer par la définition d'interfaces techniques qui restreignent les appels possibles en fonction du dernier appel de méthode.
+Pour définir une belle API *fluent*, qui impose un ordre dans l'enchaînement des méthodes, voire qui en rend obligatoire certaines,
+il faut passer par la définition d'interfaces techniques qui restreignent les appels possibles en fonction du dernier appel de méthode.
 
 > Hein ? Mais qu'est-ce qu'il dit ?
 
@@ -154,9 +166,9 @@ public interface SwitchDefaultCase <T,R>
 
 Et voici la seconde interface technique qui autorise exclusivement les méthodes :
 
-* `single(...)`
-* `predicate(...)`
-* `resolve(...)`
+- `single(...)`
+- `predicate(...)`
+- `resolve(...)`
 
 ```java
 package fr.fxjavadevblog.fs;
@@ -186,7 +198,7 @@ public interface SwitchStep <T,R>
    *    current instance of the switch which allows method chaining.
    */
   SwitchStep<T, R> single(T value, Function<T, R> function);
-
+  
   /**
    * appends a predicate mapped with a function.
    * 
@@ -198,7 +210,7 @@ public interface SwitchStep <T,R>
    *    current instance of the switch which allows method chaining.
    */
   SwitchStep<T, R> predicate(Predicate<T> predicate, Function<T, R> function);
-
+  
   /**
    * last operation of the switch method chaining which executes the flow
    * of the rules looking for a matching single value, then the list of predicates, then the
@@ -217,12 +229,12 @@ Notez les types de retour des méthodes qui assurent le chaînage correct pour l
 
 La classe `Switch` est assez classique :
 
-* elle masque son constructeur pour empêcher l'instanciation. Seule la méthode `of(...)` est le point d'entrée.
-* elle conserve dans un attribut `private T value` la valeur à tester.
-* elle détient une `Map<T, Function <T,R>>` pour associer les valeurs simples de type `T` à des fonctions qui retourneront un résultat.
-* elle détient une liste de tuples `Predicate<T>, Function<T,R>` pour gérer les cas complexes comme des plages de valeurs.
-* elle détient une réference vers une fonction pour le cas par défaut : `private Function<T, R> defaultCase`,
-* et enfin elle implémente bien évidemment les deux interfaces techniques `SwithDefaultCase<T, R>` et `SwitchStep<T, R>` décrites au paragraphe précédent.
+- elle masque son constructeur pour empêcher l'instanciation. Seule la méthode `of(...)` est le point d'entrée.
+- elle conserve dans un attribut `private T value` la valeur à tester.
+- elle détient une `Map<T, Function <T,R>>` pour associer les valeurs simples de type `T` à des fonctions qui retourneront un résultat.
+- elle détient une liste de tuples `Predicate<T>, Function<T,R>` pour gérer les cas complexes comme des plages de valeurs.
+- elle détient une réference vers une fonction pour le cas par défaut : `private Function<T, R> defaultCase`,
+- et enfin elle implémente bien évidemment les deux interfaces techniques `SwithDefaultCase<T, R>` et `SwitchStep<T, R>` décrites au paragraphe précédent.
 
 ```java
 package fr.fxjavadevblog.fs;
@@ -253,7 +265,7 @@ public final class Switch<T, R> implements SwitchDefaultCase<T, R>, SwitchStep<T
    * function executed when no value has been found.
    */
   private Function<T, R> defaultCase;
-
+  
   /**
    * value to evaluate.
    */
@@ -361,17 +373,18 @@ Cela fonctionne avec des prédicats bien plus évolués que des plages de valeur
 
 En l'état, c'est assez satisfaisant, mais le coût de création du Switch à chaque appel peu être très élevé.
 
-Généralement, les différents cas et prédicats sont assez stables et évoluent assez peu au _Runtime_.
+Généralement, les différents cas et prédicats sont assez stables et évoluent assez peu au *Runtime*.
 
 Il serait donc intéressant de pouvoir :
 
-* construire une instance de `Switch`, sans valeur particulière,
-* conserver une référence de cette instance en `static` par exemple,
-* déclencher le _flow_ au moyen d'une nouvelle méthode `resolve(T value)` qui prendra en argument la valeur à tester.
+- construire une instance de `Switch`, sans valeur particulière,
+- conserver une référence de cette instance en `static` par exemple,
+- déclencher le *flow* au moyen d'une nouvelle méthode `resolve(T value)` qui prendra en argument la valeur à tester.
 
 > C'est parti ! Let's have fun!
 
-Première étape, on introduit une nouvelle interface qui permet de faire uniquement un `resolve(T value)`. Initialement `resolve()` n'avait pas besoin de valeur puisque celle-ci était fournie à l'appel de la méthode `of(...)`. Cette interface, je décide de l'appeler `SwitchExpression <T, R>`.
+Première étape, on introduit une nouvelle interface qui permet de faire uniquement un `resolve(T value)`. Initialement `resolve()` n'avait pas besoin de valeur
+puisque celle-ci était fournie à l'appel de la méthode `of(...)`. Cette interface, je décide de l'appeler `SwitchExpression <T, R>`.
 
 ```java
 package fr.fxjavadevblog.fs;
@@ -400,7 +413,8 @@ public interface SwitchExpression <T, R>
 }
 ```
 
-Ensuite, au sein de classe `Switch`, il nous faut une nouvelle méthode de "démarrage" statique en complément de `of(...)`. En manque d'inspiration, je la nomme `start()`.
+Ensuite, au sein de classe `Switch`, il nous faut une nouvelle méthode de "démarrage" statique en complément de `of(...)`. 
+En manque d'inspiration, je la nomme `start()`.
 
 ```java
 public static <T, R> SwitchDefaultCase<T, R> start()
@@ -417,7 +431,7 @@ public SwitchExpression<T, R> build()
 {
   return this;
 }
-```
+```  
 
 Et enfin il faut implementer la méthode `resolve(T value)` dans la classe `Switch` puisqu'elle implémente maintenant l'interface `SwitchExpression <T, R>`. Evidemment, je réutilise la méthode `resolve()` qui existe déjà :
 
@@ -457,16 +471,17 @@ public class SwitchTest
   {
     assertEquals("3 is an exception!", localSwitch.resolve(3));
   }
-
+  
   @Test
   public void staticTest5()
   {
     assertEquals("5 is between 0 and 10", localSwitch.resolve(5));
   }
 }
-```
+```  
 
-Cette fois-ci le `Switch` n'est construit qu'une seule fois et peut être déclenché autant de fois que nécessaire avec une valeur différente à chaque appel de `resolve(...)`.
+Cette fois-ci le `Switch` n'est construit qu'une seule fois et peut être déclenché autant de fois que nécessaire avec une valeur différente
+à chaque appel de `resolve(...)`.
 
 ## Let's go further ...
 
@@ -474,13 +489,15 @@ Ne nous arrêtons pas en si bon chemin !
 
 Une remarque judicieuse sur les forums de developpez.com après publication de la première version cet article a été formulée :
 
-> Ce serait bien si l'interface `SwitchExpression` héritait de Function . On pourrait l'utiliser dans un Stream.map\(\) par exemple. Signé "BugFactory", membre expérimenté depuis 2005.
+> Ce serait bien si l'interface `SwitchExpression` héritait de Function <T, R>. On pourrait l'utiliser dans un Stream.map() par exemple.
+> Signé "BugFactory", membre expérimenté depuis 2005.
 
 Mais oui bien évidemment, merveilleuse idée.
 
 Donc, on change un peu l'interface `SwitchExpression` :
 
 ```java
+
 public interface SwitchExpression <T, R> extends Function<T, R>
 {
    // unchanged content ...
@@ -527,17 +544,17 @@ public void StreamMapTest()
   // few tests on the list
   assertNotNull(result, "the returned list is null, which is unacceptable!");
   assertEquals(10, result.size(), "the returned list size is wrong, which is totally unacceptable!");
-
+  
   // then lets count the EVEN and the ODD to verify the switcher behavior inside a Stream.map().
-
+  
   Map<String, Long> statistics = result.stream().collect(Collectors.groupingBy(String::toString, Collectors.counting()));
-
+  
   assertNotNull(statistics, "the returned map is null, which is unbelievable!");
   assertEquals(5L, statistics.get("ODD").longValue());
   assertEquals(5L, statistics.get("EVEN").longValue());
-
+  
   // it's working!
-
+  
 }
 ```
 
@@ -589,7 +606,7 @@ $ mvn test
 
 Vous pouvez récupérer le code source de cet article ici : [https://github.com/fxrobin/functional-switch](https://github.com/fxrobin/functional-switch)
 
-Rien à ajouter, sinon que je me suis \(encore\) bien amusé et qu'il s'agit de la **« fin de l'histoire »**.
+Rien à ajouter, sinon que je me suis (encore) bien amusé et qu'il s'agit de la **« fin de l'histoire »**.
 
-![The end](../../../.gitbook/assets/the-end.png) {: style="text-align : center; width : 50%"}
-
+![The end](/images/the-end.png)
+{: style="text-align : center; width : 50%"}

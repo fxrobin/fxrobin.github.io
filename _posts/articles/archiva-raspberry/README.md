@@ -1,2 +1,0 @@
-# archiva-raspberry
-

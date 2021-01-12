@@ -1,2 +1,0 @@
-# cdi-deltaspike-junit5
-

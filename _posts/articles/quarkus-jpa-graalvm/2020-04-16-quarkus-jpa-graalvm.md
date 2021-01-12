@@ -1,102 +1,197 @@
 ---
 layout: post
+title: REST API avec Quarkus, JPA, PostGreSQL et GraalVM
+subtitle: réduire l'empreinte serveur d'une API REST en JAVA en la compilant en code natif !
 logo: graal.png
+category: articles
+tags: [Java, Quarkus, Bean Validation, JAX-RS, REST, GraalVM]
 lang: fr
 ref: quarkus-jpa-graalvm
-subtitle: >-
-  réduire l'empreinte serveur d'une API REST en JAVA en la compilant en code
-  natif !
-title: 'REST API avec Quarkus, JPA, PostGreSQL et GraalVM'
-tags:
-  - Java
-  - Quarkus
-  - Bean Validation
-  - JAX-RS
-  - REST
-  - GraalVM
-category: articles
 ---
 
-# 2020-04-16-quarkus-jpa-graalvm
+<div class="intro" markdown='1'>
 
 Ce tutoriel Quarkus-JPA-PostgreSQL met en oeuvre :
 
-* une API Rest partielle \(GET\) avec JAX-RS et Quarkus sur une source de données JPA
-* des tests unitaires
-* des tests d'intégration au niveau API \(http\) avec un PostGreSQL lancé par un plugin maven Docker
-* une distribution native, compilée avec GraalVM et une image docker de l'application compilée
+- une API Rest partielle (GET) avec JAX-RS et Quarkus sur une source de données JPA
+- des tests unitaires
+- des tests d'intégration au niveau API (http) avec un PostGreSQL lancé par un plugin maven Docker
+- une distribution native, compilée avec GraalVM et une image docker de l'application compilée
 
 > Réalisé sous Linux Mint 19 mais devrait convenir à de nombreuses distributions, voire à Windows.
 
-&lt;/div&gt; 
+</div>
+<!--excerpt-->
 
 ## Choix techniques
 
 L'objectif de cet article est de faire tourner une API REST avec Quarkus fonctionnant avec :
 
-* JAX-RS 2 : Avec RESTEasy et Jackson pour la sérialization JSON
-* CDI 2 : avec l'implémentation interne partielle de QUARKUS
-* JPA 2 : avec Hibernate
-* Bean Validation : avec Hibernate Validator
-* Health Check et Metrics : avec SmallRye Health et SmallRye Metrics
+- JAX-RS 2 : Avec RESTEasy et Jackson pour la sérialization JSON
+- CDI 2 : avec l'implémentation interne partielle de QUARKUS
+- JPA 2 : avec Hibernate
+- Bean Validation : avec Hibernate Validator
+- Health Check et Metrics : avec SmallRye Health et SmallRye Metrics
 
 On équipera le projet de diverses bibliothèques pour accéler le développement
 
-* Spring Data JPA : pour ses `Repository` CRUD JPA
-* Lombok : pour réduire le _boiler plate_ \([&gt; Voir mon article sur Lombok](https://github.com/fxrobin/fxrobin.github.io/tree/16c6a31a96269f3288f4c4c39c6179cd29bf1f79/Lombok-Oui-Mais/README.md)\)
-* Open API avec Swagger 2 \(mais ce n'est pas l'objet de ce tutorial\)
+- Spring Data JPA : pour ses `Repository` CRUD JPA
+- Lombok : pour réduire le *boiler plate* ([> Voir mon article sur Lombok](/Lombok-Oui-Mais))
+- Open API avec Swagger 2 (mais ce n'est pas l'objet de ce tutorial)
 
 > Nativement Quarkus est fourni avec Google Guava, ce qui servira dans le cadre de ce tutoriel.
 
-Le projet au complet est diponible sur GitHub :
+Le projet au complet est diponible sur GitHub : {%include github.html repository="fxrobin/quarkus-tuto" %}
 
 ## Qu'est-ce que Quarkus
 
-![Quarkus-Logo](../../../.gitbook/assets/quarkus-logo.svg)
+![Quarkus-Logo](/images/quarkus-logo.svg)
 
 Sur la page d'accueil de [Quarkus](https://quarkus.io/), on peut lire :
 
-> Quarkus : Supersonic Subatomic Java A Kubernetes Native Java stack tailored for OpenJDK HotSpot and GraalVM, crafted from the best of breed Java libraries and standards.
+> Quarkus : Supersonic Subatomic Java
+> A Kubernetes Native Java stack tailored for OpenJDK HotSpot and GraalVM, crafted from the best of breed Java libraries and standards.
 
-Jolie _punch line_ !
+Jolie *punch line* !
 
 En substance, c'est un framework constitué des meilleurs standards et bibliothèques Java pour réaliser des applications pour le cloud en mode REST.
 
 Ses concurrents directs sont les fameux :
 
-* Micronaut,
-* Thorntail,
-* SpringBoot \(et toute la plateforme Spring\),
-* dans une moindre mesure, Payara-micro.
+- Micronaut,
+- Thorntail,
+- SpringBoot (et toute la plateforme Spring),
+- dans une moindre mesure, Payara-micro.
 
 ## Structure globale du projet
 
 Avant de commencer à entrer dans le détail des divers éléments, voici la structure du projet Maven :
 
-{:.preformatted} \[quarkus-tuto\] ├── src │ ├── main │ │ ├── docker │ │ │ ├── Dockerfile.jvm │ │ │ └── Dockerfile.native │ │ ├── java │ │ │ └── fr │ │ │ └── fxjavadevblog │ │ │ └── qjg │ │ │ ├── genre │ │ │ │ ├── Genre.java │ │ │ │ ├── GenreConverterProvider.java │ │ │ │ └── GenreResource.java │ │ │ ├── health │ │ │ │ └── SimpleHealthCheck.java │ │ │ ├── ping │ │ │ │ └── PingService.java │ │ │ ├── utils │ │ │ │ ├── GenericEnumConverter.java │ │ │ │ ├── InjectUUID.java │ │ │ │ └── UUIDProducer.java │ │ │ ├── videogame │ │ │ │ ├── VideoGame.java │ │ │ │ ├── VideoGameFactory.java │ │ │ │ ├── VideoGameRepository.java │ │ │ │ └── VideoGameResource.java │ │ │ └── ApiDefinition.java │ │ └── resources │ │ ├── application.properties │ │ └── import.sql │ ├── test │ │ ├── java │ │ │ └── fr │ │ │ └── fxjavadevblog │ │ │ └── qjg │ │ │ ├── global │ │ │ │ └── TestingGroups.java │ │ │ ├── ping │ │ │ │ └── PingTest.java │ │ │ └── utils │ │ │ ├── CDITest.java │ │ │ ├── DummyTest.java │ │ │ └── GenericEnumConverterTest.java │ │ └── resources │ │ └── application.properties │ └── test-integration │ ├── java │ │ └── fr │ │ └── fxjavadevblog │ │ └── qjg │ │ ├── utils │ │ │ └── IT\_DummyTest.java │ │ └── videogame │ │ └── IT\_VideoGameResource.java │ └── resources │ └── application.properties ├── target │ ├── classes │ │ ├── application.properties │ │ └── import.sql │ └── test-classes │ └── application.properties ├── .dockerignore ├── README.md └── pom.xml
+{:.preformatted}
+[quarkus-tuto]
+├── src
+│   ├── main
+│   │   ├── docker
+│   │   │   ├── Dockerfile.jvm
+│   │   │   └── Dockerfile.native
+│   │   ├── java
+│   │   │   └── fr
+│   │   │       └── fxjavadevblog
+│   │   │           └── qjg
+│   │   │               ├── genre
+│   │   │               │   ├── Genre.java
+│   │   │               │   ├── GenreConverterProvider.java
+│   │   │               │   └── GenreResource.java
+│   │   │               ├── health
+│   │   │               │   └── SimpleHealthCheck.java
+│   │   │               ├── ping
+│   │   │               │   └── PingService.java
+│   │   │               ├── utils
+│   │   │               │   ├── GenericEnumConverter.java
+│   │   │               │   ├── InjectUUID.java
+│   │   │               │   └── UUIDProducer.java
+│   │   │               ├── videogame
+│   │   │               │   ├── VideoGame.java
+│   │   │               │   ├── VideoGameFactory.java
+│   │   │               │   ├── VideoGameRepository.java
+│   │   │               │   └── VideoGameResource.java
+│   │   │               └── ApiDefinition.java
+│   │   └── resources
+│   │       ├── application.properties
+│   │       └── import.sql
+│   ├── test
+│   │   ├── java
+│   │   │   └── fr
+│   │   │       └── fxjavadevblog
+│   │   │           └── qjg
+│   │   │               ├── global
+│   │   │               │   └── TestingGroups.java
+│   │   │               ├── ping
+│   │   │               │   └── PingTest.java
+│   │   │               └── utils
+│   │   │                   ├── CDITest.java
+│   │   │                   ├── DummyTest.java
+│   │   │                   └── GenericEnumConverterTest.java
+│   │   └── resources
+│   │       └── application.properties
+│   └── test-integration
+│       ├── java
+│       │   └── fr
+│       │       └── fxjavadevblog
+│       │           └── qjg
+│       │               ├── utils
+│       │               │   └── IT_DummyTest.java
+│       │               └── videogame
+│       │                   └── IT_VideoGameResource.java
+│       └── resources
+│           └── application.properties
+├── target
+│   ├── classes
+│   │   ├── application.properties
+│   │   └── import.sql
+│   └── test-classes
+│       └── application.properties
+├── .dockerignore
+├── README.md
+└── pom.xml
 
 La structure du projet se décompose ainsi :
 
-* `src/main` : contient les sources JAVA `main/java` et les ressources pour Quarkus `main\resources` : `application.properties` et `import.sql`
-* `src/test` : contient les tests unitaires `test/java` et les ressources pour les tests unitaires sans base de données PostgreSQL `test\resources`
-* `src/test-integration` : contient les tests d'intégration `test-integration/java` et les ressources pour les tests unitaires avec PostgreSQL `test-integration\resources`
-* `src/main/docker` : contient les Dockerfile nécessaires à la génération de l'image conteneurisée de l'application
+- `src/main` : contient les sources JAVA `main/java` et les ressources pour Quarkus `main\resources` : `application.properties` et `import.sql`
+- `src/test` : contient les tests unitaires `test/java` et les ressources pour les tests unitaires sans base de données PostgreSQL `test\resources`
+- `src/test-integration` : contient les tests d'intégration `test-integration/java` et les ressources pour les tests unitaires avec PostgreSQL `test-integration\resources`
+- `src/main/docker` : contient les Dockerfile nécessaires à la génération de l'image conteneurisée de l'application
 
 La partie JAVA se décompose en 3 packages :
 
-{:.preformatted} fxjavadevblog └── qjg ├── genre │ ├── Genre.java : enum qui contient tous les genres de jeux vidéo │ ├── GenreConverterProvider.java : fournisseur de conversion de Genre pour les paramètres JAX-RS │ └── GenreResource.java : point d'accès REST via JAX-RS aux genres de jeux vidéo ├── health │ └── SimpleHealthCheck.java : retour simple de Health Check \(optionnel\) ├── ping │ └── PingService.java : pour vérifier que JAX-RS est bien opérationnel ├── utils │ ├── GenericEnumConverter.java : convertisseur générique d'enum en Json │ ├── InjectUUID.java : annotation pour injecter des UUID sous forme de String │ └── UUIDProducer.java : générateur de UUID ├── videogame │ ├── VideoGame.java : classe métier, persistante via JPA \(Hibernate\) │ ├── VideoGameFactory.java : Factory de jeux video via CDI pour bénéficier de @InjectUUID en mode programmatique │ ├── VideoGameRepository.java : un repository CRUD JPA généré par Spring Data JPA │ └── VideoGameResource.java : le point d'accès REST via JAX-RS aux jeux vidéo └── ApiDefinition.java : pour les informations de l'API via Swagger
+{:.preformatted}
+fxjavadevblog
+└── qjg
+    ├── genre
+    │   ├── Genre.java                    : enum qui contient tous les genres de jeux vidéo
+    │   ├── GenreConverterProvider.java   : fournisseur de conversion de Genre pour les paramètres JAX-RS
+    │   └── GenreResource.java            : point d'accès REST via JAX-RS aux genres de jeux vidéo
+    ├── health
+    │   └── SimpleHealthCheck.java        : retour simple de Health Check (optionnel)
+    ├── ping
+    │   └── PingService.java              : pour vérifier que JAX-RS est bien opérationnel
+    ├── utils
+    │   ├── GenericEnumConverter.java     : convertisseur générique d'enum en Json
+    │   ├── InjectUUID.java               : annotation pour injecter des UUID sous forme de String
+    │   └── UUIDProducer.java             : générateur de UUID
+    ├── videogame
+    │   ├── VideoGame.java                : classe métier, persistante via JPA (Hibernate)
+    │   ├── VideoGameFactory.java         : Factory de jeux video via CDI pour bénéficier de @InjectUUID en mode programmatique
+    │   ├── VideoGameRepository.java      : un repository CRUD JPA généré par Spring Data JPA
+    │   └── VideoGameResource.java        : le point d'accès REST via JAX-RS aux jeux vidéo
+    └── ApiDefinition.java                : pour les informations de l'API via Swagger
 
 La partie tests unitaires est consituée des éléments suivants :
 
-{:.preformatted} test ├── java │ └── fr │ └── fxjavadevblog │ └── qjg │ ├── global │ │ └── TestingGroups.java : définitions de constantes pour les groupes de tests JUnit 5 │ ├── ping │ │ └── PingTest.java : Vérifie que le "ping" fonctionne │ └── utils │ ├── CDITest.java : permet de vérifier que CDI est opérationnel │ ├── DummyTest.java : un test vide │ └── GenericEnumConverterTest.java : vérification de la conversion générique d'enum └── resources └── application.properties : fichier de paramétrage de Quarkus spécifique pour les tests unitaires
+{:.preformatted}
+test
+├── java
+│   └── fr
+│       └── fxjavadevblog
+│           └── qjg
+│               ├── global
+│               │   └── TestingGroups.java   : définitions de constantes pour les groupes de tests JUnit 5
+│               ├── ping
+│               │   └── PingTest.java        : Vérifie que le "ping" fonctionne
+│               └── utils
+│                   ├── CDITest.java                    : permet de vérifier que CDI est opérationnel
+│                   ├── DummyTest.java                  : un test vide
+│                   └── GenericEnumConverterTest.java   : vérification de la conversion générique d'enum
+└── resources
+    └── application.properties               : fichier de paramétrage de Quarkus spécifique pour les tests unitaires
 
-> `DummyTest.java` : un test _vide_ afin de vérifier que les tests unitaires s'exécutent correctement \(un méta-test, lol\)
+> `DummyTest.java` : un test *vide* afin de vérifier que les tests unitaires s'exécutent correctement (un méta-test, lol)
 
 ## Maven et son pom.xml
 
 D'abord il nous faut quelques paramétrages classiques MAVEN :
 
-```markup
+```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -123,7 +218,7 @@ D'abord il nous faut quelques paramétrages classiques MAVEN :
 
 On ajoute les dépendences classiques :
 
-```markup
+```xml
 <dependencies>
        <dependency>
               <groupId>org.projectlombok</groupId>
@@ -136,7 +231,7 @@ On ajoute les dépendences classiques :
 
 Pour utiliser Quarkus :
 
-```markup
+```xml
 <dependencyManagement>
     <dependencies>
         <dependency>
@@ -152,7 +247,7 @@ Pour utiliser Quarkus :
 
 puis :
 
-```markup
+```xml
 <dependency>
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-spring-data-jpa</artifactId>
@@ -208,11 +303,11 @@ Attention, ils sont nombreux, mais ce n'est pas rare pour des projets MAVEN.
 
 Il nous faut de quoi :
 
-* générer tout ce qui est traité par Quarkus
-* lancer les tests unitaires sans base de données
-* lancer notre base de données PostgreSQL avec Docker pendant les tests d'intégration JUnit 5. On est ainsi à mi-chemin entre des tests unitaires et des tests d'intégration. Je préfère cette solution plutôt que de _mocker_ les tests. Cela nécessite évidemment que Docker soit installé sur l'environnement.
+- générer tout ce qui est traité par Quarkus
+- lancer les tests unitaires sans base de données
+- lancer notre base de données PostgreSQL avec Docker pendant les tests d'intégration JUnit 5. On est ainsi à mi-chemin entre des tests unitaires et des tests d'intégration. Je préfère cette solution plutôt que de *mocker* les tests. Cela nécessite évidemment que Docker soit installé sur l'environnement.
 
-```markup
+```xml
 <build>
     <plugins>
       <plugin>
@@ -384,7 +479,7 @@ Il nous faut de quoi :
 
 Et enfin, pour atteindre le Graal du code Java compilé en binaire natif, il nous faut rajouter un petit profil MAVEN :
 
-```markup
+```xml
 <profiles>
     <profile>
         <id>native</id>
@@ -540,7 +635,7 @@ __  ____  __  _____   ___  __ ____  ______
 2020-04-02 11:26:09,819 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, hibernate-orm-panache, hibernate-validator, jdbc-postgresql, narayana-jta, resteasy, resteasy-jsonb, spring-data-jpa, spring-di]
 ```
 
-> Quakus se lance en très peu de temps alors qu'il est _simplement_ en mode JVM classique. Vivement le build GraalVM natif... patience.
+> Quakus se lance en très peu de temps alors qu'il est *simplement* en mode JVM classique. Vivement le build GraalVM natif... patience.
 
 On peut tester le service manuellement :
 
@@ -549,22 +644,24 @@ $ curl http://localhost:8080/api/ping/v1
 pong
 ```
 
-Si on modifie le code java et qu'on le sauvegarde, il se recompile automatiquement grâce au mode **dev** de Quarkus. Par exemple : on change le `return "pong";` par `return "PONG";` et on sauvegarde le fichier.
+Si on modifie le code java et qu'on le sauvegarde, il se recompile automatiquement grâce au mode **dev** de Quarkus.
+Par exemple : on change le `return "pong";` par `return "PONG";` et on sauvegarde le fichier.
 
 ```bash
 $ curl http://localhost:8080/api/ping/v1
 PONG
 ```
 
-C'est vraiment très pratique ce _live reload_ !
+C'est vraiment très pratique ce *live reload* !
 
-> Attention avec Lombok toutefois, Quarkus ne semble pas relancer l'annotation processor et donc il ne génère pas le bytecode de Lombok. Lien vers cette anomalie : [https://github.com/quarkusio/quarkus/issues/4224](https://github.com/quarkusio/quarkus/issues/4224)
+> Attention avec Lombok toutefois, Quarkus ne semble pas relancer l'annotation processor et donc il ne génère pas le bytecode de Lombok.
+> Lien vers cette anomalie : <https://github.com/quarkusio/quarkus/issues/4224>
 
 ## Compilation en binaire avec GraalVM
 
-En pré-requis, il faut s'assurer que GraalVM est bien installé.
+En pré-requis, il faut s'assurer que GraalVM est bien installé. 
 
-Je vous conseille d'utilser SDKMAN pour cela qui est une plateforme pour gérer plusieurs outils de développement présents sur votre poste en plusieurs versions et vous permet des les activer simplement et rapidement, même le temps d'une session shell \(terminal\).
+Je vous conseille d'utilser SDKMAN pour cela qui est une plateforme pour gérer plusieurs outils de développement présents sur votre poste en plusieurs versions et vous permet des les activer simplement et rapidement, même le temps d'une session shell (terminal).
 
 ### Installation de SDKMAN
 
@@ -605,7 +702,8 @@ Setting java 19.3.1.r11-grl as default.
 
 Dans cet exemple, j'ai choisi de mettre GraalVM en version 19.3.1 et de le déclarer comme JDK par défaut.
 
-GraalVM s'est installé dans le répertoire de SDKMAN `/home/robin/.sdkman/candidates/java/19.3.1.r11-grl` et tout a été _linké_ correctement pour en faire le JDK par défaut.
+GraalVM s'est installé dans le répertoire de SDKMAN `/home/robin/.sdkman/candidates/java/19.3.1.r11-grl`
+et tout a été *linké* correctement pour en faire le JDK par défaut.
 
 ```bash
 $ echo $JAVA_HOME
@@ -616,7 +714,7 @@ $ whereis java
 java: /usr/bin/java /usr/lib/java /usr/share/java /home/robin/.sdkman/candidates/java/19.3.1.r11-grl/bin/java
 ```
 
-Pour pouvoir compiler du code Java en code natif, il faut rajouter une variable d'environnement au fichier `~/.mavenrc` \(à créer s'il n'existe pas\).
+Pour pouvoir compiler du code Java en code natif, il faut rajouter une variable d'environnement au fichier `~/.mavenrc` (à créer s'il n'existe pas).
 
 ```text
 export JAVA_HOME=/home/robin/.sdkman/candidates/java/current
@@ -648,7 +746,8 @@ Tout est prêt pour pouvoir compiler notre application en code natif.
 
 ### Compilation en code natif
 
-Il suffit de lancer maven avec le profil _native_ qui est présent dans le pom XML. C'est un peu long, c'est normal, mais le résultat en vaut la chandelle.
+Il suffit de lancer maven avec le profil *native* qui est présent dans le pom XML.
+C'est un peu long, c'est normal, mais le résultat en vaut la chandelle.
 
 ```bash
 $ mvn package -Pnative
@@ -658,25 +757,25 @@ $ mvn package -Pnative
 ...
 ...
 ...
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]    classlist:  10 076,23 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]        (cap):   1 186,64 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]        setup:   3 325,77 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]    classlist:  10 076,23 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]        (cap):   1 186,64 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]        setup:   3 325,77 ms
 17:25:16,623 INFO  [org.hib.val.int.uti.Version] HV000001: Hibernate Validator 6.1.2.Final
 17:25:18,675 INFO  [org.jbo.threads] JBoss Threads version 3.0.1.Final
 17:25:42,598 INFO  [org.hib.Version] HHH000412: Hibernate ORM core version 5.4.12.Final
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]   (typeflow):  20 083,90 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]    (objects):  16 238,17 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]   (typeflow):  20 083,90 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]    (objects):  16 238,17 ms
 [quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]   (features):     742,27 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]     analysis:  38 874,58 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]     analysis:  38 874,58 ms
 [quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]     (clinit):     658,58 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]     universe:   2 171,74 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]      (parse):   2 662,69 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]     (inline):   4 485,66 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]    (compile):  29 844,86 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]      compile:  39 558,51 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]        image:   2 916,45 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]     universe:   2 171,74 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]      (parse):   2 662,69 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]     (inline):   4 485,66 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]    (compile):  29 844,86 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]      compile:  39 558,51 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]        image:   2 916,45 ms
 [quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]        write:     817,69 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]      [total]:  98 480,45 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:1965]      [total]:  98 480,45 ms
 [INFO] [io.quarkus.deployment.QuarkusAugmentor] Quarkus augmentation completed in 101129ms
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
@@ -703,7 +802,7 @@ __  ____  __  _____   ___  __ ____  ______
 
 Oui c'est bien la réalité : notre application a démarré en 0.016 secondes !
 
-Pour l'arrêter, il suffit de _tuer_ le process ou simplement avec un `CTRL+C` dans le terminal.
+Pour l'arrêter, il suffit de *tuer* le process ou simplement avec un `CTRL+C` dans le terminal.
 
 ## Configuration de l'accès aux données
 
@@ -827,7 +926,12 @@ quarkus.arc.remove-unused-beans=false
 %prod.quarkus.hibernate-orm.sql-load-script=import.sql
 ```
 
-> Remarque importante : quand on construit l'image native de l'application, Quarkus se met automatiquement en mode `prod`. Cela signifie que certains paramètres sont ignorés par défaut comme le `drop-and-create` et le `sql-load-script`. C'est une très bonne pratique, cependant dans le cadre de ce tutoriel où les données ne persistent pas, je force, même en mode `prod`, la création de la base de données et l'import du script SQL. Dans le fichier ci-dessus, ce sont les lignes `%prod.*` qui s'activent en production AUSSI. Je le redis : à ne pas faire dans un vrai projet !
+> Remarque importante : quand on construit l'image native de l'application, Quarkus se met automatiquement en mode `prod`.
+> Cela signifie que certains paramètres sont ignorés par défaut comme le `drop-and-create` et le `sql-load-script`.
+> C'est une très bonne pratique, cependant dans le cadre de ce tutoriel où les données ne persistent pas, je force, même en mode 
+> `prod`, la création de la base de données et l'import du script SQL.
+> Dans le fichier ci-dessus, ce sont les lignes `%prod.*` qui s'activent en production AUSSI.
+> Je le redis : à ne pas faire dans un vrai projet !
 
 Pour les tests unitaires et les tests d'intégration, nous aurons donc des fichiers `application.properties` différents.
 
@@ -835,11 +939,11 @@ Pour les tests unitaires et les tests d'intégration, nous aurons donc des fichi
 
 Bien évidemment, il nous faut au moins une classe persistente. J'ai repris ici des exemples d'un précédent article :
 
-* VideoGame : classe persistante JPA
-* Genre : une enum JAVA persistée sous forme de String
-* Producers : des producers CDI pour les UUID qui serviront de `@Id` dans la classe persistance comme clé primaire
-* VideoGameReposity : le CRUD issu de Spring Data JPA
-* VideoGameFactory : de quoi créer des instances de la classe VideoGame en bénéficiant de l'injection automatique de UUID
+- VideoGame : classe persistante JPA
+- Genre : une enum JAVA persistée sous forme de String
+- Producers : des producers CDI pour les UUID qui serviront de `@Id` dans la classe persistance comme clé primaire
+- VideoGameReposity : le CRUD issu de Spring Data JPA
+- VideoGameFactory : de quoi créer des instances de la classe VideoGame en bénéficiant de l'injection automatique de UUID
 
 ### VideoGame et Genre
 
@@ -1169,14 +1273,14 @@ Pour résumer le problème, les URL d'appel ainsi que le contenu du retour JSON 
 
 Ce que l'on souhaite pour les URL d'appel et les retours JSON :
 
-* utiliser des "-" au lieu des "\_" pour séparer les mots clés
-* basculer tout en minuscules
+- utiliser des "-" au lieu des "_" pour séparer les mots clés
+- basculer tout en minuscules
 
 Vous pouvez retrouver ces recommandations ici : [https://restfulapi.net/resource-naming/](https://restfulapi.net/resource-naming/)
 
 Exemple : l'appel de `/api/videogames/v1/genre/shoot-them-up` doit retourner :
 
-```javascript
+```json
 [
   ...
   ...
@@ -1200,31 +1304,31 @@ public enum Genre
 {
    @JsonProperty(value = "arcade")
    ARCADE, 
-
+   
    @JsonProperty(value = "education")
    EDUCATION, 
-
+   
    @JsonProperty(value = "fighting")
    FIGHTING, 
-
+   
    @JsonProperty(value = "pinball")
    PINBALL, 
-
+   
    @JsonProperty(value = "platform")
    PLATFORM, 
-
+   
    @JsonProperty(value = "reflexion")
    REFLEXION, 
-
+   
    @JsonProperty(value = "rpg")
    RPG, 
-
+   
    @JsonProperty(value = "shoot-them-up")
    SHOOT_THEM_UP, 
-
+   
    @JsonProperty(value = "simulation")
    SIMULATION,
-
+   
    @JsonProperty(value = "sport")
    SPORT;
 }
@@ -1243,7 +1347,8 @@ $ curl http://localhost:8080//api/videogames/v1/genre/SHOOT_THEM_UP
     },
 
     ... etc ...
-```
+
+ ```
 
 Mais le problème persiste pour l'URL ! Il faut donc créer un ParamConverter JAX-RS !
 
@@ -1280,7 +1385,7 @@ import com.google.common.collect.HashBiMap;
 public class GenericEnumConverter<T extends Enum<T>> implements ParamConverter<T>
 {
     private static final Logger log = LoggerFactory.getLogger(GenericEnumConverter.class);
-
+    
     /**
      * bi-directionnal Map to store enum value as key and its string representation as value.
      * The string representation is retrieved through the JsonProperty annotation put on the enum constant. 
@@ -1301,7 +1406,7 @@ public class GenericEnumConverter<T extends Enum<T>> implements ParamConverter<T
     {
         return new GenericEnumConverter<>(t);
     }
-
+    
     private GenericEnumConverter(Class<T> t)
     {
         log.debug("Generating conversion map for enum {}", t);
@@ -1349,12 +1454,12 @@ public class GenericEnumConverter<T extends Enum<T>> implements ParamConverter<T
 
 Les concepts de cette classe sont les suivants :
 
-* elle est instanciée en prenant une enum comme argument : `ParamConverter<Genre> converter = GenericEnumConverter.of(Genre.class);`
-* elle instrospecte l'enum pendant sa construction à la recherche des annotations `@JsonProperty` sur chaque valeur
-* pour chaque valeur, elle récupère le contenu de l'annotation `@JsonProperty` et peuple une BiMap \(Map bidirectionnelle Guava, incluse dans Quarkus\)
-* si l'annotation n'est pas présente \(on ne sait jamais\), la valeur `toString()` de l'enum sera prise par défaut
+- elle est instanciée en prenant une enum comme argument : `ParamConverter<Genre> converter = GenericEnumConverter.of(Genre.class);`
+- elle instrospecte l'enum pendant sa construction à la recherche des annotations `@JsonProperty` sur chaque valeur
+- pour chaque valeur, elle récupère le contenu de l'annotation `@JsonProperty` et peuple une BiMap (Map bidirectionnelle Guava, incluse dans Quarkus)
+- si l'annotation n'est pas présente (on ne sait jamais), la valeur `toString()` de l'enum sera prise par défaut
 
-La partie "générique" permet de s'adapter à n'importe quelle _enum_.
+La partie "générique" permet de s'adapter à n'importe quelle *enum*.
 
 A la fin de la construction de cette classe, la BiMap contient les tuples suivants :
 
@@ -1372,7 +1477,7 @@ Enum value Genre.SIMULATION is mapped to "simulation"
 Enum value Genre.SPORT is mapped to "sport"
 ```
 
-Ensuite il faut _enregistrer_ ce convertisseur automatique auprès de JAX-RS : cela se fait au moyen d'une classe qui implémente l'interface `ParamConverterProvider` et d'une annotation `@Provider` :
+Ensuite il faut *enregistrer* ce convertisseur automatique auprès de JAX-RS : cela se fait au moyen d'une classe qui implémente l'interface `ParamConverterProvider` et d'une annotation `@Provider` :
 
 ```java
 package fr.fxjavadevblog.qjg.genre;
@@ -1468,7 +1573,8 @@ $ curl http://localhost:8080//api/videogames/v1/genre/shoot-them-up
     }
 
     ... etc ...
-```
+
+ ```  
 
 De plus, quand on invoque l'URL avec un genre qui ne peut pas être mappé, on obtient une erreur 404. Ce comportement est très satisfaisant.
 
@@ -1485,11 +1591,11 @@ Content-Type: application/json
 
 Ces tests sont classiquement dans le répertoire "test". Les points particuliers sont les suivants :
 
-* la base de données n'est pas créée dans ce cas
-* `@QuarkusTest` est présent sur quelques classes de tests unitaires pour vérifier le comportement de CDI
-* les tests unitaires nommés `IT_*` sont ignorés par convention \(tests d'intégration\)
-* le profil `test` de Quarkus est automatique, un fichier spécifique `application.properties` est utilisé à cet effet
-* la propriété `quarkus.arc.remove-unused-beans=false` permet de conserver dans le contexte CDI tous les beans injectables
+- la base de données n'est pas créée dans ce cas
+- `@QuarkusTest` est présent sur quelques classes de tests unitaires pour vérifier le comportement de CDI
+- les tests unitaires nommés `IT_*` sont ignorés par convention (tests d'intégration)
+- le profil `test` de Quarkus est automatique, un fichier spécifique `application.properties` est utilisé à cet effet
+- la propriété `quarkus.arc.remove-unused-beans=false` permet de conserver dans le contexte CDI tous les beans injectables
 
 Pour lancer les tests unitaires :
 
@@ -1531,9 +1637,9 @@ $ mvn clean test
 
 Ces tests sont placés dans le répertoire "test-integration". Les points particuliers sont les suivants :
 
-* une image Docker PostgreSQL pour les tests d'intégration est lancée
-* `@QuarkusTest` est présent sur tous les tests afin de disposer de l'environnement complet
-* Les tests sont _assurés_ avec _Rest Assured_
+- une image Docker PostgreSQL pour les tests d'intégration est lancée
+- `@QuarkusTest` est présent sur tous les tests afin de disposer de l'environnement complet
+- Les tests sont *assurés* avec *Rest Assured*
 
 ```java
 package fr.fxjavadevblog.qjg.videogame;
@@ -1571,8 +1677,8 @@ class IT_VideoGameResource
 
 Pour lancer les tests d'intégration :
 
-* s'assurer que le PostgreSQL de dev n'est pas lancé
-* lancer la commande `$ mvn -Dskip.surefire.tests verify`
+- s'assurer que le PostgreSQL de dev n'est pas lancé
+- lancer la commande `$ mvn -Dskip.surefire.tests verify`
 
 ```bash
 $ mvn -Dskip.surefire.tests verify
@@ -1688,10 +1794,10 @@ Scanning for projects...
 19:29:20.555 PostgreSQL Server :2020-04-14 17:29:20.555 UTC [65] LOG:  database system was shut down at 2020-04-14 17:29:20 UTC
 19:29:20.560 PostgreSQL Server :2020-04-14 17:29:20.560 UTC [1] LOG:  database system is ready to accept connections
 Hibernate: 
-
+    
     drop table if exists VIDEO_GAME cascade
 Hibernate: 
-
+    
     create table VIDEO_GAME (
        id varchar(36) not null,
         GENRE varchar(255) not null,
@@ -1700,7 +1806,7 @@ Hibernate:
         primary key (id)
     )
 Hibernate: 
-
+    
     alter table if exists VIDEO_GAME 
        add constraint UK_jg5tlrbpecd0wd8c9vjo6b429 unique (NAME)
 
@@ -1762,27 +1868,27 @@ Status: Downloaded newer image for quay.io/quarkus/ubi-quarkus-native-image:19.3
 quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11
 [INFO] [io.quarkus.deployment.pkg.steps.NativeImageBuildStep] Running Quarkus native-image plugin on GraalVM Version 19.3.1 CE
 [INFO] [io.quarkus.deployment.pkg.steps.NativeImageBuildStep] docker run -v /home/robin/git/quarkus-tuto/target/quarkus-tuto-0.0.1-SNAPSHOT-native-image-source-jar:/project:z --env LANG=C --user 1000:1000 --rm quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11 -J-Djava.util.logging.manager=org.jboss.logmanager.LogManager -J-Dsun.nio.ch.maxUpdateArraySize=100 -J-DCoordinatorEnvironmentBean.transactionStatusManagerEnable=false -J-Dvertx.logger-delegate-factory-class-name=io.quarkus.vertx.core.runtime.VertxLogDelegateFactory -J-Dvertx.disableDnsResolver=true -J-Dio.netty.leakDetection.level=DISABLED -J-Dio.netty.allocator.maxOrder=1 -J-Duser.language=fr -J-Dfile.encoding=UTF-8 --initialize-at-build-time= -H:InitialCollectionPolicy=com.oracle.svm.core.genscavenge.CollectionPolicy$BySpaceAndTime -H:+JNI -jar quarkus-tuto-0.0.1-SNAPSHOT-runner.jar -H:FallbackThreshold=0 -H:+ReportExceptionStackTraces -H:-AddAllCharsets -H:-IncludeAllTimeZones -H:EnableURLProtocols=http,https --enable-all-security-services --no-server -H:-UseServiceLoaderFeature -H:+StackTrace quarkus-tuto-0.0.1-SNAPSHOT-runner
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]    classlist:  10 740,32 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]    classlist:  10 740,32 ms
 [quarkus-tuto-0.0.1-SNAPSHOT-runner:24]        (cap):     793,01 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]        setup:   2 161,94 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]        setup:   2 161,94 ms
 08:35:25,649 INFO  [org.hib.Version] HHH000412: Hibernate ORM core version 5.4.12.Final
 08:35:25,663 INFO  [org.hib.ann.com.Version] HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
 08:35:25,705 INFO  [org.hib.dia.Dialect] HHH000400: Using dialect: io.quarkus.hibernate.orm.runtime.dialect.QuarkusPostgreSQL10Dialect
 08:35:25,848 INFO  [org.hib.val.int.uti.Version] HV000001: Hibernate Validator 6.1.2.Final
 08:35:27,547 INFO  [org.jbo.threads] JBoss Threads version 3.0.1.Final
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]   (typeflow):  47 866,54 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]    (objects):  33 462,47 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]   (features):   1 692,11 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     analysis:  87 791,76 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     (clinit):   1 211,71 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     universe:   5 195,59 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]      (parse):   6 258,47 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     (inline):   8 432,95 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]    (compile):  55 066,12 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]      compile:  74 232,51 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]        image:   5 742,28 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]        write:   1 469,31 ms
-[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]      [total]: 187 812,32 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]   (typeflow):  47 866,54 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]    (objects):  33 462,47 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]   (features):   1 692,11 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     analysis:  87 791,76 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     (clinit):   1 211,71 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     universe:   5 195,59 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]      (parse):   6 258,47 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]     (inline):   8 432,95 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]    (compile):  55 066,12 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]      compile:  74 232,51 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]        image:   5 742,28 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]        write:   1 469,31 ms
+[quarkus-tuto-0.0.1-SNAPSHOT-runner:24]      [total]: 187 812,32 ms
 [INFO] [io.quarkus.deployment.QuarkusAugmentor] Quarkus augmentation completed in 223001ms
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
@@ -1794,12 +1900,12 @@ quay.io/quarkus/ubi-quarkus-native-image:19.3.1-java11
 
 Cette commande a réalisée un chose essentielle : elle a compilé en une version native LINUX de toute l'application, quel que soit votre environnement de travail au moyen d'un conteneur dédié à la compilation.
 
-Pour faire simple, un conteneur Docker `ubi-quarkus-native-image:19.3.1-java11` a été récupéré puis lancé pour compiler l'application au format LINUX même si vous êtes sous Windows. Cela nécessite toutefois d'avoir GraalVM installé nativement, mais cela peut-être contourné \(cf : [https://quarkus.io/guides/building-native-image](https://quarkus.io/guides/building-native-image)\)
+Pour faire simple, un conteneur Docker `ubi-quarkus-native-image:19.3.1-java11` a été récupéré puis lancé pour compiler l'application au format LINUX même si vous êtes sous Windows. Cela nécessite toutefois d'avoir GraalVM installé nativement, mais cela peut-être contourné (cf : <https://quarkus.io/guides/building-native-image>)
 
 Une fois l'application compilée, il faut maintenant créer l'image du conteneur Docker. Cette création est possible en ayant préalablement créé 2 fichiers dans `/src/main/docker` :
 
-* `/src/main/docker/Dockerfile.native` : fichier pour la génération en mode natif
-* `.dockerignore` : fichier pour la génération en mode JVM _normal_ à la racine du projet MAVEN
+- `/src/main/docker/Dockerfile.native` : fichier pour la génération en mode natif
+- `.dockerignore` : fichier pour la génération en mode JVM *normal* à la racine du projet MAVEN
 
 > Il peut aussi exister un fichier `Dockerfile.jvm` mais ce n'est pas l'objet de ce tutoriel.
 
@@ -1858,7 +1964,7 @@ Successfully built 6009aee9381b
 Successfully tagged quarkus-tuto:latest
 ```
 
-Une fois le conteneur créé, il suffit de le lancer, en ayant lancé préalablement une instance de PostgreSQL \(encore avec Docker, comme en DEV\) :
+Une fois le conteneur créé, il suffit de le lancer, en ayant lancé préalablement une instance de PostgreSQL (encore avec Docker, comme en DEV) :
 
 ```bash
 $ docker run -i --rm -p 8080:8080 --network="host" quarkus-tuto
@@ -1903,7 +2009,7 @@ Quarkus embarque les extensions SmallRye Health et Metrics, qui sont les implém
 
 Le simple ajout dans le pom de ces deux dépendances rend ces fonctionnalités opérationnelles :
 
-```markup
+```xml
 <!-- Health Check -->
 <dependency>
   <groupId>io.quarkus</groupId>
@@ -1989,14 +2095,13 @@ $ curl -H"Accept: application/json" localhost:8080/metrics/application/videogame
 
 Quarkus est, à mon humble avis, un framework de développement de Web Services REST très intéressant sur de nombreux aspects :
 
-* il est facile à prendre en main
-* le mode _dev_ et le _hot reload_ offrent un gain de temps important, même si l'usage conjoint de Lombok n'est pas encore optimum
-* la documentation est claire et il y a de nombreux exemples officiels sur GitHub
-* la conformité aux specs Java EE et Microprofile est très intéressante et rassurante \( JAX-RS, etc\) : pas de nouvelle API propriétaire à apprendre
-* le plugin de compilation native avec GraalVM est fourni et le résultat est à la hauteur des espérances
-* l'usage du Health Check et des Metrics sont vraiment bien intégrés et facile à mettre en oeuvre
-* il est facile de rajouter la gestion de token JWT et la liaison avec KeyCloak
-* la communauté semble très active
+- il est facile à prendre en main
+- le mode *dev* et le *hot reload* offrent un gain de temps important, même si l'usage conjoint de Lombok n'est pas encore optimum
+- la documentation est claire et il y a de nombreux exemples officiels sur GitHub
+- la conformité aux specs Java EE et Microprofile est très intéressante et rassurante ( JAX-RS, etc) : pas de nouvelle API propriétaire à apprendre
+- le plugin de compilation native avec GraalVM est fourni et le résultat est à la hauteur des espérances
+- l'usage du Health Check et des Metrics sont vraiment bien intégrés et facile à mettre en oeuvre
+- il est facile de rajouter la gestion de token JWT et la liaison avec KeyCloak
+- la communauté semble très active
 
 Je vous encourage donc vivement à vous pencher sérieusement sur Quarkus !
-
