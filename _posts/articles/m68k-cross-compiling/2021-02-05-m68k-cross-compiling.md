@@ -159,7 +159,7 @@ va pas s'arrêter en si bon chemin ...
 ## Compilation d'un programme GEM
 
 GEM c'est l'environnement graphique de l'Atari ST. 
-C'est gestionnaire de fenêtres conçu en 1984 par Digital Research et porté sur 68000 par Atari en 1985
+C'est un gestionnaire de fenêtres conçu en 1984 par Digital Research et porté sur 68000 par Atari en 1985.
 A la même époque on trouve Microsoft Windows 1.0 (Oui, 1.0 !).
 
 > En bref, GEM offre le *machin* qu'on manipule avec la souris et qui a des fenêtres sur un fond vert.
