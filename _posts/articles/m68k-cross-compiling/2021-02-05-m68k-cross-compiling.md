@@ -224,3 +224,4 @@ m'intéressera dans un autre tutorial à venir, si cela fonctionne pour mon STE 
 - EmuTOS : <https://emutos.sourceforge.io/>
 - GEM Lib : <https://github.com/freemint/gemlib>, 2016 (pour la doc en ligne) <http://arnaud.bercegeay.free.fr/gemlib/>
 - Chaine Youtube Vretrocomputing de Vincent Rivière : <https://www.youtube.com/c/Vretrocomputing>
+- Page Facebook Vretrocomputing : <https://www.facebook.com/Vretrocomputing/>
