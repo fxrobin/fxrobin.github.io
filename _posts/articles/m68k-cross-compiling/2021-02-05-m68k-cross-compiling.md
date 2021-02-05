@@ -101,7 +101,7 @@ Première étape satisfaisante, la dopamine commence à se secréter ...
 
 ## Compilation d'un programme TOS
 
-On se créer un petit programme en C, tout classique, un violant "Hello Bitmap Brothers", parce que dire bonjour au *monde* me parait un peu présomptueux.
+On se créer un petit programme en C, tout classique, un bon vieux message "Hello Bitmap Brothers", parce que dire bonjour au *monde* me parait un peu présomptueux.
 
 `hello_bb.c`
 ```c
