@@ -30,7 +30,8 @@ dans ce tutorial.
 
 > "Vincent, si tu nous écoutes ..." 
 
-Je Arnaud Bercegeay pour la librairie GEM qui sera utilisée dans une partie de ce tutorial.
+Je remercie aussi Arnaud Bercegeay pour la librairie GEM qui sera utilisée dans une partie de ce tutorial.
+
 
 > "Arnaud, si tu nous lis ..."
 
