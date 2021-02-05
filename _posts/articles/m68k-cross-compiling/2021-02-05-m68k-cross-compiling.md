@@ -190,7 +190,7 @@ $ m68k-atari-mint-gcc hello_ge.c -o hello_ge.prg -lgem
 Ensuite je relance l'émulateur :
 
 ```bash
-$ hatari -t ../tos/etos256fr.img -d . --auto --tos-res med hello_ge.prg
+$ hatari -t ../tos/etos256fr.img --tos-res med hello_ge.prg
 ```
 
 Et j'obtiens ceci :
