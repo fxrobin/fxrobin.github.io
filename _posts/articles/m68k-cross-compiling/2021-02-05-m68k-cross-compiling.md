@@ -43,7 +43,7 @@ Par défaut, sous Linux, la cible 68000, le processeur de l'Atari ST (et de l'Am
 
 Il faut donc installer de quoi "*cross-compiler*" un programme C pour 68000 sous un bon vieux Linux X86, pour ma part en 64 bits.
 
-Ceci est d'une simplicité extrème sous Ubuntu et dérivés (je suis sous Mint), 
+Ceci est d'une simplicité extrème sous Ubuntu et dérivés (je suis sous Linux Mint), 
 grâce au PPA de Vincent Rivière et des packages qu'il a préparés pour nous :
 
 ```bash
@@ -65,7 +65,7 @@ gpg:               importées : 1
 
 ```bash
 $ sudo apt update
-$ sudo apt sudo apt install cross-mint-essential
+$ sudo apt install cross-mint-essential
 ```
 
 ```text
@@ -146,8 +146,8 @@ Cela donne la ligne de commande suivante :
 $ hatari -t ../tos/etos256fr.img --tos-res med hello_bb.tos
 ```
 
-> Dans cette configuration, Hatari monte un disque C automatiquement sur le répertoire courant et 
-> lance automatiquement le fichier `.tos` ou `.prg` spécifié.
+> Dans cette configuration, Hatari monte un disque C automatiquement sur le répertoire contenant le programme 
+> `.tos` ou `.prg` spécifié et le lance.
 
 L'émulateur Hatari se lance et lance directement le programme `hello_bb.tos` :
 
