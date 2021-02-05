@@ -137,7 +137,7 @@ Voilà, c'est presque prêt, car l'émulateur a besoin du TOS (ou plutôt d'un T
 
 Je n'ai plus qu'à lancer directement le programme compilé précédemment, en configurant Hatari avec les paramètres suivants : 
 
-- `-t ../tos/etos256fr.img` : utiliser la ROM Emutos
+- `-t ../tos/etos256fr.img` : utiliser la ROM EmuTOS
 - `--tos-res med` : être en moyenne résolution, juste pour le *fun*.
 
 Cela donne la ligne de commande suivante :
@@ -218,6 +218,6 @@ m'intéressera dans un autre tutorial à venir, si cela fonctionne pour mon STE 
 
 - Packaging Cross Compiler 68k par Vincent Rivière pour Ubuntu : <http://vincent.riviere.free.fr/soft/m68k-atari-mint/ubuntu.php>
 - Hatari : <https://hatari.tuxfamily.org/>
-- Emutos : <https://emutos.sourceforge.io/>
-- GEM Lib : <https://github.com/freemint/gemlib>, 2016 (pour la doc en ligne) <http://arnaud.bercegeay.free.fr/gemlib/>, 
+- EmuTOS : <https://emutos.sourceforge.io/>
+- GEM Lib : <https://github.com/freemint/gemlib>, 2016 (pour la doc en ligne) <http://arnaud.bercegeay.free.fr/gemlib/>
 - Chaine Youtube Vretrocomputing de Vincent Rivière : <https://www.youtube.com/c/Vretrocomputing>
