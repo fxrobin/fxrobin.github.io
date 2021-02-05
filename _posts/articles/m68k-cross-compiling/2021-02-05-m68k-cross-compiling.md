@@ -122,7 +122,7 @@ $ m68k-atari-mint-gcc hello_bb.c -o hello_bb.tos
 ```
 
 Le fichier exécutable `hello_bb.tos` vient d'apparaitre dans le dossier,
-mais mon petit linux est bien accapable d'en faire quoi que ce soit sans un 
+mais mon petit linux est bien incapable d'en faire quoi que ce soit sans un 
 émulateur 68000 : Hatari, c'est le sujet de la section suivante.
 
 ## Installation, paramétrage et lancement du programme sous Hatari
