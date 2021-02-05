@@ -138,14 +138,12 @@ Voilà, c'est presque prêt, car l'émulateur a besoin du TOS (ou plutôt d'un T
 Je n'ai plus qu'à lancer directement le programme compilé précédemment, en configurant Hatari avec les paramètres suivants : 
 
 - `-t ../tos/etos256fr.img` : utiliser la ROM Emutos
--  `-d .` : créer un disque dur "C" visible par l'Atari, pointant à la racine de mon répertoire courant, là où ce trouve le fichier `hello_bb.tos` :
-- `--auto "C:\hello_bb.tos"` : préciser le programme à lancer
 - `--tos-res med` : être en moyenne résolution, juste pour le *fun*.
 
 Cela donne la ligne de commande suivante :
 
 ```bash
-$ hatari -t ../tos/etos256fr.img -d . --auto "C:\hello_bb.tos" --tos-res med
+$ hatari -t ../tos/etos256fr.img --tos-res med hello_bb.tos
 ```
 
 L'émulateur Hatari se lance et lance directement le programme `hello_bb.tos` :
@@ -158,20 +156,12 @@ va pas s'arrêter en si bon chemin ...
 ## Compilation d'un programme GEM
 
 GEM c'est l'environnement graphique de l'Atari ST. 
-C'est gestionnaire de fenêtres conçu en 1984 par Intel, porté sur 68000 par Atari en 1985
+C'est gestionnaire de fenêtres conçu en 1984 par Digital Research et porté sur 68000 par Atari en 1985
 A la même époque on trouve Microsoft Windows 1.0 (Oui, 1.0 !).
 
 > En bref, GEM offre le *machin* qu'on manipule avec la souris et qui a des fenêtres sur un fond vert.
 
-Nous allons coder un progamme `PRG` pour Atari, qui utilisent les fonctionnalités du GEM, notamment la création d'une fenêtre modale, au moyen de la librarie "[GEM Lib](http://arnaud.bercegeay.free.fr/gemlib/)"
-
-Encore une fois, grâce au travail d'Arnaud Bercegeay pour la librairie GEM et de Vincent Rivière pour le packaging Ubuntu, c'est d'une simplicité enfantine. Même la génération Z devrait en être capable. Ok, c'est facile et gratuit venant d'une génération X, mais ça fait du bien.
-
-```bash
-$ sudo apt install gemma-m68k-atari-mint
-```
-
-Voilà, facile.
+Nous allons coder un progamme `PRG` pour Atari, qui utilisent les fonctionnalités du GEM, notamment la création d'une fenêtre modale, au moyen de la librarie "[GEM Lib](http://arnaud.bercegeay.free.fr/gemlib/)". Cette bibliothèque est déjà présente, car fournie lors de l'installation du package `cross-mint-essential`.
 
 Ensuite, un petit programme qui utilise cette bibliothèque :
 
@@ -200,7 +190,7 @@ $ m68k-atari-mint-gcc hello_ge.c -o hello_ge.prg -lgem
 Ensuite je relance l'émulateur :
 
 ```bash
-$ hatari -t ../tos/etos256fr.img -d . --auto "C:\hello_ge.prg" --tos-res med
+$ hatari -t ../tos/etos256fr.img -d . --auto --tos-res med hello_ge.prg
 ```
 
 Et j'obtiens ceci :
@@ -226,9 +216,8 @@ m'intéressera dans un autre tutorial à venir, si cela fonctionne pour mon STE 
 
 ## Liens
 
-- Packaging Cross Compiler 68k par Vicent Rivière pour Ubuntu : http://vincent.riviere.free.fr/soft/m68k-atari-mint/ubuntu.php
-- Hatari : https://hatari.tuxfamily.org/
-- Emutos : https://emutos.sourceforge.io/
-- GEM Lib : http://arnaud.bercegeay.free.fr/gemlib/
-- Chaine Youtube Vretrocomputing de Vincent Rivière : https://www.youtube.com/channel/UCG4S3PerB8tmodN-tpGQthA
-
+- Packaging Cross Compiler 68k par Vincent Rivière pour Ubuntu : <http://vincent.riviere.free.fr/soft/m68k-atari-mint/ubuntu.php>
+- Hatari : <https://hatari.tuxfamily.org/>
+- Emutos : <https://emutos.sourceforge.io/>
+- GEM Lib : <https://github.com/freemint/gemlib>, 2016 (pour la doc en ligne) <http://arnaud.bercegeay.free.fr/gemlib/>, 
+- Chaine Youtube Vretrocomputing de Vincent Rivière : <https://www.youtube.com/c/Vretrocomputing>
