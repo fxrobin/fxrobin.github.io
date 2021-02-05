@@ -146,6 +146,9 @@ Cela donne la ligne de commande suivante :
 $ hatari -t ../tos/etos256fr.img --tos-res med hello_bb.tos
 ```
 
+> Dans cette configuration, Hatari monte un disque C automatiquement sur le répertoire courant et 
+> lance automatiquement le fichier `.tos` ou `.prg` spécifié.
+
 L'émulateur Hatari se lance et lance directement le programme `hello_bb.tos` :
 
 ![TOS Result](/images/m68k-cross-compiling/tos.png){: .fakescreen}
