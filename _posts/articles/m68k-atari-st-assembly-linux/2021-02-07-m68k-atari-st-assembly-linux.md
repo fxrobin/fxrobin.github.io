@@ -132,7 +132,7 @@ $ hatari -t /usr/local/share/tos/etos256fr.img HELLO.TOS
 
 ## Conclusion
 
-Les outils `vasm` et `vlink` sont très puissants et produisent un exécutable "mini-rikiki". 
+Les outils `vasm` et `vlink` sont très puissants et produisent un exécutable "mini-rikiki", ici 303 octets ! (oui, octets !)
 
 C'est bien ce que l'on cherche à faire en assembleur en plus d'aller chercher un maximum de performance et de pouvoir
 accéder à la machine, et ses fonctionnalités, à son plus bas niveau.
