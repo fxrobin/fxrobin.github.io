@@ -27,6 +27,7 @@ pre.highlight {
   .line-number {
     display: block;
     float: left;
+    font-size : 1em;
     margin: 0 1em 0 -1em;
     border-right: 1px solid #339933;
     text-align: right;
@@ -114,8 +115,9 @@ pre.highlight {
 
 .language-bash pre.highlight
 {
-  font-family: amiga;
-  background-color : darkblue;
+  font-family: monospace;
+  font-size :larger;
+  background-color : rgb(1, 1, 65);
   color : white;
 
   span.line-number > span {color : #888888;}
