@@ -4,7 +4,7 @@ title: Assembleur 68000 pour Atari ST sous Linux
 subtitle: compilation Assembleur pour TOS avec VASM et VLINK
 logo: atari-st-full-scene-small.png
 category: articles
-tags: [Retro, Assembleur, Atari-ST]
+tags: [Retro, Assembleur, Atari]
 lang: fr
 ref: m68k-atari-st-assembly-linux
 ---

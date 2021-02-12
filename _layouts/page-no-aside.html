@@ -6,13 +6,8 @@ layout: default
   <img src="{{ site.baseurl }}/images/logos/{{  page.logo }}" class="logo-in-page hvr-buzz-out"/>
   <h1>{{ page.title }}</h1>
 	<div class="accroche">{{ page.subtitle }}</div>
-	
-	<!-- include language-selector.html -->
-	{% include post-aside.html %}
   
-  <div class="entry">
-    {{ content }}
-  </div> 
+  {{ content }}
+
 </article>
 
-{% include disqus.html %}
