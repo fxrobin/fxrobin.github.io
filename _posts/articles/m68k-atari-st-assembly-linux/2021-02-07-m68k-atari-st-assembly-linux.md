@@ -50,7 +50,7 @@ Les outils sont prêts.
 
 ## Compilation d'un programme TOS
 
-Je me crée un petit programme en assembleur, qui respecte la syntaxe Motorala mais aussi Devpack.
+Je me crée un petit programme en assembleur, qui respecte la syntaxe Motorola mais aussi Devpack.
 
 > Pour comprendre ce petit programme je vous invite à regarder [cette vidéo](https://www.youtube.com/watch?v=w9G-DidbTeU) de Vincent Rivière.
 
@@ -97,7 +97,7 @@ MESSAGE:
 ; -- DATA -----------------------------------------------
 ```
 
-> Notez l'usage du code ASCII $82 (Hexadécimal) qui correspond au caractère `é` dans la table
+> Notez l'usage du code ASCII $82 (Hexadécimal) qui correspond au caractère `é` dans la table ASCII
 > de l'Atari ST. Cette "astuce" est obligatoire car le code source sous Linux est en `UTF-8`.
 > L'Atari ST serait incapable, avec les routines par défaut, d'afficher ce caractère codé sur 2 octets,
 > s'il était laissé tel quel dans le code source.
