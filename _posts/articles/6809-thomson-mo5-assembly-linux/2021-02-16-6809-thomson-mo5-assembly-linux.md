@@ -14,7 +14,8 @@ ref: 6809-thomson-mo5-assembly-linux
 La dans série "comment compiler à partir de Linux pour une autre machine", l'objectif
 de ce mini-tutorial est d'obternir un `.BIN` pour Thomson MO5 avec l'assembleur `C6809`
 
-Le fichier exécutable sera exécuté avec l'émulateur DCMOTO de Daniel Coulomb.
+Le fichier exécutable sera testé avec l'émulateur DCMOTO de Daniel Coulomb avant d'être
+transféré sur un véritable MO5.
 </div>
 <!--excerpt-->
 
@@ -95,16 +96,16 @@ Je me crée un petit programme en assembleur pour MO5 (attention, ce n'est pas c
 
 DEBUT
     ORG $6000
-	LDX #MESSAGE
+    LDX #MESSAGE
 AFFICHE		
-	LDB ,X+
-	BEQ FIN
+    LDB ,X+
+    BEQ FIN
     SWI 
     FCB $02
-	BRA AFFICHE
+    BRA AFFICHE
 
 FIN
-	RTS
+    RTS
 
 MESSAGE
     FCS "HELLO LES THOMSONISTES !",0
