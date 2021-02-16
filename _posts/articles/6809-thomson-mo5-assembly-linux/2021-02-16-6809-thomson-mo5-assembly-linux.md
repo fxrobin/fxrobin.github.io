@@ -41,7 +41,7 @@ Au niveau du processeur :
 
 Et c'est tout ...
 
-## Installation l'assembleur
+## Installation de l'assembleur 6809
 
 Pour compiler de l'assembleur Motorola 6809 , je vais utiliser `c6809` réalisé par l'équipe "[PULSDEMOS](http://www.pulsdemos.com/c6809.html)".
 
@@ -85,7 +85,7 @@ C6809 [options] fichier_source fichier_destination
 
 Tout est fonctionnel.
 
-## Compilation d'un programme MO
+## Compilation d'un programme MO5
 
 Je me crée un petit programme en assembleur pour MO5 (attention, ce n'est pas compatible avec TO7  et +)
 
