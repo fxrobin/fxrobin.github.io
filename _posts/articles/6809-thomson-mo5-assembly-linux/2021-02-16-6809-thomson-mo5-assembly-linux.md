@@ -25,7 +25,7 @@ Je vais décrire ici brièvement le Thomson MO5 et son fameux processeur 6809.
 
 Les caractéristiques de la bête :
 
-- Processeur Motoral 6809 à 1 MHz
+- Processeur Motorola 6809 à 1 MHz
 - 48 Ko de mémoire : 16 Ko de ROM, 32 Ko de RAM
 - 320 x 200 en 16 couleurs, avec contrainte (2 couleurs tous les 8 pixels, par ligne)
 
