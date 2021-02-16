@@ -35,7 +35,7 @@ Au niveau du processeur :
 
 - registres "accumulators" (données) : `A` et `B`, 8 bits chacun. `D` étant la combinaison 16 bits de A et B
 - registres "pointers" (adresses) : `X` et `Y` sur 16 bits
-- registres de pile : `U` (User stack) et `S` (System stack) sur 16 bits chacuns
+- registres de pile : `U` (User stack) et `S` (System stack) sur 16 bits chacun
 - registre PC (Program Counter) sur 16 bits
 - DP (Direct Page) et CC (Condition Code) sur 8 bits chacun.
 
