@@ -23,6 +23,8 @@ transféré sur un véritable MO5.
 
 Je vais décrire ici brièvement le Thomson MO5 et son fameux processeur 6809.
 
+![Thomson MO5](/images/mo5.png)
+
 Les caractéristiques de la bête :
 
 - Processeur Motorola 6809 à 1 MHz
