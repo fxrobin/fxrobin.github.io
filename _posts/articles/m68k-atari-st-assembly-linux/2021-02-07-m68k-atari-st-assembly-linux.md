@@ -56,13 +56,13 @@ Je me crée un petit programme en assembleur, qui respecte la syntaxe Motorola m
 
 `hello.s`
 ```
-; -------------------------------------------------------
+; ---------------------------------------------------
 ; Hello, Bitmap Brothers! en assembleur pour Atari ST 
 ; (inspiré du HelloWorld de Vretrocomputing, 2019.)
 ; Date : 02/2021
-; -------------------------------------------------------
+; ---------------------------------------------------
 
-; -- DEBUT ----------------------------------------------
+; -- DEBUT ----------------------------------------------------------------------
 ; affichage du message
 	PEA     MESSAGE	        ; 4 octets sur la pile (PEA = PUSH EFFECTIVE ADDRESS)
 	MOVE.W	#9,-(sp)		; 2 octets sur la pile (9 = affiche chaine)s
@@ -77,14 +77,14 @@ Je me crée un petit programme en assembleur, qui respecte la syntaxe Motorola m
 ; fin du processus, retour au GEM
 	CLR.W   -(sp)			; 1 octet sur la pile
 	TRAP    #1				; pas de besoin d'ajuster
-; -- FIN ------------------------------------------------
+; -- FIN ------------------------------------------------------------------------
 
-; -- EQUATES --------------------------------------------
+; -- EQUATES ------------------------------------
 CR	EQU	$0D	; ASCII Carriage Return
 LF	EQU	$0A	; ASCII Line Feed
 ES	EQU	$00	; Fin de chaine 
 EA	EQU	$82 ; E accent aigue selon la table ASCII
-; -- EQUATES --------------------------------------------
+; -- EQUATES ------------------------------------
 
 ; -- DATA -----------------------------------------------
 MESSAGE:
@@ -111,7 +111,7 @@ vasm M68k/CPU32/ColdFire cpu backend 2.3n (c) 2002-2020 Frank Wille
 vasm motorola syntax module 3.14c (c) 2002-2020 Frank Wille
 vasm ELF output module 2.7 (c) 2002-2016,2020 Frank Wille
 
-CODE(acrx2):	          186 bytes
+CODE(acrx2):	          184 bytes
 ```
 
 Puis j'utilise le *linker* pour produire le fichier exécutable :

@@ -81,3 +81,13 @@
   font-weight: normal;
   font-style: normal;        
 }
+
+@font-face 
+{
+	font-family: "pixel-operator";
+    src: url('/fonts/PixelOperatorMono.woff2') format('woff2'),
+         url('/fonts/PixelOperatorMono.woff') format('woff'),
+         url('/fonts/cPixelOperatorMono.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;        
+}
