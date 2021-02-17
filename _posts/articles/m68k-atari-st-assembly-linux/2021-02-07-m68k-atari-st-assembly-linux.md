@@ -64,15 +64,15 @@ Je me crée un petit programme en assembleur, qui respecte la syntaxe Motorola m
 
 ; -- DEBUT ----------------------------------------------
 ; affichage du message
-	MOVE.L	#MESSAGE,-(sp)	; 4 octets sur la pile
-	MOVE.W	#9,-(sp)		; 2 octets sur la pile
+	PEA     MESSAGE	        ; 4 octets sur la pile (PEA = PUSH EFFECTIVE ADDRESS)
+	MOVE.W	#9,-(sp)		; 2 octets sur la pile (9 = affiche chaine)s
 	TRAP	#1
-	ADDQ.L	#6,sp			; ajustement de la pile
+	ADDQ.L	#6,sp			; ajustement de la pile 6 octets
 
 ; attente d'une touche
-	MOVE.W	#8,-(sp)		; 2 octets sur la pile
+	MOVE.W	#8,-(sp)		; 2 octets sur la pile (8 = attente clavier)
 	TRAP	#1
-	ADDQ.L	#2,sp			; ajustement de la pile
+	ADDQ.L	#2,sp			; ajustement de la pile de 2 octects
 
 ; fin du processus, retour au GEM
 	CLR.W   -(sp)			; 1 octet sur la pile
@@ -132,7 +132,7 @@ $ hatari -t /usr/local/share/tos/etos256fr.img HELLO.TOS
 
 ## Conclusion
 
-Les outils `vasm` et `vlink` sont très puissants et produisent un exécutable "mini-rikiki", ici 303 octets ! (oui, octets !)
+Les outils `vasm` et `vlink` sont très puissants et produisent un exécutable "mini-rikiki", ici 300 octets ! (oui, octets !)
 
 C'est bien ce que l'on cherche à faire en assembleur en plus d'aller chercher un maximum de performance et de pouvoir
 accéder à la machine, et ses fonctionnalités, à son plus bas niveau.
