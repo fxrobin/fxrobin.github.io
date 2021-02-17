@@ -4,12 +4,13 @@ code.highlighter-rouge
 	background-color:rgba(204,204,221,0.5);
 	border-radius: 0.25em;
 	padding : 5px;	
-    font-family: $codeFont;
-    font-size : 12pt;
+    font-family: "Share Tech Mono";
+    font-size : 1em;
 }
 
 pre.highlight {
-  font-family: $codeFont;
+  font-family:"Share Tech Mono";
+  font-size : 12pt;
   color : #00ff00;
   background-color: #111133;
   // background-image : url('/images/scanline.jpg');
