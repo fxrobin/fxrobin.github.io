@@ -29,9 +29,9 @@ t:
             articles: 
                 url: "/"
                 text: "Articles"
-            st-programming:
-                url: "/st-programming/"
-                text: "ST-Programming"
+            retro-programming:
+                url: "/retro-programming/"
+                text: "Retro-Programming"
             blanka: 
                 url: "/blanka-cave/fr/"
                 text: "Grotte de Blanka"
@@ -61,9 +61,9 @@ t:
             articles: 
                 url: "/"
                 text: "Articles"
-            st-programming:
-                url: "/st-programming/"
-                text: "ST-Programming"
+            retro-programming:
+                url: "/retro-programming/"
+                text: "Retro-Programming"
             blanka: 
                 url: "/blanka-cave/en/"
                 text: "Blanka Cave"
