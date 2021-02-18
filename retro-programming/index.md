@@ -17,13 +17,13 @@ Ici, que de vieux trucs, mais avec quelques outils modernes ou presque.
 </div>
 
 {% assign posts = site.posts %}
-<div id="left">
-<div class="posts" style="margin-top : 4em; width : 95%">
+<div id="left" style="margin : auto; width : 85%">
+<div class="posts" style="margin-top : 4em;">
     {% for post in posts %}
     {% if post.tags contains 'Retro-Prog' %}
   
     <div style="margin-top: 2em; border-top : solid black 1px">
-          <div style="float : right; margin : 1em;"> <a href="{{ site.baseurl }}{{ post.url }}" class="hvr-buzz-out">
+          <div style="float : right; margin-left : 2em; margin-top : 1em"> <a href="{{ site.baseurl }}{{ post.url }}" class="hvr-buzz-out">
                         <img src="{{ site.baseurl }}/images/logos/{{ post.logo }}" class="logo"	alt="{{ post.title }}" title="{{ post.title }}" />
                     </a></div>
         <div style="font-size : 2.5em; font-family : 'greenberet'; margin-top : 0.5em;"> <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></div>
