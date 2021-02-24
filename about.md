@@ -17,7 +17,29 @@ Voici un bref résumé chronologique de mon petit parcours de développeur / adm
 
 <!--excerpt-->
 
-## 1984-1989 : Découverte pendant mon enfance
+## 1983-1984 : La TV devient interactive
+
+Jusqu'à l'arrivée de mon Atari 2600, la TV était l'objet sur lequel je regardais plus ou moins passivement les émissions et dessins-animés de l'époque : Goldorak, La Bataille de Planètes, Récrée A2, L'Ile aux enfants, etc.
+
+![ATARI-2600](/images/atari-2600.png)
+
+Dessus, j'ai pu avoir les jeux suivants :
+
+Pole Position
+
+{%include video.html youtube-id="W2jLrNYzyr8?rel=0&amp;showinfo=0"  size="mini" %}
+
+Snoopy and the Red Baron
+
+{%include video.html youtube-id="0XfGUXoTxSo?rel=0&amp;showinfo=0"  size="mini" %}
+
+E.T. (le fameux)
+
+{%include video.html youtube-id="ZPnmewxetNA?rel=0&amp;showinfo=0"  size="mini" %}
+
+A ce jour, je possède toujours cette seule et unique console et ses jeux, car par la suite je n'ai eu que des micro-ordinateurs.
+
+## 1984-1989 : Découverte de la micro-informatique
 
 En 1984, à 9 ans (les plus forts d'entre vous auront ainsi découvert mon année de naissance au moyen de l'outil mathématique nommé "soustraction") j'ai découvert le développement grâce au THOMSON TO7-70 au fond de la classe de mon école primaire. C'est le déclic grâce au LOGO, au BASIC 1.0, le crayon optique, les cartouches ! Je demande même à l'institutrice de passer quelques récréations sur le TO7 plutôt que d'aller jouer aux billes dans la cours d'école.
 
