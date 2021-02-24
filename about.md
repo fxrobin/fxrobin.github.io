@@ -31,11 +31,19 @@ Pole Position
 
 Snoopy and the Red Baron
 
-{%include video.html youtube-id="0XfGUXoTxSo?rel=0&amp;showinfo=0"  size="mini" %}
+{%include video.html youtube-id="0XfGUXoTxSo?rel=0&amp;showinfo=0"  sizeyy="mini" %}
 
 E.T. (le fameux)
 
 {%include video.html youtube-id="ZPnmewxetNA?rel=0&amp;showinfo=0"  size="mini" %}
+
+Defender
+
+{%include video.html youtube-id="FIH3qE7jUUs?rel=0&amp;showinfo=0"  size="mini" %}
+
+Real Sport Tennis
+
+{%include video.html youtube-id="wMocFmcL1a0?rel=0&amp;showinfo=0"  size="mini" %}
 
 A ce jour, je possède toujours cette seule et unique console et ses jeux, car par la suite je n'ai eu que des micro-ordinateurs.
 
