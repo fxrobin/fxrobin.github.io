@@ -31,7 +31,7 @@ Parmis les divers petits programmes réalisés :
 
 * une sorte de chatbot ... précurseur mais limité, vous vous en doutez bien !
 * une gestion d'adhérents pour le club de tennis de mon père (avec sauvegarde cassette)
-* un jeu genre "X-Xwing" où des chasseurs TIE passent dans le viseur (si on pilote bien) et que l'on peut détruire bien sûr.
+* un jeu genre "X-Wing" où des chasseurs TIE passent dans le viseur (si on pilote bien) et que l'on peut détruire bien sûr.
 
 Malheureusement, je n'ai plus aucun code source de cette époque ...
 
