@@ -35,6 +35,8 @@ Parmis les divers petits programmes réalisés :
 
 Malheureusement, je n'ai plus aucun code source de cette époque ...
 
+Vous pouvez aussi aller jeter un oeil sur [comment assembler un programme pour MO5 à partir de Linux](/6809-thomson-mo5-assembly-linux).
+
 A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz de fréquence d'horloge, mais 256 Ko de RAM et surtout un lecteur de disquettes double faces. 360 Ko par face ! C'est la profusion d'octets ! Pendant toute cette période mes langages sont donc le BASIC 1.0 puis le BASIC 512 (les deux codés par Microsoft) ainsi que l'assembleur 6809 ! Les fameuses "Routines" ...
 
 ![TO8](/images/to8.png)
@@ -42,26 +44,26 @@ A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz 
 Un petit exemple pour la route (dont je ne suis pas l'auteur) :
 
 ```
-USERAF      EQU     $2070
-PUTCH       EQU     2
-CHDRAW      EQU     $2036
+USERAF      EQU    $2070
+PUTCH       EQU    2
+CHDRAW      EQU    $2036
 
-            ORG   &32000
+            ORG    &32000
             LDX    #DEFGR0
             STX    USERAF
             LDV    #TABLE
-DEBUT       LDB     ,U+
+DEBUT       LDB    ,U+
             CMPB   #4
-            BEQ     SUITE
+            BEQ    SUITE
             CALL   PUTCH
-            BRA     DEBUT
+            BRA    DEBUT
 SUITE       CLRA
-            LDX     #$14
-            LDY     #$0C
-SUITE2      LDB     #$80
-            STB      CHDRAW
-            CALL    CHPLH
-            JSR      COMPT
+            LDX    #$14
+            LDY    #$0C
+SUITE2      LDB    #$80
+            STB    CHDRAW
+            CALL   CHPLH
+            JSR    COMPT
 etc ...
 ```
 
