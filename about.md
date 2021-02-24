@@ -31,7 +31,7 @@ Pole Position
 
 Snoopy and the Red Baron
 
-{%include video.html youtube-id="0XfGUXoTxSo?rel=0&amp;showinfo=0"  sizeyy="mini" %}
+{%include video.html youtube-id="0XfGUXoTxSo?rel=0&amp;showinfo=0"  size="mini" %}
 
 E.T. (le fameux)
 
