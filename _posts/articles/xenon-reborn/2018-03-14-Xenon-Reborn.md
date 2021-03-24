@@ -20,6 +20,12 @@ Afin de rendre ludique l'apprentissage des fondamentaux de l'algorithmique et de
 
 <!--excerpt-->
 
+## TL;DR
+
+Vous pouvez aller voir directement la conférence que j'ai donnée à l'occasion de Breizhcamp 2019 :
+
+{%include video.html youtube-id="iLqG5Pmgw6c"  size="normal" %}
+
 ## Contexte
 
 Coder des applications « professionnelles » nécessite un background technique assez important tant les éléments à prendre en compte sont nombreux, surtout quand il s'agit d'applications web, multi-utilisateurs, transactionnelles et sécurisées.
