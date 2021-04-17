@@ -42,10 +42,13 @@ temps pour le moment !
 
 ## La mémoire vidéo
 
-A l'initialisation de l'Atari ST, une zone de la mémoire située à l'adresse `$3F8000` contient l'information d'affichage des pixels affichés à l'écran. Je ne vais évoquer dans cet article que de l'affichage en basse résolution, c'est à dire en 320x200 16 couleurs.
+A l'initialisation de l'Atari ST, une zone de la mémoire est réservée et contient l'information d'affichage des pixels affichés à l'écran. Je ne vais évoquer dans cet article que de l'affichage en basse résolution, c'est à dire en 320x200 16 couleurs.
 
-Au passage, l'adresse de la mémoire vidéo est changeable, mais ceci est un autre sujet !
-Cette zone mémoire fait 32 ko. 
+L'adresse de cette zone mémoire peut varier. En effet à l'initialisation, la fin de la RAM est allouée. Cela dépend donc de la taille de la mémoire que vous avez. Avec un ST équipé de 4 Mo de RAM, elle se situe à l'adresse `3F8000` alors qu'elle se situe à l'adresse `F8000` pour un ST équipé d'un seul méga octet.
+
+De plus plus, en pratique, l'adresse de la mémoire vidéo est changeable avec certaines contraites dans le cas du ST (le STE n'aura pas ces contraintes), mais ceci est un autre sujet que je n'aborderais pas ici (*double buffering*, etc.).
+
+Cette zone mémoire fait 32 000 octets, c'est à dire un peu moins de 32 Ko, puique 1 Ko = 1024 octets. 
 
 Etant donné qu'un pixel à l'écran fait référence à une couleur parmis 16, seuls 4 bits sont nécessaires par pixel
 pour préciser la référence de quelle couleur est à afficher. Et oui, 4 bits == 16 valeurs possibles (de 0 à 15)
@@ -73,15 +76,17 @@ Petit rappel si jamais cela devait être nécessaire :
 
 ## La palette et le codage des couleurs
 
-La palette de l'Atari ST est située, par défaut, à l'adresse `$FF8240`, mais en C je dispose
+La palette de l'Atari ST est située à l'adresse non modifiable `$FF8240`. En C je dispose
 de fonction qui appelleront directement des fonctionnalités du TOS pour récupérer affecter des valeurs
-à la palette voire même de définir une nouvelle zone mémoire pour l'ensemble de la palette.
+à la palette voire même de définir une nouvelle palette par copie d'une structure équivalente.
 
 Chaque couleur est exprimée sur 16 bits, c'est à dire 2 octets, ou encore 1 *word* (mot).
 Il y a donc 32 octets utilisés pour la palette (16 couleurs * 2 octets).
 
-Sur ces 16 bits, seuls les 12 bits de poids faibles seront vraiment utilisés.
+
 Ces 16 bits permettent de spéficier la valeur "RGB" (Red Green Blue) de la couleur.
+
+En réalité, seuls les 12 bits de poids faibles seront vraiment utilisés sur STE, et seulement 9 bits répartis sur les 12 bits dans le cas d'un ST/STF.
 
 Chaque composante de couleur peut aller de 0 à 7 dans le cas d'un Atari ST et de 0 à F (avec une petite astuce) pour le STE. Nous allons nous concentrer sur le ST "Normal", sachant que les couleurs définies ainsi sont compatibles avec l'Atari STE.
 
@@ -89,15 +94,15 @@ On remarque qu'il y a donc 8 valeurs possibles (de 0 à 7) pour chaque composant
 
 Voici quelques exemples pour représenter certaines couleurs :
 
-| ` RGB` | Couleur     |
-|--------|-------------|            
-| `0777` | blanc       |
-| `0000` | noir        |
-| `0700` | rouge       |
-| `0070` | vert        |
-| `0007` | bleu        |
-| `0300` | Rouge foncé |
-| `0003` | Bleu foncé  |
+| ` RGB` | Couleur      |
+|--------|--------------|            
+| `0777` | blanc        |
+| `0000` | noir         |
+| `0700` | rouge        |
+| `0070` | vert         |
+| `0007` | bleu         |
+| `0300` | Rouge sombre |
+| `0003` | Bleu sombre  |
  
 Fred, regarde, les 4 bits de poids fort sont systématiquement à 0. On code la palette sur 12 bits seulement.
 
@@ -130,16 +135,17 @@ __uint16_t palette[16] =
 
 ## La structure des blocs de 64 bits (4 x 16 bits) consécutifs
 
-Voici venu le temps, non pas des rires et des chants, mais celui de s'attaquer à la fameuse structure "4 bitplans".
+Voici venu le temps, non pas des rires et des chants, mais celui de s'attaquer à la fameuse structure "4 bitplanes".
+
 C'est assez particulier, mais quand on "revient" en 1985, cette structure porte tout sens quand il s'agit de gérer
 de multiples résolutions avec des couleurs faisant référence à une palette, le tout dans un espace mémoire contraint, 
-dans notre cas, je ne rappelle : 32 Ko.
+dans notre cas, je le rappelle : environ 32 Ko ce qui est conséquent sur un ordinateur qui ne possède que 520 Ko !
 
 Ces 64 bits, répartis donc sur 4 mots de 16 bits, serviront à représenter 16 pixels consécutifs.
 
 > Fred : "Mais alors, dis moi, par exemple, comment est représenté le premier pixel en haut à gauche, si je le veux en rouge !"
 
-Alors déjà, le "rouge", dans notre palette, c'est celle à l'index 9 du tableau. En effet, à cet index on y trouve la définition du rouge en RGB, c'est à dire 0x700.
+Alors déjà, le "rouge", dans notre palette, c'est la couleur à l'index 9 du tableau. En effet, à cet index on y trouve la définition du rouge en RGB, c'est à dire 0x700.
 
 Il faut donc affecter "9" quelque part en mémoire pour dire "affiche moi du rouge" !
 
@@ -152,7 +158,7 @@ C'est là que ça se complique, il va falloir que tu répartisses chacun des ces
 
 - 1er mot : sur le bit le plus à gauche (donc le bit de poids fort), il faut placer le bit de poids faible qui représente 9, c'est à dire `1`
 - 2ème mot : sur le bit le plus à gauche, il faut placer le 2nd bit qui représente 9, c'est à dire `0`
-- 3ème mot : sur le bit le plus à gauche toujours, il fait placer le 3ème bit qui représente 9, c'est à dire `0`
+- 3ème mot : sur le bit le plus à gauche toujours, il faut placer le 3ème bit qui représente 9, c'est à dire `0`
 - 4ème mot : encore sur le bit le plus à gauche, il faut placer le 4ème et dernier bit qui représente 9, c'est à dire `1`
 
 Ce qui donne pour ces 4 premiers mots le valeurs suivantes, en binaire.
@@ -207,14 +213,14 @@ __uint16_t pixels[4] =
     };
 ```
 
-> Fred : "En fait, c'est simple mais pour changer 1 pixel, il faut manipuler 4 mots !"
+> Fred : "En fait, c'est simple mais pour changer 1 pixel, il faut manipuler 4 octets répartis sur 4 mots !"
 
-Oui c'est un peu compliqué, c'est l'une des raisons pour laquelle les "sprites" sur Atari ST
+Oui c'est un peu compliqué, il faut bien l'avouer, c'est l'une des raisons pour laquelle les "sprites" sur Atari ST
 ont très souvent une largeur de 16 pixels, car ils se manipulent ainsi d'un seul bloc.
 
 > Fred : "Et si je veux refaire le même motif pour les 16 pixels suivants ?"
 
-C'est simple, tu copies les 4 mots à une adresse située à 4 mots (64 bits) de décalalage, c'est à dire 8 octets plus loin, et ainsi de suite.
+Facile : tu copies les 4 mots à une adresse située à 4 mots (64 bits) de décalalage, c'est à dire 8 octets plus loin, et ainsi de suite.
 
 Sur une ligne à l'écran, tu as donc 20 blocs de 16 pixels. Chaque bloc prend 8 octets (64 bits, 4 mots).
 Une ligne est donc composée de 160 octets.
@@ -226,7 +232,7 @@ Et quand tu sais qu'il y a 200 lignes, cela fait bien 32000 octets pour représe
 ## Mise en pratique en C
 
 Pour cette mise en pratique, j'ai donc installé le compilateur GCC "Cross-Compiler" pour Motorola 68000 sur mon Linux.
-Le détail de l'installation est dans [cet article](m68k-cross-compiling).
+Le détail de l'installation est dans [cet article](/m68k-cross-compiling).
 
 En complément j'ai installé [libcmini](https://github.com/freemint/libcmini) qui me permet d'obtenir un exécutable `.TOS` de faible taille sur l'Atari ST.
 
@@ -274,16 +280,16 @@ __uint16_t GetColor(short colorIndex)
 void SavePalette(__uint16_t* paletteBuffer)
 {
     for(int i=0; i < 16; i++)
-     {
-         paletteBuffer[i] = GetColor(i);
-     }
+    {
+        paletteBuffer[i] = GetColor(i);
+    }
 }
 
 // saves the current resolution and its palette
 void SaveResolutionAndPalette()
 {
-     savedResolution = Getrez(); // Get current resolution
-     SavePalette((__uint16_t*) &savedPalette); // Save the palette
+    savedResolution = Getrez(); // Get current resolution
+    SavePalette(savedPalette); // Save the palette
 }
 
 // restores the saved resolution and its palette
@@ -337,29 +343,21 @@ void DisplayScreen()
 }
 
 // demo runs here
-void run()
+int main(int argc, char *argv[])
 {
     // inits
-    videoAddress = Physbase();
+    videoAddress = Logbase(); // get the logical pointer of the video RAM
     SaveResolutionAndPalette();
     DisplayInfo();
  
     // demo
     SetResolution(LOW_RES);
-    Setpalette(&palette);
+    Setpalette(palette);
     DisplayScreen();    
     getchar();
 
     // restore initial state   
     RestoreResolutionAndPalette();
-}
-
-// entry point, starting in supervisor mode
-// not needed in this demo but it's a best practice 
-// to discover full atari st programming
-int main(int argc, char *argv[])
-{  
-    Supexec(&run);
     return 0;
 }
 ```
@@ -372,7 +370,7 @@ LIBCMINI=/usr/m68k-atari-mint/libcmini
 CFLAGS=-std=gnu99 -I/usr/m68k-atari-mint/include-libcmini -nostdlib $(LIBCMINI)/crt0.o 
 LINKFLAGS=-s -L$(LIBCMINI) -lcmini -lgcc
 all: clean main
-grab0002
+
 main: 
 	$(CC) $(CFLAGS) main.c -o main.tos $(LINKFLAGS)
 
@@ -417,3 +415,10 @@ Mince, encore ...
 Atari ST !!!
 
 Voilà, c'est bien comme cela.
+
+## Remerciements
+
+Je tiens, une nouvelle fois, à remercier Vincent Rivière pour la relecture attentive de cet article et pour ses conseils bienveillants.
+
+- Chaine Youtube Vretrocomputing de Vincent Rivière : <https://www.youtube.com/c/Vretrocomputing>
+- Page Facebook Vretrocomputing : <https://www.facebook.com/Vretrocomputing/>
