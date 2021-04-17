@@ -333,7 +333,7 @@ void DisplayScreen()
     };
 
     // not optimized, but better for understanding
-    // 20 block * 200 lines = 4000 iterations
+    // 20 blocks * 200 lines = 4000 iterations
     for(int i = 0 ; i < 4000 ; i ++)
     {
         short offset = 4 * i;
