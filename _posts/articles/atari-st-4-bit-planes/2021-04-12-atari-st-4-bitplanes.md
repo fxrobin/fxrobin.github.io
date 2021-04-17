@@ -48,7 +48,7 @@ L'adresse de cette zone mémoire peut varier. En effet à l'initialisation, la f
 - avec un ST équipé de 4 Mo de RAM, elle se situe à l'adresse `3F8000` ;
 - alors qu'elle se situe à l'adresse `F8000` pour un ST équipé d'un seul méga octet.
 
-De plus plus, en pratique, l'adresse de la mémoire vidéo est changeable avec certaines contraintes dans le cas du ST (le STE n'aura pas ces contraintes), mais ceci est un autre sujet que je n'aborderais pas ici (*double buffering*, etc.).
+De plus plus, en pratique, l'adresse de la mémoire vidéo est changeable avec certaines contraintes dans le cas du ST (le STE n'aura pas ces contraintes), mais ceci est un autre sujet que je n'aborderai pas ici (*double buffering*, etc.).
 
 Cette zone mémoire fait 32 000 octets, c'est à dire un peu moins de 32 Ko, puique 1 Ko = 1024 octets. 
 
