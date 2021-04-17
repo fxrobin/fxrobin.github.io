@@ -298,7 +298,7 @@ void SaveResolutionAndPalette()
 void RestoreResolutionAndPalette()
 {
     Setscreen(-1,-1, savedResolution);
-    Setpalette(&savedPalette);
+    Setpalette(savedPalette);
 }
 
 // changes the current resolution
@@ -307,7 +307,6 @@ void SetResolution(short resolution)
     Setscreen(-1,-1, resolution);
 }
 
-// 
 void DisplayInfo()
 {
     SetResolution(MEDIUM_RES);
