@@ -34,7 +34,7 @@ des bits différents sur 8 octets !
 
 > Fred : "Mais ! Euh !!! C'est compliqué !"
 
-Oui c'est un peu compliqué, mais c'est un mal nécessaire pour économiser de la RAM ! Et puis tu veras, 64 bits consécutifs te permettront
+Oui c'est un peu compliqué, mais c'est un mal nécessaire pour économiser de la RAM ! Et puis tu verras, 64 bits consécutifs te permettront
 de définir la couleur de 16 pixels et ainsi de suite, tous les 8 octets (64 bits).
 
 Allez, sans plus attendre je t'explique tranquillement, mais tu peux oublier de faire de la musique en même
