@@ -27,7 +27,7 @@ dans sa quête d'affichage de pixels !
 > Fred : "Je veux afficher des Sprites animés avec de la musique en même temps, à 60 FPS !"
 
 Minute Papillon ! Retour en 1985, Nom de Zeus ! Tu n'as que 16 couleurs à ta disposition,
-parmis 4096 si tu es le chanceux propriétaire d'un STE ou seulement 512 pour les ST et STF.
+parmi 4096 si tu es le chanceux propriétaire d'un STE ou seulement 512 pour les ST et STF.
 
 Et en plus tu vas rire, mais pour changer la couleur d'1 pixel à l'écran tu vas devoir manipuler
 des bits différents sur 4 octets distincts !
@@ -52,7 +52,7 @@ De plus plus, en pratique, l'adresse de la mémoire vidéo est changeable avec c
 
 Cette zone mémoire fait 32 000 octets, c'est à dire un peu moins de 32 Ko, puique 1 Ko = 1024 octets. 
 
-Etant donné qu'un pixel à l'écran fait référence à une couleur parmis 16, seuls 4 bits sont nécessaires par pixel
+Etant donné qu'un pixel à l'écran fait référence à une couleur parmi 16, seuls 4 bits sont nécessaires par pixel
 pour préciser la référence de quelle couleur est à afficher. Et oui, 4 bits == 16 valeurs possibles (de 0 à 15)
 
 Petit rappel si jamais cela devait être nécessaire :
@@ -82,7 +82,7 @@ La palette de l'Atari ST est située à l'adresse non modifiable `$FF8240`. En C
 de fonctions qui appelleront directement des fonctionnalités du TOS pour récupérer affecter des valeurs
 à la palette voire même de définir une nouvelle palette par copie d'une structure équivalente.
 
-Chaque couleur est exprimée sur 16 bits, c'est à dire 2 octets, ou encore 1 *word* (mot).
+Chaque couleur est exprimée sur 16 bits, c'est-à-dire 2 octets, ou encore 1 *word* (mot).
 Il y a donc 32 octets utilisés pour la palette (16 couleurs * 2 octets).
 
 
@@ -159,9 +159,9 @@ Le bit le plus à droite est le bit de poids faible. Le bit de plus à gauche es
 C'est là que ça se complique, il va falloir que tu répartisses chacun des ces bits sur 4 mots (*word*, 16 bits) différents :
 
 - 1er mot : sur le bit le plus à gauche (donc le bit de poids fort), il faut placer le bit de poids faible qui représente 9, c'est à dire `1`
-- 2ème mot : sur le bit le plus à gauche, il faut placer le 2nd bit qui représente 9, c'est à dire `0`
-- 3ème mot : sur le bit le plus à gauche toujours, il faut placer le 3ème bit qui représente 9, c'est à dire `0`
-- 4ème mot : encore sur le bit le plus à gauche, il faut placer le 4ème et dernier bit qui représente 9, c'est à dire `1`
+- 2ème mot : sur le bit le plus à gauche, il faut placer le 2nd bit qui représente 9, c'est-à-dire `0`
+- 3ème mot : sur le bit le plus à gauche toujours, il faut placer le 3ème bit qui représente 9, c'est-à-dire `0`
+- 4ème mot : encore sur le bit le plus à gauche, il faut placer le 4ème et dernier bit qui représente 9, c'est-à-dire `1`
 
 Ce qui donne pour ces 4 premiers mots le valeurs suivantes, en binaire.
 
@@ -222,7 +222,7 @@ ont très souvent une largeur de 16 pixels, car ils se manipulent ainsi d'un seu
 
 > Fred : "Et si je veux refaire le même motif pour les 16 pixels suivants ?"
 
-Facile : tu copies les 4 mots à une adresse située à 4 mots (64 bits) de décalalage, c'est à dire 8 octets plus loin, et ainsi de suite.
+Facile : tu copies les 4 mots à une adresse située à 4 mots (64 bits) de décalalage, c'est-à-dire 8 octets plus loin, et ainsi de suite.
 
 Sur une ligne à l'écran, tu as donc 20 blocs de 16 pixels. Chaque bloc prend 8 octets (64 bits, 4 mots).
 Une ligne est donc composée de 160 octets.
