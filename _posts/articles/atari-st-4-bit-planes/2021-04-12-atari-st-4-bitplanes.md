@@ -332,7 +332,7 @@ void DisplayScreen()
         0b1100000000000001
     };
 
-    // not optimized, but better for comprehension
+    // not optimized, but better for understanding
     // 20 block * 200 lines = 4000 iterations
     for(int i = 0 ; i < 4000 ; i ++)
     {
