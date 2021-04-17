@@ -52,8 +52,8 @@ pour préciser la référence de quelle couleur est à afficher. Et oui, 4 bits 
 
 Petit rappel si jamais cela devait être nécessaire :
 
-| Décimal | Binaire | Hexadecimal |
-|---------|---------|-------------|
+| Décimal | Binaire | Hexa |
+|--------:|--------:|:----:|
 | `0`     | `0000`  | `0`         |
 | `1`     | `0001`  | `1`         |
 | `2`     | `0010`  | `2`         |
