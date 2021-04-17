@@ -79,7 +79,7 @@ Petit rappel si jamais cela devait être nécessaire :
 ## La palette et le codage des couleurs
 
 La palette de l'Atari ST est située à l'adresse non modifiable `$FF8240`. En C je dispose
-de fonction qui appelleront directement des fonctionnalités du TOS pour récupérer affecter des valeurs
+de fonctions qui appelleront directement des fonctionnalités du TOS pour récupérer affecter des valeurs
 à la palette voire même de définir une nouvelle palette par copie d'une structure équivalente.
 
 Chaque couleur est exprimée sur 16 bits, c'est à dire 2 octets, ou encore 1 *word* (mot).
