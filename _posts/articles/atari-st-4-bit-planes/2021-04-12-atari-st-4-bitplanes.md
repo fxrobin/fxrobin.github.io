@@ -30,7 +30,7 @@ Minute Papillon ! Retour en 1985, Nom de Zeus ! Tu n'as que 16 couleurs à ta di
 parmis 4096 si tu es le chanceux propriétaire d'un STE ou seulement 512 pour les ST et STF.
 
 Et en plus tu vas rire, mais pour changer la couleur d'1 pixel à l'écran tu vas devoir manipuler
-des bits différents sur 8 octets !
+des bits différents sur 4 octets distincts !
 
 > Fred : "Mais ! Euh !!! C'est compliqué !"
 
