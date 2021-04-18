@@ -215,6 +215,11 @@ __uint16_t pixels[4] =
     };
 ```
 
+Pour résumer, nous avons fait ceci (j'ai supprimé de ce schéma les bits et les couleurs que nous n'avons
+pas utilisés dans cet exemple, même si le noir, en 0, est bien une couleur !)
+
+![Schema](/images/atari-st-4-bitplanes/schema-4-bitplanes.png){: .fakescreen}
+
 > Fred : "En fait, c'est simple mais pour changer 1 pixel, il faut manipuler 4 octets répartis sur 4 mots !"
 
 Oui c'est un peu compliqué, il faut bien l'avouer, c'est l'une des raisons pour laquelle les "sprites" sur Atari ST
