@@ -181,7 +181,7 @@ sur le premier mot, et le bit de poids fort sur le second mot.
 
 C'est un peu comme si tu distribuais des cartes à différents joueurs :
 
-- les cartes, ce sont les "bits" de l'index de la couleur dans palette, et les joueurs, ce sont les 4 mots consécutifs.
+- les cartes, ce sont les "bits" de l'index de la couleur dans palette,
 - les joueurs, ce sont les 4 mots consécutifs.
 
 > Fred : "Ouah mais c'est la galère ! Et comment je fais pour avoir du vert à côté du rouge maintenant ?"
