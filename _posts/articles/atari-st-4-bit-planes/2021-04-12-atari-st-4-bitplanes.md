@@ -48,12 +48,12 @@ L'adresse de cette zone mémoire peut varier. En effet à l'initialisation, la f
 - avec un ST équipé de 4 Mo de RAM, elle se situe à l'adresse `3F8000` ;
 - alors qu'elle se situe à l'adresse `F8000` pour un ST équipé d'un seul méga octet.
 
-De plus plus, en pratique, l'adresse de la mémoire vidéo est changeable avec certaines contraintes dans le cas du ST (le STE n'aura pas ces contraintes), mais ceci est un autre sujet que je n'aborderai pas ici (*double buffering*, etc.).
+De plus, en pratique, l'adresse de la mémoire vidéo est changeable avec certaines contraintes dans le cas du ST (le STE n'aura pas ces contraintes), mais ceci est un autre sujet que je n'aborderai pas ici (*double buffering*, etc.).
 
 Cette zone mémoire fait 32 000 octets, c'est à dire un peu moins de 32 Ko, puique 1 Ko = 1024 octets. 
 
 Etant donné qu'un pixel à l'écran fait référence à une couleur parmi 16, seuls 4 bits sont nécessaires par pixel
-pour préciser la référence de quelle couleur est à afficher. Et oui, 4 bits == 16 valeurs possibles (de 0 à 15)
+pour préciser la référence de la couleur à afficher. Et oui, 4 bits == 16 valeurs possibles (de 0 à 15)
 
 Petit rappel si jamais cela devait être nécessaire :
 
@@ -79,20 +79,24 @@ Petit rappel si jamais cela devait être nécessaire :
 ## La palette et le codage des couleurs
 
 La palette de l'Atari ST est située à l'adresse non modifiable `$FF8240`. En C je dispose
-de fonctions qui appelleront directement des fonctionnalités du TOS pour récupérer affecter des valeurs
-à la palette voire même de définir une nouvelle palette par copie d'une structure équivalente.
+de fonctions qui appelleront directement des fonctionnalités du TOS pour récupérer (*read*), affecter (*write*) des valeurs
+à la palette, voire même de définir une nouvelle palette complète par copie d'une structure équivalente.
 
 Chaque couleur est exprimée sur 16 bits, c'est-à-dire 2 octets, ou encore 1 *word* (mot).
 Il y a donc 32 octets utilisés pour la palette (16 couleurs * 2 octets).
-
 
 Ces 16 bits permettent de spéficier la valeur "RGB" (Red Green Blue) de la couleur.
 
 En réalité, seuls les 12 bits de poids faibles seront vraiment utilisés sur STE, et seulement 9 bits répartis sur les 12 bits dans le cas d'un ST/STF.
 
-Chaque composante de couleur peut aller de 0 à 7 dans le cas d'un Atari ST et de 0 à F (avec une petite astuce) pour le STE. Nous allons nous concentrer sur le ST "Normal", sachant que les couleurs définies ainsi sont compatibles avec l'Atari STE.
+Chaque composante de couleur peut aller de :
 
-On remarque qu'il y a donc 8 valeurs possibles (de 0 à 7) pour chaque composante. Ce qui fait 8 x 8 x 8 = 512 couleurs possibles.
+- 0 à 7 (3 bits) dans le cas d'un Atari ST 
+- de 0 à F (4 bits) pour le STE. 
+  
+Nous allons nous concentrer sur le ST "Normal", sachant que les couleurs définies ainsi sont compatibles avec l'Atari STE.
+
+On remarque qu'il y a donc 8 valeurs possibles (de 0 à 7) pour chaque composante. Ce qui fait 8 x 8 x 8 = 512 couleurs possibles. 
 
 Voici quelques exemples pour représenter certaines couleurs :
 
