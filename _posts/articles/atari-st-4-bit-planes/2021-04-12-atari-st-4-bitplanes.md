@@ -185,7 +185,7 @@ __uint16_t pixels[4] =
     };
 ```
 
-J'ai disposé volontairement les mots les uns en dessous des autres. Regarde la première colonne.
+J'ai disposé volontairement les mots les uns en dessous des autres. Regarde la première colonne (après `0b`) !
 On y voit le nombre `1001` en vertical, sachant que le bit de poids faible de ce nombre est placé
 sur le premier mot, et le bit de poids fort sur le second mot.
 
@@ -197,7 +197,7 @@ C'est un peu comme si tu distribuais des cartes à différents joueurs :
 > Fred : "Ouah mais c'est la galère ! Et comment je fais pour avoir du vert à côté du rouge maintenant ?"
 
 Et bien le vert dans notre palette, c'est la couleur 10, qui se note `1010` en binaire.
-On refait donc la même manipulation sur chaque mot, mais cette fois-ci sur chacun des bits situés à 1 décallage à droite du bit de poids fort, ceux qui nous a permis d'indiquer la couleur rouge.
+On refait donc la même manipulation sur chaque mot, mais cette fois-ci sur chacun des bits situés à 1 décallage à droite du bit de poids fort, ceux qui nous a permis d'indiquer la couleur rouge. Je place aisni successivement les bits `1010` répartis sur la 2ème colonne de chacun des mots.
 
 ```c
 __uint16_t pixels[4] =
@@ -420,7 +420,7 @@ Puis après avoir appuyé sur la touche `ENTREE` retour au *Desktop* avec la bon
 
 Tu vois c'était pas si compliqué.
 
-> Fred : "Mais c'est aussi parce que tu expliques trop bien ..."
+> Fred : "Mais c'est aussi parce que tu expliques trop bien..."
 
 Tu vas me faire rougir ! Et tu sais quoi, tout ce que tu viens de comprendre est aussi valable sur ton Amiga, qui, il
 me faut l'avouer même si cela m'est difficile, est un peu plus puissant que mon Atari ST sur ce point. En effet, sur ton Amiga, tu peux avoir une palette de 64 couleurs en 320x256 qui utilise 6 bitplanes où 1 pixel est réparti sur 6 mots !
