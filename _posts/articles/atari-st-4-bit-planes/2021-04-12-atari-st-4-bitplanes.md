@@ -52,8 +52,14 @@ De plus, en pratique, l'adresse de la mémoire vidéo est changeable avec certai
 
 Cette zone mémoire fait 32 000 octets, c'est à dire un peu moins de 32 Ko, puique 1 Ko = 1024 octets. 
 
+En C, je dispose d'une function `Logbase()` qui me retournera le pointer vers cette zone mémoire.
+
+```c
+videoAddress = Logbase();
+```
+
 Etant donné qu'un pixel à l'écran fait référence à une couleur parmi 16, seuls 4 bits sont nécessaires par pixel
-pour préciser la référence de la couleur à afficher. Et oui, 4 bits == 16 valeurs possibles (de 0 à 15)
+pour préciser la référence de la couleur à afficher. Et oui, 4 bits == 16 valeurs possibles (de 0 à 15). 
 
 Petit rappel si jamais cela devait être nécessaire :
 
