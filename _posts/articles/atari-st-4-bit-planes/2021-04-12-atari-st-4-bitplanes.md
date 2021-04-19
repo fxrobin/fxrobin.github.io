@@ -434,7 +434,7 @@ Voilà, c'est bien comme cela.
 
 ## Remerciements
 
-Je tiens, une nouvelle fois, à remercier Vincent Rivière pour la relecture attentive de cet article et pour ses conseils bienveillants.
+Je tiens à remercier Lyloo et Vincent Rivière pour leur relecture attentive de cet article et pour leurs conseils bienveillants.
 
 - Chaine Youtube Vretrocomputing de Vincent Rivière : <https://www.youtube.com/c/Vretrocomputing>
 - Page Facebook Vretrocomputing : <https://www.facebook.com/Vretrocomputing/>
