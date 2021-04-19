@@ -17,7 +17,7 @@ avec nos ordinateurs "modernes", où la structure en mémoire est très simple e
 Cet article, illustré de programmes en C, va vous permettre de comprendre ENFIN cet agencement
 particulièrement étonnant pour ne pas dire étrange.
 
-Retouvez mon ami Fred, qui a délaissé un peu son Amiga pour venir du côté obscur de l'Atari ST,
+Retrouvez mon ami Fred, qui a délaissé un peu son Amiga pour venir du côté obscur de l'Atari ST,
 dans sa quête d'affichage de pixels !
 </div>
 <!--excerpt-->
