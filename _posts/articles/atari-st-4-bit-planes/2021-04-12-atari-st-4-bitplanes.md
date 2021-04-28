@@ -42,7 +42,7 @@ temps pour le moment !
 
 ## La mémoire vidéo
 
-A l'initialisation de l'Atari ST, une zone de la mémoire est réservée et contient l'information d'affichage des pixels affichés à l'écran. Je ne vais évoquer dans cet article que de l'affichage en basse résolution, c'est à dire en 320x200 16 couleurs.
+A l'initialisation de l'Atari ST, une zone de la mémoire est réservée et contient l'information d'affichage des pixels affichés à l'écran. Je ne vais évoquer dans cet article que l'affichage en basse résolution, c'est à dire en 320x200 16 couleurs.
 
 L'adresse de cette zone mémoire peut varier. En effet à l'initialisation, la fin de la RAM est allouée. Cela dépend donc de la taille de la mémoire : 
 - avec un ST équipé de 4 Mo de RAM, elle se situe à l'adresse `3F8000` ;
