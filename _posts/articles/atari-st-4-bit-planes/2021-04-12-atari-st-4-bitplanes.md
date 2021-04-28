@@ -100,7 +100,7 @@ Chaque composante de couleur peut aller de :
 - 0 à 7 (3 bits) dans le cas d'un Atari ST 
 - de 0 à F (4 bits) pour le STE, mais avec un agencement spécifique qui ne se suit pas de 0 à F de manière naturelle et classique. 
   
-En effet, sur STE, afin d'être compatible avec le ST mais aussi de permettre 4096 nuances par rapport à 512, les valeurs entre 8 et F sont réparties de la sorte, de la plus petite à la plus élevée : `0, 8, 1, 9, 2, A, 3, B, 4, C, 5, D, 6, E, 7, F`. Les valeurs supplémenaires pour STE sont ainsi intercallées dans les valeurs possibles du ST.
+En effet, sur STE, afin d'être compatible avec le ST mais aussi de permettre 4096 nuances par rapport à 512, les valeurs entre 8 et F sont réparties de la sorte, de la plus petite à la plus élevée : `0, 8, 1, 9, 2, A, 3, B, 4, C, 5, D, 6, E, 7, F`. Les valeurs supplémentaires pour STE sont ainsi intercallées dans les valeurs possibles du ST.
   
 Nous allons nous concentrer exclusivement sur une palette en mode ST "Normal", sachant que les couleurs définies ainsi sont compatibles avec l'Atari STE.
 
