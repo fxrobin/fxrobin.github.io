@@ -51,7 +51,7 @@ A ce jour, je possède toujours cette seule et unique console et ses jeux, car p
 
 En 1984, à 9 ans (les plus forts d'entre vous auront ainsi découvert mon année de naissance au moyen de l'outil mathématique nommé "soustraction") j'ai découvert le développement grâce au THOMSON TO7-70 au fond de la classe de mon école primaire. C'est le déclic grâce au LOGO, au BASIC 1.0, le crayon optique, les cartouches ! Je demande même à l'institutrice de passer quelques récréations sur le TO7 plutôt que d'aller jouer aux billes dans la cours d'école.
 
-A 10 ans, mes parents m'offrent un THOMSON MO5 : 32 Ko de mémoire, sauvegarde cassette, crayon optique. Quand on est seul avec quelques livres (basic, assembleur) c'est l'école de la découverte permanente, des tests, des plantages, des resets et de l'optimisation du code. Et oui 32 Ko et 1 MHz de fréquence, cela nécessite quelques astuces.
+A 10 ans, mes parents m'offrent un THOMSON MO5 : 32 Ko de mémoire (48 Ko de RAM, 16 Ko de ROM), sauvegarde cassette, crayon optique. Quand on est seul avec quelques livres (basic, assembleur) c'est l'école de la découverte permanente, des tests, des plantages, des resets et de l'optimisation du code. Et oui 48 Ko et 1 MHz de fréquence, cela nécessite quelques astuces.
 
 A ce jour (30 ans plus tard), j'ai toujours ce goût de l'optimisation et de l'octet bien utilisé.
 
@@ -63,11 +63,11 @@ Parmis les divers petits programmes réalisés :
 * une gestion d'adhérents pour le club de tennis de mon père (avec sauvegarde cassette)
 * un jeu genre "X-Wing" où des chasseurs TIE passent dans le viseur (si on pilote bien) et que l'on peut détruire bien sûr.
 
-Malheureusement, je n'ai plus aucun code source de cette époque ...
+Malheureusement, je n'ai plus aucun code source de cette époque.
 
 Vous pouvez aussi aller jeter un oeil sur [comment assembler un programme pour MO5 à partir de Linux](/6809-thomson-mo5-assembly-linux).
 
-A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz de fréquence d'horloge, mais 256 Ko de RAM et surtout un lecteur de disquettes double faces. 360 Ko par face ! C'est la profusion d'octets ! Pendant toute cette période mes langages sont donc le BASIC 1.0 puis le BASIC 512 (les deux codés par Microsoft) ainsi que l'assembleur 6809 ! Les fameuses "Routines" ...
+A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz de fréquence d'horloge, mais 256 Ko de RAM, 80Ko de ROM et surtout un lecteur de disquettes double faces. 360 Ko par face ! C'est la profusion d'octets ! Pendant toute cette période mes langages sont donc le BASIC 1.0 puis le BASIC 512 (les deux codés par Microsoft) ainsi que l'assembleur 6809 ! Les fameuses "Routines" ...
 
 ![TO8](/images/to8.png)
 
