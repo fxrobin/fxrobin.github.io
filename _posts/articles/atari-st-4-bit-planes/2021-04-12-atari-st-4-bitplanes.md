@@ -423,7 +423,7 @@ Puis après avoir appuyé sur la touche `ENTREE` retour au *Desktop* avec la bon
 
 ## Conclusion
 
-Tu vois c'était pas si compliqué.
+Tu vois, ce n'était pas si compliqué.
 
 > Fred : "Mais c'est aussi parce que tu expliques trop bien..."
 
