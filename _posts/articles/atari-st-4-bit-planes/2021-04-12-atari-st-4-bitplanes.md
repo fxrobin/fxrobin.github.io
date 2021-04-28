@@ -84,7 +84,7 @@ Petit rappel si jamais cela devait être nécessaire :
 
 ## La palette et le codage des couleurs
 
-La palette de l'Atari ST est située à l'adresse non modifiable `$FF8240`. En C je dispose
+La palette de l'Atari ST est située à l'adresse fixe `$FF8240`. En C je dispose
 de fonctions qui appelleront directement des fonctionnalités du TOS pour récupérer (*read*), affecter (*write*) des valeurs
 à la palette, voire même de définir une nouvelle palette complète par copie d'une structure équivalente.
 
@@ -98,9 +98,11 @@ En réalité, seuls les 12 bits de poids faibles seront vraiment utilisés sur S
 Chaque composante de couleur peut aller de :
 
 - 0 à 7 (3 bits) dans le cas d'un Atari ST 
-- de 0 à F (4 bits) pour le STE. 
+- de 0 à F (4 bits) pour le STE, mais avec un agencement spécifique qui ne se suit pas de 0 à F de manière naturelle et classique. 
   
-Nous allons nous concentrer sur le ST "Normal", sachant que les couleurs définies ainsi sont compatibles avec l'Atari STE.
+En effet, sur STE, afin d'être compatible avec le ST mais aussi de permettre 4096 nuances par rapport à 512, les valeurs entre 8 et F sont réparties de la sorte, de la plus petite à la plus élevée : `0, 8, 1, 9, 2, A, 3, B, 4, C, 5, D, 6, E, 7, F`. Les valeurs supplémenaires pour STE sont ainsi intercallées dans les valeurs possibles du ST.
+  
+Nous allons nous concentrer exclusivement sur une palette en mode ST "Normal", sachant que les couleurs définies ainsi sont compatibles avec l'Atari STE.
 
 On remarque qu'il y a donc 8 valeurs possibles (de 0 à 7) pour chaque composante. Ce qui fait 8 x 8 x 8 = 512 couleurs possibles. 
 
@@ -377,6 +379,9 @@ int main(int argc, char *argv[])
     return 0;
 }
 ```
+
+> Nota : l'usage de libcmini m'impose de mettre `\r\n` pour avoir un retour à la ligne correct dans la fonction `DisplayInfo` , mais ce n'est pas 
+> le comportement normal de `printf`.
 
 Pour le compiler, ce Makefile :
 
