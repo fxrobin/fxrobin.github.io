@@ -5,13 +5,15 @@
 html {
     font-size: 100%;
 }
+
+
   
   body {
     background: url('/images/3132.jpg') no-repeat center center fixed;
     background-size : cover;
     font: 1em $helvetica;
     color: $darkGray;
-    cursor: url("/images/mouse-pointer-amiga-v2.png"), auto;
+    cursor: url("/images/atari-st-mouse-pointer.png"), auto;
     
     @include mobile {
       font-size: 0.8em;
@@ -62,7 +64,7 @@ html {
   a {
     color: $blue;
     text-decoration: none;
-      cursor: pointer;
+    cursor: url("/images/atari-st-mouse-pointer.png"), auto;
     &:hover, &:active {
       color: $blue;
     }
