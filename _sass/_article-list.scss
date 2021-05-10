@@ -1,5 +1,6 @@
 /* ARTICLE LIST CSS */
 
+/*
 #article-list:before
 {
   content:url('/images/croco-amstrad.gif');
@@ -7,6 +8,7 @@
   margin-top : -32px;
   margin-left : -32px;
 }
+*/
 
 #article-list
 {   
@@ -26,12 +28,13 @@
   
   .article-list-header 
   {
-    font-family : "atari";
+    font-family : "thomson";
     text-align : center; 
     text-shadow: 1px 1px 1px #DDDDDD;
+    text-transform: uppercase;
     color : #3333AA;
-    margin-bottom : 1em;
-    font-size : 1.4em;
+    font-size : 2.5em;
+    letter-spacing: 0.2em;
   }
   
   .article-list-entry

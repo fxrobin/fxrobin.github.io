@@ -31,7 +31,7 @@ t:
                 text: "Articles"
             retro-programming:
                 url: "/retro-programming/"
-                text: "Retro-Programming"
+                text: "Retro-Prog"
             blanka: 
                 url: "/blanka-cave/fr/"
                 text: "Grotte de Blanka"
@@ -63,7 +63,7 @@ t:
                 text: "Articles"
             retro-programming:
                 url: "/retro-programming/"
-                text: "Retro-Programming"
+                text: "Retro-Prog"
             blanka: 
                 url: "/blanka-cave/en/"
                 text: "Blanka Cave"
