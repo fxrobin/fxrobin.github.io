@@ -64,7 +64,7 @@ html {
   a {
     color: $blue;
     text-decoration: none;
-    cursor: url("/images/atari-st-mouse-pointer.png"), auto;
+    cursor: url("/images/atari-st-mouse-hand.png"), auto;
     &:hover, &:active {
       color: $blue;
     }
