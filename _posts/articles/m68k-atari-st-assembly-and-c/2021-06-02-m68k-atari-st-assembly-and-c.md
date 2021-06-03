@@ -97,7 +97,7 @@ void main()
 et côté assembleur :
 
 Fichier : `asm_functions.s`
-```
+```armasm
 ; ------------------------------------------------------------
 ; Declaration of the ASM function to be called from C 
 ; ------------------------------------------------------------
@@ -157,7 +157,7 @@ void helloPalaceSoftware()
 ```
 
 Fichier `asm_functions.s`
-```
+```armasm
 ; ------------------------------------------------------------
 ; Declaration of the C function to be called from ASM 
 ; ------------------------------------------------------------
@@ -218,7 +218,7 @@ Dans cet exemple la pile contient :
 Pour récupérer les arguments, il faut donc se décaler au préalable de 4 octets pour se déplacer au delà de l'adresse de retour de la routine.
 
 Fichier `asm_functions.s`
-```
+```armasm
 ; -----------------------------------------------------------------------------
 ; Declaration of the C function to be called from ASM 
 ; -----------------------------------------------------------------------------
@@ -312,7 +312,7 @@ Dans le fichier suivant, les exemples sont un peu plus fournis que dans les expl
 sont foncièrement équivalents.
 
 Fichier `asm_functions.s`
-```
+```armasm
 ; -------------------------------------------------------------------------------
 ; -- Declaring C functions to be called by ASM	
 ; -------------------------------------------------------------------------------
