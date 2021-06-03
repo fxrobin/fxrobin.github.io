@@ -27,7 +27,7 @@ Le fichier exécutable sera exécuté avec l'émulateur HATARI comme dans l'arti
 en C](/m68k-cross-compiling/).
 
 *Spoiler* : Je me servirai de tout cela pour implémenter une routine Timer A
-dans le cadre de la lecture de fichiers de musique YM-2149 `YM3!` à 50 Hz, dans un futur tutoriel...
+dans le cadre de la lecture de fichiers de musique YM-2149 au format "`YM3!`" à 50 Hz, dans un futur tutoriel...
 </div>
 <!--excerpt-->
 
@@ -58,7 +58,7 @@ Le but de ce tutoriel est de montrer les cas simples suivants :
 
 - Cas ALPHA   : du code C qui appelle une fonction simple écrite en assembleur.
 - Cas BRAVO   : du code assembleur qui appelle une fonction simple en C.
-- Cas CHARLIE : du code C qui appelle une fonction avec des paramètres en entrée et qui retourne une valeur.
+- Cas CHARLIE : du code C qui appelle une fonction assembleur avec des paramètres en entrée et qui retourne une valeur.
 
 > Attention, il s'agit bien de code C et non pas de C++ pour lequel il y aurait quelques
 > subilités supplémentaires avec l'usage `extern "C" { }` .
@@ -181,12 +181,12 @@ courante de la *stack*.
 
 Il y a de très bonnes explications sur le fonctionnement de la pile, données par Vincent Rivière dans le cadre de ses
 [tutoriels assembleur](https://www.youtube.com/watch?v=w9G-DidbTeU&list=PLpqOJeWrMJfRF8UMTGOHvmcagQlvo-zUo) ainsi que dans 
-les [cours ASM de Feroce Lapin](http://www.labibleatari.fr/pages/disque/programmation/assembleur/cours/ferocelapincoursserie1.html).
+les [cours ASM](http://www.labibleatari.fr/pages/disque/programmation/assembleur/cours/ferocelapincoursserie1.html) de Feroce Lapin.
 
 Dans notre cas, Le code ASM récupéra les 2 arguments (a et b) sur la *stack* et retournera la valeur dans le registre `D0`.
 
 Je ne vais donc donner ici que quelques détails supplémentaires :
-- l'accès au argumùents sur la *stack* doit être décalé de 4 octets car, avant de detenir les arguments, elle contient l'adresse de retour nécessaire à l'instruction `RTS`. Cette adresse est placée de manière transparente par l'appel de fonction C.
+- l'accès aux arguments sur la *stack* doit être décalé de 4 octets car, avant de détenir les arguments, elle contient l'adresse de retour nécessaire à l'instruction `RTS`. Cette adresse est placée de manière transparente par l'appel de fonction C.
 - chaque argument est placé sur la *stack* en partant de son argument le plus à droite ;
 - chaque argument occupe systématiquement 32 bits (4 octets) sur la *stack*, quelque soit la précision de l'argument. Ex: un argument de type `char` (8 bits) occupera quand même 32 bits sur *stack*. La valeur réelle étant placée, bien évidemment, sur l'octet de poids faible.
 - la valeur de retour sera à placer dans le registre `D0` avant l'instruction `RTS`.
@@ -212,9 +212,9 @@ Dans cet exemple la pile contient :
 (SP)   -> $ 4 bytes : $<adresse de retour> 
 ```
 
-Pour récupérer les arguments, il faut donc se décaller au préalable de 4 octets pour se déplacer au dela de l'adresse de retour de la routine.
+Pour récupérer les arguments, il faut donc se décaler au préalable de 4 octets pour se déplacer au delà de l'adresse de retour de la routine.
 
-fichier `asm_functions.s`
+Fichier `asm_functions.s`
 ```
 ; -----------------------------------------------------------------------------
 ; Declaration of the C function to be called from ASM 
@@ -299,7 +299,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-Ne pretez pas trop attention à `fx_screen.h`. Il contient simplement quelques fonctions pour basculer en mode
+Ne prêtez pas trop attention à `fx_screen.h` et `fx_screen.c`. Ils contiennent simplement quelques fonctions et constantes pour basculer en mode
 "MOYENNE RESOLUTION", sauvegarder la palette, et puis revenir proprement au DESKTOP GEM.
 
 Comme j'utilise `libcmini`, je suis obligé de coder `\r\n` au lieu de `\n` même si cela n'est pas le comportement
@@ -421,7 +421,7 @@ ASMFLAGS=-Faout -quiet -x -m68000 -spaces -showopt
 # GCC PARAMETERS
 LIBCMINI=./libcmini
 CC=m68k-atari-mint-gcc
-CFLAGS=-c -std=gnu99 -I$(LIBCMINI)/include
+CFLAGS=-c -std=gnu99 -I$(LIBCMINI)/include -g
 
 # LINKER PARAMETERS
 LINKFLAGS=-nostdlib -s -L$(LIBCMINI)/lib -lcmini -lgcc -Wl,--traditional-format
@@ -539,9 +539,11 @@ $ m68k-atari-mint-nm ./build/main.o
 
 Comme annoncé en introduction, je me servirai des ces éléments pour coder une routine qui joue des fichier `.ym` pour notre YM-2149.
 En effet, la partie principale de ce futur programme sera codé en C, mais il y aura quelques aller-retours avec du code assembleur notamment
-pour déclarer une routine Timer A exécutée 50 fois par secondes (50 Hz).
+pour déclarer une routine Timer A exécutée 50 fois par seconde (50 Hz).
 
 Ceci sera dans le prochain épisode !
+
+> Je remercie Lyloo & Vincent Rivière pour leur relecture attentive de cet article.
 
 ## Liens
 
