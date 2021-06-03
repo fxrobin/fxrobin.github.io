@@ -537,7 +537,7 @@ $ m68k-atari-mint-nm ./build/main.o
 
 ## Conclusion
 
-Comme annoncé en introduction, je me servirai des ces éléments pour coder une routine qui joue des fichier `.ym` pour notre YM-2149.
+Comme annoncé en introduction, je me servirai de ces éléments pour coder une routine qui joue des fichier `.ym` pour notre YM-2149.
 En effet, la partie principale de ce futur programme sera codé en C, mais il y aura quelques aller-retours avec du code assembleur notamment
 pour déclarer une routine Timer A exécutée 50 fois par seconde (50 Hz).
 
