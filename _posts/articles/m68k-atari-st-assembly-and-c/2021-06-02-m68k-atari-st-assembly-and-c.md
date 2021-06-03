@@ -424,7 +424,7 @@ CC=m68k-atari-mint-gcc
 CFLAGS=-c -std=gnu99 -I$(LIBCMINI)/include
 
 # LINKER PARAMETERS
-LINKFLAGS=-nostdlib -s -L$(LIBCMINI)/lib -lcmini -lgcc
+LINKFLAGS=-nostdlib -s -L$(LIBCMINI)/lib -lcmini -lgcc -Wl,--traditional-format
 
 all: prepare dist
 
