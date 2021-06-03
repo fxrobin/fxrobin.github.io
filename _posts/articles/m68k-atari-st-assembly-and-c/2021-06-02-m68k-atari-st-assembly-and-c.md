@@ -64,7 +64,7 @@ Le but de ce tutoriel est de montrer les cas simples suivants :
 > Attention, il s'agit bien de code C et non pas de C++ pour lequel il y aurait quelques
 > subilités supplémentaires avec l'usage `extern "C" { }` .
 
-Les différents codes sources présentés dans cet article sont disponible sur  GitHub : {%include github.html repository="fxrobin/atari-st-stuffs/tree/main/c_and_asm" %}
+Les différents codes sources présentés dans cet article sont disponibles sur  GitHub : {%include github.html repository="fxrobin/atari-st-stuffs/tree/main/c_and_asm" %}
 
 ## Cas ALPHA : appel ASM depuis du C
 
