@@ -412,7 +412,7 @@ MSG_PREFIX:
 ```
 
 Fichier `Makefile`
-```
+```make
 SOURCES_DIR=./src
 BUILD_DIR=./build
 DIST_DIR=./dist
