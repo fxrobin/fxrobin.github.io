@@ -546,7 +546,7 @@ pour déclarer une routine Timer A exécutée 50 fois par seconde (50 Hz).
 
 Ceci sera dans le prochain épisode !
 
-> Je remercie Lyloo & Vincent Rivière pour leur relecture attentive de cet article.
+> Je remercie Lyloo la relecture attentive de cet article.
 
 ## Liens
 
