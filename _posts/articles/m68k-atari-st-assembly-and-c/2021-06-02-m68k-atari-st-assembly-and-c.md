@@ -41,7 +41,7 @@ Pour ce tutorial, vous aurez besoin :
 
 Je vous renvoie à mes articles concernant :
 
-- la [configuration de `vasm`](m68k-atari-st-assembly-linux)
+- la [configuration de `vasm`](/m68k-atari-st-assembly-linux)
 - la [configuration de `m68k-atari-mint-gcc`](/m68k-cross-compiling/)
 
 Pour compiler de l'assembleur Motorola 68000 (M68K), je vais utiliser `vasm`.
