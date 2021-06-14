@@ -12,8 +12,8 @@ ref: m68k-atari-st-assembly-and-c
 <div class="intro" markdown='1'>
 
 Il n'est pas rare de devoir mixer du code C et assembleur au sein d'un même programme.
-En effet, certains aspects sont plus simples et souvent tout aussi rapides à coder en C
-mais d'autres cas sont paradoxalement plus faciles à écrire à assembleur et souvent plus optimisés.
+En effet, si un programme est généralement plus simple à écrire en C, certains aspects sont 
+paradoxalement plus faciles à écrire en assembleur.
 
 L'idée est donc de pouvoir profiter du meilleur des deux mondes. 
 
