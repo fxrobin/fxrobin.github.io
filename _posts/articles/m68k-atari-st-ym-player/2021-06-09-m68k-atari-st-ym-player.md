@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Atari ST : Routines YM avec le Timer A en ASM et C'
-subtitle: Comment retrouver ce son "que les moins de vingt ans ne peuvent pas connaitre" ?
+subtitle: Comment retrouver ce son "que les moins de vingt ans ne peuvent pas connaître" ?
 logo: atari-rainbow.png
 category: articles
 tags: [Retro, Assembleur, Atari, Retro-Prog]
@@ -11,7 +11,7 @@ ref: m68k-atari-st-ym-player
 
 <div class="intro" markdown='1'>
 
-Je vous avais mis l'eau à la bouche, dans mon précédent article relatif aux [interactions entre C et Assembleurs](/m68k-atari-st-assembly-and-c), en vous disant que cela servirait à jouer de la musique sur le processeur audio de l'Atari ST, le YAMAHA-2149 (YM-2149) : *nous y voilà* !
+Je vous avais mis l'eau à la bouche, dans mon précédent article relatif aux [interactions entre C et Assembleurs](/m68k-atari-st-assembly-and-c), en annonçant que cela servirait à jouer de la musique sur le processeur audio de l'Atari ST, le YAMAHA-2149 (YM-2149) : *nous y voilà* !
 
 Dans ce tutoriel, nous verrons :
 
@@ -68,9 +68,9 @@ Pour sythétiser, je ne connaissais *pas grand chose* et donc j'espère que ce t
 
 Les documentations techniques sont nombreuses à ce sujet, cependant elles ne sont pas du tout digestes quand il s'agit de comprendre les concepts aussi bien liés au son, à la production de son et à la programmation du `YM-2149`. Pour synthéser, ces documents techniques, je les ai trouvés utiles à partir du moment où j'avais pu comprendre les concepts, c'est à dire : "pas au début".
 
-De plus, quand on parcourt les forums spécialisés, j'ai eu la douloureuse impression que tous les intervants maîtrisent le vocabulaire dédié et cela rend l'immersion d'autant plus difficile. En effet tous les codeurs présents semblent faire partie de la "scène démo-codeur" depuis des années, ce qui n'est pas non plus étonnant quand on repense au fait que l'Atari ST a plus de 35 ans d'existance.
+De plus, quand on parcourt les forums spécialisés, j'ai eu la douloureuse impression que tous les intervants maîtrisent le vocabulaire dédié et cela rend l'immersion d'autant plus difficile. En effet tous les codeurs présents semblent faire partie de la "scène démo-codeur" depuis des années, ce qui n'est pas non plus étonnant quand on repense au fait que l'Atari ST a plus de 35 ans d'existence.
 
-Ainsi, sans prétention, j'espère pouvoir vous mettre le pied à l'étrier, sans vous noyer dans les termes techniques. L'objectif est de jouer un fichier de musique au format populaire **YM** et que l'on obtienne ceci, histoire de vous tenir en haleine :
+Ainsi, sans prétention, j'espère pouvoir vous mettre le pied à l'étrier, sans vous noyer dans les termes techniques. L'objectif est de jouer un fichier de musique au format populaire et répa,du **YM** pour obtenir au final ceci, histoire de vous tenir en haleine :
 
 {%include video.html youtube-id="D1rf20psS1o"  size="normal" %}
 
