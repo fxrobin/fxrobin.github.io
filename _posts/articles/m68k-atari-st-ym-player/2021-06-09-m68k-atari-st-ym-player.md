@@ -380,25 +380,25 @@ La problématique que devra résoudre l'algorithme de lecture est la suivante :
 
 > Nota : on pourrait imaginer que le fichier soit lu et qu'il soit ré-agencé en mémoire afin de disposer de N séries (music frames) des 14 registres de manière contigüe. Cela consommerait 
 > de la mémoire le temps de cette transformation mais la structure en mémoire serait plus simple. De fait l'algorithme de lecture serait simple et peut-être plus rapide : lire un "paquet" 
-> de 14 octets représentants les 14 registres de manière contigüe et les envoyer au PSG. Toutefois, on ne peut envoyer que 1 octets à la fois, les un après les autres et dans tous les cas il faut 
+> de 14 octets représentants les 14 registres de manière contigüe et les envoyer au PSG. Toutefois, on ne peut envoyer que 1 octet à la fois, les un après les autres et dans tous les cas il faut 
 > aller lire les données entrelacées, donc nous n'allons pas mettre en place ce ré-agencement car le gain est trop faible.
 
 ## Algorithme de lecture du son
 
 L'algorithme de lecture du son assez simple, il tient en quelques lignes.
 
-Le principe est d'aller chercher les valeurs des 14 registres dans en mémoire de la manière suivantes :
+Le principe est d'aller chercher les valeurs des 14 registres en mémoire de la manière suivante :
 
-- Lire la valeur du registre R0 en fonction du la music frame courante (en décallant simplement l'adresse) ;
-- Puis, chaque valeur de chacun des autres registres (14 au total) doit être récupérée avec un décallage du nombre global de "music frames" ;
-- Pour chaque, valeur récupérée, il faut écrire aux adresses $FF8800 et $FF8802 pour programmer le YM-2149 ;
-- Enfin, il faut incrémenter le compteur de la "music frame courante" et ne pas la routine sur le compteur est égal ou supérieur au nombre total de "music frames".
+- Lire la valeur du registre R0 en fonction de la *music frame courante* (en décalant simplement l'adresse) ;
+- Puis, chaque valeur de chacun des autres registres (14 au total) doit être récupérée avec un décalage du nombre global de *music frames* ;
+- Pour chaque valeur récupérée, il faut écrire aux adresses `$FF8800` et `$FF8802` pour programmer le YM-2149 ;
+- Enfin, il faut incrémenter le compteur de la *music frame courante* et ne pas la routine sur le compteur est égal ou supérieur au nombre total de "music frames".
 
 Ainsi, il suffit de 3 variables globales :
 
 - `musicData` :l'adresse mémoire du buffer représentant les données du fichiers, en pointant sur le premier octet "utile", c'est à dire sans l'entête YM3! ou YM2!
-- `totalMusicFrames` : nombre total de "music frames" (14 octets à envoyer au YM-2149), calculé en fonction de la taille du fichier, mois les 4 octets d'entête.
-- `currentMusicFrame` : index courant de la "music frame" envoyé au YM-2149. 
+- `totalMusicFrames` : nombre total de *music frames* (14 octets à envoyer au YM-2149), calculé en fonction de la taille du fichier, mois les 4 octets d'entête.
+- `currentMusicFrame` : index courant de la *music frame* envoyé au YM-2149. 
 
 Algorithme général (en pseudo langage fictif, qui ressemble à du BASIC)
 
@@ -408,7 +408,7 @@ ADRESS PSG_REGISTER_DATA_ADDRESS  = $FF8802
 
 ADDRESS musicData = LOAD_FILE("my-music.ym") + 4 
 INTEGER totalMusicFrames = (FILE_SIZE("my-music.ym")) - 4) / 14
-INTEGER currentMusicFrames = 0
+INTEGER currentMusicFrame = 0
 
 DO_AT_FREQUENCY(50)
     WHILE (currentMusicFrame < totalMusicFrames>)
