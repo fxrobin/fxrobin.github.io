@@ -506,18 +506,20 @@ souhaitée.
 
 ## Théorie : Les Timers
 
-Encore une fois, dans cette section, je ne rentrerai pas dans le détails des Timers, mais juste ce qu'il faut pour
+Encore une fois, dans cette section, je ne rentrerai pas dans le détail des *Timers*, mais juste ce qu'il faut pour
 comprendre l'usage que nous allons en faire.
 
-En préambule, un timer est une sorte de "cadenceur" qui permet de déclencher du code à intervalle régulier.
+En préambule, un *timer* est une sorte de cadenceur qui permet de déclencher du code à intervalle régulier. C'est un peu comme un réveil-matin.
 
-Ains, un timer est configuré sur une fréquence d'éxécution et associé avec l'adresse d'une routine à lancer. Ce genre de routine est appelé "Exception", car il interrompt l'exécution du programme en cours momentanément.
 
-L'atari ST dispose de 4 timers : le Timer A, le Timer B, le timer C et le timer D. Chacun ayant quelques spécifités (compteur de lignes HBL, horloge 200 Hz, Horloge RS232), hormis le timer A, c'est ce dernier que nous utiliserons.
+
+Ainsi, un *timer* est configuré sur une fréquence d'exécution et associé à l'adresse d'une routine à lancer. Ce genre de routine est appelé "*Exception*", car il interrompt l'exécution du programme en cours momentanément.
+
+L'atari ST dispose de 4 timers : le Timer A, le Timer B, le Timer C et le Timer D. Chacun ayant quelques spécifités (compteur de lignes HBL, horloge 200 Hz, horloge RS-232), hormis le Timer A, c'est ce dernier que nous utiliserons.
 
 Il y a quelques subtilités à prendre en compte dans une telle routine mais cela fera l'objet de la prochaine section.
 
-La mise en place de la routine, c'est à dire son paramétrage, est fait au moyen de l'appel XBIOS via la Trap 14 et de sa routine #31 (xbtimer). Dans notre cas, je vais utiliser une fonction C, déjà présente dans `osbind.h` qui permet de spécifier la fréquence et la routine à appeler. Il est préférable de désactiver le système qui génère l'interruption en fonction du timer, le temps de son paramétrage.
+La mise en place de la routine, c'est à dire son paramétrage, est fait au moyen de l'appel XBIOS via la *Trap 14* et de sa routine `#31` (xbtimer). Dans notre cas, je vais utiliser une fonction C, déjà présente dans `osbind.h` qui permet de spécifier la fréquence et la routine à appeler. Il est préférable de désactiver le système qui génère l'interruption en fonction du timer, le temps de son paramétrage.
 
 Voici donc à quoi ressemble, en C, le paramétrage de la routine Timer A.
 
@@ -530,13 +532,13 @@ Jenabint(13);
 
 Explications :
 
-- `Jdisint(13)` : désactive les interruptions de niveau 13. Le timer A est une interruption de niveau 13.
-- `Xbtimer(0, 7, 246,  adresseRoutine)` : paramètre le timer A (0), avec une prédevision de fréquence à 7 (c'est à dire 1/200), et une division finale de 246, ce qui équivaut presque à 50 Hz, en mappant l'adresse de la routine dans le vecteur du timer A
+- `Jdisint(13)` : désactive les interruptions de niveau 13. Le Timer A est une interruption de niveau 13.
+- `Xbtimer(0, 7, 246,  adresseRoutine)` : paramètre le Timer A (0), avec une prédivision de fréquence à 7 (c'est à dire 1/200), et une division finale de 246, ce qui équivaut presque à 50 Hz, en mappant l'adresse de la routine dans le vecteur du timer A
 - `Jenabint(13)` : réactive les interruptions de niveau 13, dont le Timer A.
 
 > Mais c'est quoi ces valeurs de paramètres `7` et `246` ?
 
-Pour répondre à cette question, il faut se référer à la documentation du __MFP 68901 (Multi Function Peripheral)__, puce responsable de certains cadencements et notamment de celui des timers et donc du Timer A. Le MPF offre une cadence de base à `2,4576 MHz`. Il est possible de définir avec presque exactitude la fréquence souhaitée au moyen de 2 paramètres : le **prédiviseur** et le **diviseur**. 
+Pour répondre à cette question, il faut se référer à la documentation du __MFP 68901 (Multi Function Peripheral)__, puce responsable de certains cadencements et notamment de celui des *timers* et donc du Timer A. Le MPF offre une cadence de base à `2,4576 MHz`. Il est possible de définir la fréquence souhaitée au moyen de 2 paramètres : le **prédiviseur** et le **diviseur**. 
 
 Voici le tableau de définition du prédiviseur :
 
@@ -550,7 +552,7 @@ Voici le tableau de définition du prédiviseur :
 | `6`       | 1 / 100                   | 24 756 Hz        |          
 | `7`       | 1 / 200                   | 12 288 Hz        |          
 
-Ensuite, il faut d'appliquer un **diviseur** pour obtenir la fréquence souhaitée. Ce diviseur d'une précision de 8 bits.
+Ensuite, il faut d'appliquer un **diviseur** pour obtenir la fréquence souhaitée. Ce diviseur est d'une précision de 8 bits.
 
 Ainsi pour s'approcher au plus près de 50 Hz, il faut choisir la prédivision `7` : 12288 Hz, que l'on divise par 246, ce qui donne **49,95 Hz**.
 Si on utilise 245, on obtenient 50,15 Hz, ce qui est moins proche de notre cible à 50 Hz.
@@ -558,33 +560,33 @@ Si on utilise 245, on obtenient 50,15 Hz, ce qui est moins proche de notre cible
 > Nota : la valeur `0` du diviseur n'étant mathématiquement pas possible, elle représente `256`, mais cela n'a pas de conséquence sur ce tutoriel.
 > Ce qui permet d'obtenir la fréquence la plus basse possible pour un timer : `12 288 / 256 = 48 Hz`
 
-Enfin, pour arrêter la routine en fin de programme, il suffit de paramétrer le Timer A avec 0 et 0 en tant que pré-diviseur et diviseur de fréquence. L'adresse passé en paramètre est ignorée : `Xbtimer(0, 0, 0,  (void*) 0)`
+Enfin, pour arrêter la routine en fin de programme, il suffit de paramétrer le Timer A avec 0 et 0 en tant que pré-diviseur et diviseur de fréquence. L'adresse passée en paramètre est ignorée : `Xbtimer(0, 0, 0,  (void*) 0)`
 
 ## Implémenter une routine Timer A
 
-Comme précisé dans la section précédente, une routine type "Timer" est un peu spéciale :
+Comme précisé dans la section précédente, une routine type *Timer* est un peu spéciale :
 
-- Il faut veiller à bien sauvegarder l'ensemble des états des registres de données et d'addresse sauf, A7 (SP), bien évidemment, avant d'écriture la routine.
-- Il faut que la ne dure pas plus longtemps que la fréquence qui est spécifiée.
+- Il faut veiller à bien sauvegarder l'ensemble des états des registres de données et d'addresse sauf, A7 (SP), bien évidemment, avant d'écrire la routine.
+- Il faut que la routine ne dure pas plus longtemps que la fréquence qui est spécifiée (dans notre cas 20 ms)
 - Il faut restorer l'état des registres sauvegardés précédemment.
-- Il faut que la routine signale qu'elle est terminée en mettant à zéro un bit spécifique d'un registre mémoire assigné à l'état des exceptions. Dans le cas du timer A, c'est le 5 ème bit du registre `$FFFFFA0F`. Nota : dans le libre du développeur vol. 2, ce bit est appelé __le bit mystérieux__.
+- Il faut que la routine signale qu'elle est terminée en mettant à zéro un bit spécifique d'un registre mémoire assigné à l'état des exceptions. Dans le cas du Timer A, c'est le 5ème bit du registre `$FFFFFA0F`. Nota : dans le *Livre du Développeur vol. 2*, ce bit est appelé __le bit mystérieux__.
 - Il faut terminer la routine par l'instruction `RTE` (return from exception) et non pas `RTS`.
 
-Voici donc le canvas d'une routine de type Timer A :
+Voici donc le canvas d'une routine de type Timer A en Assembleur :
 
 ```armasm
     MOVEM.L		D0-A6,-(SP)         ; saves registers
 
     ; ... Do the real JOB HERE ... but do it fast !
 
-	BCLR.B 	#5, $FFFFFA0F     	; effacer le bit d'interruption de service : bit 5 du timer A
+	BCLR.B 	#5, $FFFFFA0F     	; clear 5th bit of the service register
 	MOVEM.L	(SP)+,D0-A6   		; restore registers
 	RTE                         ; Return from exception : end of Timer A interrupt
 ```
 
 Simple non ?
 
-> Mais en C ? On fait comment pour faire une function qui se termine par un RTE et non pas un RTS ?
+> Mais en C ? On fait comment pour faire une fonction qui se termine par un RTE et non pas un RTS ?
 
 Pas de panique tout est prévu. Il suffit d'aposer `__attribute__((interrupt))` dans la déclaration de la fonction.
 Facile++; !
@@ -610,7 +612,7 @@ void __attribute__((interrupt)) timerA_Routine_C()
 
 Je vous propose ici deux versions, l'une en C, l'autre en assembleur
 
-### La routine timer A version C
+### La routine Timer A version C
 
 ```c
 #define PSG_REGISTER_INDEX_ADDRESS (__uint8_t *)0xFF8800
@@ -639,9 +641,9 @@ void __attribute__((interrupt)) timerA_Routine_C()
 }
 ```
 
-> Dans la version finale de cette routine, j'utiliserai la fonction "write_PSG" à la place des écritured aux adresses du PSG dans la boucle *for*. cf. le [projet sur Github](https://github.com/fxrobin/atari-st-stuffs/tree/main/ym_player).
+> Dans la version finale de cette routine, j'utiliserai la fonction "write_PSG" à la place des écritures aux adresses du PSG dans la boucle *for*. cf. le [projet sur Github](https://github.com/fxrobin/atari-st-stuffs/tree/main/ym_player).
 
-### La routine timer A version Assembleur
+### La routine Timer A version Assembleur
 
 ```armasm
 ; -- References to C defined variables and pointers
@@ -780,11 +782,11 @@ write_byte(originalKeyClick, KEYCLICK_CONF_ADDRESS);
 ```
 
 Attention toutefois à restaurer la valeur de ce registre avant de sortir du programme.
-Ce qui signifie qu'il aura fallu la sauvegarder au préalable.
+Ce qui signifie qu'il faut la sauvegarder au préalable.
 
 ### Et je coupe le son
 
-Avant de retourner au Desktop et quitter le programme, il faut "éteindre" toute production de sonore.
+Avant de retourner au Desktop et quitter le programme, il faut "éteindre" toute production sonore.
 
 Je le fais en indiquant au registre R7 de tout désactiver, étrangement en mettant tous les bits utiles (6 bits) à 1.
 
@@ -809,7 +811,7 @@ Dans notre cas, il suffit de scruter l'adresse `$FFFC02` et de regarder si elle 
 Nous voici avec une belle routine pour jouer des fichiers YM simples. Nos oreilles sont maintenant ravies !
 L'ensemble parait un peu laborieux, mais quel plaisir d'entendre ces *Chiptunes* !
 
-> Je remercie Lyloo la relecture attentive de cet article.
+> Je remercie Lyloo pour la relecture attentive de cet article.
 
 ## Liens & Bibliographie
 
