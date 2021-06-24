@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 'Atari ST : Routines YM avec le Timer A en ASM et C'
-subtitle: Comment retrouver ce son "que les moins de vingt ans ne peuvent pas connaître" ?
+title: 'Atari ST : Routines YM avec le Timer A'
+subtitle: Tutoriel en C et Assembleur pour jouer des chiptunes.
 logo: sound.gif
 category: articles
 tags: [Retro, Assembleur, Atari, Retro-Prog]
