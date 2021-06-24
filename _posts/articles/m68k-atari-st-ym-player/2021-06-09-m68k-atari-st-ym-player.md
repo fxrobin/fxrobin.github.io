@@ -389,15 +389,16 @@ L'algorithme de lecture du son assez simple, il tient en quelques lignes.
 
 Le principe est d'aller chercher les valeurs des 14 registres en mémoire de la manière suivante :
 
+- Ne pas exécuter la routine si le compteur *music frame courante* est supérieur ou égal au nombre total de *music frames*.
 - Lire la valeur du registre R0 en fonction de la *music frame courante* (en décalant simplement l'adresse) ;
 - Puis, chaque valeur de chacun des autres registres (14 au total) doit être récupérée avec un décalage du nombre global de *music frames* ;
 - Pour chaque valeur récupérée, il faut écrire aux adresses `$FF8800` et `$FF8802` pour programmer le YM-2149 ;
-- Enfin, il faut incrémenter le compteur de la *music frame courante* et ne pas la routine sur le compteur est égal ou supérieur au nombre total de "music frames".
+- Enfin, il faut incrémenter le compteur de la *music frame courante* et 
 
 Ainsi, il suffit de 3 variables globales :
 
-- `musicData` :l'adresse mémoire du buffer représentant les données du fichiers, en pointant sur le premier octet "utile", c'est à dire sans l'entête YM3! ou YM2!
-- `totalMusicFrames` : nombre total de *music frames* (14 octets à envoyer au YM-2149), calculé en fonction de la taille du fichier, mois les 4 octets d'entête.
+- `musicData` : l'adresse mémoire du buffer représentant les données, en pointant sur le premier octet "utile", c'est à dire **sans** l'entête `YM3!` ou `YM2!`
+- `totalMusicFrames` : nombre total de *music frames* (14 octets à envoyer au YM-2149), calculé en fonction de la taille du fichier, moins les 4 octets d'entête.
 - `currentMusicFrame` : index courant de la *music frame* envoyé au YM-2149. 
 
 Algorithme général (en pseudo langage fictif, qui ressemble à du BASIC)
@@ -430,12 +431,12 @@ Explications des instructions fictives :
 |----------------------------|--------|----------------|            
 | `ADDRESS <name> = <value>`{:.nowrap} | Déclare une variable de type "adresse" et affecte une valeur. | C'est à dire un pointeur en mémoire. |            
 | `INTEGER <name> = <value>`{:.nowrap} | Déclare une variable de type "entier". | |
-| `LOAD_FILE(<file>)`{:.nowrap} | Charge un fichier en mémoire et retourne l'adresse sur les données chargés | Ici, on décalle l'adresse de 4 octets pour "passer" l'entête "YM2!" ou "YM3!". |
+| `LOAD_FILE(<file>)`{:.nowrap} | Charge un fichier en mémoire et retourne l'adresse sur les données chargées | Ici, on décale l'adresse de 4 octets pour "passer" l'entête "YM2!" ou "YM3!". |
 | `FILE_SIZE(<file>)`{:.nowrap} | Retourne la taille du fichier. | Ici, on retire 4 octets de la taille pour pouvoir en déduire le nombre de "music frames" en divisant par 14. |
 | `DO_AT_FREQUENCY(<freq>)`{:.nowrap} <br /> ... <br /> `END_DO_AT_FREQUENCY` | Exécute une portion de code à une fréquence spécifique. | Fréquence en Hz |
 | `WHILE (<condition>)`{:.nowrap} <br /> ... <br /> `END_WHILE` | Classiquement, répète une portion de code tant que la condition est vraie. |  |
 | `FOR <name> FROM <start> TO <end>`{:.nowrap}  <br /> ... <br /> `NEXT` | Répète une portion de code en fonction d'une itération sur un nombre. | Ici de 0 à 13 inclus |
-| `PEEK(<address>)`{:.nowrap} | Retourne la valeur d'un octet situé à une adresse mémoire. | Si on utilise cette instruction 2 fois, il faut rajouer l'instruction `&COLEGRAM`.|  
+| `PEEK(<address>)`{:.nowrap} | Retourne la valeur d'un octet situé à une adresse mémoire. | Si on utilise cette instruction 2 fois, il faut rajouer l'instruction `&COLEGRAM ;-)` .|  
 | `POKE(<address>, <value>)`{:.nowrap}| Ecrit un octet à une adresse donnée. | Petites pensées pour l'âge d'or de la *Bible des Pokes*. |                  
 | `INCREMENT <var>`{:.nowrap} | ajoute 1 à une variable numérique. | |
 
@@ -492,7 +493,7 @@ dont_play:
     ...
 ```
 
-La particularité de cette algorithme est donc qu'il soit s'éxécuter de manière cadencée, 50 fois par secondes.
+La particularité de cet algorithme est donc qu'il soit s'éxécuter de manière cadencée, 50 fois par secondes.
 
 J'entends déjà au fond de la salle :
 
