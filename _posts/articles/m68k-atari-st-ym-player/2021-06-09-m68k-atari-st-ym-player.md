@@ -170,6 +170,8 @@ Ensuite il faut activer le "mixer" sur le canal A et mettre le volume du canal A
 
 > Nota : il ne faut pas oublier de couper le tout avant de sortir du programme.
 
+Vous pouvez aussi retrouver le [code source de ce programme sur Github](https://github.com/fxrobin/atari-st-stuffs/tree/main/simple_ym_2149).
+
 ```c
 /**
  * Simple YM-2149 Demo
@@ -636,7 +638,7 @@ void __attribute__((interrupt)) timerA_Routine_C()
 }
 ```
 
-> Dans la version finale de cette routine, j'utiliserai la fonction "write_PSG" à la place des écriture aux adresses dans la boucle *for*.
+> Dans la version finale de cette routine, j'utiliserai la fonction "write_PSG" à la place des écritured aux adresses du PSG dans la boucle *for*. cf. le [projet sur Github](https://github.com/fxrobin/atari-st-stuffs/tree/main/ym_player).
 
 ### La routine timer A version Assembleur
 
