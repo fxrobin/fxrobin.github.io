@@ -2,7 +2,7 @@
 layout: post
 title: 'Atari ST : Routines YM avec le Timer A en ASM et C'
 subtitle: Comment retrouver ce son "que les moins de vingt ans ne peuvent pas connaître" ?
-logo: atari-rainbow.png
+logo: sound.gif
 category: articles
 tags: [Retro, Assembleur, Atari, Retro-Prog]
 lang: fr
@@ -11,7 +11,7 @@ ref: m68k-atari-st-ym-player
 
 <div class="intro" markdown='1'>
 
-Je vous avais mis l'eau à la bouche, dans mon précédent article relatif aux [interactions entre C et Assembleurs](/m68k-atari-st-assembly-and-c), en annonçant que cela servirait à jouer de la musique sur le processeur audio de l'Atari ST, le YAMAHA-2149 (YM-2149) : *nous y voilà* !
+Je vous avais mis l'eau à la bouche, dans mon précédent article relatif aux [interactions entre C et Assembleur](/m68k-atari-st-assembly-and-c), en annonçant que cela servirait à jouer de la musique sur le processeur audio de l'Atari ST, le YAMAHA-2149 (YM-2149) : *nous y voilà* !
 
 Dans ce tutoriel, nous verrons :
 
@@ -66,11 +66,11 @@ J'avais toutefois quelques souvenirs de cours de sciences physiques :
 
 Pour sythétiser, je ne connaissais *pas grand chose* et donc j'espère que ce tutoriel pourra accompagner ceux qui, comme moi, voudront découvrir ce monde au moyen de la programmation du `YM-2149` de l'Atari ST.
 
-Les documentations techniques sont nombreuses à ce sujet, cependant elles ne sont pas du tout digestes quand il s'agit de comprendre les concepts aussi bien liés au son, à la production de son et à la programmation du `YM-2149`. Pour synthéser, ces documents techniques, je les ai trouvés utiles à partir du moment où j'avais pu comprendre les concepts, c'est à dire : "pas au début".
+Les documentations techniques sont nombreuses à ce sujet, cependant elles ne sont pas du tout digestes quand il s'agit de comprendre les concepts aussi bien liés au son, à la production de son ou à la programmation du `YM-2149`. Ces documents techniques, je les ai trouvés utiles à partir du moment où j'ai compris les concepts, c'est à dire : "pas au début".
 
-De plus, quand on parcourt les forums spécialisés, j'ai eu la douloureuse impression que tous les intervants maîtrisent le vocabulaire dédié et cela rend l'immersion d'autant plus difficile. En effet tous les codeurs présents semblent faire partie de la "scène démo-codeur" depuis des années, ce qui n'est pas non plus étonnant quand on repense au fait que l'Atari ST a plus de 35 ans d'existence.
+De plus, quand on parcourt les forums spécialisés, on a la douloureuse impression que tous les intervants maîtrisent le vocabulaire dédié et cela rend l'immersion d'autant plus difficile. En effet tous les codeurs présents semblent faire partie de la "scène démo-codeur" depuis des années, ce qui n'est pas non plus étonnant quand on repense au fait que l'Atari ST a plus de 35 ans d'existence.
 
-Ainsi, sans prétention, j'espère pouvoir vous mettre le pied à l'étrier, sans vous noyer dans les termes techniques. L'objectif est de jouer un fichier de musique au format populaire et répa,du **YM** pour obtenir au final ceci, histoire de vous tenir en haleine :
+Ainsi, sans prétention, j'espère pouvoir vous mettre le pied à l'étrier, sans vous noyer dans les termes techniques. L'objectif est de jouer un fichier de musique au format populaire et répandu **YM** pour obtenir au final ceci, histoire de vous tenir en haleine :
 
 {%include video.html youtube-id="D1rf20psS1o"  size="normal" %}
 
@@ -80,17 +80,17 @@ Il est toutefois nécessaire d'avoir quelques bases en C ainsi qu'en Assembleur 
 
 La puce YM-2149 est un __PSG__. Vous pouvez ranger vous écharpes "bleues et rouges", il ne s'agit d'un célèbre club de football, mais de __Programable Sound Generator__. 
 
-On trouve ce genre de puce dans divers bornes d'arcade, dans le Commodore 64,l'Amstrad CPC, le MSX, etc. et dans notre bel Atari ST. J'utiliserai les termes __YM-2149__ et __PSG__ de manière identique dans ce tutoriel. On peut aussi trouver le terme de __SSG__ (Software-Controlled Sound Generator), notamment dans la [documentation officielle](http://www.ym2149.com/ym2149.pdf).
+On trouve ce genre de puce dans divers bornes d'arcade, le Commodore 64, l'Amstrad CPC, le MSX, etc. et dans notre bel Atari ST. J'utiliserai les termes __YM-2149__ et __PSG__ de manière identique dans ce tutoriel. On peut aussi trouver le terme de __SSG__ (Software-Controlled Sound Generator), notamment dans la [documentation officielle](http://www.ym2149.com/ym2149.pdf).
 
 Historiquement, le YM-2149 est un clône du __AY-3-8910__ mais il dispose d'un contrôle de volume en sortie sur 32 niveaux au lieu de 16.
 
 Le YM-2149, qui équipe l'Atari ST, est cadencé à 2 Mhz. Il est capable de produire :
 
-- des __ondes sonores "carrés"__ (square waves), dont je décrirai les caractéristique de base un peu plus loin, ce générateur est parfois aussi appelé *buzzer*, 
-- du __bruit__ (noise) : ondes pseudo-aléatoire, 
+- des __ondes sonores "carrées"__ (square waves), dont je décrirai les caractéristiques de base un peu plus loin, ce générateur est parfois aussi appelé *buzzer*, 
+- du __bruit__ (noise) : ondes pseudo-aléatoires, 
 - des __enveloppes__, pour produire certaines atténuation sur l'amplitude (volume) du son. 
 
-Il existe 3 canaux de sortie distincts qui peuvent prendre comme source soit l'un des 3 générateurs d'ondes carrés ou un générateur de bruit, avec des configurations spécifiques pour chacun des 3 canaux.
+Il existe 3 canaux de sortie distincts qui peuvent prendre comme source soit l'un des 3 générateurs d'ondes carrées ou un générateur de bruit, avec des configurations spécifiques pour chacun des 3 canaux.
 
 En ce qui concerne les contraintes (non exhaustif) :
 
@@ -105,7 +105,7 @@ Pour vulgariser au maximum, et les experts du domaine me pardonneront, les 3 gé
 
 Ce tutoriel n'a pas pour objectif de vous apprendre les bases de la musique ni de la composition musicale. Nous allons laisser ce domaine riche et complexe aux musiciens. Tout le monde n'a pas le talent de Jean-Michel Jarre, de [Mad Max](https://en.wikipedia.org/wiki/Jochen_Hippel), ni de [David Whittaker](https://en.wikipedia.org/wiki/David_Whittaker_(video_game_composer)) ou encore de David Guetta (quoique dans le cas de David G., ...).
 
-Toutefois, voici à quoi ressemble une onde carrée (__square wave__) de 440 Hz (LA sur le 3^ème octave) visuellement et pour le plaisir des oreilles :
+Toutefois, voici à quoi ressemble une onde carrée (__square wave__) de 440 Hz (LA sur le 3ème octave) visuellement et pour le plaisir des oreilles :
  
 {%include video.html youtube-id="1W_uV-p-7_k"  size="normal" %}
 
@@ -149,7 +149,7 @@ des valeurs que peut prendre chacun des registres, ni à quoi ils servent. La do
 donne tous ces éléments, mais cela n'est pas nécessaire pour la poursuite de ce tutoriel.
 
 Cependant, afin de vous donner une légère "base" sur le fonctionnement, voici un petit programme en C
-qui joue `DO RE MI FA SOL LA SI DO` sur l'octave 3, suivi de son code source.
+qui joue `DO RE MI FA SOL LA SI` sur l'octave 3, suivi de son code source.
 
 {%include video.html youtube-id="R2f5o6e7YPQ"  size="normal" %}
 
@@ -158,7 +158,7 @@ Le principe est donc d'envoyer les différentes fréquences qui correpondent à 
 Avant d'être envoyée au PSG, la fréquence de la note souhaitée doit subir une légère conversion pour devenir le paramètre attendu par le générateur de *square wave*.
 Cette conversion est décrite dans la documentation du YM-2149 et je l'ai reportée dans le code source ci-dessous.
 
-Comme ce paramètre est codé sur 12 bits il sera envoyé sur les R0 et R1 qui sont chargé de prendre en compte le réglage de la fréquence sur le canal A.
+Comme ce paramètre est codé sur 12 bits il sera envoyé sur les R0 et R1 qui sont chargés de prendre en compte le réglage de la fréquence sur le canal A.
 - dans R0 je place les 8 bits de poids faible du paramètre ;
 - dans R1, je place les 4 bits restants, de poids fort. 
 
@@ -288,8 +288,8 @@ int main(int argc, char *argv[])
 }
 ```
 
-> Nota : l'attente d'une seconde entre chaque note utilise la VBL. Ce n'est pas la meilleure approche, vous le verrez pas la suite.
-> Mais je ne souhaitais pas complexifier de petit exemple, donc c'est convenable.
+> Nota : l'attente d'une seconde entre chaque note utilise la VBL. Ce n'est pas la meilleure approche, vous le verrez par la suite.
+> Mais je ne souhaitais pas complexifier ce petit exemple, donc c'est convenable.
 
 Ainsi, si l'on cherche à changer la valeur des 14 registres "d'un coup", il faut faire l'action suivante **14 fois** :
 
