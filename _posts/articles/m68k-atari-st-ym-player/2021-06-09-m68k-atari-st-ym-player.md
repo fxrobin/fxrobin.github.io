@@ -348,7 +348,7 @@ Pour la music frame 0 :
 - R0 est à l'offset 0, 
 - R1 est à l'offset 5000, (offset de R0 + nombre de music frames)
 - R2 est à l'offset 10000, (offset de R1 + nombre de music frames)
-- R3 est à l'offset 15000, (offset de R0 + nombre de music frames)
+- R3 est à l'offset 15000, (offset de R2 + nombre de music frames)
 - etc.
 
 Pour la music frame 1 :
@@ -356,7 +356,7 @@ Pour la music frame 1 :
 - R0 est à l'offset 1,
 - R1 est à l'offset 5001, (offset de R0 + nombre de music frames)
 - R2 est à l'offset 10001, (offset de R1 + nombre de music frames)
-- R3 est à l'offset 15001, (offset de R0 + nombre de music frames)
+- R3 est à l'offset 15001, (offset de R2 + nombre de music frames)
 - etc.
 
 Pour la music frame 2 :
@@ -364,7 +364,7 @@ Pour la music frame 2 :
 - R0 est à l'offset 2,
 - R1 est à l'offset 5002, (offset de R0 + nombre de music frames)
 - R2 est à l'offset 10002, (offset de R1 + nombre de music frames)
-- R3 est à l'offset 15002, (offset de R0 + nombre de music frames)
+- R3 est à l'offset 15002, (offset de R2 + nombre de music frames)
 - etc.
 
 Pour résumer voici la structure résumée au moyen de ce schéma :
@@ -375,7 +375,7 @@ Ce format (YM2 ou YM3) est finalement assez simple.
 
 La problématique que devra résoudre l'algorithme de lecture est la suivante :
 
-- Le buffer contient 5000 premières valeurs pour R0, puis 5000 autres valeurs pour R1... La lecture du fichier est linéaire.
+- Le buffer contient 5000 premières valeurs pour R0, puis 5000 autres valeurs pour R1... La lecture du fichier est linéaire ;
 - Pour chaque "music frame", il faut envoyer une "colonne" de 14 registres au PSG, et non pas une ligne. Il faudra donc se déplacer dans la mémoire pour aller chercher les valeurs situées aux bonnes colonnes (donc aux bons offsets).
 
 > Nota : on pourrait imaginer que le fichier soit lu et qu'il soit ré-agencé en mémoire afin de disposer de N séries (music frames) des 14 registres de manière contigüe. Cela consommerait 
