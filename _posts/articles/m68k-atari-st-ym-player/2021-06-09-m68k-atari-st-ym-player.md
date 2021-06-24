@@ -417,7 +417,7 @@ DO_AT_FREQUENCY(50)
             BYTE registerValue = PEEK (bufferOffset);
             POKE (PSG_REGISTER_INDEX_ADDRESS, registerIndex)
             POKE (PSG_REGISTER_DATA_ADDRESS, registerValue) 
-            bufferOffset = bufferOffset + totalMusicFrame
+            bufferOffset = bufferOffset + totalMusicFrames
         NEXT
         INCREMENT currentMusicFrame
     END_WHILE
