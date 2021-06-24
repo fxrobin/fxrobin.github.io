@@ -302,7 +302,7 @@ Une petite curiosité intéressante : pour connaître la valeur d'un des registr
 du registre dans le sélecteur, puis, lire à la même adresse (c'est à dire l'adresse du sélecteur !) la valeur
 courante. Cela sera utile pour afficher le contenu des registres à un instant donné à l'écran.
 
-Pour résumer cette section, __`$FF8800` et `$FF8802` sont les deux seules adresses mémoires pour intéragir avec les 14 registres du YM-2149__, 
+Pour résumer cette section, __`$FF8800` et `$FF8802` sont les deux seules adresses mémoire pour intéragir avec les 14 registres du YM-2149__, 
 et cela suffira pour produire de la musique !
 
 ## Structure des fichiers YM2 et YM3
@@ -315,7 +315,7 @@ Le format "YM" a eu beaucoup de versions (de la 1 à la 6). Dans le cadre de ce 
 Pour vulgariser, **ces fichiers YM sont des suites de 14 octets**, représentants la capture (*dump*) des 14 registres du YM-2149 réalisés, généralement, 50 fois par secondes (50 Hz).
 
 Cette fréquence est largement suffisante pour permettre de jolies musiques typiques de nos Atari ST tout en laissant
-suffisamment de temps processeur au 68000 pour faire tout autre choses que de mettre à jour le "son", comme par exemple
+suffisamment de temps processeur au 68000 pour faire autre chose que de mettre à jour le "son", comme par exemple
 des animations à l'écran, ou calculer l'IA du jeu en cours.
 
 Le format "YM" est généralement compressé au moyen de l'algorithme LZH, répandu sur nos machines. Il est peu gourmand en
@@ -324,7 +324,7 @@ ressources pour décompresser et permet d'obtenir un taux de compression intére
 Le fichier dispose d'une entête de 4 octets, où l'on trouve les caractères `YM2!` ou `YM3!`.
 Les données utiles, dans le cadre de ce tutoriel, commencent donc après cette entête.
 
-Comme indiqué précédemment, les données représentent des séquences de 14 octets, qui seront à envoyer aux 14 registres du YM-2149. Ces séquences seront à envoyer de manière régulière, généralement à une fréquence de 50 fois par secondes.
+Comme indiqué précédemment, les données représentent des séquences de 14 octets, qui seront à envoyer aux 14 registres du YM-2149. Ces séquences seront à envoyer de manière régulière, généralement à une fréquence de 50 fois par seconde.
 
 Ainsi, en prenant la taille totale du fichier, moins les 4 octets d'entête, et qu'on la divise par 14, on obtient le nombre de "music frames", c'est à dire combien de blocs de 14 octets sont présents dans le fichier.
 
@@ -337,9 +337,9 @@ Ainsi, pour avoir les 14 octets à mettre dans les 14 registres à un instant do
 Pour comprendre ce format, prenons un exemple : un fichier YM décompressé de taille 70004 octets.
 
 - Après avoir retiré les 4 octets de l'entête, il dispose donc de 70000 octets de données.
-- Il y a car 14 registres, donc pour obtenir le nombre de "mudic frames" : 70000 / 14 = 5000..
+- Il y a car 14 registres, donc pour obtenir le nombre de "mudic frames" : 70000 / 14 = 5000.
 - Le fichier comporte donc 5000 music frames (de 0 à 4999).
-- Etant donné que l'on met à jour le YM-2149 50 fois par seconde avec le contenu des 14 registres inclus dans 1 music frame, la musique dure donc 100 secondes : 5000 / 50 = 100, c'est à dire 1 minute et 40 se secondes.  
+- Etant donné que l'on met à jour le YM-2149 50 fois par seconde avec le contenu des 14 registres inclus dans 1 music frame, la musique dure donc 100 secondes : 5000 / 50 = 100, c'est à dire 1 minute et 40 secondes.  
 
 La structure en mémoire du fichier lu est la suivante :
 
