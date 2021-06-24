@@ -74,11 +74,11 @@ Ainsi, sans prétention, j'espère pouvoir vous mettre le pied à l'étrier, san
 
 {%include video.html youtube-id="D1rf20psS1o"  size="normal" %}
 
-Il est toutefois nécessaire d'avoir quelques bases en C ainsi qu'en Assembleur M68K : je ne reviendrai pas sur ce qu'est un `DEFINE` et les pointeurs en C ou encore un `DBRA`  en Assembleur.
+Il est toutefois nécessaire d'avoir quelques bases en C ainsi qu'en Assembleur M68K : je ne reviendrai pas sur ce qu'est un `DEFINE` et les pointeurs en C ou encore un `DBRA` en Assembleur.
 
 ## Produire du son sur le YM-2149
 
-La puce YM-2149 est un __PSG__. Vous pouvez ranger vous écharpes "bleues et rouges", il ne s'agit de pas foot ici mais de __Programable Sound Generator__. 
+La puce YM-2149 est un __PSG__. Vous pouvez ranger vous écharpes "bleues et rouges", il ne s'agit d'un célèbre club de football, mais de __Programable Sound Generator__. 
 
 On trouve ce genre de puce dans divers bornes d'arcade, dans le Commodore 64,l'Amstrad CPC, le MSX, etc. et dans notre bel Atari ST. J'utiliserai les termes __YM-2149__ et __PSG__ de manière identique dans ce tutoriel. On peut aussi trouver le terme de __SSG__ (Software-Controlled Sound Generator), notamment dans la [documentation officielle](http://www.ym2149.com/ym2149.pdf).
 
