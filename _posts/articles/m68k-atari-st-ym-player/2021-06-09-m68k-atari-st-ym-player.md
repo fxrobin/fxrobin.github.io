@@ -811,7 +811,7 @@ Dans notre cas, il suffit de scruter l'adresse `$FFFC02` et de regarder si elle 
 Nous voici avec une belle routine pour jouer des fichiers YM simples. Nos oreilles sont maintenant ravies !
 L'ensemble parait un peu laborieux, mais quel plaisir d'entendre ces *Chiptunes* !
 
-Si vous voulez aller plus loin dans la composition de musique YM-2149, je vous suggère d'utiliser
+Enfin, si vous voulez aller plus loin dans la composition de musique YM-2149, je vous suggère d'utiliser
 [Arkos Tracker 2](https://www.julien-nevo.com/arkostracker/).
 
 > Je remercie Lyloo pour la relecture attentive de cet article.
