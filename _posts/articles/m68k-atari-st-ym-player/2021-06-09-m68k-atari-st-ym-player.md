@@ -82,7 +82,7 @@ La puce YM-2149 est un __PSG__. Vous pouvez ranger vous écharpes "bleues et rou
 
 On trouve ce genre de puce dans divers bornes d'arcade, dans le Commodore 64,l'Amstrad CPC, le MSX, etc. et dans notre bel Atari ST. J'utiliserai les termes __YM-2149__ et __PSG__ de manière identique dans ce tutoriel. On peut aussi trouver le terme de __SSG__ (Software-Controlled Sound Generator), notamment dans la [documentation officielle](http://www.ym2149.com/ym2149.pdf).
 
-Le YM-2149 est un clône du __AY-3-8910__ mais il dispose d'un contrôle de volume en sortie sur 32 niveaux au lieu de 16.
+Historiquement, le YM-2149 est un clône du __AY-3-8910__ mais il dispose d'un contrôle de volume en sortie sur 32 niveaux au lieu de 16.
 
 Le YM-2149, qui équipe l'Atari ST, est cadencé à 2 Mhz. Il est capable de produire :
 
