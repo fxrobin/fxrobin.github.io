@@ -164,7 +164,7 @@ Comme ce paramètre est codé sur 12 bits il sera envoyé sur les R0 et R1 qui s
 
 Ce qui fait bien 12 bits utiles au final.
 
-> Pour info, R2 et R3, propose le même mécanisme mais pour le canal B, tandis que R4 et R5 s'occupe du canal C.
+> Pour info, R2 et R3, proposent le même mécanisme mais pour le canal B, tandis que R4 et R5 s'occupent du canal C.
 
 Ensuite il faut activer le "mixer" sur le canal A et mettre le volume du canal A au maximum. 
 
