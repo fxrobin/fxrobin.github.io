@@ -493,7 +493,7 @@ dont_play:
     ...
 ```
 
-La particularité de cet algorithme est donc qu'il soit s'éxécuter de manière cadencée, 50 fois par secondes.
+La particularité de cet algorithme est donc qu'il doit s'éxécuter de manière cadencée, 50 fois par secondes.
 
 J'entends déjà au fond de la salle :
 
