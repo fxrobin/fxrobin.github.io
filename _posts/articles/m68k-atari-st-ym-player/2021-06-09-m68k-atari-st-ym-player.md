@@ -404,8 +404,8 @@ Ainsi, il suffit de 3 variables globales :
 Algorithme général (en pseudo langage fictif, qui ressemble à du BASIC)
 
 ```python
-ADRESS PSG_REGISTER_INDEX_ADDRESS = $FF8800
-ADRESS PSG_REGISTER_DATA_ADDRESS  = $FF8802
+ADDRESS PSG_REGISTER_INDEX_ADDRESS = $FF8800
+ADDRESS PSG_REGISTER_DATA_ADDRESS  = $FF8802
 
 ADDRESS musicData = LOAD_FILE("my-music.ym") + 4 
 INTEGER totalMusicFrames = (FILE_SIZE("my-music.ym")) - 4) / 14
