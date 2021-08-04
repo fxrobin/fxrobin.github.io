@@ -538,7 +538,7 @@ Explications :
 
 > Mais c'est quoi ces valeurs de paramètres `7` et `246` ?
 
-Pour répondre à cette question, il faut se référer à la documentation du __MFP 68901 (Multi Function Peripheral)__, puce responsable de certains cadencements et notamment de celui des *timers* et donc du Timer A. Le MPF offre une cadence de base à `2,4576 MHz`. Il est possible de définir la fréquence souhaitée au moyen de 2 paramètres : le **prédiviseur** et le **diviseur**. 
+Pour répondre à cette question, il faut se référer à la documentation du __MFP 68901 (Multi Function Peripheral)__, puce responsable de certains cadencements et notamment de celui des *timers* et donc du Timer A. Le MFP offre une cadence de base à `2,4576 MHz`. Il est possible de définir la fréquence souhaitée au moyen de 2 paramètres : le **prédiviseur** et le **diviseur**. 
 
 Voici le tableau de définition du prédiviseur :
 
