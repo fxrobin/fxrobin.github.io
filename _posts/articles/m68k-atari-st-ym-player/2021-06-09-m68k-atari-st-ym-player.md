@@ -412,7 +412,7 @@ INTEGER totalMusicFrames = (FILE_SIZE("my-music.ym")) - 4) / 14
 INTEGER currentMusicFrame = 0
 
 DO_AT_FREQUENCY(50)
-    WHILE (currentMusicFrame < totalMusicFrames>)
+    WHILE (currentMusicFrame < totalMusicFrames)
         ADDRESS bufferOffset = musicData + currentMusicFrame
         FOR BYTE registerIndex FROM 0 TO 13
             BYTE registerValue = PEEK (bufferOffset);
