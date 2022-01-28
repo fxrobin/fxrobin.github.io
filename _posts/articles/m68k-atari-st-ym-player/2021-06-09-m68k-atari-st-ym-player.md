@@ -78,7 +78,7 @@ Il est toutefois nécessaire d'avoir quelques bases en C ainsi qu'en Assembleur 
 
 ## Produire du son sur le YM-2149
 
-La puce YM-2149 est un __PSG__. Vous pouvez ranger vous écharpes "bleues et rouges", il ne s'agit d'un célèbre club de football, mais de __Programable Sound Generator__. 
+La puce YM-2149 est un __PSG__. Vous pouvez ranger vous écharpes "bleues et rouges", il ne s'agit pas d'un célèbre club de football, mais de __Programable Sound Generator__. 
 
 On trouve ce genre de puce dans divers bornes d'arcade, le Commodore 64, l'Amstrad CPC, le MSX, etc. et dans notre bel Atari ST. J'utiliserai les termes __YM-2149__ et __PSG__ de manière identique dans ce tutoriel. On peut aussi trouver le terme de __SSG__ (Software-Controlled Sound Generator), notamment dans la [documentation officielle](http://www.ym2149.com/ym2149.pdf).
 
@@ -337,7 +337,7 @@ Ainsi, pour avoir les 14 octets à mettre dans les 14 registres à un instant do
 Pour comprendre ce format, prenons un exemple : un fichier YM décompressé de taille 70004 octets.
 
 - Après avoir retiré les 4 octets de l'entête, il dispose donc de 70000 octets de données.
-- Il y a car 14 registres, donc pour obtenir le nombre de "mudic frames" : 70000 / 14 = 5000.
+- Il y a car 14 registres, donc pour obtenir le nombre de "music frames" : 70000 / 14 = 5000.
 - Le fichier comporte donc 5000 music frames (de 0 à 4999).
 - Etant donné que l'on met à jour le YM-2149 50 fois par seconde avec le contenu des 14 registres inclus dans 1 music frame, la musique dure donc 100 secondes : 5000 / 50 = 100, c'est à dire 1 minute et 40 secondes.  
 
@@ -404,15 +404,15 @@ Ainsi, il suffit de 3 variables globales :
 Algorithme général (en pseudo langage fictif, qui ressemble à du BASIC)
 
 ```python
-ADRESS PSG_REGISTER_INDEX_ADDRESS = $FF8800
-ADRESS PSG_REGISTER_DATA_ADDRESS  = $FF8802
+ADDRESS PSG_REGISTER_INDEX_ADDRESS = $FF8800
+ADDRESS PSG_REGISTER_DATA_ADDRESS  = $FF8802
 
 ADDRESS musicData = LOAD_FILE("my-music.ym") + 4 
 INTEGER totalMusicFrames = (FILE_SIZE("my-music.ym")) - 4) / 14
 INTEGER currentMusicFrame = 0
 
 DO_AT_FREQUENCY(50)
-    WHILE (currentMusicFrame < totalMusicFrames>)
+    WHILE (currentMusicFrame < totalMusicFrames)
         ADDRESS bufferOffset = musicData + currentMusicFrame
         FOR BYTE registerIndex FROM 0 TO 13
             BYTE registerValue = PEEK (bufferOffset);
@@ -436,7 +436,7 @@ Explications des instructions fictives :
 | `DO_AT_FREQUENCY(<freq>)`{:.nowrap} <br /> ... <br /> `END_DO_AT_FREQUENCY` | Exécute une portion de code à une fréquence spécifique. | Fréquence en Hz |
 | `WHILE (<condition>)`{:.nowrap} <br /> ... <br /> `END_WHILE` | Classiquement, répète une portion de code tant que la condition est vraie. |  |
 | `FOR <name> FROM <start> TO <end>`{:.nowrap}  <br /> ... <br /> `NEXT` | Répète une portion de code en fonction d'une itération sur un nombre. | Ici de 0 à 13 inclus |
-| `PEEK(<address>)`{:.nowrap} | Retourne la valeur d'un octet situé à une adresse mémoire. | Si on utilise cette instruction 2 fois, il faut rajouer l'instruction `&COLEGRAM ;-)` .|  
+| `PEEK(<address>)`{:.nowrap} | Retourne la valeur d'un octet situé à une adresse mémoire. | Si on utilise cette instruction 2 fois, il faut rajouter l'instruction `&COLEGRAM ;-)` .|  
 | `POKE(<address>, <value>)`{:.nowrap}| Ecrit un octet à une adresse donnée. | Petites pensées pour l'âge d'or de la *Bible des Pokes*. |                  
 | `INCREMENT <var>`{:.nowrap} | ajoute 1 à une variable numérique. | |
 
@@ -493,7 +493,7 @@ dont_play:
     ...
 ```
 
-La particularité de cet algorithme est donc qu'il soit s'éxécuter de manière cadencée, 50 fois par secondes.
+La particularité de cet algorithme est donc qu'il doit s'éxécuter de manière cadencée, 50 fois par secondes.
 
 J'entends déjà au fond de la salle :
 
@@ -538,7 +538,7 @@ Explications :
 
 > Mais c'est quoi ces valeurs de paramètres `7` et `246` ?
 
-Pour répondre à cette question, il faut se référer à la documentation du __MFP 68901 (Multi Function Peripheral)__, puce responsable de certains cadencements et notamment de celui des *timers* et donc du Timer A. Le MPF offre une cadence de base à `2,4576 MHz`. Il est possible de définir la fréquence souhaitée au moyen de 2 paramètres : le **prédiviseur** et le **diviseur**. 
+Pour répondre à cette question, il faut se référer à la documentation du __MFP 68901 (Multi Function Peripheral)__, puce responsable de certains cadencements et notamment de celui des *timers* et donc du Timer A. Le MFP offre une cadence de base à `2,4576 MHz`. Il est possible de définir la fréquence souhaitée au moyen de 2 paramètres : le **prédiviseur** et le **diviseur**. 
 
 Voici le tableau de définition du prédiviseur :
 
