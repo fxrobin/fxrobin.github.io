@@ -82,9 +82,9 @@ Voici ce que cela donne pour le moment, le jeu commence vraiment vers 48 seconde
 
 {%include video.html youtube-id="ki39sbk4VKc" size="normal" %}
 
-Si vous souhaitez y jouer, il vous suffit d'avoir un Java 8 (JRE) d'installé sur votre poste (Windows ou Linux), de dézipper ce fichier :
+Si vous souhaitez y jouer, il vous suffit d'avoir un Java 8 (JRE) d'installé sur votre poste (Windows ou Linux), de télécharger ce fichier :
 
-{%include download.html url="https://github.com/fxrobin/XenonReborn/releases/download/v0.1.11/xenon-reborn-0_1_11.jar" title="XenonReborn_0_1_10.zip" %}
+{%include download.html url="https://github.com/fxrobin/xenon-reborn/releases/download/v0.1.11/xenon-reborn-0_1_11.jar" title="xenon-reborn-0_1_11.jar" %}
 
 Puis, lancez le fichier jar `xenon-reborn-0_1_11.jar` en double cliquant dessus ou en tapant :
 
