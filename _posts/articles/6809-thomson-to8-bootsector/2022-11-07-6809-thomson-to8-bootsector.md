@@ -589,7 +589,7 @@ J'aimerais remercier très chaleureusement Bentoc pour les éléments liés à l
 fournies sur [logicielsmoto.com](http://www.logicielsmoto.com/home.php) ! Merci à vous pour faire vivre notre "petite" passion THOMSONISTE et 
 pour partager votre savoir !
 
-J'ai pu ainsi collaborer du jeu **[Pacman 40th Anniversary](https://www.oxustudio.com/pacman/)** réalisé par ADNZ en codant le chargement de l'ensemble des fichiers BIN du jeu au moyen du *bootsector*  avec des routines de chargements améliorées par rapport au `LOADM` du BASIC, en utilisant certaines routines de l'extra-moniteur.
+J'ai pu ainsi collaborer du jeu **[Pacman 40th Anniversary](https://www.oxustudio.com/pacman/)** réalisé par ADNZ en codant le chargement de l'ensemble des fichiers BIN du jeu au moyen du *bootsector*  avec des routines de chargement améliorées par rapport au `LOADM` du BASIC, en utilisant certaines routines de l'extra-moniteur.
 
 Un grand merci également à Rodrik et sa chaine [Rodrik Studio](https://www.youtube.com/c/rodrikstudio), qui met régulièrement en avant nos vieilles bécanes que l'on aime tant !
 
