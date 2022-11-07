@@ -583,7 +583,7 @@ Et après avoir tapé `1` ou `2` ou `B` ou `C`, on obtient le chargement du boot
 
 Pour conclure ce petit article, le point fondal est vraiment la partie de transformation en complément à deux d'une portion du code du bootsector, ainsi que le calcul de la checksum. Le reste est assez trivial fort heureusement.
 
-Dans cet article j'ai proprosé un ensemble de scripts Groovy pour réaliser chacune des tâches successivement à titre pédagogique. J'aurais pu, évidemment, regrouper l'ensemble au sein d'un même script, plus compact, mais cela aurait été mon accessible à mon sens.
+Dans cet article j'ai proprosé un ensemble de scripts Groovy pour réaliser chacune des tâches successivement à titre pédagogique. J'aurais pu, évidemment, regrouper l'ensemble au sein d'un même script, plus compact, mais cela aurait été moins accessible à mon sens.
 
 J'aimerais remercier très chaleureusement Bentoc pour les éléments liés à la génération d'un bootsector ainsi que Sam pour les explications
 fournies sur [logicielsmoto.com](http://www.logicielsmoto.com/home.php) ! Merci à vous pour faire vivre notre "petite" passion THOMSONISTE et 
