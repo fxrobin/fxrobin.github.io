@@ -764,7 +764,7 @@ Pour exécuter le fichier, je pourrais utiliser DCMOTO, mais je vais le faire av
 
 Au préalable, j'ai installé RETROARCH et récupéré le core THEODORE avec les commandes suivantes 
 
-1. `sudo add-apt-repository ppa:libretro/stable && sudo apt-get update && sudo apt-get install retroarch`
+1. `$ sudo add-apt-repository ppa:libretro/stable && sudo apt-get update && sudo apt-get install retroarch`
 2. `$ git clone https://github.com/wide-dot/theodore.git`
 
 Le core est situé dans le répertoire `dist` 
