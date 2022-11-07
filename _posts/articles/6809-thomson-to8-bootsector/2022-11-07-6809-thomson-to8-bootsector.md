@@ -110,10 +110,6 @@ Petit rappel sur les disquettes :
 
 ![FloppyDisk](/images/6809-thomson-to8-bootsector/floppy-disk-structure.png)
 
-Légende :
-
-A. Piste (Track)
-B. 
 
 En ce qui concerne la structure des disquettes doubles faces, double densité, qui équipent le TO8 :
 - les faces sont numérotées de 0 à 1, 
