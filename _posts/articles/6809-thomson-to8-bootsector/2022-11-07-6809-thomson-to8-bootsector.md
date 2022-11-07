@@ -476,6 +476,161 @@ Le bootsector est maintenant complet. Passons au "véritable" petit programme qu
 
 Groose inspiration, je vais faire un petit "Hello world!" évolué en hommage au film *[WarGames](https://en.wikipedia.org/wiki/WarGames)*.
 
+```
+*************************************************************
+* EQUATES
+*************************************************************
+GETCH         EQU $E806	  * routine getchar
+KEY_ENTER     EQU $0D 	  * touche entrée
+PUTC          EQU $E803   * routine PUTC
+SET_PALETTE   EQU $EC00   * routine setpalette 
+*************************************************************
+
+    ORG $6300
+
+DEBUT 
+    PULU Y,X,A
+
+    * reglage palette couleur 1 sur CYAN (FF0)
+    LDA #$01
+    LDX #$FFF0
+    LDY #$0FF0
+    JSR SET_PALETTE
+
+    * initialisation de l'affichage
+    LDX #INIT
+    BSR PRINT_STRING
+
+    * affichage du texte
+    LDX #MESSAGE
+    BSR PRINT_STRING_WITH_EFFECT
+
+    * attente clavier
+    BSR KEY_ECHO 
+
+    PULU A,X,Y
+FIN    
+    JMP [$FFFE]     * reset TO8
+
+
+********************************************************
+* Routine : PRINT_STRING
+* Affichage d'une chaine de caractères
+* X contient l'adresse de la chaine, terminée par un $00
+* Usage : LDX #STRING
+*         BSR PRINT_STRING
+********************************************************
+PRINT_STRING
+    PSHU B
+!                   * debut de boucle
+    LDB ,X+         
+    BEQ >           * si c'est 0 on sort de la boucle
+    JSR PUTC
+
+    CMPB #$0A       * si c'est retour chariot, on rajoute retour à la ligne.
+    BNE <           * sinon on itère une nouvelle fois  
+    LDB #$0D
+    JSR PUTC
+    BRA <
+!                  * fin de boucle      
+    PULU B
+    RTS
+********************************************************  
+
+PRINT_STRING_WITH_EFFECT
+    PSHU B
+!                   * debut de boucle
+    
+WAIT_VBL_00                
+    TST $E7E7              * le faisceau n'est pas dans l'ecran
+    BPL WAIT_VBL_00        * tant que le bit est a 0 on boucle
+WAIT_VBL_01
+    TST $E7E7              * le faisceau est dans l'ecran
+    BMI WAIT_VBL_01        * tant que le bit est a 1 on boucle
+
+    LDB #$7F    * curseur carré
+    JSR PUTC    
+    LDB #$07    * BEEP
+    JSR PUTC
+    LDB #$08    * on revient un cran en arrière (pour l'écraser par la suite)
+    JSR PUTC  
+    LDB #$20    * on efface le curseur avec un espace
+    JSR PUTC
+    LDB #$08    * on revient un cran en arrière 
+    JSR PUTC
+        
+    LDB ,X+         * on charge le caractère à afficher       
+    BEQ >           * si c'est 0 on sort de la boucle
+    JSR PUTC
+
+
+
+    CMPB #$0A       * si c'est retour chariot, on rajoute retour à la ligne.
+    BNE <           * sinon on itère une nouvelle fois  
+    LDB #$0D
+    JSR PUTC
+    BRA <
+!                  * fin de boucle      
+    PULU B
+    RTS
+********************************************************  
+
+
+********************************************************
+* Routine : KEY_ECHO
+* Affiche un curseur et toutes les touches saisie
+* jusqu'à ce que le code KEY (equate) soit rencontré
+* Usage : BSR KEY_ECHO
+********************************************************
+KEY_ECHO  
+    PSHU B
+!
+    LDB #$7F    * curseur carré
+    JSR PUTC    
+    LDB #$08    * on revient un cran en arrière (pour l'écraser par la suite)
+    JSR PUTC  
+    JSR GETCH   * on attend une touche saisie B contient le caractère tapé
+    CMPB #KEY_ENTER    * est-ce le caractère de sortie ?
+    BEQ >      
+    JSR PUTC    * on l'affiche si ce n'était pas le caractère de sortie        
+    BRA <
+!  
+    PULU B
+    RTS  
+********************************************************
+
+
+**************************************************************************************
+* DATA
+**************************************************************************************
+INIT
+    FCB $1B,$5B                  * passage en mode 80 colonnes. Oui PUTC peut faire ça
+    FCB $1B,$41,$1B,$50,$1B,$60  * screen 1,0,0
+    FCB $11,$0C,$00              * effacement du curseur, effacement de l'écran 
+**************************************************************************************    
+
+**************************************************************************************    
+MESSAGE                         
+    INCLUDEBIN "message.raw"     * volontairement le message est en binaire
+                                 * histoire d'avoir une petite surprise
+    END   
+```
+
+et le fichier `message.raw` :
+
+```
+$ hexdump -C message.raw
+00000000  5b 43 50 45 31 37 30 34  54 4b 53 5d 0a 0a 47 52  |[CPE1704TKS]..GR|
+00000010  45 45 54 49 4e 47 53 20  50 52 4f 46 45 53 53 4f  |EETINGS PROFESSO|
+00000020  52 20 46 41 4c 4b 45 4e  0a 0a 3e 20 48 45 4c 4c  |R FALKEN..> HELL|
+00000030  4f 0a 0a 41 20 53 54 52  41 4e 47 45 20 47 41 4d  |O..A STRANGE GAM|
+00000040  45 2e 0a 54 48 45 20 4f  4e 4c 59 20 57 49 4e 4e  |E..THE ONLY WINN|
+00000050  49 4e 47 20 4d 4f 56 45  20 49 53 0a 4e 4f 54 20  |ING MOVE IS.NOT |
+00000060  54 4f 20 50 4c 41 59 2e  0a 0a 48 4f 57 20 41 42  |TO PLAY...HOW AB|
+00000070  4f 55 54 20 41 20 4e 49  43 45 20 47 41 4d 45 20  |OUT A NICE GAME |
+00000080  4f 46 20 43 48 45 53 53  3f 0a 0a 3e 20 00        |OF CHESS?..> .|
+```
+
 On le compile en mode RAW (effectivement le format BIN ne convient pas, car le progamme sera directement placé secteur 2 et 3).
 
 ```bash
