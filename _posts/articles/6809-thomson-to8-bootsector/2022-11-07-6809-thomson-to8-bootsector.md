@@ -702,7 +702,7 @@ System.arraycopy(fullBootSector,0,fdImage,0, fullBootSector.length) // premier s
 println "[OK]"
 
 print "Copying real program code ... "
-System.arraycopy(realProgram,0,fdImage,256, fullBootSector.length)  // 2ème secteur == Offset 256
+System.arraycopy(realProgram,0,fdImage,256, realProgram.length)  // 2ème secteur == Offset 256
 println "[OK]"
 
 // L'image FD est terminée, on l'écrit, Groovy nous aide bien pour cette tâche ici !
@@ -719,6 +719,40 @@ Creating FD Image. Input : fullbootsector.raw, bootprog.raw, boot-demo.fd
 Copying bootsector code ..... [OK]
 Copying real program code ... [OK]
 Ok, FD image generated! You can run it with your prefered emulator.
+```
+
+On peut contrôler le contenu de la disquette :
+
+```bash
+$ hexdump -C boot-demo.fd 
+00000000  7a a0 e1 75 f0 32 60 00  72 9d 00 61 b1 7a fe 69  |z..u.2`.r..a.z.i|
+00000010  b8 3a fe 29 b4 7a fc 43  18 d6 db f6 f4 b1 f4 b4  |.:.).z.C........|
+00000020  b6 da 0c 43 9d 00 92 61  01 02 00 00 00 00 00 00  |...C...a........|
+00000030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00000070  00 00 00 00 00 00 00 00  42 41 53 49 43 32 00 c9  |........BASIC2..|
+00000080  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+00000100  37 32 86 01 8e ff f0 10  8e 0f f0 bd ec 00 8e 63  |72.............c|
+00000110  8c 8d 0d 8e 63 97 8d 1f  8d 57 37 32 6e 9f ff fe  |....c....W72n...|
+00000120  36 04 e6 80 27 0e bd e8  03 c1 0a 26 f5 c6 0d bd  |6...'......&....|
+00000130  e8 03 20 ee 37 04 39 36  04 7d e7 e7 2a fb 7d e7  |.. .7.96.}..*.}.|
+00000140  e7 2b fb c6 7f bd e8 03  c6 07 bd e8 03 c6 08 bd  |.+..............|
+00000150  e8 03 c6 20 bd e8 03 c6  08 bd e8 03 e6 80 27 0e  |... ..........'.|
+00000160  bd e8 03 c1 0a 26 d2 c6  0d bd e8 03 20 cb 37 04  |.....&...... .7.|
+00000170  39 36 04 c6 7f bd e8 03  c6 08 bd e8 03 bd e8 06  |96..............|
+00000180  c1 0d 27 05 bd e8 03 20  ea 37 04 39 1b 5b 1b 41  |..'.... .7.9.[.A|
+00000190  1b 50 1b 60 11 0c 00 5b  43 50 45 31 37 30 34 54  |.P.`...[CPE1704T|
+000001a0  4b 53 5d 0a 0a 47 52 45  45 54 49 4e 47 53 20 50  |KS]..GREETINGS P|
+000001b0  52 4f 46 45 53 53 4f 52  20 46 41 4c 4b 45 4e 0a  |ROFESSOR FALKEN.|
+000001c0  0a 3e 20 48 45 4c 4c 4f  0a 0a 41 20 53 54 52 41  |.> HELLO..A STRA|
+000001d0  4e 47 45 20 47 41 4d 45  2e 0a 54 48 45 20 4f 4e  |NGE GAME..THE ON|
+000001e0  4c 59 20 57 49 4e 4e 49  4e 47 20 4d 4f 56 45 20  |LY WINNING MOVE |
+000001f0  49 53 0a 4e 4f 54 20 54  4f 20 50 4c 41 59 2e 0a  |IS.NOT TO PLAY..|
+00000200  0a 48 4f 57 20 41 42 4f  55 54 20 41 20 4e 49 43  |.HOW ABOUT A NIC|
+00000210  45 20 47 41 4d 45 20 4f  46 20 43 48 45 53 53 3f  |E GAME OF CHESS?|
+00000220  0a 0a 3e 20 00 00 00 00  00 00 00 00 00 00 00 00  |..> ............|
+00000230  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 ```
 
 L'image FD est maintenant prête à être exécutée dans un émulateur :
