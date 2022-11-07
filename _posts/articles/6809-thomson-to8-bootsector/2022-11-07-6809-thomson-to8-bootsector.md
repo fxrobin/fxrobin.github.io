@@ -94,7 +94,7 @@ Enfin si l'utilisateur a appuyé sur `B` ou `C` le BASIC, alors initialisé, va 
 
 Si le programme du bootsector n'a pas besoin du BASIC, ce qui va être le cas de nombreux programmes et jeux écrits exclusivement en assembleur, alors il aura la "main" dès le chargement. Le BASIC ne sera pas exécuté, et donc toute la mémoire sera disponible pour notre programme.
 
-En pratique, on pourra utiliser la mémoire à partir de l'adresse `$6300`,voire `$6280` pour ne perdre aucun octet, ou encore même `$6000` ou `$6100` si l'on décide de se passer des routines offertes respectivement par le moniteur et l'extra-moniteur, mais attention à ne pas écraser le code du bootsector qui est en train de s'exécuter en `$6100 + PC`!
+En pratique, on pourra utiliser la mémoire à partir de l'adresse `$6300`,voire `$6280` pour ne perdre aucun octet, ou encore même `$6000` ou `$6100` si l'on décide de se passer des routines offertes respectivement par le moniteur et l'extra-moniteur, mais attention à ne pas écraser le code du bootsector qui est en train de s'exécuter en `$6200 + PC`, notamment avec l'usage de la routine `PUTC` du moniteur qui va initialiser un buffer dans cette zone. (Mais il existe une astuce ...)
 
 > "Le moniteur", l'écran ?
 
