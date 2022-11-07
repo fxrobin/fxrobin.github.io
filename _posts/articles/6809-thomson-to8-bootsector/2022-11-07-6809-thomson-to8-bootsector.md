@@ -129,8 +129,6 @@ On peut donc y placer du code exécutable, tant que code compilé ne dépasse pa
 
 Ca parait simple vue ainsi, mais le code écrit dans le *bootsector* doit subir quelques modifications par rapport à un programme BINAIRE classique afin d'être exécuté par le TO8 :
 
-
-
 | Offset(s) | Contenu |  Remarque(s)|
 |-----------|---------|-------------|
 | 0 à 119   | le code compilé au format RAW | Chaque octet doit être transformé par son *complément à deux*. Si le code BIN est plus petit que 120 octets, le reste doit être mis à `$00` |
@@ -138,6 +136,8 @@ Ca parait simple vue ainsi, mais le code écrit dans le *bootsector* doit subir 
 | 126       | `$00`   | Octet fixe à zéro
 | 127       | Checksum | checksum de la partie RAW entre les offsets 0 et 119 + checksum de la partie signature. Voir détails plus loin |
 | 128 à 255 | code RAW ou DATA ou des `$00` | format classique sans complément à deux.
+
+**Si le format du bootsector n'est pas respecté (complément à deux + checksum) le TO8 n'exécutera rien, même si le programme est correct.**
 
 ### Le complément à deux, qu'est-ce que c'est ?
 
