@@ -637,6 +637,33 @@ On le compile en mode RAW (effectivement le format BIN ne convient pas, car le p
 $ lwasm --6809 --raw bootprog.asm --output=bootprog.raw --list=bootprog.lst
 ```
 
+et on obtient le fichier `bootprog.raw` :
+
+```bash
+$ hexdump -C bootprog.raw 
+00000000  37 32 86 01 8e ff f0 10  8e 0f f0 bd ec 00 8e 63  |72.............c|
+00000010  8c 8d 0d 8e 63 97 8d 1f  8d 57 37 32 6e 9f ff fe  |....c....W72n...|
+00000020  36 04 e6 80 27 0e bd e8  03 c1 0a 26 f5 c6 0d bd  |6...'......&....|
+00000030  e8 03 20 ee 37 04 39 36  04 7d e7 e7 2a fb 7d e7  |.. .7.96.}..*.}.|
+00000040  e7 2b fb c6 7f bd e8 03  c6 07 bd e8 03 c6 08 bd  |.+..............|
+00000050  e8 03 c6 20 bd e8 03 c6  08 bd e8 03 e6 80 27 0e  |... ..........'.|
+00000060  bd e8 03 c1 0a 26 d2 c6  0d bd e8 03 20 cb 37 04  |.....&...... .7.|
+00000070  39 36 04 c6 7f bd e8 03  c6 08 bd e8 03 bd e8 06  |96..............|
+00000080  c1 0d 27 05 bd e8 03 20  ea 37 04 39 1b 5b 1b 41  |..'.... .7.9.[.A|
+00000090  1b 50 1b 60 11 0c 00 5b  43 50 45 31 37 30 34 54  |.P.`...[CPE1704T|
+000000a0  4b 53 5d 0a 0a 47 52 45  45 54 49 4e 47 53 20 50  |KS]..GREETINGS P|
+000000b0  52 4f 46 45 53 53 4f 52  20 46 41 4c 4b 45 4e 0a  |ROFESSOR FALKEN.|
+000000c0  0a 3e 20 48 45 4c 4c 4f  0a 0a 41 20 53 54 52 41  |.> HELLO..A STRA|
+000000d0  4e 47 45 20 47 41 4d 45  2e 0a 54 48 45 20 4f 4e  |NGE GAME..THE ON|
+000000e0  4c 59 20 57 49 4e 4e 49  4e 47 20 4d 4f 56 45 20  |LY WINNING MOVE |
+000000f0  49 53 0a 4e 4f 54 20 54  4f 20 50 4c 41 59 2e 0a  |IS.NOT TO PLAY..|
+00000100  0a 48 4f 57 20 41 42 4f  55 54 20 41 20 4e 49 43  |.HOW ABOUT A NIC|
+00000110  45 20 47 41 4d 45 20 4f  46 20 43 48 45 53 53 3f  |E GAME OF CHESS?|
+00000120  0a 0a 3e 20 00                                    |..> .|
+```
+
+
+
 ## Génération d'une image de disquette
 
 Il s'agit maintenant de mettre tout cela sur une image de disquette `.fd` que saura lire un émulateur comme DCMOTO ou THEODORE.
