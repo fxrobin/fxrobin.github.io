@@ -474,7 +474,7 @@ Le bootsector est maintenant complet. Passons au "véritable" petit programme qu
 
 ## Réalisation du Programme lancé par le bootsector
 
-Groose inspiration, je vais faire un petit "Hello world!" évolué en hommage au film *[WarGames](https://en.wikipedia.org/wiki/WarGames)*.
+Grosse inspiration, je vais faire un petit "Hello world!" évolué en hommage au film *[WarGames](https://en.wikipedia.org/wiki/WarGames)*.
 
 ```
 *************************************************************
