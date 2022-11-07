@@ -762,7 +762,7 @@ L'image FD est maintenant prête à être exécutée dans un émulateur :
 
 Pour exécuter le fichier, je pourrais utiliser DCMOTO, mais je vais le faire avec le [fork du core THEODORE](https://github.com/wide-dot/theodore), du groupe [WIDE-DOT]() (dont je fais humblement partie aux côtés de BENTOC et ADNZ) pour RETROARCH.
 
-Au préalable, j'ai installé RETROARCH et récupérér le core THEODORE avec les commandes suivantes 
+Au préalable, j'ai installé RETROARCH et récupéré le core THEODORE avec les commandes suivantes 
 
 1- `sudo add-apt-repository ppa:libretro/stable && sudo apt-get update && sudo apt-get install retroarch`
 2- `$ git clone https://github.com/wide-dot/theodore.git`
