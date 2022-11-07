@@ -581,7 +581,7 @@ Et après avoir tapé `1` ou `2` ou `B` ou `C`, on obtient le chargement du boot
 
 ## Conclusion et remerciements
 
-Pour conclure ce petit article, le point fondal est vraiment la partie de transformation en complément à deux d'une portion du code du bootsector,ainsi que le calcul de la checksum. Le reste est assez trivial fort heureusement.
+Pour conclure ce petit article, le point fondal est vraiment la partie de transformation en complément à deux d'une portion du code du bootsector, ainsi que le calcul de la checksum. Le reste est assez trivial fort heureusement.
 
 Dans cet article j'ai proprosé un ensemble de scripts Groovy pour réaliser chacune des tâches successivement à titre pédagogique. J'aurais pu, évidemment, regrouper l'ensemble au sein d'un même script, plus compact, mais cela aurait été mon accessible à mon sens.
 
