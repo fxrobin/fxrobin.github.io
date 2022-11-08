@@ -190,10 +190,10 @@ d'intégrité pour vérifier que le code n'a pas été altéré, volontairement 
 Pour calculer la checksum, il faut :
 
 1. initialiser la checksum avec la valeur `$55`. Pourquoi ? Parce que ! En binaire ça fait une alternance de 0 et de 1 : `$55` == `01010101` ce qui est intéressant comme base de départ pour une checksum.
-2. l'additionner avec la checksum de la signature. Cette checksum est obtenue en additionnant le complément à deux de chacun des octets de la signature, et non pas ses octets initiaux. Comme le contenu de la signature est fixé, le calcul de la checksum de la signature ne varie pas. On écrira donc le résultat directement puisque des gens gentils l'ont calculés bien avant nous :`$6C`. Cependant si, tu as envie, celui-ci aurait pû être calculé dynamiquement
-3. l'additioner avec la checksum de **l'ensemble des octets d'origines** situés entre 0 et 129. Pour ce calcul, on ne prend pas en compte le complément à deux de chacun des octets.
+2. l'additionner avec la checksum de la signature. Cette checksum est obtenue en additionnant le complément à deux de chacun des octets de la signature, et non pas ses octets initiaux. Comme le contenu de la signature est fixé, le calcul de la checksum de la signature ne varie pas. On écrira donc le résultat directement puisque des gens gentils l'ont calculé bien avant nous :`$6C`. Cependant si, tu as envie, celui-ci aurait pû être calculé dynamiquement.
+3. l'additioner avec la checksum de **l'ensemble des octets d'origines** situés entre 0 et 129. Pour ce calcul, on ne prend pas en compte le complément à deux de chacun des octets, mais bien la valeur de l'octet d'origine. 
 
-Pour résumer : `checksum = $55 + $6C + checksum_signature + check_sum_first_part`
+Pour résumer : `checksum = $55 + $6C + checksum_first_part`
 
 > C'est marrant ça, pour le calcul du checksum de la signature, on a pris le complément à deux et les octets sont pourtant écrits 
 > tels quels, alors que pour les octets de 0 à 129, on calcule la checksum sur les octets d'origine alors qu'au final 
