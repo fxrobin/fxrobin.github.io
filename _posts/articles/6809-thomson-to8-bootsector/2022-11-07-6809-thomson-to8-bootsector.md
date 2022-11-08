@@ -302,7 +302,7 @@ On compile ce programme avec lwasm :
 $ lwasm --6809 --raw bootsector.asm --output=bootsector.raw --list=bootsector.lst
 ```
 
-Après la compilation, on peut le code brut généré :
+Après la compilation, on peut voir le code brut généré :
 
 ```
                       (   bootsector.asm):00027                 ORG     $6200                   * adresse d'implantation du bootsector, ne peut pas être modifié
@@ -336,7 +336,7 @@ Après la compilation, on peut le code brut généré :
 6226 6E9FFFFE         (   bootsector.asm):00055         END     JMP [$FFFE]                     * reset TO8 si jamais on arrive à cette ligne c'est que qqch s'est mal passé :)
 ```
 
-et en binaire "pure", ça donne donc ceci :
+et en binaire "pur", ça donne donc ceci :
 
 ```bash
 $ hexdump -C bootsector.raw
