@@ -219,12 +219,12 @@ La bonne idée est donc de faire le minimum dans le code du bootsector, mais un 
 ### Le code assembleur 6809
 
 L'objectif du code du bootsector est donc de charger N secteurs à partir du secteur 2 inclus et les déposer à partir de l'adresse `$6300`.
-Ces éléments seront indiqués avec des *EQUATE*, ce sont des "paramètres" du programme qui pourront varier en fonction des besoins
+Ces éléments seront indiqués avec des *EQUATES*, ce sont des "paramètres" du programme qui pourront varier en fonction des besoins
 
 ```
 START_SECTOR    EQU $02          ** premier secteur à lire, ici 2 
-NB_READ_SECTORS EQU $04          ** nombre de secteurs, ici on lit 4 secteurs = 1 Ko (4x256 octets)
-TARGET_ADDR     EQU $6300        ** adresse d'implantation
+NB_READ_SECTORS EQU $02          ** nombre de secteurs, ici on lit 2 secteurs = 512 octets (2 x 256 octets)
+TARGET_ADDR     EQU $6300        ** adresse d'implantation du programme final
 ```
 
 Pour lire les secteurs, nous allons utiliser les routines du moniteur pour cette action.
@@ -254,8 +254,8 @@ On peut donc l'utiliser sans problème ! Sauvés !
 
 ** EQUATES PARAMETRES -------------------------------
 START_SECTOR    EQU $02          ** premier secteur à lire, ici 2 
-NB_READ_SECTORS EQU $04          ** nombre de secteurs, ici on lit 4 secteurs = 1 Ko (4x256 octets)
-TARGET_ADDR     EQU $6300        ** adresse d'implantation
+NB_READ_SECTORS EQU $02          ** nombre de secteurs, ici on lit 2 secteurs = 512 octets (2 x 256 octets)
+TARGET_ADDR     EQU $6300        ** adresse d'implantation du programme final
 
 ** EQUATES ROUTINES et REGISTRES ----------------------------------------------------------------------------
 DKCO                   EQU $E82A ** routine pour les opérations avec la disquette
@@ -490,7 +490,7 @@ SET_PALETTE   EQU $EC00   * routine setpalette
     ORG $6300
 
 DEBUT 
-    PULU Y,X,A
+    PSHU Y,X,A
 
     * reglage palette couleur 1 sur CYAN (FF0)
     LDA #$01
@@ -642,7 +642,7 @@ et on obtient le fichier `bootprog.raw` :
 
 ```bash
 $ hexdump -C bootprog.raw 
-00000000  37 32 86 01 8e ff f0 10  8e 0f f0 bd ec 00 8e 63  |72.............c|
+00000000  36 32 86 01 8e ff f0 10  8e 0f f0 bd ec 00 8e 63  |62.............c|
 00000010  8c 8d 0d 8e 63 97 8d 1f  8d 57 37 32 6e 9f ff fe  |....c....W72n...|
 00000020  36 04 e6 80 27 0e bd e8  03 c1 0a 26 f5 c6 0d bd  |6...'......&....|
 00000030  e8 03 20 ee 37 04 39 36  04 7d e7 e7 2a fb 7d e7  |.. .7.96.}..*.}.|
@@ -734,7 +734,7 @@ $ hexdump -C boot-demo.fd
 00000070  00 00 00 00 00 00 00 00  42 41 53 49 43 32 00 c9  |........BASIC2..|
 00000080  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 *
-00000100  37 32 86 01 8e ff f0 10  8e 0f f0 bd ec 00 8e 63  |72.............c|
+00000100  36 32 86 01 8e ff f0 10  8e 0f f0 bd ec 00 8e 63  |62.............c|
 00000110  8c 8d 0d 8e 63 97 8d 1f  8d 57 37 32 6e 9f ff fe  |....c....W72n...|
 00000120  36 04 e6 80 27 0e bd e8  03 c1 0a 26 f5 c6 0d bd  |6...'......&....|
 00000130  e8 03 20 ee 37 04 39 36  04 7d e7 e7 2a fb 7d e7  |.. .7.96.}..*.}.|
@@ -754,6 +754,8 @@ $ hexdump -C boot-demo.fd
 00000210  45 20 47 41 4d 45 20 4f  46 20 43 48 45 53 53 3f  |E GAME OF CHESS?|
 00000220  0a 0a 3e 20 00 00 00 00  00 00 00 00 00 00 00 00  |..> ............|
 00000230  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+*
+000a0000
 ```
 
 L'image FD est maintenant prête à être exécutée dans un émulateur :
