@@ -673,8 +673,8 @@ Une image `.fd` c'est tout simplement un fichier binaire "à plat" avec la même
 
 L'idée est de realiser un petit script en Groovy, car on l'aime beaucoup maintenant ce petit langage de scripting, qui :
 
-1. prend le nom du fichier du programme *bootsecteur* converti en complément à deux, et le placer secteur 1 de la piste 0 de la face 0
-2. prend le nom du fichier du programme réel, lancé par le programme *bootsector*, et le placer secteur 2 et 3 de la piste 0 de face 0
+1. prend le nom du fichier qui représente le bootsector complet, et le placer secteur 1 de la piste 0 de la face 0.
+2. prend le nom du fichier du programme réel, lancé par le programme *bootsector*, et le placer secteur 2 et 3 de la piste 0 de face 0.
 3. prend le nom du fichier `.fd` à générer.
 
 Voici ce script :
