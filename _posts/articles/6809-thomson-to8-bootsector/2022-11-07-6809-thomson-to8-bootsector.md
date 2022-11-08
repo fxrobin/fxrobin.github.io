@@ -669,7 +669,7 @@ $ hexdump -C bootprog.raw
 
 Il s'agit maintenant de mettre tout cela sur une image de disquette `.fd` que saura lire un émulateur comme DCMOTO ou THEODORE.
 
-Une image `.fd` c'est tout simplement 2 faces de 80 pistes composées de 16 secteurs chacunes, chaque secteur faisant 256 octets.
+Une image `.fd` c'est tout simplement un fichier binaire "à plat" avec la même structure qu'une disquette, de manière séquentielle. Comme une disquette contient 2 faces de 80 pistes composées de 16 secteurs chacunes, chaque secteur faisant 256 octets, le fichier `.fd` aura donc une taille de `2 x 80 x 16 x 256 = 655360` octets.
 
 L'idée est de realiser un petit script en Groovy, car on l'aime beaucoup maintenant ce petit langage de scripting, qui :
 
@@ -690,7 +690,7 @@ def fdImageFileName = args[2]
 
 println "Creating FD Image. Input : $fullBootSectorFileName, $realProgramFileName, $fdImageFileName"
 
-// creation du bootsector vierge
+// creation de la disquette vierge double face en mémoire
 def DISK_SIZE = 2 * 80 * 16 * 256
 byte[] fdImage = new byte[DISK_SIZE]
 
