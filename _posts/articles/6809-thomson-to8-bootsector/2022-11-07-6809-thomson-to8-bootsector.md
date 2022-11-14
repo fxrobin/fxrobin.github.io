@@ -157,7 +157,7 @@ Dans le paragraphe précédent, j'ai indiqué que la signature à placer à l'of
 
 Si la signature `BASIC1` est placée à la place de `BASIC2`, le *bootsector* ne se lancera pas automatiquement si l'on appuie sur `1` ou `B`. Seul le BASIC 1.0 (Donc `2` ou `C` sur TO8) lancera le *bootsector*.
 
-Avec ou sans la signature BASIC2, le BASIC 1.0 lance toujours le *bootsector*.
+Avec ou sans la signature `BASIC2`, le BASIC 1.0 lance toujours le *bootsector*.
 - En BASIC 128 ou 256, le *bootsector* est lancé automatiquement s'il y a la signature, sinon il n'est pas lancé.
 - Dans ce dernier cas, on peut lancer le *bootsector* avec la commande `EXEC &HA007` (MO) ou `EXEC &HE007` (TO).
 
