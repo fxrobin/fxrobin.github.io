@@ -149,6 +149,24 @@ Pour retrouver b, c'est simple, niveau 5ème je pense : `256 - b = a`, et bim ! 
 
 Dans les faits, pour calculer le complément à deux d'un octet, on inverse tous les bits et on ajoute 1. En Java, ça donnera `data = ~data + 1` (*data* est l'octet à transformer, l'opérateur `~` inverse les bits et `+1` ajoute 1).
 
+### La signature à l'offset 120, qu'est-ce donc ?
+
+> En préambule à ce paragraphe, je remercie Daniel Coulom pour les informations relatives à la signature donnés sur le forum [system-cfg](https://forum.system-cfg.com/viewtopic.php?p=217836#p217836).
+
+Dans le paragraphe précédent, j'ai indiqué que la signature à placer à l'offset 120 était `BASIC2`. C'est le cas lorsqu'il s'agit de pouvoir lancer le *bootsector* automatiquement, quelle que soit la touche pressées (`1`, `2`, `B` ou `C`) sur TO8.
+
+Si la signature `BASIC1` est placée à la place de `BASIC2`, le *bootsector* ne se lancera pas automatiquement si l'on appuie sur `1` ou `B`. Seul le BASIC 1.0 (Donc `2` ou `C` sur TO8) lancera le *bootsector*.
+
+Avec ou sans la signature BASIC2, le BASIC 1.0 lance toujours le *bootsector*.
+- En BASIC 128 ou 256, le *bootsector* est lancé automatiquement s'il y a la signature, sinon il n'est pas lancé.
+- Dans ce dernier cas, on peut lancer le *bootsector* avec la commande `EXEC &HA007` (MO) ou `EXEC &HE007` (TO).
+
+Il y a des cas où il ne faut pas mettre la chaîne `BASIC2`, par exemple dans une disquette DOS :
+- le *bootsector* ne sera pas exécuté en BASIC 128 ou 512, car ils contiennent déjà le DOS. 
+- en revanche, en BASIC 1.0, il sera exécuté et chargera le DOS, qui est nécessaire dans ce cas pour pouvoir "opérer" la disquette correctement.
+
+Dans cet article, je suis sur TO8, je souhaite que le *bootsector* soit automatiquement lancé quel que soit le menu sélectionné. Je choisi donc d'inscrire la signature `BASIC2`.
+
 ### Digression : pourquoi le format "RAW" et pas "BIN" ?
 
 Ce paragraphe est un peu "hors-sujet", mais si vous vous posiez la question de la différence entre un fichier `RAW` et un fichier `BIN`, je ne résiste pas à fournir quelques éléments.
@@ -190,7 +208,7 @@ d'intégrité pour vérifier que le code n'a pas été altéré, volontairement 
 Pour calculer la checksum, il faut :
 
 1. initialiser la checksum avec la valeur `$55`. Pourquoi ? Parce que ! En binaire ça fait une alternance de 0 et de 1 : `$55` == `01010101` ce qui est intéressant comme base de départ pour une checksum.
-2. l'additionner avec la checksum de la signature. Cette checksum est obtenue en additionnant le complément à deux de chacun des octets de la signature, et non pas ses octets initiaux. Comme le contenu de la signature est fixé, le calcul de la checksum de la signature ne varie pas. On écrira donc le résultat directement puisque des gens gentils l'ont calculé bien avant nous :`$6C`. Cependant si, tu as envie, celui-ci aurait pû être calculé dynamiquement.
+2. l'additionner avec la checksum de la signature `BASIC2`. Cette checksum est obtenue en additionnant *le complément à deux de chacun des octets de la signature, et non pas ses octets initiaux*. Comme le contenu de la signature est fixé (`BASIC2`), le calcul de la checksum de la signature ne varie pas. On écrira donc le résultat directement puisque des gens gentils l'ont calculé bien avant nous :`$6C`. Cependant si, tu as envie, celui-ci aurait pû être calculé dynamiquement.
 3. l'additioner avec la checksum de **l'ensemble des octets d'origines** situés entre 0 et 129. Pour ce calcul, on ne prend pas en compte le complément à deux de chacun des octets, mais bien la valeur de l'octet d'origine. 
 
 Pour résumer : `checksum = $55 + $6C + checksum_first_part`
@@ -305,9 +323,6 @@ $ lwasm --6809 --raw bootsector.asm --output=bootsector.raw --list=bootsector.ls
 Après la compilation, on peut voir le code brut généré :
 
 ```
-                      (   bootsector.asm):00027                 ORG     $6200                   * adresse d'implantation du bootsector, ne peut pas être modifié
-     60               (   bootsector.asm):00028                 SETDP   $60                     
-                      (   bootsector.asm):00029         
 6200                  (   bootsector.asm):00030         BEGIN    
 6200 8660             (   bootsector.asm):00031                 LDA #$60                        * pour réduire la taille du binaire générer, on utiliser des adresses
 6202 1F8B             (   bootsector.asm):00032                 TFR A,DP                        * avec DP fixé en $60
@@ -322,7 +337,7 @@ Après la compilation, on peut voir le code brut généré :
                       (   bootsector.asm):00041         
 6211 C602             (   bootsector.asm):00042                 LDB     #START_SECTOR
 6213 D74C             (   bootsector.asm):00043                 STB     <REG_SECTOR             * on force l'adressage sur 1 octet, car DP est fixé sur $60
-6215 8604             (   bootsector.asm):00044                 LDA     #NB_READ_SECTORS        * A est notre compteur qui va décrémenter.
+6215 8602             (   bootsector.asm):00044                 LDA     #NB_READ_SECTORS        * A est notre compteur qui va décrémenter.
                       (   bootsector.asm):00045         
                       (   bootsector.asm):00046         * READ_SECTOR_LOOP                
 6217 BDE82A           (   bootsector.asm):00047         !       JSR     DKCO                    * charge le secteur
@@ -341,7 +356,7 @@ et en binaire "pur", ça donne donc ceci :
 ```bash
 $ hexdump -C bootsector.raw
 00000000  86 60 1f 8b 10 ce a0 00  8e 63 00 9f 4f 86 02 97  |.`.......c..O...|
-00000010  48 c6 02 d7 4c 86 04 bd  e8 2a 25 0a 0c 4f 0c 4c  |H...L....*%..O.L|
+00000010  48 c6 02 d7 4c 86 02 bd  e8 2a 25 0a 0c 4f 0c 4c  |H...L....*%..O.L|
 00000020  4a 26 f4 bd 63 00 6e 9f  ff fe                    |J&..c.n...|
 ``` 
 
@@ -384,19 +399,21 @@ Il suffit ensuite de lancer le convertisseur sur le fichier `bootsector.raw` en 
 ```bash
 $ groovy convert.groovy bootsector.raw bootsector.conv
 Converting bootsector.raw into bootsector.conv (2 complement)
-INPUT    : 86601F8B10CEA0008E63009F4F86029748C602D74C8604BDE82A250A0C4F0C4C4A26F4BD63006E9FFFFE (bootsector.raw) 
-OUTPUT   : 7AA0E175F0326000729D0061B17AFE69B83AFE29B47AFC4318D6DBF6F4B1F4B4B6DA0C439D0092610102 (bootsector.conv) 
-CHECKSUM : 5D 
+INPUT    : 86601F8B10CEA0008E63009F4F86029748C602D74C8602BDE82A250A0C4F0C4C4A26F4BD63006E9FFFFE (bootsector.raw) 
+OUTPUT   : 7AA0E175F0326000729D0061B17AFE69B83AFE29B47AFE4318D6DBF6F4B1F4B4B6DA0C439D0092610102 (bootsector.conv) 
+CHECKSUM : 5B 
 LENGTH   : 42 bytes
 Converted file (bootsector.conv) is written.
 ```
+
+Le programme nous affiche aussi la checksum calculée `5B` de cette première partie qui sera à utiliser par la suite.
 
 Et voici le fichier `bootsector.conv` obtenu :
 
 ```bash
 $ hexdump -C bootsector.conv 
 00000000  7a a0 e1 75 f0 32 60 00  72 9d 00 61 b1 7a fe 69  |z..u.2`.r..a.z.i|
-00000010  b8 3a fe 29 b4 7a fc 43  18 d6 db f6 f4 b1 f4 b4  |.:.).z.C........|
+00000010  b8 3a fe 29 b4 7a fe 43  18 d6 db f6 f4 b1 f4 b4  |.:.).z.C........|
 00000020  b6 da 0c 43 9d 00 92 61  01 02                    |...C...a..|
 ```
 ### Finalisation des 256 octets du bootsector
@@ -411,9 +428,9 @@ Je vais encore réaliser ceci avec un autre script GROOVY :
 ```java
 import java.nio.file.*
 
-// Usage exemple : groovy create-full-bootsector.groovy bootsector.conv fullbootsector.raw 5D
+// Usage exemple : groovy create-full-bootsector.groovy bootsector.conv fullbootsector.raw 5B
 //
-// note : 5D est le report en hexadécimal de la checksum retournée par le script "convert.groovy"
+// note : 5B est le report en hexadécimal de la checksum retournée par le script "convert.groovy"
 
 def convertedBootSectorFileName = args[0] 
 def fullBootSectorFileName = args[1]
@@ -448,9 +465,9 @@ println "Ok, CHECKSUM = ${String.format('%02X', fullBootSector[127])}"
 et je le lance :
 
 ```bash
-$ groovy create-full-bootsector.groovy bootsector.conv fullbootsector.raw 5D
+$ groovy create-full-bootsector.groovy bootsector.conv fullbootsector.raw 5B
 Creating full bootsector, input : bootsector.conv, fullbootsector.raw, 5D
-Ok, CHECKSUM = C9
+Ok, CHECKSUM = C7
 ```
 
 et voici le contenu du fichier `fullbootsector.raw` qui vient d'être créé :
@@ -458,17 +475,17 @@ et voici le contenu du fichier `fullbootsector.raw` qui vient d'être créé :
 ```bash
 $ hexdump -C fullbootsector.raw 
 00000000  7a a0 e1 75 f0 32 60 00  72 9d 00 61 b1 7a fe 69  |z..u.2`.r..a.z.i|
-00000010  b8 3a fe 29 b4 7a fc 43  18 d6 db f6 f4 b1 f4 b4  |.:.).z.C........|
+00000010  b8 3a fe 29 b4 7a fe 43  18 d6 db f6 f4 b1 f4 b4  |.:.).z.C........|
 00000020  b6 da 0c 43 9d 00 92 61  01 02 00 00 00 00 00 00  |...C...a........|
 00000030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 *
-00000070  00 00 00 00 00 00 00 00  42 41 53 49 43 32 00 c9  |........BASIC2..|
+00000070  00 00 00 00 00 00 00 00  42 41 53 49 43 32 00 c7  |........BASIC2..|
 00000080  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 *
 00000100
 ```
 
-La signature `BASIC2` a bien été insérée à l'offset 120 ainsi que la checksum `C9` à l'offset 127.
+La signature `BASIC2` a bien été insérée à l'offset 120 ainsi que la checksum `C7` à l'offset 127.
 La suite du bootsector est tout à zéro.
 
 Le bootsector est maintenant complet. Passons au "véritable" petit programme qu'il chargera et lancera.
@@ -727,11 +744,11 @@ On peut contrôler le contenu de la disquette :
 ```bash
 $ hexdump -C boot-demo.fd 
 00000000  7a a0 e1 75 f0 32 60 00  72 9d 00 61 b1 7a fe 69  |z..u.2`.r..a.z.i|
-00000010  b8 3a fe 29 b4 7a fc 43  18 d6 db f6 f4 b1 f4 b4  |.:.).z.C........|
+00000010  b8 3a fe 29 b4 7a fe 43  18 d6 db f6 f4 b1 f4 b4  |.:.).z.C........|
 00000020  b6 da 0c 43 9d 00 92 61  01 02 00 00 00 00 00 00  |...C...a........|
 00000030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 *
-00000070  00 00 00 00 00 00 00 00  42 41 53 49 43 32 00 c9  |........BASIC2..|
+00000070  00 00 00 00 00 00 00 00  42 41 53 49 43 32 00 c7  |........BASIC2..|
 00000080  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 *
 00000100  36 32 86 01 8e ff f0 10  8e 0f f0 bd ec 00 8e 63  |62.............c|
@@ -755,7 +772,6 @@ $ hexdump -C boot-demo.fd
 00000220  0a 0a 3e 20 00 00 00 00  00 00 00 00 00 00 00 00  |..> ............|
 00000230  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
 *
-000a0000
 ```
 
 L'image FD est maintenant prête à être exécutée dans un émulateur :
