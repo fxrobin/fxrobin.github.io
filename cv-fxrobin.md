@@ -56,13 +56,6 @@ IA : réseau de neurones, algorithmes génétiques, deep learning
   
 </fieldset>
 
-<fieldset id="qualite-pro" markdown="1">
- <legend>Qualités prof.</legend>
- Essai
-
- Essai
-</fieldset>
-
 <fieldset id="projets" markdown="1">
  <legend>Compétences "Projets"</legend> 
 Gestion d'équipe et des compétences
