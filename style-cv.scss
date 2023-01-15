@@ -73,7 +73,7 @@ body {
       text-align : center;
       display: block;
       
-      a { display: block; margin-bottom : 0.2em;}
+      a { margin : 0.3em; width:45%}
    }
 }
 
@@ -169,6 +169,13 @@ body {
     padding : 0.5em;
     font-family: "Contrail One";
     margin : auto;
+
+    @include mobile
+    {
+      width : 10em;
+      white-space: nowrap;
+      text-align: center;
+    }
   }
 
   li 
