@@ -1,0 +1,188 @@
+--- 
+---
+
+// IMPORTS
+//
+
+@import "reset";
+@import "variables";
+@import "back-to-top";
+@import "base-rules";
+@import "mixins";
+// Nicolas Gallagher's micro clearfix hack
+// http://nicolasgallagher.com/micro-clearfix-hack/
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/*********************/
+/* LAYOUT / SECTIONS */
+/*********************/
+
+.center {
+    margin: 1em;
+    width : 100%;
+    max-width: none;
+}
+
+
+
+//
+// .masthead
+//
+.wrapper-masthead {
+    display : none;
+}
+
+
+.wrapper-footer , .disqus , .article-list-footer, .share-page {
+    display : none ;
+}
+
+
+
+//
+// .main
+//
+@import "article-list";
+@import "blanka";
+@import "stackoverflow";
+@import "search";
+@import "front-post";
+@import "post";
+@import "table-of-content";
+@import "share";
+@import "video";
+@import "disqus";
+@import "languages";
+@import "article-list-post-footer";
+@import "gurumeditation";
+
+// Settled on moving the import of syntax highlighting to the bottom of the CSS
+// ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
+@import "highlights";
+@import "svg-icons";
+@import "fx";
+
+.orbitron, h2 
+{
+font-family: "Orbitron", "Sans-Serif";
+}
+
+body {
+    background : white;
+    width: 100%;
+    font-family: "Ubuntu", "Sans-Serif";
+}
+
+#back-to-blog
+{
+    display: none;
+}
+
+#intro
+{
+    margin-top : 2cm;
+    margin-bottom : 1cm;
+}
+
+#photo
+{
+    float: left; 
+    margin: 0cm 0.5cm 0cm 0cm; 
+    border-radius : 0.5em;
+    width : 2cm;
+}
+
+
+#title
+{
+    font-size:1.2em;
+}
+
+#social
+{
+    margin-top : 1em;
+    font-size: 0.8em;
+}
+
+.container
+{
+    border : none;
+
+    p 
+    {
+       margin-left : 1em; 
+    }
+}
+
+#short-details
+{
+    margin-left : 1em;
+    padding-left: 1em;
+    padding-top: 0.5em;
+    width : 6cm;
+    float : right;
+    border-left: solid black 2px;
+    border-bottom: solid black 2px;
+    background-color: rgb(226, 225, 225);
+
+    p 
+    {
+       margin : 0px;
+       margin-bottom : 0.5em;
+       text-align: left;
+       font-size: 0.8em;
+    }
+
+    fieldset
+    {
+        margin-bottom : 1em;
+    }
+
+    legend 
+    {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+}
+
+h2 {
+    margin-top : 0em;
+    margin-bottom : 0.5em;
+    text-shadow: 2px 2px white;
+
+    &::before {
+        content: "> ";
+    }
+
+    &::after {
+        content: "_";  
+    }
+}
+ 
+
+h3 {
+    color: darkblue;
+    margin-top : 1em;
+    margin-bottom : 0.2em;
+
+    &::before {
+        content: '\2589 ';
+        margin-right : 0.2em;
+    }
+}
+
+h4 
+{
+    font-style: italic;
+    font-size: 0.8em;
+}
+
+
