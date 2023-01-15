@@ -56,6 +56,18 @@ IA : réseau de neurones, algorithmes génétiques, deep learning
   
 </fieldset>
 
+<fieldset id="loisirs" markdown="1">
+ <legend>Loisirs</legend> 
+
+Sports : tennis, course à pied, badminton
+
+Musique : guitariste et chanteur dans un groupe de reprises pop/rock
+
+RetroCoding : MO5/TO8 (ASM 6809), Atari ST (ASM 68000). Membre du groupe <a href="https://www.wide-dot.com/">wide-dot</a>
+
+Voyages
+</fieldset>
+
 <fieldset id="projets" markdown="1">
  <legend>Compétences "Projets"</legend> 
 Gestion d'équipe et des compétences
@@ -79,13 +91,6 @@ Musique : guitariste et chanteur dans un groupe de reprises pop/rock
 RetroCoding : MO5/TO8 (ASM 6809), Atari ST (ASM 68000). Membre du groupe <a href="https://www.wide-dot.com/">wide-dot</a>
 
 Voyages
-</fieldset>
-
-<fieldset id="essai" markdown="1">
- <legend>Essai</legend>
- Essai
- 
- Essai
 </fieldset>
 
 
