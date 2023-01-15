@@ -78,8 +78,16 @@ Musique : guitariste et chanteur dans un groupe de reprises pop/rock
 
 RetroCoding : MO5/TO8 (ASM 6809), Atari ST (ASM 68000). Membre du groupe <a href="https://www.wide-dot.com/">wide-dot</a>
 
-Voyages.
+Voyages
 </fieldset>
+
+<fieldset id="essai" markdown="1">
+ <legend>Essai</legend>
+ Essai
+ 
+ Essai
+</fieldset>
+
 
 
 <fieldset id="more" markdown="1">
