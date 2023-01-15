@@ -57,15 +57,15 @@ IA : réseau de neurones, algorithmes génétiques, deep learning
 </fieldset>
 
 <fieldset id="loisirs" markdown="1">
- <legend>Qualités</legend> 
+ <legend>Qualités professionnelles</legend> 
 
-Sports : tennis, course à pied, badminton
+Autonome, sens de la mission, altruiste
 
-Musique : guitariste et chanteur dans un groupe de reprises pop/rock
+Travail en équipe, goût de l'effort 
 
-RetroCoding : MO5/TO8 (ASM 6809), Atari ST (ASM 68000). Membre du groupe <a href="https://www.wide-dot.com/">wide-dot</a>
+Rigoureux et pragmatique
 
-Voyages
+Méthodique et organisé
 </fieldset>
 
 <fieldset id="projets" markdown="1">
