@@ -54,7 +54,7 @@ Rigoureux et pragmatique
 Méthodique et organisé
 </fieldset>
 
-<fieldset id="pro" markdown="1">
+<fieldset id="int-pro" markdown="1">
  <legend>Intérêts professionnels</legend> 
   
 Capitaliser : écrire, publier, partager, former, progresser
