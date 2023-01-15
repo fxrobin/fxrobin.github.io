@@ -60,7 +60,7 @@ IA : réseau de neurones, algorithmes génétiques, deep learning
  <legend>Qualités professionnelles</legend>
 Autonome, sens de la mission
 
-Travail en équipe, goût de l'effort, altruiste.
+Travail en équipe, goût de l'effort, altruiste
 
 Rigoureux et pragmatique
 
