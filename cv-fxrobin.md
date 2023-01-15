@@ -57,9 +57,9 @@ IA : réseau de neurones, algorithmes génétiques, deep learning
 </fieldset>
 
 <fieldset id="loisirs" markdown="1">
- <legend>Loisirs</legend> 
+ <legend>Qualités professionnelles</legend> 
 
-Sports : tennis, course à pied, badminton
+Autonome, sens de la mission
 
 Musique : guitariste et chanteur dans un groupe de reprises pop/rock
 
