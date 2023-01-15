@@ -59,13 +59,9 @@ IA : réseau de neurones, algorithmes génétiques, deep learning
 <fieldset id="loisirs" markdown="1">
  <legend>Qualités professionnelles</legend> 
 
-Autonome, sens de la mission, altruiste
+Autonome, sens de la mission, altruiste, travail en équipe, goût de l'effort 
 
-Travail en équipe, goût de l'effort 
-
-Rigoureux et pragmatique
-
-Méthodique et organisé
+Rigoureux et pragmatique, Méthodique et organisé
 </fieldset>
 
 <fieldset id="projets" markdown="1">
