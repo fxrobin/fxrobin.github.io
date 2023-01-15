@@ -32,7 +32,7 @@ lang: fr
 Certification SAFE DevSecOps (2022)
 
 Officier de l'armée de Terre du grade de sous-lieutenant à **commandant**,
-de 1998 à 2018,titulaire du diplôme technique militaire "Systèmes d'Information"
+de 1998 à 2018, titulaire du diplôme technique militaire "Systèmes d'Information"
 
 Anglais TOEIC : 865 (2013)
 
