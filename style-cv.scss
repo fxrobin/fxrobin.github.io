@@ -1,6 +1,12 @@
 --- 
 ---
 
+@mixin mobile {
+  @media screen and (max-width: 1024px) {
+    @content;
+  }
+}
+
 body {
     font-family: "Ubuntu", "Sans-Serif";
     background-image: url('/images/background-cv.jpg'); background-attachment: fixed;
@@ -22,6 +28,15 @@ body {
     float: left; 
     margin: 0px 15px 15px 0px; 
     border-radius : 0.5em;
+
+    @include mobile {
+      width : 5em;
+      float : none;
+      margin : auto;
+      text-align : center;
+      display: block;
+    }
+
 }
 
 #intro
@@ -29,6 +44,13 @@ body {
     h1 
     {
        font-size : 2.5em;
+      
+       @include mobile {
+         font-size: 1em;
+         text-align : center;
+         display: block;
+      }
+
     }
 }
 
@@ -36,24 +58,27 @@ body {
 {
     font-size:1.5em;
     text-shadow: 1px 2px white;
+
+    @include mobile {
+      font-size: 1em;
+      text-align : center;
+      display: block;
+   }
 }
 
 #social
 {
     margin-top : 1em;
+    @include mobile {
+      font-size: 0.5em;
+      text-align : center;
+      display: block;
+      
+      a { display: block; }
+   }
 }
 
-#short-details
-{
-    float : right ; 
-    width : 30em;
 
-    p 
-    {
-       margin-top : 0.5em;
-       margin-bottom : 0.8em;
-    }
-}
 
   .container {
     margin-bottom: 4em;
@@ -99,6 +124,25 @@ body {
     font-style: italic;
   }
 
+#short-details
+{
+    float : right ; 
+    width : 30em;
+
+    p 
+    {
+       margin-top : 0.5em;
+       margin-bottom : 0.8em;
+    }
+
+    @include mobile {
+      float : none;
+      width : 100%;
+      margin : 0.2em;
+      font-size: 0.8em;
+  }
+}
+
   fieldset {
     border: 2px solid #9ecaed;
     box-shadow: 0 0 10px #9ecaed;
@@ -108,6 +152,13 @@ body {
     margin-right: 1em;         
     margin-bottom: 1em;  
     background-color: #d3d6ff !important;  
+
+    @include mobile {
+      padding : 0.3em;
+      margin : 0.1em;
+      margin-bottom: 1em;
+    }
+
   }
 
   legend {
