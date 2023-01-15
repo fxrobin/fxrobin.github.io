@@ -43,17 +43,6 @@ Licence d'informatique à l'Université de Versailles-St-Quentin (1996)
 DUT d'informatique à l'Université d'Orléans (1993-1995)
 </fieldset>
 
-<fieldset id="pro" markdown="1">
- <legend>Qualités profesionnelles</legend> 
-Autonome, sens de la mission
-
-Travail en équipe, goût de l'effort, altruiste.
-
-Rigoureux et pragmatique
-
-Méthodique et organisé
-</fieldset>
-
 <fieldset id="int-pro" markdown="1">
  <legend>Intérêts professionnels</legend> 
   
