@@ -95,11 +95,13 @@ Voyages.
 
 <fieldset id="more" markdown="1">
  <legend>Et un peu plus ...</legend>
+Pour en savoir plus sur mon parcours, consulter ce [lien](/about/) pour le découvrir.
 
-* Pour en savoir plus sur mon parcours, consulter ce [lien](/about/) pour le découvrir.
-* Parcourir mes articles publiés sur [Developpez.com](https://fxrobin.developpez.com/).
-* Parcourir l'ensemble des articles sur mon [blog](/).
-* Pour me contacter, envoyer, svp, un message sur [LinkedIn](https://www.linkedin.com/in/fxrobin).
+Parcourir mes articles publiés sur [Developpez.com](https://fxrobin.developpez.com/).
+
+Parcourir l'ensemble des articles sur mon [blog](/).
+
+Pour me contacter, envoyer, svp, un message sur [LinkedIn](https://www.linkedin.com/in/fxrobin).
   
 </fieldset>
 </div>
