@@ -52,7 +52,7 @@ Craftsmanship : adepte inconditionnel de l'ouvrage *Clean Code* (Robert C. Marti
 
 Architectures logicielles (Java) & SI
 
-IA : réseau de neurones, algorithmes génétiques, deep learning
+IA : algorithmes génétiques, réseau de neurones, *deep learning*
   
 </fieldset>
 
@@ -211,7 +211,7 @@ et en base de données (SGBD, SGBDR, Décisionnel)
 
 ### Web
   * HTML5/CSS3
-  * JQuery, Bootstrap
+  * JQuery, Bootstrap, Jeckyll
   * Vue.js, Angular, React
   * JavaScript, TypeScript
 
