@@ -174,7 +174,8 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * Java FX 8 à 11, Jakarta Persistence (ex JPA), Jarkarta DI 2 (ex CDI), JSF 2 à 4
   * Vertx, JAX-RS, JAX-WS, Apache CXF
   * Lombok, Apache Commons-*, Guava, LibGDX
-  * JUnit, Mockito, JMeter, Selenium
+  * JUnit, Mockito, Rest-Assured
+  * JMeter, Selenium, Gatling
   * Maven, Gradle
   * GlassFish Payara, WildFly, Tomcat, TomEE
   * Qualité du code : SonarLint, SpotBugs (FindBugs), Codacy, CodeFactor
