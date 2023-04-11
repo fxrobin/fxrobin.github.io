@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ page.lang }}">
   <head>
+    {% include analytics.html %}
     {% include meta.html %}
     <title>{% if page.title %}{{ page.title }} – {% endif %}{{ site.name }}</title>
     <!--[if lt IE 9]>
@@ -82,8 +83,6 @@
         }
       })();
     </script>
-
-    {% include analytics.html %}
 
     <script>
       var app = document.getElementById('site-name');
