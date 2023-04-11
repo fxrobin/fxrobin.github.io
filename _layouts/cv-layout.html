@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ page.lang }}">
   <head>
+    {% include analytics.html %}
     <title>{% if page.title %}{{ page.title }} – {% endif %}CV</title>
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/print-cv.css" media="print"/>
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style-cv.css" media="screen"/>
@@ -26,7 +27,6 @@
       {{ content }}
     </div>
 
-    {% include analytics.html %}
 
   </body>
 </html>
