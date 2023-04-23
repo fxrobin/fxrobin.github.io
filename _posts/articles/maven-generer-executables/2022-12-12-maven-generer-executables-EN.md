@@ -12,8 +12,7 @@ ref: maven-generer-executables
 
 
 <div class="intro" markdown='1'>
-f, like me, you are tired of making command line programs in Java and having to run them with this kind of
-to launch them with this kind of things:
+If, like me, you are tired of making command line programs in Java and having to run them with this kind of things:
 ```bash
 $ java -jar demo-app-v1.0.0-SNAPSHOT.jar arg1 arg2 arg3`
 ```
@@ -29,7 +28,7 @@ Appetizing!
 In this little tutorial, I will generate an executable file :
 - for Linux and MacOSX, 
 - for Windows, an `.EXE`, 
-- as a *Runnable JAR*, *classic*.
+- as a *classic Runnable JAR*.
 
 > However, this requires the presence of a JAVA Runtime (JRE and/or JDK) on the machine that will run it, although there are also solutions to embed a JRE.
 
@@ -40,7 +39,7 @@ In this little tutorial, I will generate an executable file :
 
 ## The JAVA program to be transformed
 
-I'm going to make it very simple for this example, but I'm going to use the [PICOCLI] library (https://picocli.info/) to make something fast and (almost) clean.
+I'm going to make it very simple for this example, using the [PICOCLI] library (https://picocli.info/) to make something fast and (almost) clean.
 
 > If you don't know picocli yet, I strongly encourage you to discover it quickly !
 
