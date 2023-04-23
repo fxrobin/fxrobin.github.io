@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Java: Generate Windows, Linux and MacOS executables'
+title: 'Java: How to generate Windows, Linux and MacOS executables?'
 subtitle: In favor of a "command line" type program, with Maven
 logo: java.png
 category: articles
