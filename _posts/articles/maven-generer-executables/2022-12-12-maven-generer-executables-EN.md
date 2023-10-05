@@ -159,7 +159,11 @@ which will be the entry point with its `static void main(String... args)` :
 							<filter>
 								<artifact>*:*</artifact>
 								<excludes>
+									<exclude>module-info.class</exclude>
 									<exclude>META-INF/*.MF</exclude>
+									<exclude>META-INF/*.SF</exclude>
+									<exclude>META-INF/*.DSA</exclude>
+									<exclude>META-INF/*.RSA</exclude>
 								</excludes>
 							</filter>
 						</filters>						
