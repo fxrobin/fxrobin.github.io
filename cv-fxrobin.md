@@ -206,7 +206,7 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * ADA, SAP, LUA
   * LaTeX
 
-### Intelligence Articificielle
+### Intelligence Artificielle
 
   * intégration (et usage) de Github Copilot X
   * prompt engineering
