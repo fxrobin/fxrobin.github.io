@@ -97,6 +97,17 @@ Pour me contacter, envoyer, svp, un message sur [LinkedIn](https://www.linkedin.
 </div>
 
 ## Parcours professionnel
+
+### Managing Solution Archictect & Crafter
+#### Depuis septembre 2023 : Capgemini, Lyon
+
+Intégré à une équipe dédiée au Craftsmanship au profit de l'ensemble des projets du groupe.
+
+* réalisation de *PoC GenAI* au profit du développeur (GitHub Copilot, Ollama, Continue, ChatBot Ollama)
+* réalisation de *PoC GenAI avec Retrieval Augmented Generation* (RAG)
+* réponse aux appels d'offres, chiffrages, propositions techniques
+* speaker pour divers évenements
+
 ### API Manager
 #### Depuis juillet 2020 : Ministère des Armées, DGNUM/CASID/SAND, Bruz ####
 
@@ -167,7 +178,7 @@ et en base de données (SGBD, SGBDR, Décisionnel)
 ### Langages
 
 * Java 
-  * 27 ans d'expérience depuis Java 1.1 (depuis fin 1996) à Java 17
+  * 27 ans d'expérience depuis Java 1.1 (depuis fin 1996) à Java 20
   * Quarkus : depuis la version 1 (2019) à la version 2
   * Spring : depuis la version 2 (2006) Spring IoC, Spring Security (depuis 2009), SpringBoot 4 à 6
   * Jakarta EE : depuis J2EE 1.2 à Jakarta EE 10
@@ -195,8 +206,18 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * ADA, SAP, LUA
   * LaTeX
 
+### Intelligence Articificielle
+
+  * intégration (et usage) de Github Copilot X
+  * prompt engineering
+  * ollama (+codellama +vicuna +mistral +zephyr)
+  * AWS CodeWhisperer
+  * VSCode Plugin CONTINUE
+  * LangChain
+  * ChatGPT
+
 ### Interopératibilité / API
-  * API REST, WebServices SOAP
+  * API REST, HATOEAS, WebServices SOAP
   * YAML, JSON, XML, XSLT, XQuery
   * OpenAPI 3, Swagger 2, XML-Schema
   * SOA/ESB, UDDI, MicroServices
