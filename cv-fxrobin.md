@@ -52,7 +52,7 @@ Craftsmanship : adepte inconditionnel de l'ouvrage *Clean Code* (Robert C. Marti
 
 Architectures logicielles (Java) & SI
 
-IA : algorithmes génétiques, réseau de neurones, *deep learning*
+IA : algorithmes génétiques, réseau de neurones, *deep learning*, IA Générative (ChatGPT, Copilot X, Ollama)
   
 </fieldset>
 
