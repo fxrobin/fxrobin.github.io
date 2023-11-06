@@ -7,6 +7,7 @@ category: articles
 tags: [Retro, C, Atari, Retro-Prog]
 lang: en
 ref: m68k-cross-compiling
+permalink: /c-programming-for-atari-st-with-linux
 ---
 
 <div class="intro" markdown='1'>

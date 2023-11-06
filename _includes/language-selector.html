@@ -1,18 +1,12 @@
 {% assign posts=site.posts | where:"ref", page.ref | sort: 'lang' %}
 {% capture difference %} {{ posts | size | minus:1 }} {% endcapture %}
+
 {% unless difference contains '-' %}
 
 <span class="language-selector">
     {{ site.t[page.lang].available_languages }}
-    Posts : 
     {% for post in posts %}
-            <a href="{{ post.url }}"><img src="/images/flags/{{ post.lang }}.png" /></a>	
-    {% endfor %}
-    
-    Pages :
-    {% assign pages=site.pages | where:"ref", page.ref | sort: 'lang' %}
-    {% for page in pages %}			
-            <a href="{{ page.url }}" class="{{ page.lang }}"><img src="/images/flags/{{ post.lang }}.png" /></a>		
+            <span style="vertical-align: middle;"><a href="{{ post.url }}"><img src="/images/flags/{{ post.lang }}.png" /></a></span>	
     {% endfor %}
 </span>
 {% endunless %}
