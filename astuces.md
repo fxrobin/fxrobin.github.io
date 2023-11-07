@@ -1,10 +1,11 @@
 ---
-layout: post
+layout: page
 title: Astuces diverses en vrac
 logo: toolbox.png
 date: 2020-01-12
 permalink: /astuces/
 lang: fr
+ref: astuces
 ---
 
 <div class="intro" markdown='1'>

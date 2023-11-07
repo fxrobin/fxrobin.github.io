@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: page
 title: Useful links
 subtitle: My favorite parts of the web
 logo: links.png
