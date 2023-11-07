@@ -4,6 +4,7 @@ title: Mot de passe en clair en base de données
 logo: blanka.png
 category: blanka
 lang: fr
+sitemap: false
 ---
 
 BRRRRRRRRRRRAAAAAAAAAAAHhhhhhhhh !!! Grrr !

@@ -4,6 +4,7 @@ title: Worst JAVA API collection of the World
 logo: blanka.png
 category: blanka
 lang: fr
+sitemap: false
 ---
 
 Grrrraaaaarrrh !!!

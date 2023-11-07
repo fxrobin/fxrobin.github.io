@@ -4,6 +4,7 @@ title: Reactive programming
 logo: blanka.png
 category: blanka
 lang: fr
+sitemap: false
 ---
 
 Blanka pas content encoRRREEEEE !

@@ -4,6 +4,7 @@ title: Dockerfile périmé
 logo: blanka.png
 category: blanka
 lang: fr
+sitemap: false
 ---
 
 Maaaaaaaaaaaaarrrrrrrrrrhhh !

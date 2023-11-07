@@ -4,6 +4,7 @@ title: EJB versus light
 logo: blanka.png
 category: blanka
 lang: fr
+sitemap: false
 ---
 
 RGHHHH ! Gens pas aimer EJB et AppServers Java EE ...

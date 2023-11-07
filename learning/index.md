@@ -3,6 +3,7 @@ layout: post
 title: Apprendre à coder
 subtitle: il n'est jamais trop tôt pour apprendre
 logo: brain-logo.png
+sitemap: false
 ---
 
 # Motivations

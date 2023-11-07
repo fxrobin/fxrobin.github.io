@@ -4,6 +4,7 @@ title: GWT, AngularJS, GoogleMaps, Kotlin
 logo: blanka.png
 category: blanka
 lang: fr
+sitemap: false
 ---
 
 Blanka pas aimer quand Google rien avoir à faire des développeurs. Google casser API, Google arrêter API, Google faire payer API quand Google dire gratuit.

@@ -4,6 +4,7 @@ title: Web Components
 logo: blanka.png
 category: blanka
 lang: fr
+sitemap: false
 ---
 
 Blanka pas content du tout quand Blanka obligé écrire JavaScript + CSS + HTML dans même fichier !

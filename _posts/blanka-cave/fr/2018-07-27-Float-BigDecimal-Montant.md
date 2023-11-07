@@ -4,6 +4,7 @@ title: Float pour un Montant
 logo: blanka.png
 category: blanka
 lang: fr
+sitemap: false
 ---
 
 Blanka très très très EN COLERREEEEEEE !

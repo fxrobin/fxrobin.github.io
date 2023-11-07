@@ -1,3 +1,11 @@
 {
-    "editor.fontFamily": "Envy Code R VS"
+    "editor.fontFamily": "Envy Code R VS",
+    "python.analysis.extraPaths": [
+        "c:\\Users\\frarobin\\.vscode\\extensions\\continue.continue-0.1.21-win32-x64",
+        "c:\\Users\\frarobin\\.vscode\\extensions\\continue.continue-0.0.412-win32-x64"
+    ],
+    "python.autoComplete.extraPaths": [
+        "c:\\Users\\frarobin\\.vscode\\extensions\\continue.continue-0.1.21-win32-x64",
+        "c:\\Users\\frarobin\\.vscode\\extensions\\continue.continue-0.0.412-win32-x64"
+    ]
 }
