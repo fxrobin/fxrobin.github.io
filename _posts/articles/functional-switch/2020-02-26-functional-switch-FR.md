@@ -7,7 +7,7 @@ category: articles
 tags: [Java, Lambda, Functional, Fluent API, Builder]
 lang: fr
 ref: functional-switch
-permalink: /functional-switch-fr
+permalink: /functional-switch
 ---
 
 <div class="intro" markdown='1'>
