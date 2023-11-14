@@ -8,6 +8,8 @@ tags: [lombok,java,builder,patterns]
 lang: fr
 ref: Lombok-Oui-Mais
 permalink: /Lombok-Oui-Mais
+redirect_from:
+  - /Lombok-Oui-Mais-FR
 ---
 
 <div class="intro" markdown='1'>
