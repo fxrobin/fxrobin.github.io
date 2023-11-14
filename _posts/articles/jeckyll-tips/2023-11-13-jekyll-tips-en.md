@@ -26,7 +26,7 @@ I've been using it for 5 years now, and I'm very happy with it.
 Nowadays, it is possible to run Jekyll locally on Windows, Linux and Mac, using Docker.
 Altough I have used Jekyll native on Linux for years, I now prefer to use Docker, because it is easier to install and maintain.
 
-Pre-requisites: Docker and Docker must be installed on your system.
+Pre-requisites: Docker must be installed on your system.
 
 If you have a repository with some github pages, you can run Jekyll locally with the following command:
 
