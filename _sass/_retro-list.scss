@@ -1,0 +1,109 @@
+/* ARTICLE LIST CSS */
+
+
+#retro-list
+{   
+
+  cursor: url("/images/mouse-pointer-thomson.png"), auto;
+
+  clear : right;
+  margin-top : 0.5em;
+  margin-right : 0.5em;
+  padding : 0.5em;
+
+  float : right;
+  width : 100%;
+
+  border : solid darkblue 2px;
+  border-radius : 0.5em;
+  box-shadow: 2px 2px 2px #555555;
+
+  /* @include crt(#C1F9F8, #EEEEFA);  */
+
+  background-color: #C1F9F8;
+
+  .retro-list-header 
+  {
+    font-family : "thomson";
+    text-align : center; 
+    text-shadow: 1px 1px 1px #DDDDDD;
+    text-transform: uppercase;
+    color : #007A9F;
+    font-size : 2.0em;
+    letter-spacing: 0.2em;
+  }
+  
+  .retro-list-entry
+  {
+   	font-size :1em;
+    border-top : solid #097792 2px;
+    margin-bottom : 0.5em;
+    margin-top : 0.5em;
+    padding-top : 0.5em;
+    font-family : "Oswald";
+
+    .thomson-menu
+    {
+      border : solid #097792 2px;
+      background-color : #DADB8F;
+      padding-left: 1.5em;
+      width : 3em;
+      cursor: url("/images/mouse-pointer-thomson.png"), auto;
+    }
+    
+    .retro-list-entry-date 
+    { 
+	    font-family : "Oswald"; 
+	    display: block; 
+	    font-size : 0.8em; 
+	    color : #097792; 
+    }
+    
+    .retro-list-title { 	
+       
+    	font-size :1.1em; 
+    	display:inline; 
+      margin : 0.1em;
+      padding-left : 0.2em;
+      padding-right : 0.2em;
+      padding-bottom : 0.2em;
+    	-moz-transition: all .2s ease-in;
+    	-o-transition: all .2s ease-in;
+    	-webkit-transition: all .2s ease-in;
+    	transition: all .2s ease-in;
+      }
+    
+      .retro-list-title:visited,  .retro-list-title
+    {
+      color :  #222222;
+      cursor: url("/images/mouse-pointer-thomson.png"), auto;
+    }
+    
+    .retro-list-title:hover 
+    {
+      color : #FFFF00;
+      background-color : #000080;
+      border-radius : 0.2em;  
+    }
+    
+    /*
+    .article-list-title:hover:after
+    {
+      margin-left : 0.2em;
+      content : '\2588';
+    }
+
+    .article-list-title:hover:before
+    {
+      font-family : "atari";
+      margin-right : 0.2em;
+      content : '>';
+    }   
+    */
+  }
+
+  .retro-list-entry:last-child
+  {
+     margin-bottom : 0.5em;
+  }
+}

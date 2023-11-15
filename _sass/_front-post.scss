@@ -10,7 +10,10 @@
         margin: 0.5em;
     }
     H1 {
+        font-family: "Share Tech";
         text-shadow: 1px 1px 2px #999999;
+        font-size: 1.8em;
+        font-weight: bold;
         @include mobile {
             font-size: 1.5em;
             text-shadow: none;
@@ -19,6 +22,7 @@
     }
     H2 {
         font-family: "Oswald";
+        font-size: 1em;
         A {
             color: black;
         }
@@ -27,7 +31,7 @@
         }
     }
     P {
-        font-size: 1.1em;
+        font-size: 1em;
         @include mobile {
             font-size: 1em;
         }
@@ -56,6 +60,14 @@
     }
 
     .entry {
+
+        border-left: solid $darkGray 2px;
+
+        P {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+
         A {
             color: $darkGray;
         }
@@ -71,13 +83,14 @@
         font-size: 1em;
         text-align: left;
         color: $blue;
-        margin: 1em;
+        margin-top: 1em;
+        
         A,
         A:visited {
             color: white;
+            padding : 0.2em;
             background-color: $blue;
-            padding: 0.5em;
-            border-radius: 1em;
+            border-radius: 0.5em;
             -moz-transition: all .2s ease-in;
             -o-transition: all .2s ease-in;
             -webkit-transition: all .2s ease-in;
@@ -85,14 +98,11 @@
         }
         A:hover {
             color: #FFFF00;
+            padding : 0.5em;
             background-color: #000080;
             border-radius: 0.5em;
             font-size: 16px;
-            font-family: "amiga";
-        }
-        A:hover:after {
-            content: '\2589';
-            font-size: 16px;
+            font-family: "amstrad";
         }
     }
 }

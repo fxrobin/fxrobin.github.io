@@ -1,6 +1,6 @@
 {% assign posts = site.categories.articles | where:"lang", page.lang %}
 
-<div id="article-list" class="crt">
+<div id="article-list">
 		<div class="article-list-header">Articles</div>
 		{% for post in posts %}
 		
@@ -15,4 +15,23 @@
 				<span class="article-list-title">{{ post.title }}</span></a>			
 			</div>
 		{% endfor %}
+</div>
+
+{% assign posts = site.categories.retro | where:"lang", page.lang %}
+
+<div id="retro-list">
+	<div class="retro-list-header">RETRO-CODING</div>
+	{% for post in posts %}
+	
+		
+		<div class="retro-list-entry">
+			<span class="retro-list-entry-date">
+			Date:
+				{{post.date | date: "%d/%m/%Y" }}
+		</span>
+			<a href="{{ site.baseurl }}{{ post.url }}">
+			<span class="thomson-menu">&nbsp;</span>
+			<span class="retro-list-title">{{ post.title }}</span></a>			
+		</div>
+	{% endfor %}
 </div>

@@ -10,6 +10,8 @@
     </div>
 </div>
     
+{% assign posts = site.categories.articles | where:"lang", page.lang %}
+
 <div id="left">
     <div class="posts crt">
         {% for post in posts %}

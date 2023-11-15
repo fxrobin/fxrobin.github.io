@@ -27,7 +27,7 @@
 
 .container {
     margin: 0 auto;
-    max-width: 1366px;
+    max-width: 1800px;
     padding: 0 10px;
     width: 100%;
 }
@@ -148,6 +148,7 @@
 // .main
 //
 @import "article-list";
+@import "retro-list";
 @import "blanka";
 @import "stackoverflow";
 @import "search";

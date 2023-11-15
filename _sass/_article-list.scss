@@ -4,7 +4,6 @@
 #article-list
 {   
 
-  cursor: url("/images/mouse-pointer-thomson.png"), auto;
 
   clear : right;
   margin-top : 0.5em;
@@ -14,41 +13,39 @@
   float : right;
   width : 100%;
 
-  border : solid darkblue 2px;
+  border : solid rgb(129, 111, 9) 2px;
   border-radius : 0.5em;
   box-shadow: 2px 2px 2px #555555;
 
   /* @include crt(#C1F9F8, #EEEEFA);  */
 
-  background-color: #C1F9F8;
+  background-color: #32332c;
 
   .article-list-header 
   {
-    font-family : "thomson";
+    font-family : "Volter";
     text-align : center; 
-    text-shadow: 1px 1px 1px #DDDDDD;
     text-transform: uppercase;
-    color : #007A9F;
-    font-size : 2.5em;
-    letter-spacing: 0.2em;
+    color :white;
+    font-size : 2.0em;
+    letter-spacing: 0.1em;
   }
   
   .article-list-entry
   {
    	font-size :1em;
-    border-top : solid #097792 2px;
+    border-top : solid #6c7679 2px;
     margin-bottom : 0.5em;
     margin-top : 0.5em;
     padding-top : 0.5em;
     font-family : "Oswald";
 
-    .thomson-menu
+    .thomson-menu::before
     {
-      border : solid #097792 2px;
-      background-color : #DADB8F;
-      padding-left: 1.5em;
-      width : 3em;
-      cursor: url("/images/mouse-pointer-thomson.png"), auto;
+      font-family : "atari";
+      margin-right : 0.2em;
+      content : '>';
+      color:white;
     }
     
     .article-list-entry-date 
@@ -56,7 +53,7 @@
 	    font-family : "Oswald"; 
 	    display: block; 
 	    font-size : 0.8em; 
-	    color : #097792; 
+	    color : #6c7679; 
     }
     
     .article-list-title { 	
@@ -75,8 +72,7 @@
     
       .article-list-title:visited,  .article-list-title
     {
-      color :  #222222;
-      cursor: url("/images/mouse-pointer-thomson.png"), auto;
+      color : white;
     }
     
     .article-list-title:hover 
