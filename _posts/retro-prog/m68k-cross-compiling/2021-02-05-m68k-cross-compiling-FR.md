@@ -9,7 +9,8 @@ lang: fr
 ref: m68k-cross-compiling
 permalink: /programmation-c-pour-atari-st-sous-linux
 redirect_from:
-  - /m68k-cross-compiling/ 
+  - /m68k-cross-compiling
+  - /m68k-cross-compiling-FR
 ---
 
 <div class="intro" markdown='1'>
