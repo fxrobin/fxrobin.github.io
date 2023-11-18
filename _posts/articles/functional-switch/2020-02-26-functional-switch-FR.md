@@ -8,6 +8,8 @@ tags: [Java, Lambda, Functional, Fluent API, Builder]
 lang: fr
 ref: functional-switch
 permalink: /functional-switch
+redirect_from:
+  - /functional-switch-FR
 ---
 
 <div class="intro" markdown='1'>

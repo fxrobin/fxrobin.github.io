@@ -8,6 +8,8 @@ tags: [Java, Maven, JAR, EXE, SH, LAUNCH4, maven-assembly]
 lang: en
 ref: maven-generer-executables
 permalink: /how-to-generate-java-executables-with-maven
+redirect_from:
+	- /maven-generer-executables-EN
 ---
 
 
