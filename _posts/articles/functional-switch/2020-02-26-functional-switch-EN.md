@@ -9,7 +9,7 @@ lang: en
 ref: functional-switch
 permalink: /functional-switch-en
 redirect_from:
-	- /functional-switch-EN
+  - /functional-switch-EN
 ---
 
 <div class="intro" markdown='1'>
