@@ -116,8 +116,7 @@ This tag can be called like this:
 
 This is an example of [mermaid diagram](http://mermaid.js.org/):  
 
-<div class="language-mermaid">
-%%{init: {'theme':'forest'}}%%
+<div class="mermaid">
 flowchart TD;
     A[Deploy to production] --> B{Is it Friday?};
     B -- Yes --> C[Do not deploy!];
@@ -131,7 +130,6 @@ Don't be fooled, this is a generated diagram from a text description. This is no
 Here is the related text description of this diagram.
 
 ```text
-%%{init: {'theme':'forest'}}%%
 flowchart TD;
     A[Deploy to production] --> B{Is it Friday?};
     B -- Yes --> C[Do not deploy!];
@@ -149,21 +147,13 @@ Note: This tip does not need a Jekyll plugin.
 First create a file named `mermaid.html` in the `_includes` directory.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
-<script src="https://unpkg.com/mermaid@8.9.3/dist/mermaid.min.js"></script>
-<script>
-  $(document).ready(function () {
-    mermaid.initialize({
-      startOnLoad:true,
-      theme: "default",
-    });
-    window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
-  });
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
 </script>
 ```
 
 This loads JQuery and Mermaid, and then initialize Mermaid on the page.
-It parses all the `<div>` with the class `language-mermaid` and renders the diagrams.
+It parses all the `<div>` with the class `mermaid` and renders the diagrams.
 
 ### Adding the include into the footer
 
@@ -198,11 +188,10 @@ mermaid: true
 
 ### Adding a mermaid diagram
 
-Then, in your content, use the following syntax, wrapping a diagram into a DIV with the class `mermaid-language`	:
+Then, in your content, use the following syntax, wrapping a diagram into a DIV with the class `mermaid`	:
 
 ```html
-<div class="mermaid-language">
-%%{init: {'theme':'forest'}}%%
+<div class="mermaid">
 flowchart TD;
     A[Deploy to production] --> B{Is it Friday?};
     B -- Yes --> C[Do not deploy!];
@@ -213,6 +202,30 @@ flowchart TD;
 ```
 
 Inside the DIV, simply use the mermaid syntax.
+
+### One last pretty mermaid diagram
+
+This is a mindmap created by mermaid. This is so cool.
+
+<div class="mermaid">
+        mindmap
+        root((Learning Java))
+          Books
+            Algorithms
+            Clean Code
+            Java 8 in Action
+          Frameworks
+            Spring Framework
+            Quarkus Framework
+          IDE
+            Eclipse
+            IntelliJ
+            NetBeans
+            VisualCode
+          Build Tools
+            Maven
+            Gradle  
+</div>      
 
 ## Links
 
