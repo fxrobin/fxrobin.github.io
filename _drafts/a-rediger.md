@@ -57,3 +57,14 @@ Post uniquement en Draft qui contient les sujets à rédiger.
 * JOOQ : https://www.jooq.org/legal/licensing#databases
 * Modèle Thread JAVA EE vs Node JS : parce que j'en ai marre de lire des bullshits [EN COURS 30%]
 * Microprofile Tuto
+
+
+## Trying mermaid
+
+```mermaid
+graph TD;
+  A-->B;
+  A-->C;
+  B-->D;
+  C-->D;
+```

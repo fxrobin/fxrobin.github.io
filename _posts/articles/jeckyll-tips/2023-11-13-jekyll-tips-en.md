@@ -8,6 +8,7 @@ tags: [Site, Jekyll]
 lang: en
 ref: my-jekyll-tips-with-github-pages
 permalink: /my-jekyll-tips-with-github-pages
+mermaid: true
 ---
 
 <div class="intro" markdown='1'>
@@ -111,6 +112,107 @@ This tag can be called like this:
 
 {%include asciinema.html cast-file="/casts/xenonreborn.cast" %}
 
+## Adding Mermaid diagrams
+
+This is an example of [mermaid diagram](http://mermaid.js.org/):  
+
+<div class="language-mermaid">
+%%{init: {'theme':'forest'}}%%
+flowchart TD;
+    A[Deploy to production] --> B{Is it Friday?};
+    B -- Yes --> C[Do not deploy!];
+    B -- No --> D[Run deploy.sh];
+    C --> E[Enjoy your weekend!];
+    D --> E;
+</div>
+
+Don't be fooled, this is a generated diagram from a text description. This is not a picture.
+
+Here is the related text description of this diagram.
+
+```text
+%%{init: {'theme':'forest'}}%%
+flowchart TD;
+    A[Deploy to production] --> B{Is it Friday?};
+    B -- Yes --> C[Do not deploy!];
+    B -- No --> D[Run deploy.sh];
+    C --> E[Enjoy your weekend!];
+    D --> E;
+```
+
+The following steps show how to setup mermaid on your Jekyll site.
+
+Note: This tip does not need a Jekyll plugin.
+
+### Creating an include file
+
+First create a file named `mermaid.html` in the `_includes` directory.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+<script src="https://unpkg.com/mermaid@8.9.3/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(function () {
+    mermaid.initialize({
+      startOnLoad:true,
+      theme: "default",
+    });
+    window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
+  });
+</script>
+```
+
+This loads JQuery and Mermaid, and then initialize Mermaid on the page.
+It parses all the `<div>` with the class `language-mermaid` and renders the diagrams.
+
+### Adding the include into the footer
+
+In the footer of your page before the end of the `BODY` tag, add the following include:
+
+```html
+{% raw %}{% if page.mermaid }
+  {% include mermaid.html %}
+{% endif %}{% endraw %}
+```
+
+### Adding a parameter to the front-matter
+
+Then simply add the parameter `mermaid: true` to the front-matter of your page, if the page or the post contains mermaid diagrams to be displayed.
+
+Here is the example related to this page.
+
+```yaml 
+---
+layout: post
+title: My JeKyll Tips with Github Pages
+subtitle: 5 years of using Jekyll with Github Pages
+logo: jekyll-logo.png
+category: articles
+tags: [Site, Jekyll]
+lang: en
+ref: my-jekyll-tips-with-github-pages
+permalink: /my-jekyll-tips-with-github-pages
+mermaid: true
+---
+```	
+
+### Adding a mermaid diagram
+
+Then, in your content, use the following syntax, wrapping a diagram into a DIV with the class `mermaid-language`	:
+
+```html
+<div class="mermaid-language">
+%%{init: {'theme':'forest'}}%%
+flowchart TD;
+    A[Deploy to production] --> B{Is it Friday?};
+    B -- Yes --> C[Do not deploy!];
+    B -- No --> D[Run deploy.sh];
+    C --> E[Enjoy your weekend!];
+    D --> E;
+</div>  
+```
+
+Inside the DIV, simply use the mermaid syntax.
 
 ## Links
 

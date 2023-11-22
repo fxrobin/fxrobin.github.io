@@ -103,7 +103,7 @@
             .deleteChars(2)
             .typeString(" EE")
             .pauseFor(2500)
-            .deleteChars(8)header
+            .deleteChars(8)
             .typeString("l'archi. SI")
             .pauseFor(2500)
             .start();
@@ -123,6 +123,14 @@
             .start();
       {% endif %}
     </script>
-    <script src="/asciinema/asciinema-player.js"></script>  
+    <script src="/asciinema/asciinema-player.js"></script>
+
+    title : {{ page.title }} <br />
+    mermaid : {{ page.mermaid }} <br />
+    {% if page.mermaid %}
+      in the if <br />
+      {% include mermaid.html %}
+    {% endif %}  
+   
   </body>
 </html>
