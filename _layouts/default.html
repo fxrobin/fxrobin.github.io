@@ -124,13 +124,8 @@
       {% endif %}
     </script>
     <script src="/asciinema/asciinema-player.js"></script>
-
-    title : {{ page.title }} <br />
-    mermaid : {{ page.mermaid }} <br />
     {% if page.mermaid %}
-      in the if <br />
       {% include mermaid.html %}
     {% endif %}  
-   
   </body>
 </html>
