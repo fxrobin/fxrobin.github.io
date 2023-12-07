@@ -7,9 +7,10 @@ category: articles
 tags: [lombok,java,builder,patterns]
 lang: fr
 ref: Lombok-Oui-Mais
-permalink: /Lombok-Oui-Mais
+permalink: /Lombok-Oui-Mais/
 redirect_from:
   - /Lombok-Oui-Mais-FR
+  - /Lombok-Oui-Mais
 ---
 
 <div class="intro" markdown='1'>

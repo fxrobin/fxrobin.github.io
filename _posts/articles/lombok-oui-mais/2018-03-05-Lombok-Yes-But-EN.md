@@ -7,7 +7,7 @@ category: articles
 tags: [lombok,java,builder,patterns]
 lang: en
 ref: Lombok-Oui-Mais
-permalink: /Lombok-Yes-But
+permalink: /Lombok-Yes-But/
 redirect_from:
   - /Lombok-Oui-Mais-EN
   - /Lombok-Oui-Mais-en

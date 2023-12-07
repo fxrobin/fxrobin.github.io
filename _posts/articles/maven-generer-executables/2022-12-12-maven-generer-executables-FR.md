@@ -7,7 +7,7 @@ category: articles
 tags: [Java, Maven, JAR, EXE, SH, LAUNCH4, maven-assembly]
 lang: fr
 ref: maven-generer-executables
-permalink: /generer-executables-java-avec-maven
+permalink: /generer-executables-java-avec-maven/
 redirect_from:
   - /maven-generer-executables-FR
 ---

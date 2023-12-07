@@ -7,7 +7,7 @@ category: articles
 tags: [Site, Jekyll, Github Pages]
 lang: fr
 ref: my-jekyll-tips-with-github-pages
-permalink: /my-jekyll-tips-with-github-pages-fr
+permalink: /my-jekyll-tips-with-github-pages-fr/
 ---
 
 <div class="intro" markdown='1'>

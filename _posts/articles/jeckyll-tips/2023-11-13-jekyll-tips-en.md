@@ -7,7 +7,7 @@ category: articles
 tags: [Site, Jekyll]
 lang: en
 ref: my-jekyll-tips-with-github-pages
-permalink: /my-jekyll-tips-with-github-pages
+permalink: /my-jekyll-tips-with-github-pages/
 mermaid: true
 ---
 
@@ -181,7 +181,7 @@ category: articles
 tags: [Site, Jekyll]
 lang: en
 ref: my-jekyll-tips-with-github-pages
-permalink: /my-jekyll-tips-with-github-pages
+permalink: /my-jekyll-tips-with-github-pages/
 mermaid: true
 ---
 ```	
