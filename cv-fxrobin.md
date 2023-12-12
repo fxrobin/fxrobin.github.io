@@ -24,6 +24,7 @@ lang: fr
 </div>
 <div style="clear:both" />
 
+
 <!--excerpt-->
 <div id="short-details">
 
@@ -95,6 +96,16 @@ Pour me contacter, envoyer, svp, un message sur [LinkedIn](https://www.linkedin.
   
 </fieldset>
 </div>
+
+J’ai 48 ans et 25 d’expérience professionnelle en développement, en architecture et en interopérabilité de SI. 
+
+En tant qu’officier dans l’armée de Terre, à partir de 1998, j’ai été responsable des préconisations Java (pratiques, frameworks) mais aussi sur l’adoption de la SOA (Service-Oriented Architecture) et notamment de tout ce qui se rapportait aux pratiques liées aux WebServices, dès 2003, au profit du ministère des Armées. A la fin de ma carrière militaire, de 2011 à 2018, j’ai été responsable de la formation des développeurs du ministère, mais aussi formateur. 
+
+Avant de rejoindre Capgemini en septembre 2023, j’ai œuvré au sein d’une cellule d’API Management du Ministère des Armées pendant 3 ans. Pendant cette péridoe j'ai rédigé un guide de bonnes pratiques pour la conception d'API REST et en développant des applications de démmonstration de ces pratiques en Java avec Quarkus. 
+
+Mon domaine de prédilection concerne tout ce qui gravite autour de la plateforme Java mais aussi et surtout sur la qualité et la performance du code, raison pour laquelle j’ai rejoint une entité de Craftsmanship chez Capgemini.  Elle est composée de Crafters identifiés du groupe. Ce sont des passionnés dont le but est de produire des applications non seulement fonctionnelles mais aussi, voire surtout, très bien conçues, avec des exigences de qualité très élevées, performantes et à l’état de l’art.
+
+J’ai toujours été attiré par ce qui touchait l’intelligence artificielle sous toutes ses formes car dès 1996 je me suis intéressé aux réseaux de neurones, leurs applications et notamment aux algorithmes génétiques. C'est un domaine que je continue d'approfondir et de pratiquer.
 
 ## Parcours professionnel
 
