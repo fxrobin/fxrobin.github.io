@@ -44,7 +44,7 @@ C'est vrai que c'est court et minimaliste.
 
 Pour le lancer, il faut disposer de "NodeJS" installé puis dans lancer le script sauvegardé sous `minimal.js`.
 
-```
+```bash
 $ node minimal.js
 ```
 
@@ -198,10 +198,10 @@ System.out.printf("Serveur démarré : %s%n", address);
 
 et voici ce que l'on reçoit dans les headers HTTP de retour :
 
-```txt
+```
 Content-length	: 12
 Content-type	: text/plain; charset=UTF-8
-Date			: Mon, 23 Apr 2018 11:27:22 GMT
+Date		: Mon, 23 Apr 2018 11:27:22 GMT
 ```
 
 On voit bien que le caractère `ç` est codé en UTF-8 sur deux octets. Puisque la chaine
@@ -235,7 +235,7 @@ Asynchrone, et multicores !
 
 Après de multiples `F5`, voici ce que l'on obtient dans le navigateur :
 
-```txt
+```
 ça marche ! Thread[pool-1-thread-1,5,main]
 ça marche ! Thread[pool-1-thread-2,5,main]
 ça marche ! Thread[pool-1-thread-3,5,main]
