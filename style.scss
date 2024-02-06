@@ -107,7 +107,7 @@
 
 @import "nav";
 #left {
-    margin-right: 450px;
+    margin-right: 470px;
     @include mobile {
         margin-right: inherit
     }
@@ -119,6 +119,7 @@
     }
     float: right;
     width: 450px;
+    margin-right: 20px;
     .social-icons-right {
         clear: right;
         padding-top: 2em;
