@@ -118,6 +118,10 @@ Intégré à une équipe dédiée au Craftsmanship au profit de l'ensemble des p
 * réalisation de *PoC GenAI avec Retrieval Augmented Generation* (RAG)
 * réponse aux appels d'offres, chiffrages, propositions techniques
 * speaker pour divers évenements
+* organisation de Coding Dojos, création de Katas en Java
+* création de PoC de Best Pratices avec Spring Boot 3 (Lombok, Testcontainers, AOP)
+* migration et réfactorisation d'applications Java et de l'architecture associée
+* création de PoC GraalVM Java Natif (Quarkus 3, Spring Boot 3)
 
 ### API Manager
 #### Depuis juillet 2020 : Ministère des Armées, DGNUM/CASID/SAND, Bruz ####
@@ -189,9 +193,9 @@ et en base de données (SGBD, SGBDR, Décisionnel)
 ### Langages
 
 * Java 
-  * 27 ans d'expérience depuis Java 1.1 (depuis fin 1996) à Java 20
-  * Quarkus : depuis la version 1 (2019) à la version 2
-  * Spring : depuis la version 2 (2006) Spring IoC, Spring Security (depuis 2009), SpringBoot 4 à 6
+  * 27 ans d'expérience depuis Java 1.1 (depuis fin 1996) à Java 21 (2023)
+  * Quarkus : depuis la version 1 (2019) à la version 3
+  * Spring : depuis la version 2 (2006) Spring IoC, Spring Security (depuis 2009), Spring Web, Spring Boot 3 (depuis 2023)
   * Jakarta EE : depuis J2EE 1.2 à Jakarta EE 10
   * Java FX 8 à 11, Jakarta Persistence (ex JPA), Jarkarta DI 2 (ex CDI), JSF 2 à 4
   * Vertx, JAX-RS, JAX-WS, Apache CXF
@@ -200,8 +204,8 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * JMeter, Selenium, Gatling
   * Maven, Gradle
   * GlassFish Payara, WildFly, Tomcat, TomEE
-  * Qualité du code : SonarLint, SpotBugs (FindBugs), Codacy, CodeFactor
-  * IDE : Eclipse, NetBeans, IntelliJ, GitPod
+  * Qualité du code : SonarLint/SonarQube, SpotBugs (FindBugs), Codacy, CodeFactor
+  * IDE : Eclipse, NetBeans, IntelliJ, GitPod, VSCode, Cursor.sh
 
 * C/C++ :
   * C depuis 1993, C++ depuis 1998 jusqu'à la version C++14
@@ -232,7 +236,7 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * YAML, JSON, XML, XSLT, XQuery
   * OpenAPI 3, Swagger 2, XML-Schema
   * SOA/ESB, UDDI, MicroServices
-  * Testing : curl, SoapUI, Citrus Framework
+  * Testing : curl, SoapUI, Citrus Framework, Bruno
   * ESB : WSO2 (2.6 à 4), IBM Websphere ESB, Mule ESB, Aqualogic Service Bus
 
 ### Securité / Authentification
@@ -262,7 +266,7 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * VMWare, VirtualBox
 
 ### Bases de données
-  * BigData : ElasticSearch, MongoDB
+  * BigData : ElasticSearch, MongoDB, REDIS
   * RDBMS : MySQL, PostgreSQL, Oracle, SQLite, hsqldb
   * BRMS : Drools
 
