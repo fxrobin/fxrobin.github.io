@@ -1,38 +1,38 @@
 ---
 layout: post
-title: 'Atari ST: Compiler for C programming with Docker'
-subtitle: Cross-compiling a Helloworld for TOS within a Docker container
+title: 'Atari ST: un compilateur C avec Docker'
+subtitle: Cross-compilation d'un Helloworld (program TOS) avec un conteneur Docker
 logo: atari-st-bomb.png
 category: retro
 tags: [Retro, C, Atari, Retro-Prog, Docker]
-lang: en
+lang: fr
 ref: c-programming-for-atari-st-with-docker
-permalink: /c-programming-for-atari-st-with-docker/
+permalink: /atari-st-c-compiler-avec-docker/
 ---
 
 <div class="intro" markdown='1'>
-The objective of this little tutorial is to compile a C program for TOS with the help of a Docker container.
+L'objectif de ce petit tutoriel est de compiler un programme C pour TOS à l'aide d'un conteneur Docker.
 </div>
 <!--excerpt-->
 
 
-## Preamble
+## Preambule
 
-Following the [previous tutorial](/c-programming-for-atari-st-with-linux/), we will use a Docker container to compile C programs for the Atari ST.
+Suite au [tutoriel précédent](/c-programming-for-atari-st-with-linux/), nous allons utiliser un conteneur Docker pour compiler des programmes C pour l'Atari ST.
 
-**Why Docker? Because it's a good way to have a clean and reproducible environment, without having to install a lot of things on your computer which could potentially break your system or conflict with other tools and libraries.**
+**Pourquoi Docker ? Parce que c'est un bon moyen d'avoir un environnement propre et reproductible, sans avoir à installer beaucoup de choses sur votre ordinateur qui pourraient potentiellement casser votre système ou entrer en conflit avec d'autres outils et bibliothèques.**
 
-The Docker image used is based on Ubuntu 20.04 and contains the cross-compiler for the 68000 processor, the processor of the Atari ST.
+L'image Docker utilisée est basée sur Ubuntu 20.04 et contient le compilateur croisé pour le processeur 68000, le processeur de l'Atari ST.
 
-The Dockerfile is a set of instructions that will be used to build the Docker image and install the necessary tools like the cross-compiler coming from [Vincent Rivière's PPA](http://vincent.riviere.free.fr/soft/m68k-atari-mint/ubuntu.php).
+Le Dockerfile est un ensemble d'instructions qui seront utilisées pour construire l'image Docker et installer les outils nécessaires comme le cross-compiler provenant du [PPA de Vincent Rivière](http://vincent.riviere.free.fr/soft/m68k-atari-mint/ubuntu.php).
 
-## Prerequisites : Docker
+## Prérequis : Docker
 
-Obvioulsy, you need to have Docker installed on your computer. If it's not the case, you can follow the instructions on the [official Docker website](https://docs.docker.com/get-docker/).
+Évidemment, vous devez avoir Docker installé sur votre ordinateur. Si ce n'est pas le cas, vous pouvez suivre les instructions sur le [site officiel de Docker](https://docs.docker.com/get-docker/).
 
-## Creating the Docker image
+## Création de l'image Docker
 
-Here is the Dockerfile that will be used to build the Docker image:
+Voici le Dockerfile qui sera utilisé pour construire l'image Docker :
 
 `Dockerfile`
 ```dockerfile
@@ -58,19 +58,19 @@ WORKDIR /app
 CMD ["/bin/bash"]
 ```
 
-To build the Docker image, save the Dockerfile in a directory and run the following command:
+Pour construire l'image Docker, enregistrez le Dockerfile dans un répertoire et exécutez la commande suivante à partir de ce répertoire :
 
 ```bash
 $ docker build -t m68k-compiler .
 ```
 
-This command will build the Docker image and tag it with the name `m68k-compiler`.
+Cette commande va construire l'image Docker et la taguer avec le nom `m68k-compiler`.
 
-Creating the image may take some time depending on your internet connection speed but this operation can be done on a Windows, Mac or Linux computer.
+La création de l'image peut prendre un certain temps en fonction de la vitesse de votre connexion Internet, mais cette opération peut être effectuée sur un ordinateur Windows, Mac ou Linux.
 
-## A simple C program for the Atari ST
+## Un programme C simple pour l'Atari ST
 
-Let's create a simple C program that will display a message on the screen of the Atari ST and placing the program in the `./src` directory.
+Créons un programme C simple qui affichera un message à l'écran de l'Atari ST et plaçons le programme dans le répertoire `./src`.
 
 `hello.c`
 ```c
@@ -84,7 +84,7 @@ void main()
 }
 ```
 
-and now let's a classic `Makefile` to compile the program:
+et maintenant, voici un `Makefile` classique pour compiler le programme :
 
 `makefile`
 ```makefile
@@ -125,9 +125,9 @@ clean:
 	rm -rf $(OBJ_DIRECTORY) $(BUILD_DIRECTORY)
 ```
 
-This `Makefile` will compile the `hello.c` program and generate the `hello.tos` executable in the `./target/build` directory.
+Ce `Makefile` compilera le programme `hello.c` et générera l'exécutable `hello.tos` dans le répertoire `./target/build`.
 
-Here is the tree structure of the project:
+Voici la structure de l'arborescence du projet :
 
 ```bash
 $ tree
@@ -138,11 +138,11 @@ $ tree
     └── hello.c
 ```
 
-## Launching the compilation with the Docker container
+## Lancement de la compilation avec le conteneur Docker
 
-The container itself runs a lightweight Linux distribution, with the cross-compiler for the 68000 processor installed, that can be run on any computer that supports Docker (Windows, Mac, Linux).
+Le conteneur lui-même exécute une distribution Linux légère, avec le cross-compiler 68000, qui peut être exécuté sur n'importe quel ordinateur prenant en charge Docker (Windows, Mac, Linux).
 
-To run the Docker container, use the following command:
+Pour exécuter le conteneur Docker, utilisez la commande suivante :
 
 ```bash
 $ docker run -it -v $(pwd):/app m68k-compiler make --debug=b
@@ -167,10 +167,9 @@ m68k-atari-mint-gcc -o target/build/hello.tos target/obj/hello.o
 Must remake target 'all'.
 Successfully remade target file 'all'.
 ```
+Cette commande démarre le conteneur Docker, monte le répertoire courant à l'intérieur du conteneur et exécute la commande `make` avec l'option `--debug=b` pour afficher les commandes exécutées par `make`.
 
-This command starts the Docker container, mounts the current directory inside the container, and runs the `make` command with the `--debug=b` option to display the commands executed by `make`.
-
-The `make` command compiles the `hello.c` program for the Atari ST and generates the `hello.tos` in the `./target/build` directory. 
+La commande `make` compile le programme `hello.c` pour l'Atari ST et génère le fichier `hello.tos` dans le répertoire `./target/build`.
 
 ```bash
 $ ls -l ./target/build
@@ -178,7 +177,7 @@ total 132
 -rwxr-xr-x 1 root root 132601 Sep 20 15:59 hello.tos
 ```
 
-Here is the tree structure of the project after the compilation:
+Voici la structure de l'arborescence du projet après la compilation :
 
 ```bash
 $ tree
