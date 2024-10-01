@@ -59,7 +59,7 @@ There is NO WARRANTY, to the extent permitted by law.
 
 L'image est fonctionnelle et prête à ête utilisée pour compiler des programmes C pour l'Atari ST.
 
-### Solution 2 Création de l'image Docker
+### Solution 2 : Création de l'image Docker
 
 Si vous souhaitez faire le tout manuellemen, voici le Dockerfile qui sera utilisé pour construire l'image Docker :
 
