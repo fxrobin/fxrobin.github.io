@@ -30,9 +30,38 @@ Le Dockerfile est un ensemble d'instructions qui seront utilisées pour construi
 
 Évidemment, vous devez avoir Docker installé sur votre ordinateur. Si ce n'est pas le cas, vous pouvez suivre les instructions sur le [site officiel de Docker](https://docs.docker.com/get-docker/).
 
-## Création de l'image Docker
+## Image Docker pour le compilateur 68000
 
-Voici le Dockerfile qui sera utilisé pour construire l'image Docker :
+Vous avez maintenant deux options pour compiler votre programme C pour l'Atari ST :
+- soit utiliser l'image docker disponible sur le [Docker Hub](https://hub.docker.com/r/fxrobin/m68k-compiler)
+- soit construire l'image Docker vous-même en suivant les instructions ci-dessous
+
+### Solution 1 : Utiliser l'image Docker disponible sur  Docker Hub
+
+Pour utiliser l'image Docker disponible sur le Docker Hub, exécutez la commande suivante pour vérifier que tout fonctionne correctement :
+
+```bash
+$  docker run -it fxrobin/m68k-compiler make --version
+Unable to find image 'fxrobin/m68k-compiler:latest' locally
+latest: Pulling from fxrobin/m68k-compiler
+602d8ad51b81: Already exists
+a83e648886ca: Pull complete
+fff2a7d88eba: Pull complete
+Digest: sha256:797d84ac0937717aa6891c54ef23dc29ad151ac062343d69634502968cb6d109
+Status: Downloaded newer image for fxrobin/m68k-compiler:latest
+GNU Make 4.2.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+```
+
+L'image est fonctionnelle et prête à ête utilisée pour compiler des programmes C pour l'Atari ST.
+
+### Solution 2 Création de l'image Docker
+
+Si vous souhaitez faire le tout manuellemen, voici le Dockerfile qui sera utilisé pour construire l'image Docker :
 
 `Dockerfile`
 ```dockerfile
@@ -145,7 +174,7 @@ Le conteneur lui-même exécute une distribution Linux légère, avec le cross-c
 Pour exécuter le conteneur Docker, utilisez la commande suivante :
 
 ```bash
-$ docker run -it -v $(pwd):/app m68k-compiler make --debug=b
+$ docker run -it -v $(pwd):/app fxrobin/m68k-compiler make --debug=b
 GNU Make 4.2.1
 Built for x86_64-pc-linux-gnu
 Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -167,6 +196,8 @@ m68k-atari-mint-gcc -o target/build/hello.tos target/obj/hello.o
 Must remake target 'all'.
 Successfully remade target file 'all'.
 ```
+> **Note** : Si vous avez construit votre propre image Docker, remplacez `fxrobin/m68k-compiler` par `m68k-compiler` dans la commande ci-dessus.
+
 Cette commande démarre le conteneur Docker, monte le répertoire courant à l'intérieur du conteneur et exécute la commande `make` avec l'option `--debug=b` pour afficher les commandes exécutées par `make`.
 
 La commande `make` compile le programme `hello.c` pour l'Atari ST et génère le fichier `hello.tos` dans le répertoire `./target/build`.
@@ -193,15 +224,15 @@ $ tree
         └── hello.o
 ```      
 
-You can now test the `hello.tos` executable with your favorite Atari ST emulator, like Hatari on Linux or Steem on Windows.
+Vous pouvez maintenant tester l'exécutable `hello.tos` avec votre émulateur Atari ST préféré, comme Hatari sur Linux ou Steem sur Windows.
 
 ## Conclusion
 
-Thanks to Docker, we have a clean and reproducible environment to compile C programs for the Atari ST.
+Grâce à Docker, nous avons un environnement propre et reproductible pour compiler des programmes C pour l'Atari ST.
 
-You can now compile and build from your favorite IDE or text editor on your favorite operating system (Windows, Linux, MacOS) without worrying about the compatibility of the tools.
+Vous pouvez maintenant compiler et construire à partir de votre IDE ou éditeur de texte préféré sur votre système d'exploitation préféré (Windows, Linux, MacOS) sans vous soucier de la compatibilité des outils.
 
-## Links
-- Packaging Cross Compiler 68k by Vincent Rivière for Ubuntu : <http://vincent.riviere.free.fr/soft/m68k-atari-mint/ubuntu.php>
-- Vretrocomputing Youtube channel of Vincent Rivière : <https://www.youtube.com/c/Vretrocomputing>
-- Vretrocomputing Facebook page: <https://www.facebook.com/Vretrocomputing/>
+## Liens
+- Packaging Cross Compiler 68k par Vincent Rivière pour Ubuntu : <http://vincent.riviere.free.fr/soft/m68k-atari-mint/ubuntu.php>
+- Chaîne Youtube Vretrocomputing de Vincent Rivière : <https://www.youtube.com/c/Vretrocomputing>
+- Page Facebook Vretrocomputing : <https://www.facebook.com/Vretrocomputing/>

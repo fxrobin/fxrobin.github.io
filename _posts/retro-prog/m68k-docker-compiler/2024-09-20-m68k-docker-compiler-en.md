@@ -30,9 +30,38 @@ The Dockerfile is a set of instructions that will be used to build the Docker im
 
 Obvioulsy, you need to have Docker installed on your computer. If it's not the case, you can follow the instructions on the [official Docker website](https://docs.docker.com/get-docker/).
 
-## Creating the Docker image
+## Docker Image for the 68000 Compiler
 
-Here is the Dockerfile that will be used to build the Docker image:
+You now have two options to compile your C program for the Atari ST:
+- either use the Docker image available on [Docker Hub](https://hub.docker.com/r/fxrobin/m68k-compiler)
+- or build the Docker image yourself by following the instructions below
+
+### Solution 1: Use the Docker Image Available on Docker Hub
+
+To use the Docker image available on Docker Hub, run the following command to verify that everything is working correctly:
+
+```bash
+$ docker run -it fxrobin/m68k-compiler make --version
+Unable to find image 'fxrobin/m68k-compiler:latest' locally
+latest: Pulling from fxrobin/m68k-compiler
+602d8ad51b81: Already exists
+a83e648886ca: Pull complete
+fff2a7d88eba: Pull complete
+Digest: sha256:797d84ac0937717aa6891c54ef23dc29ad151ac062343d69634502968cb6d109
+Status: Downloaded newer image for fxrobin/m68k-compiler:latest
+GNU Make 4.2.1
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+```
+
+The image is functional and ready to be used to compile C programs for the Atari ST.
+
+### Solution 2: Build the Docker Image Yourself
+
+If you want to do everything manually, here is the Dockerfile that will be used to build the Docker image:
 
 `Dockerfile`
 ```dockerfile
@@ -145,7 +174,7 @@ The container itself runs a lightweight Linux distribution, with the cross-compi
 To run the Docker container, use the following command:
 
 ```bash
-$ docker run -it -v $(pwd):/app m68k-compiler make --debug=b
+$ docker run -it -v $(pwd):/app fxrobin/m68k-compiler make --debug=b
 GNU Make 4.2.1
 Built for x86_64-pc-linux-gnu
 Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -167,6 +196,8 @@ m68k-atari-mint-gcc -o target/build/hello.tos target/obj/hello.o
 Must remake target 'all'.
 Successfully remade target file 'all'.
 ```
+
+> **Note**: If you have built your own Docker image, replace `fxrobin/m68k-compiler` with `m68k-compiler` in the command above.
 
 This command starts the Docker container, mounts the current directory inside the container, and runs the `make` command with the `--debug=b` option to display the commands executed by `make`.
 
