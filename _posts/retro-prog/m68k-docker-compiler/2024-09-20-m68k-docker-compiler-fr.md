@@ -22,7 +22,7 @@ Suite au [tutoriel précédent](/c-programming-for-atari-st-with-linux/), nous a
 
 **Pourquoi Docker ? Parce que c'est un bon moyen d'avoir un environnement propre et reproductible, sans avoir à installer beaucoup de choses sur votre ordinateur qui pourraient potentiellement casser votre système ou entrer en conflit avec d'autres outils et bibliothèques.**
 
-L'image Docker utilisée est basée sur Ubuntu 20.04 et contient le compilateur croisé pour le processeur 68000, le processeur de l'Atari ST.
+L'image Docker utilisée est basée sur Ubuntu 20.04 et contient le "cross compiler" pour le processeur Motorola 68000, le processeur de l'Atari ST.
 
 Le Dockerfile est un ensemble d'instructions qui seront utilisées pour construire l'image Docker et installer les outils nécessaires comme le cross-compiler provenant du [PPA de Vincent Rivière](http://vincent.riviere.free.fr/soft/m68k-atari-mint/ubuntu.php).
 
