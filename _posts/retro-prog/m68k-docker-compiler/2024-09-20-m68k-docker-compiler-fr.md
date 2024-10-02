@@ -61,7 +61,7 @@ L'image est fonctionnelle et prête à ête utilisée pour compiler des programm
 
 ### Solution 2 : Création de l'image Docker
 
-Si vous souhaitez faire le tout manuellemen, voici le Dockerfile qui sera utilisé pour construire l'image Docker :
+Si vous souhaitez faire le tout manuellement, voici le Dockerfile qui sera utilisé pour construire l'image Docker :
 
 `Dockerfile`
 ```dockerfile
