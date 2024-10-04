@@ -22,6 +22,14 @@ et besoins. Elle ne contient aucun tutoriel mais représente une sorte d'aide-m�
 
 ## Linux
 
+### Un prompt avec des informations GIT
+
+A placer dans le fichier `~/.bashrc` pour avoir un prompt avec des informations sur le dépôt GIT courant :
+
+```bash
+export PS1=$'\\n\[\\e[97;44m\\] \\u \\[\\e[34;106m\\] \\w \\[\\e[30;107m\\]$(GIT_PS1_SHOWUNTRACKEDFILES=1 GIT_PS1_SHOWDIRTYSTATE=1 __git_ps1) \\[\\e[00m\\] \\n\u25B8 '
+```
+
 ### installation de powerline
 
 ```bash
@@ -266,6 +274,9 @@ Petits ajouts pratiques pour les commandes bash à ajouter à `~/.bashrc` :
 alias cls='clear'
 alias lh='ls -gFh --group-directories-first --time-style=long-iso'
 alias ..='cd ..'
+alias e='exa --group-directories-first --long --time-style=long-iso --bytes'
+alias run="docker compose up"
+
 
 function mkcd {
     mkdir -p $1
