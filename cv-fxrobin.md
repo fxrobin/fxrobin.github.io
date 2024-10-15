@@ -124,7 +124,7 @@ Intégré à une équipe dédiée au Craftsmanship au profit de l'ensemble des p
 * création de PoC GraalVM Java Natif (Quarkus 3, Spring Boot 3)
 
 Architecte, Techlead et développeur au profit d'une plateforme d'échanges liée aux transports
-* Refonte d'une architecture Java 8 / Spring 5 vers Java 21 / Quarkus 2 en mode réactif
+* Refonte d'une architecture Java 8/Spring 5 vers Java 21/Quarkus 3 en mode réactif
 * Gestion technique d'une équipe de 5 developpeurs directs
 * Elaborations de PoC divers (OpenIDConnect, Verrous Distribués)
 * Définition de bonnes pratiques, aculturation de l'équipe de dev à ces partiques
