@@ -97,7 +97,7 @@ Pour me contacter, envoyer, svp, un message sur [LinkedIn](https://www.linkedin.
 </fieldset>
 </div>
 
-J’ai 48 ans et 25 d’expérience professionnelle en développement, en architecture et en interopérabilité de SI. 
+J’ai 49 ans et 26 d’expérience professionnelle en développement, en architecture et en interopérabilité de SI. 
 
 En tant qu’officier dans l’armée de Terre, à partir de 1998, j’ai été responsable des préconisations Java (pratiques, frameworks) mais aussi sur l’adoption de la SOA (Service-Oriented Architecture) et notamment de tout ce qui se rapportait aux pratiques liées aux WebServices, dès 2003, au profit du ministère des Armées. A la fin de ma carrière militaire, de 2011 à 2018, j’ai été responsable de la formation des développeurs du ministère, mais aussi formateur. 
 
@@ -122,6 +122,12 @@ Intégré à une équipe dédiée au Craftsmanship au profit de l'ensemble des p
 * création de PoC de Best Pratices avec Spring Boot 3 (Lombok, Testcontainers, AOP)
 * migration et réfactorisation d'applications Java et de l'architecture associée
 * création de PoC GraalVM Java Natif (Quarkus 3, Spring Boot 3)
+
+Architecte, Techlead et développeur au profit d'une plateforme d'échanges liée aux transports
+* Refonte d'une architecture Java 8 / Spring 5 vers Java 21 / Quarkus 2 en mode réactif
+* Gestion technique d'une équipe de 5 developpeurs directs
+* Elaborations de PoC divers (OpenIDConnect, Verrous Distribués)
+* Définition de bonnes pratiques, aculturation de l'équipe de dev à ces partiques
 
 ### API Manager
 #### Depuis juillet 2020 : Ministère des Armées, DGNUM/CASID/SAND, Bruz ####
@@ -193,12 +199,12 @@ et en base de données (SGBD, SGBDR, Décisionnel)
 ### Langages
 
 * Java 
-  * 27 ans d'expérience depuis Java 1.1 (depuis fin 1996) à Java 21 (2023)
+  * 27 ans d'expérience depuis Java 1.1 (depuis fin 1996) à Java 21 (2024)
   * Quarkus : depuis la version 1 (2019) à la version 3
   * Spring : depuis la version 2 (2006) Spring IoC, Spring Security (depuis 2009), Spring Web, Spring Boot 3 (depuis 2023)
   * Jakarta EE : depuis J2EE 1.2 à Jakarta EE 10
   * Java FX 8 à 11, Jakarta Persistence (ex JPA), Jarkarta DI 2 (ex CDI), JSF 2 à 4
-  * Vertx, JAX-RS, JAX-WS, Apache CXF
+  * Vert.X, JAX-RS, JAX-WS, Apache CXF
   * Lombok, Apache Commons-*, Guava, LibGDX
   * JUnit, Mockito, Rest-Assured
   * JMeter, Selenium, Gatling
@@ -229,7 +235,8 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * AWS CodeWhisperer
   * VSCode Plugin CONTINUE
   * LangChain
-  * ChatGPT
+  * Usage de Github Copilot & ChatGPT
+
 
 ### Interopératibilité / API
   * API REST, HATOEAS, WebServices SOAP
@@ -244,7 +251,7 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * OWASP Dependency-Check (Maven)
   * Kali Linux : Metasploit-Framework
   * Wireshark
-  * KeyCloak, OAuth2
+  * KeyCloak, OAuth2, OpenIDConnect
 
 ### Web
   * HTML5/CSS3
@@ -253,6 +260,7 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * JavaScript, TypeScript
 
 ### CI/CD
+  * Azure DevOps
   * GitLab (worker), GitHub (+workflows), GitPod
   * Docker, Kubernetes (initiation)
   * Jenkins / SonarQube
@@ -266,7 +274,7 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * VMWare, VirtualBox
 
 ### Bases de données
-  * BigData : ElasticSearch, MongoDB, REDIS
+  * BigData : REDIS, ElasticSearch, MongoDB
   * RDBMS : MySQL, PostgreSQL, Oracle, SQLite, hsqldb
   * BRMS : Drools
 
