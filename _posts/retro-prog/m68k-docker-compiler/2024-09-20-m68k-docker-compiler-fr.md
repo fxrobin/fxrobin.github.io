@@ -105,11 +105,12 @@ Créons un programme C simple qui affichera un message à l'écran de l'Atari ST
 ```c
 #include <stdio.h>
 
-void main()
+int main(void)
 {
-    printf("Hello Bitmap Brothers!\n");
-    printf("Press Enter");
+    puts("Hello Bitmap Brothers!");
+    puts("Press Enter...");
     getchar();
+    return 0;
 }
 ```
 

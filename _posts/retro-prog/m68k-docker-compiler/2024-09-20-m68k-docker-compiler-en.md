@@ -105,11 +105,12 @@ Let's create a simple C program that will display a message on the screen of the
 ```c
 #include <stdio.h>
 
-void main()
+int main(void)
 {
-    printf("Hello Bitmap Brothers!\n");
-    printf("Press Enter");
+    puts("Hello Bitmap Brothers!");
+    puts("Press Enter...");
     getchar();
+    return 0;
 }
 ```
 
