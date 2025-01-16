@@ -33,6 +33,7 @@ Le Dockerfile est un ensemble d'instructions qui seront utilisées pour construi
 ## Image Docker pour le compilateur 68000
 
 Vous avez maintenant deux options pour compiler votre programme C pour l'Atari ST :
+
 - soit utiliser l'image docker disponible sur le [Docker Hub](https://hub.docker.com/r/fxrobin/m68k-compiler)
 - soit construire l'image Docker vous-même en suivant les instructions ci-dessous
 
@@ -175,7 +176,7 @@ Le conteneur lui-même exécute une distribution Linux légère, avec le cross-c
 Pour exécuter le conteneur Docker, utilisez la commande suivante :
 
 ```bash
-$ docker run -it -v $(pwd):/app fxrobin/m68k-compiler make --debug=b
+$ docker run -it -u $(id -u):$(id -g) -v $(pwd):/app fxrobin/m68k-compiler make --debug=b
 GNU Make 4.2.1
 Built for x86_64-pc-linux-gnu
 Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -197,7 +198,10 @@ m68k-atari-mint-gcc -o target/build/hello.tos target/obj/hello.o
 Must remake target 'all'.
 Successfully remade target file 'all'.
 ```
+
 > **Note** : Si vous avez construit votre propre image Docker, remplacez `fxrobin/m68k-compiler` par `m68k-compiler` dans la commande ci-dessus.
+
+> **Information** : notez l'usage de `-u $(id -u):$(id -g)` pour exécuter le conteneur Docker avec les mêmes droits que l'utilisateur courant. Cela permet de conserver les droits sur les fichiers générés par le conteneur.
 
 Cette commande démarre le conteneur Docker, monte le répertoire courant à l'intérieur du conteneur et exécute la commande `make` avec l'option `--debug=b` pour afficher les commandes exécutées par `make`.
 
@@ -206,7 +210,7 @@ La commande `make` compile le programme `hello.c` pour l'Atari ST et génère le
 ```bash
 $ ls -l ./target/build
 total 132
--rwxr-xr-x 1 root root 132601 Sep 20 15:59 hello.tos
+-rwxr-xr-x 1 fxrobin fxrobin 132601 Sep 20 15:59 hello.tos
 ```
 
 Voici la structure de l'arborescence du projet après la compilation :
@@ -226,6 +230,20 @@ $ tree
 ```      
 
 Vous pouvez maintenant tester l'exécutable `hello.tos` avec votre émulateur Atari ST préféré, comme Hatari sur Linux ou Steem sur Windows.
+
+Enfin, je vous recommande de créer un alias bash pour cette commande afin de simplifier son utilisation. Par exemple, ajoutez la ligne suivante à votre fichier `~/.bashrc` :
+
+```bash
+alias m68k='docker run -it -u $(id -u):$(id -g) -v $(pwd):/app fxrobin/m68k-compiler'
+```
+
+Cet alias permet de lancer une simple commande `m68k make` pour compiler le programme C pour l'Atari ST :
+
+```bash
+ $ m68k make
+m68k-atari-mint-gcc  -c src/hello.c -o target/obj/hello.o
+m68k-atari-mint-gcc -o target/build/hello.tos target/obj/hello.o
+```
 
 ## Conclusion
 
