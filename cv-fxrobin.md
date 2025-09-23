@@ -3,14 +3,14 @@ layout: cv-layout
 title: François-Xavier ROBIN
 subtitle: Architecte SI, Expert Java EE, API Manager
 logo: xenon-reborn.png
-permalink: /cv/
+permalink: /cv
 lang: fr
 ---
 
 <!--excerpt-->
 
 <div id="intro">
-    <img id="photo" src="/images/me.jpg" />
+    <img id="photo" src="/images/me-big-black-white.png" style="width: 10em; height: auto;" />
     <h1>{{ page.title }}</h1>
     <div id="title" class="orbitron">{{ page.subtitle }}</div>
     <p>
@@ -29,7 +29,7 @@ lang: fr
 <div id="short-details">
 
 <fieldset id="diplomes" markdown="1">
- <legend>Diplômes & Certifications</legend> 
+ <legend>🎓 Diplômes & Certifications</legend> 
 Certification SAFE DevSecOps (2022)
 
 Officier de l'armée de Terre du grade de sous-lieutenant à **commandant**,
@@ -45,7 +45,7 @@ DUT d'informatique à l'Université d'Orléans (1993-1995)
 </fieldset>
 
 <fieldset id="int-pro" markdown="1">
- <legend>Intérêts professionnels</legend> 
+ <legend>💡 Intérêts professionnels</legend> 
   
 Capitaliser : écrire, publier, partager, former, progresser
 
@@ -58,7 +58,7 @@ IA : algorithmes génétiques, réseau de neurones, *deep learning*, IA Généra
 </fieldset>
 
 <fieldset id="projets" markdown="1">
- <legend>Compétences "Projets"</legend> 
+ <legend>📋 Compétences "Projets"</legend> 
 Gestion d'équipe et des compétences
 
 Ingénierie pédagogique, suivi et gestion RH
@@ -71,7 +71,7 @@ Rédaction de spécifications et de cadres normatifs
 
 
 <fieldset id="loisirs" markdown="1">
- <legend>Loisirs</legend> 
+ <legend>🎸 Loisirs</legend> 
 
 Sports : tennis, course à pied, badminton
 
@@ -85,7 +85,7 @@ Voyages
 
 
 <fieldset id="more" markdown="1">
- <legend>Et un peu plus ...</legend>
+ <legend>🔗 Et un peu plus ...</legend>
 Pour en savoir plus sur mon parcours, consulter ce [lien](/about/) pour le découvrir.
 
 Parcourir mes articles publiés sur [Developpez.com](https://fxrobin.developpez.com/).
@@ -97,19 +97,23 @@ Pour me contacter, envoyer, svp, un message sur [LinkedIn](https://www.linkedin.
 </fieldset>
 </div>
 
-J’ai 49 ans et 26 d’expérience professionnelle en développement, en architecture et en interopérabilité de SI. 
+<div id="biography" markdown="1">
 
-En tant qu’officier dans l’armée de Terre, à partir de 1998, j’ai été responsable des préconisations Java (pratiques, frameworks) mais aussi sur l’adoption de la SOA (Service-Oriented Architecture) et notamment de tout ce qui se rapportait aux pratiques liées aux WebServices, dès 2003, au profit du ministère des Armées. A la fin de ma carrière militaire, de 2011 à 2018, j’ai été responsable de la formation des développeurs du ministère, mais aussi formateur. 
+**27 années d'expérience professionnelle** en développement, en architecture et en interopérabilité de SI.
 
-Avant de rejoindre Capgemini en septembre 2023, j’ai œuvré au sein d’une cellule d’API Management du Ministère des Armées pendant 3 ans. Pendant cette période j'ai rédigé un guide de bonnes pratiques pour la conception d'API REST et en développant des applications de démonstration de ces pratiques en Java avec Quarkus. 
+En tant qu'officier dans l'armée de Terre, à partir de 1998, j'ai été responsable des préconisations *Java* (pratiques, frameworks) mais aussi sur l'adoption de la *SOA* (Service-Oriented Architecture) et notamment de tout ce qui se rapportait aux pratiques liées aux *WebServices*, dès 2003, au profit du ministère des Armées. A la fin de ma carrière militaire, de 2011 à 2018, j'ai été responsable de la formation des développeurs du ministère, mais aussi formateur.
 
-Mon domaine de prédilection concerne tout ce qui gravite autour de la plateforme Java mais aussi et surtout sur la qualité et la performance du code, raison pour laquelle j’ai rejoint une entité de Craftsmanship chez Capgemini.  Elle est composée de Crafters identifiés du groupe. Ce sont des passionnés dont le but est de produire des applications non seulement fonctionnelles mais aussi, voire surtout, très bien conçues, avec des exigences de qualité très élevées, performantes et à l’état de l’art.
+Avant de rejoindre *Capgemini* en septembre 2023, j'ai œuvré au sein d'une cellule d'*API Management* du Ministère des Armées pendant 3 ans. Pendant cette période j'ai rédigé un guide de bonnes pratiques pour la conception d'*API REST* et en développant des applications de démonstration de ces pratiques en Java avec *Quarkus*.
 
-J’ai toujours été attiré par ce qui touchait l’intelligence artificielle sous toutes ses formes car dès 1996 je me suis intéressé aux réseaux de neurones, leurs applications et notamment aux algorithmes génétiques. C'est un domaine que je continue d'approfondir et de pratiquer.
+Mon domaine de prédilection concerne tout ce qui gravite autour de la plateforme *Java* mais aussi et surtout sur la **qualité et la performance du code**, raison pour laquelle j'ai rejoint une entité de *Craftsmanship* chez Capgemini.  Elle est composée de *Crafters* identifiés du groupe. Ce sont des passionnés dont le but est de produire des applications non seulement fonctionnelles mais aussi, voire surtout, très bien conçues, avec des exigences de qualité très élevées, performantes et à l'état de l'art.
 
+J'ai toujours été attiré par ce qui touchait l'**intelligence artificielle** sous toutes ses formes car dès 1996 je me suis intéressé aux *réseaux de neurones*, leurs applications et notamment aux *algorithmes génétiques*. C'est un domaine que je continue d'approfondir et de pratiquer.
+
+</div>
+  
 ## Parcours professionnel
 
-### Managing Solution Archictect & Crafter
+### 🏆 Managing Solution Archictect & Crafter
 #### Depuis septembre 2023 : Capgemini, Lyon
 
 Intégré à une équipe dédiée au Craftsmanship au profit de l'ensemble des projets du groupe.
@@ -129,7 +133,7 @@ Architecte, Techlead et développeur au profit d'une plateforme d'échanges lié
 * Elaborations de PoC divers (OpenIDConnect, Verrous Distribués)
 * Définition de bonnes pratiques, aculturation de l'équipe de dev à ces partiques
 
-### API Manager
+### 🔌 API Manager
 #### Depuis juillet 2020 : Ministère des Armées, DGNUM/CASID/SAND, Bruz ####
 
 * **analyses, conseils, validations d'API REST** (OpenAPI 3, Swagger 2) auprès des directions d'application et MOE
@@ -138,7 +142,7 @@ Architecte, Techlead et développeur au profit d'une plateforme d'échanges lié
 * mise en place d'un **site dédié à l'API Management** avec TULEAP, présentant les procédures, les attendus, les ressources et les outils au profit des directions d'application et MOE
 * réalisation d'outils pour l'**automatisation de la validation et la comparaison fonctionnelle des API** du ministère
 
-### TechLead
+### 🎯 TechLead
 #### De mai 2018 à juin 2020 : APSIDE, Rennes 
 
 Au profit de l'ensemble des agences du groupe APSIDE :
@@ -161,7 +165,7 @@ Au profit spécifiquement de l'agence APSIDE de Rennes :
 * entretien et validation techniques de candidats
 * conseils techniques
 
-### Responsable de formations de développeurs
+### 🎓 Responsable de formations de développeurs
 #### De janvier 2015 à avril 2018 : Ministère des Armées, ETRS, Cesson-Sévigné
 
 * manager d'une équipe pédagogique de 10 formateurs et d'environ 100 stagiaires développeurs par an, pour des cursus de 7 mois ainsi que la formation des officiers chefs de projets pour des cursus de 11 mois
@@ -175,7 +179,7 @@ et en base de données (SGBD, SGBDR, Décisionnel)
 * mise en œuvre d'une plateforme LMS fondée sur SAKAI pour l'enseignement à distance
 * élaboration et rédaction d'un recueil de bonnes pratiques de développements sécurisés
 
-### Formateur Java EE et SOA
+### 📚 Formateur Java EE et SOA
 #### De juillet 2011 à janvier 2015 : Ministère des Armées, ETRS, Cesson-Sévigné
 
 * formateur et responsable des contenus pédagogiques Java EE et SOA, Programmation Orientée Objets au profits des développeurs et chefs de projets du ministère
@@ -184,7 +188,7 @@ et en base de données (SGBD, SGBDR, Décisionnel)
 * mise en place des VM Linux (Debian / XFCE) packagées avec de nombreux outils de DEV
 (Eclipse, GlassFish, SoapUI, MySQL, etc.) au profit des formateurs et stagiaires
 
-### Architecte technique Java EE et SOA
+### 🏗️ Architecte technique Java EE et SOA
 #### D'octobre 1998 à juillet 2011 : Ministère de la Défense, CPSIAT, région Parisienne.
 
 * responsable technique des architectures logicielles et du développement Java pour l'armée de Terre, puis pour le Ministère de la Défense
@@ -196,7 +200,7 @@ et en base de données (SGBD, SGBDR, Décisionnel)
 * AMOE et AMOA sur plus de 30 projets du MinDef
 
 ## Compétences Techniques
-### Langages
+### ☕ Langages
 
 * Java 
   * 27 ans d'expérience depuis Java 1.1 (depuis fin 1996) à Java 21 (2024)
@@ -205,13 +209,13 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * Jakarta EE : depuis J2EE 1.2 à Jakarta EE 10
   * Java FX 8 à 11, Jakarta Persistence (ex JPA), Jarkarta DI 2 (ex CDI), JSF 2 à 4
   * Vert.X, JAX-RS, JAX-WS, Apache CXF
-  * Lombok, Apache Commons-*, Guava, LibGDX
+  * Lombok, Apache Commons-*, Guava, LibGDX (et tellement d'autres ...)
   * JUnit, Mockito, Rest-Assured
-  * JMeter, Selenium, Gatling
+  * JMeter, Selenium, Gatling; K6
   * Maven, Gradle
   * GlassFish Payara, WildFly, Tomcat, TomEE
   * Qualité du code : SonarLint/SonarQube, SpotBugs (FindBugs), Codacy, CodeFactor
-  * IDE : Eclipse, NetBeans, IntelliJ, GitPod, VSCode, Cursor.sh
+  * IDE : Eclipse, NetBeans, IntelliJ, GitPod, VSCode, Cursor
 
 * C/C++ :
   * C depuis 1993, C++ depuis 1998 jusqu'à la version C++14
@@ -227,18 +231,17 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * ADA, SAP, LUA
   * LaTeX
 
-### Intelligence Artificielle
+### 🤖 Intelligence Artificielle
 
-  * intégration (et usage) de Github Copilot X
+  * intégration (et usage) de Github Copilot
   * prompt engineering
   * ollama (+codellama +vicuna +mistral +zephyr)
   * AWS CodeWhisperer
   * VSCode Plugin CONTINUE
   * LangChain
-  * Usage de Github Copilot & ChatGPT
+  * MCP avec Quarkus
 
-
-### Interopératibilité / API
+### 🔌 Interopératibilité / API
   * API REST, HATOEAS, WebServices SOAP
   * YAML, JSON, XML, XSLT, XQuery
   * OpenAPI 3, Swagger 2, XML-Schema
@@ -246,34 +249,34 @@ et en base de données (SGBD, SGBDR, Décisionnel)
   * Testing : curl, SoapUI, Citrus Framework, Bruno
   * ESB : WSO2 (2.6 à 4), IBM Websphere ESB, Mule ESB, Aqualogic Service Bus
 
-### Securité / Authentification
+### 🔒 Sécurité / Authentification
   * OWASP : WEB Top 10 / API Top 10
   * OWASP Dependency-Check (Maven)
   * Kali Linux : Metasploit-Framework
   * Wireshark
   * KeyCloak, OAuth2, OpenIDConnect
 
-### Web
+### 🌐 Web
   * HTML5/CSS3
   * JQuery, Bootstrap, Jeckyll
   * Vue.js, Angular, React
   * JavaScript, TypeScript
 
-### CI/CD
+### 🚀 CI/CD
   * Azure DevOps
   * GitLab (worker), GitHub (+workflows), GitPod
   * Docker, Kubernetes (initiation)
   * Jenkins / SonarQube
   * Nexus / JFrog Artifactory / Apache Archiva / Maven Central 
 
-### Systèmes d'exploitations et virtualisation
+### 🖥️ Systèmes d'exploitations et virtualisation
   * Linux, Debian
   * Windows 
   * Scripting shell (bash), Ansible, Powershell
   * CloudStack
   * VMWare, VirtualBox
 
-### Bases de données
+### 🗄️ Bases de données
   * BigData : REDIS, ElasticSearch, MongoDB
   * RDBMS : MySQL, PostgreSQL, Oracle, SQLite, hsqldb
   * BRMS : Drools

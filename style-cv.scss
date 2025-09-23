@@ -119,15 +119,11 @@ body {
 
   h3 {
     color: darkblue;
-
-    &::before {
-        content: '\2589';
-        margin-right : 0.2em;
-    }
   }
 
   h4 {
     font-style: italic;
+    margin-left : 1em;
   }
 
 #short-details
@@ -195,13 +191,142 @@ body {
     }
   }
 
-  li 
-  { 
+  li { 
     margin-bottom: 0.5em;
   }
 
+  // Biography section styling - make it catchy and prominent
+  #biography {
+    background: linear-gradient(135deg, rgba(232, 91, 35, 0.08), rgba(158, 202, 237, 0.12));
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 1em;
+    padding: 2em 2.5em;
+    margin: 2.5em 0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    position: relative;
+    overflow: hidden;
+    
+    // Add a subtle animated gradient border
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, #e85b23, #9ecaed, #e85b23);
+      background-size: 200% 200%;
+      border-radius: 1em;
+      z-index: -1;
+      animation: gradientShift 6s ease infinite;
+    }
+    
+    // Professional icon
+    &::after {
+      content: '👨‍💼';
+      position: absolute;
+      top: -15px;
+      right: 25px;
+      background: linear-gradient(135deg, #fff, #f8f9fa);
+      padding: 8px 12px;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      font-size: 1.3em;
+      border: 2px solid #e85b23;
+    }
 
-  footer 
-  { color : white ; width : 50%; margin: auto; background-color: black; padding : 1em; opacity : 0.8 ;
+    p {
+      font-size: 1.1em;
+      line-height: 1.7;
+      margin-bottom: 1.2em;
+      text-align: justify;
+      color: #2c3e50;
+      font-weight: 400;
+      
+      &:first-child {
+        font-weight: 600;
+        font-size: 1.2em;
+        color: #1a252f;
+        margin-top: 0.5em;
+        border-left: 3px solid #e85b23;
+        background: rgba(232, 91, 35, 0.05);
+        padding: 1em;
+        border-radius: 0.5em;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    // Enhanced highlighting for key terms
+    strong {
+      color: #e85b23;
+      font-weight: 700;
+      padding: 0.1em 0.3em;
+      background: rgba(232, 91, 35, 0.1);
+      border-radius: 0.3em;
+      box-shadow: 0 1px 3px rgba(232, 91, 35, 0.2);
+    }
+    
+    em {
+      color: #2980b9;
+      font-style: italic;
+      font-weight: 600;
+      background: rgba(41, 128, 185, 0.1);
+      padding: 0.1em 0.2em;
+      border-radius: 0.2em;
+    }
+
+    // Add subtle animation on hover
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
+    &:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      
+      &::after {
+        transform: rotate(10deg) scale(1.1);
+      }
+    }
+
+    @include mobile {
+      padding: 1.2em;
+      margin: 1.5em 0;
+      
+      &::after {
+        right: 15px;
+        font-size: 1.1em;
+        top: -12px;
+      }
+      
+      p {
+        font-size: 1em;
+        text-align: left;
+        line-height: 1.6;
+        
+        &:first-child {
+          font-size: 1.1em;
+          padding: 0.8em;
+        }
+      }
+    }
+  }
+  
+  // Keyframe animation for the gradient border
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  footer { 
+    color: white; 
+    width: 50%; 
+    margin: auto; 
+    background-color: black; 
+    padding: 1em; 
+    opacity: 0.8;
     text-align: center;
   }
