@@ -12,6 +12,52 @@ body {
     background-image: url('/images/background-cv.jpg'); background-attachment: fixed;
   }
 
+  // Fade-in animations for scroll effects
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  // Base animation class
+  .fade-in-element {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    &.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
 #back-to-blog
 {
     width : 50%; 
@@ -103,9 +149,57 @@ body {
     font-family: "Orbitron", "Sans-Serif";
   }
 
+  // Animation styles - elements are visible by default, animated when .animate-on-scroll class is present
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    &.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // Ensure content is visible if no JavaScript or animation classes
+  body:not(.js-enabled) {
+    .animate-on-scroll {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  // Fallback: ensure content is always visible if JavaScript fails
+  h1, h2, h3, h4, p, fieldset, #biography, ul, ol, li {
+    opacity: 1;
+    transform: none;
+  }
+
+  // Special handling for content that should always be visible
+  fieldset p, fieldset ul, fieldset ol, fieldset li,
+  #short-details, #intro, #short-details *,
+  .container > p:not(.animate-on-scroll) {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  // Ensure all content in fieldsets is visible
+  fieldset {
+    * {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  // Individual element styling (no delays for h3 content)
+  h1 {
+    transition-delay: 0.1s;
+  }
+
   h2 {
     margin-top : 1em;
     text-shadow: 2px 2px white;
+    transition-delay: 0.2s;
 
     &::before {
         content: "> ";
@@ -114,16 +208,77 @@ body {
     &::after {
         content: "_";  
     }
-}
+  }
  
-
   h3 {
     color: darkblue;
+    // No transition-delay - will be controlled by JavaScript as section blocks
+    
+    // When h3 becomes visible, ensure following content animates as a block
+    &.visible {
+      ~ h4, ~ p, ~ ul, ~ ol {
+        animation-delay: 0.1s;
+        animation-fill-mode: both;
+      }
+      
+      ~ ul li, ~ ol li {
+        animation-delay: 0.2s;
+        animation-fill-mode: both;
+      }
+    }
+  }
+
+  // H3 content elements - animate simultaneously with h3
+  h3 ~ h4,
+  h3 ~ p,
+  h3 ~ ul,
+  h3 ~ ol {
+    transition-delay: 0s; // No delay for h3 content
   }
 
   h4 {
     font-style: italic;
     margin-left : 1em;
+    // Transition delay will be 0 when following h3, or default when standalone
+  }
+
+  // Standalone paragraphs (not following h3) get delay
+  h2 ~ p,
+  fieldset p {
+    transition-delay: 0.3s;
+  }
+
+  // Additional elements for scroll animations
+  ul, ol {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition-delay: 0.6s;
+    
+    &.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // H3 section block styling is now integrated above
+
+  // Force all list items to be visible - override any animation hiding
+  ul li, ol li {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: list-item !important;
+    position: relative !important;
+  }
+
+  // Make sure bullet points show
+  ul li::marker, ol li::marker {
+    display: list-item !important;
+  }
+
+  // Smooth page transitions
+  html {
+    scroll-behavior: smooth;
   }
 
 #short-details
@@ -148,6 +303,7 @@ body {
     margin-right: 1em;         
     margin-bottom: 1em;  
     background-color: rgba(white, $alpha: 0.8);
+    transition-delay: 0.6s;
 
     p 
     {       
@@ -193,6 +349,27 @@ body {
 
   li { 
     margin-bottom: 0.5em;
+    opacity: 1 !important; // Force visible by default
+    transform: none !important;
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  // Special handling for list items that should animate
+  .animate-on-scroll ul li,
+  .animate-on-scroll ol li {
+    opacity: 0 !important;
+    transform: translateX(-10px) !important;
+    
+    &.visible {
+      opacity: 1 !important;
+      transform: translateX(0) !important;
+    }
+  }
+
+  // Ensure fieldset list items are always visible
+  fieldset li {
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   // Biography section styling - make it catchy and prominent
@@ -206,6 +383,7 @@ body {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
     position: relative;
     overflow: hidden;
+    transition-delay: 0.8s;
     
     // Add a subtle animated gradient border
     &::before {
@@ -279,12 +457,12 @@ body {
       border-radius: 0.2em;
     }
 
-    // Add subtle animation on hover
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    
+    // Add subtle animation on hover (separate from scroll animation)
     &:hover {
       transform: translateY(-3px) scale(1.01);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                  box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       
       &::after {
         transform: rotate(10deg) scale(1.1);
@@ -330,3 +508,5 @@ body {
     opacity: 0.8;
     text-align: center;
   }
+
+  // List items are now forced visible via JavaScript
