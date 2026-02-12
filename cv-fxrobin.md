@@ -3,7 +3,7 @@ layout: cv-layout
 title: François-Xavier ROBIN
 subtitle: Architecte SI, Expert Java EE, API Manager
 logo: xenon-reborn.png
-permalink: /cv
+permalink: /cv-old
 lang: fr
 ---
 
