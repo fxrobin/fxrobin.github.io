@@ -1,0 +1,231 @@
+@font-face {
+    font-family: 'Siemens';
+    src: url('fonts/Web437_Siemens_PC-D.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Siemens', monospace;
+    background: #1a1a2e;
+    color: #0f0;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* CRT Monitor */
+
+.crt-monitor {
+    position: relative;
+    width: 90vw;
+    height: 88vh;
+    max-width: 1200px;
+    background: linear-gradient(145deg, #3a3a3a 0%, #2a2a2a 30%, #1e1e1e 100%);
+    border-radius: 24px;
+    padding: 28px 28px 50px 28px;
+    box-shadow:
+        0 0 0 3px #111,
+        0 0 0 6px #444,
+        0 0 0 8px #222,
+        0 20px 60px rgba(0, 0, 0, 0.7),
+        inset 0 2px 4px rgba(255, 255, 255, 0.05);
+}
+
+.crt-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow:
+        inset 0 0 80px rgba(0, 255, 0, 0.03),
+        inset 0 0 4px rgba(0, 0, 0, 1),
+        0 0 2px #000;
+    border: 3px solid #111;
+}
+
+.crt-bezel-label {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #666;
+    font-family: 'Arial', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    user-select: none;
+}
+
+.crt-power-led {
+    position: absolute;
+    bottom: 16px;
+    right: 40px;
+    width: 8px;
+    height: 8px;
+    background: #0f0;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #0f0, 0 0 12px #0f0;
+    animation: led-pulse 3s ease-in-out infinite;
+}
+
+@keyframes led-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.crt-brand {
+    position: absolute;
+    bottom: 12px;
+    left: 40px;
+    color: #555;
+    font-family: 'Arial', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    user-select: none;
+}
+
+/* Screen effects */
+
+.scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        transparent 50%,
+        rgba(0, 0, 0, 0.3) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 10;
+    animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+}
+
+.crt-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9;
+    background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+    border-radius: 12px;
+}
+
+/* Terminal */
+
+#terminal {
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    overflow-y: auto;
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+#terminal::-webkit-scrollbar {
+    width: 10px;
+}
+
+#terminal::-webkit-scrollbar-track {
+    background: #001100;
+}
+
+#terminal::-webkit-scrollbar-thumb {
+    background: #0f0;
+}
+
+/* Prompt & input */
+
+.prompt {
+    color: #0f0;
+}
+
+.input-line {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    margin-top: 10px;
+    cursor: text;
+}
+
+#command-input {
+    width: 0;
+    min-width: 1ch;
+    background: transparent;
+    border: none;
+    color: #0f0;
+    font-family: 'Siemens', monospace;
+    font-size: 18px;
+    outline: none;
+    caret-color: transparent;
+}
+
+/* Cursors */
+
+.block-cursor {
+    display: inline-block;
+    width: 0.6em;
+    height: 1em;
+    background: #0f0;
+    position: relative;
+    top: 0.25em;
+    left: -0.3em;
+    animation: blink-block 1s step-end infinite;
+}
+
+@keyframes blink-block {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.cursor {
+    background: #0f0;
+    color: #000;
+    animation: blink-cursor 0.6s step-end infinite;
+}
+
+@keyframes blink-cursor {
+    50% { background: transparent; color: #0f0; }
+}
+
+/* Output styles */
+
+.progress-bar {
+    margin: 5px 0;
+}
+
+.error { color: #f00; }
+.success { color: #0f0; }
+.warning { color: #0f0; }
+.header { color: #0f0; text-decoration: underline; }
+
+.ascii-art {
+    color: #0f0;
+    white-space: pre;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.boot-line {
+    opacity: 0;
+    animation: appearLine 0.1s forwards;
+}
