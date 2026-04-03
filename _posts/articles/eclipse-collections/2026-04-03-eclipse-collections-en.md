@@ -55,13 +55,13 @@ Good start. Let's go further.
 
 ## Ready, set, go!
 
-We start with a classic Maven project in Java 17, with Eclipse Collections dependencies, Lombok for our domain classes, and JUnit 5 for tests.
+We start with a classic Maven project in Java 25, with Eclipse Collections dependencies, Lombok for our domain classes, and JUnit 5 for tests.
 
-`pom.xml`
+`pom.xml (part)`
 ```xml
 <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>25</maven.compiler.source>
+    <maven.compiler.target>25</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 </properties>
 
@@ -69,17 +69,17 @@ We start with a classic Maven project in Java 17, with Eclipse Collections depen
     <dependency>
         <groupId>org.eclipse.collections</groupId>
         <artifactId>eclipse-collections-api</artifactId>
-        <version>12.0.0</version>
+        <version>13.0.0</version>
     </dependency>
     <dependency>
         <groupId>org.eclipse.collections</groupId>
         <artifactId>eclipse-collections</artifactId>
-        <version>12.0.0</version>
+        <version>13.0.0</version>
     </dependency>
     <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
-        <version>1.18.32</version>
+        <version>1.18.44</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
