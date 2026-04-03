@@ -98,35 +98,38 @@
   }
 
 .entry {
+    p { padding-left: 1em; }
+
     h2 {
         /* font-family: "amiga"; */
         margin-top: 1em;
-        padding: 0.75em;
-        color: #FFFFFF;
-        background: linear-gradient(#000066, 50%, #0000bb 50%);
-        background-size: 100% 4px;
-        background-repeat: repeat-y;
-        border-radius: 0.25em;
-        font-size: 1.25em;
-        box-shadow: 2px 2px 2px #555555;
+        // padding: 0.75em;
+        color: black;
+        // background: linear-gradient(#000066, 50%, #0000bb 50%);
+        // background-size: 100% 4px;
+        // background-repeat: repeat-y;
+        // border-radius: 0.25em;
+        font-size: 1.5em;
+        // box-shadow: 2px 2px 2px #555555;
     }
     h2:before {
         margin-right: 0.25em;
         content: '>';
         font-size: 1em;
     }
-    h2:after {
+    /*h2:after {
         margin-left: 0.25em;
         content: '\2588';
         animation: blinker 3s ease infinite;
-    }
+    }*/
     h3 {
         margin-top: 1em;
         font-size: 1.5em;
+        padding: 0.75em;
     }
     h3:before {
         margin: 0.25em;
-        content: url('/images/bullet-amiga.png');
+        // content: url('/images/bullet-amiga.png');
     }
     P>IMG {
         margin: 1em;
