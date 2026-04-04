@@ -35,7 +35,7 @@ List<String> gothamHeroNames = heroes.stream()
     .filter(h -> "Gotham".equals(h.getCity()))
     .map(Hero::getName)
     .map(String::toUpperCase)
-    .collect(Collectors.toList());
+    .toList();
 ```
 
 That works fine. But we systematically go through `.stream()`, `.collect()`, `Collectors.toList()`. It is verbose, and it gets heavy fast when chaining operations.
