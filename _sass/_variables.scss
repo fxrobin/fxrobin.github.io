@@ -1,26 +1,34 @@
-
 //
 // VARIABLES
 //
 
-// Colors
-$blue: #4183C4;
+// Colors — VT-100 phosphor palette
+$amber:        #FFB000;
+$amber-dim:    #996600;
+$body-text:    #E0E0E0;
+$code-green:   #33FF33;
+$link:         #5BC8FF;
+$link-visited: #FFB000;
+$border:       #333333;
+$bg-card:      #111111;
+$bg-body:      #0A0A0A;
 
-// Grays
-$black: #000;
-$darkerGray: #000066;
-$darkGray: #333;
-$gray: #666;
-$lightGray: #eee;
-$white: #fff;
+// Legacy aliases (used by other partials not yet rewritten)
+$blue:         #5BC8FF;
+$black:        #000;
+$darkerGray:   $amber;
+$darkGray:     $body-text;
+$gray:         $amber-dim;
+$lightGray:    #222222;
+$white:        $body-text;
 
 // Font stacks
-$helvetica: "Monda", Helvetica, Arial, sans-serif;
-$helveticaNeue: "Monda", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$georgia: Georgia, serif;
-
-$codeFont: "coders-crux";
-$articleFont: "Monda", Helvetica, Arial, sans-serif;
+$mono:             "Share Tech Mono", "coders-crux", monospace;
+$helvetica:        "Monda", Helvetica, Arial, sans-serif;
+$helveticaNeue:    "Monda", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$georgia:          Georgia, serif;
+$codeFont:         "coders-crux", "Share Tech Mono", monospace;
+$articleFont:      "Monda", Helvetica, Arial, sans-serif;
 
 // Mobile breakpoints
 @mixin mobile {
