@@ -1,0 +1,103 @@
+.wrapper-masthead {
+  background: $bg-body;
+  border-bottom: 2px solid $amber;
+  padding: 0.75rem 0;
+  width: 100%;
+  position: relative;
+
+  // Scanline overlay
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0.08),
+      rgba(0,0,0,0.08) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    pointer-events: none;
+  }
+}
+
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  font-family: $mono;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.site-avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.site-info {
+  flex: 1;
+  padding-left: 1rem;
+}
+
+.site-name {
+  font-family: $mono;
+  font-size: 1.2rem;
+  color: $amber;
+  text-shadow: 0 0 8px $amber;
+  margin: 0;
+
+  a {
+    color: $amber;
+    &:visited { color: $amber; }
+    &:hover { color: $amber; }
+  }
+}
+
+.site-description {
+  display: none; // description now in typewriter effect
+}
+
+.header-lang {
+  font-family: $mono;
+  font-size: 0.85rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  a {
+    color: $amber-dim;
+    padding: 0.15rem 0.4rem;
+    border: 1px solid $amber-dim;
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+
+    &:visited { color: $amber-dim; }
+    &:hover {
+      color: $amber;
+      border-color: $amber;
+      text-shadow: 0 0 6px $amber;
+    }
+    &.active {
+      color: $amber;
+      border-color: $amber;
+      text-shadow: 0 0 6px $amber;
+    }
+  }
+
+  .lang-sep {
+    color: $amber-dim;
+    user-select: none;
+  }
+}
