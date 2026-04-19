@@ -158,8 +158,22 @@
 
 // TOC sidebar (article pages)
 .toc-sidebar {
+  float: right;
+  margin: 0 0 1.5rem 2rem;
+  min-width: 200px;
+  max-width: 280px;
+  background: rgba($amber, 0.03);
+  border: 1px solid $border;
+  padding: 0.75rem 1rem;
+
   .sidebar-section-title {
     margin-bottom: 0.5rem;
+  }
+
+  @include mobile {
+    float: none;
+    max-width: 100%;
+    margin: 0 0 1.5rem;
   }
 }
 
