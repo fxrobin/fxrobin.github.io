@@ -1,0 +1,130 @@
+.posts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.post-card {
+  border: 1px solid #444444;
+  background: $bg-card;
+  font-family: $mono;
+  transition: border-color 0.1s;
+
+  &:hover { border-color: #666666; }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.5rem 0.75rem 0.4rem;
+    border-bottom: 1px solid #333;
+
+    .card-path {
+      color: $amber;
+      font-size: 0.85rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .card-date {
+      color: $amber-dim;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+      margin-left: 1rem;
+    }
+  }
+
+  .card-body {
+    padding: 0.6rem 0.75rem;
+
+    .card-title {
+      font-family: $helvetica;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: $body-text;
+      margin: 0 0 0.3rem;
+
+      a {
+        color: $body-text;
+        &:hover { color: $amber; }
+        &:visited { color: $body-text; }
+      }
+    }
+
+    .card-excerpt {
+      font-family: $helvetica;
+      font-size: 0.88rem;
+      color: #AAAAAA;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.4rem 0.75rem;
+    border-top: 1px solid #333;
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+
+      .tag {
+        color: $amber-dim;
+        font-size: 0.75rem;
+        &::before { content: '#'; }
+        &:hover { color: $amber; }
+        &:visited { color: $amber-dim; }
+      }
+    }
+
+    .card-read-more {
+      color: $amber;
+      font-size: 0.78rem;
+      border: 1px solid $amber-dim;
+      padding: 0.15rem 0.5rem;
+      white-space: nowrap;
+      transition: background 0.1s, color 0.1s;
+
+      &::before { content: '▶ '; }
+      &:visited { color: $amber; }
+
+      &:hover {
+        background: $amber;
+        color: $bg-body;
+        border-color: $amber;
+        text-shadow: none;
+      }
+    }
+  }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+  font-family: $mono;
+  font-size: 0.85rem;
+
+  a, span {
+    color: $amber-dim;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid $border;
+  }
+
+  a {
+    &:hover { color: $amber; border-color: $amber; }
+    &:visited { color: $amber-dim; }
+  }
+
+  .page-info { color: $amber-dim; border: none; }
+}
