@@ -298,3 +298,19 @@
     &:visited { color: $amber-dim; }
   }
 }
+
+.type-cursor {
+  display: inline;
+  color: #33FF33;
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.8);
+  animation: type-blink 0.5s step-end infinite;
+
+  &--done {
+    animation: type-blink 1.2s step-end infinite;
+    opacity: 0.6;
+  }
+}
+
+@keyframes type-blink {
+  50% { opacity: 0; }
+}

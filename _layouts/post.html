@@ -62,30 +62,41 @@ layout: default
   var intro = document.querySelector('.entry-intro .intro');
   if (!intro) return;
 
-  var html = intro.innerHTML;
-  intro.innerHTML = '';
-  intro.style.visibility = 'visible';
-
+  var html = intro.innerHTML.trim();
+  var out = '';
   var i = 0;
+  var cursor = '<span class="type-cursor">\u2588</span>';
+
+  intro.innerHTML = cursor;
+
   function tick() {
-    if (i >= html.length) return;
+    if (i >= html.length) {
+      intro.innerHTML = html + '<span class="type-cursor type-cursor--done">\u2588</span>';
+      return;
+    }
     if (html[i] === '<') {
-      // consume full tag in one shot — no delay
+      // consume full tag instantly
       var end = html.indexOf('>', i);
       if (end === -1) end = html.length - 1;
-      intro.innerHTML += html.slice(i, end + 1);
+      out += html.slice(i, end + 1);
       i = end + 1;
       tick();
     } else if (html[i] === '&') {
-      // consume HTML entity in one shot
+      // consume entity instantly
       var end = html.indexOf(';', i);
-      if (end === -1) end = i;
-      intro.innerHTML += html.slice(i, end + 1);
+      if (end === -1) { out += html[i++]; tick(); return; }
+      out += html.slice(i, end + 1);
       i = end + 1;
       tick();
     } else {
-      intro.innerHTML += html[i++];
-      setTimeout(tick, 6);
+      // burst: up to next tag/entity boundary, max 6 chars, always advance
+      var burst = i;
+      while (burst < html.length && html[burst] !== '<' && html[burst] !== '&' && burst - i < 6) burst++;
+      if (burst === i) burst = i + 1;
+      out += html.slice(i, burst);
+      i = burst;
+      intro.innerHTML = out + cursor;
+      setTimeout(tick, 18);
     }
   }
   tick();
