@@ -56,3 +56,38 @@ layout: default
 </div>
 
 {% include article-list-footer.html %}
+
+<script>
+(function () {
+  var intro = document.querySelector('.entry-intro .intro');
+  if (!intro) return;
+
+  var html = intro.innerHTML;
+  intro.innerHTML = '';
+  intro.style.visibility = 'visible';
+
+  var i = 0;
+  function tick() {
+    if (i >= html.length) return;
+    if (html[i] === '<') {
+      // consume full tag in one shot — no delay
+      var end = html.indexOf('>', i);
+      if (end === -1) end = html.length - 1;
+      intro.innerHTML += html.slice(i, end + 1);
+      i = end + 1;
+      tick();
+    } else if (html[i] === '&') {
+      // consume HTML entity in one shot
+      var end = html.indexOf(';', i);
+      if (end === -1) end = i;
+      intro.innerHTML += html.slice(i, end + 1);
+      i = end + 1;
+      tick();
+    } else {
+      intro.innerHTML += html[i++];
+      setTimeout(tick, 6);
+    }
+  }
+  tick();
+})();
+</script>
