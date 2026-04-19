@@ -24,10 +24,9 @@
     font-size: 0.78rem;
     color: $amber-dim;
     display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     text-decoration: none;
+    white-space: normal;
+    word-break: break-word;
     transition: color 0.1s;
 
     &::before { content: '§ '; color: $border; }
