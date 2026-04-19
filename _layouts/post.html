@@ -33,11 +33,21 @@ layout: default
     {% include language-selector.html %}
   </div>
 
-  {% include post-aside.html %}
+  {% assign content_parts = content | split: '<!--excerpt-->' %}
 
-  <div class="entry">
-    {{ content }}
-  </div>
+  {% if content_parts.size > 1 %}
+    <div class="entry entry-intro">{{ content_parts[0] }}</div>
+    <div class="post-body">
+      <div class="entry entry-content">{{ content_parts[1] }}</div>
+      {% include post-aside.html %}
+    </div>
+  {% else %}
+    <div class="post-body">
+      <div class="entry">{{ content }}</div>
+      {% include post-aside.html %}
+    </div>
+  {% endif %}
+
 </article>
 
 <button class="comments-toggle" onclick="this.textContent=this.textContent.includes('▼')?'[COMMENTS ▲]':'[COMMENTS ▼]';document.getElementById('comments-section').classList.toggle('open')">[COMMENTS ▼]</button>

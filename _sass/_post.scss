@@ -3,11 +3,41 @@
 
   ul, ol { margin-left: 1em; }
 
-  .logo-in-page { display: none; } // replaced by .post-header .post-logo
+  .logo-in-page { display: none; }
+  .accroche     { display: none; }
+  .date         { display: none; }
+  .metadata     { display: none; }
+}
 
-  .accroche { display: none; } // replaced by .post-subtitle in new header
+.entry-intro {
+  margin-bottom: 2rem;
+}
 
-  .date { display: none; } // replaced by .post-meta
+.post-body {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
 
-  .metadata { display: none; } // replaced by .post-meta
+  .entry-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toc-sidebar {
+    flex-shrink: 0;
+    width: 320px;
+    float: none;
+    margin: 0;
+    position: sticky;
+    top: 1rem;
+  }
+
+  @include mobile {
+    flex-direction: column;
+
+    .toc-sidebar {
+      width: 100%;
+      position: static;
+    }
+  }
 }
