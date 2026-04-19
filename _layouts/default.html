@@ -22,19 +22,15 @@
     <div class="wrapper-masthead">
       <div class="container">
         <header class="masthead clearfix">
-          <a href="{{ site.baseurl }}/" class="site-avatar">
-            <img src="{{ site.avatar }}" alt="{{ site.name }}" title="{{ site.name }}" />
-          </a>
-
-          <div class="site-info">
+<div class="site-info">
             <h1 id="site-name" class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }}</a></h1>
           </div>
 
           <div class="header-lang">
-            <a href="{{ site.baseurl }}/index-fr.html"
+            <a href="{{ site.baseurl }}/fr"
                class="{% if page.lang == 'fr' %}active{% endif %}">FR</a>
             <span class="lang-sep">·</span>
-            <a href="{{ site.baseurl }}/index-en.html"
+            <a href="{{ site.baseurl }}/en"
                class="{% if page.lang == 'en' %}active{% endif %}">EN</a>
           </div>
         </header>

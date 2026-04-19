@@ -53,41 +53,18 @@
     }
 
     .card-excerpt {
-      font-family: $mono;
-      font-size: 0.80rem;
-      color: #33FF33;
+      font-family: $helvetica;
+      font-size: 0.88rem;
+      color: $body-text;
       line-height: 1.6;
       margin: 0.4rem 0 0;
-      padding: 0.55rem 0.8rem;
+      padding: 0 0.1rem;
 
-      // CRT screen body
-      background-color: #030803;
-      background-image:
-        repeating-linear-gradient(
-          0deg,
-          rgba(0, 0, 0, 0.45),
-          rgba(0, 0, 0, 0.45) 1px,
-          transparent 1px,
-          transparent 2px
-        ),
-        radial-gradient(
-          ellipse at 50% 40%,
-          rgba(0, 60, 0, 0.25) 0%,
-          rgba(0, 0, 0, 0.75) 100%
-        );
-
-      border-radius: 6px / 4px;
-      box-shadow:
-        inset 0 0 18px rgba(0, 0, 0, 0.9),
-        inset 0 0 6px  rgba(0, 200, 0, 0.08),
-        0 0 1px rgba(0, 255, 0, 0.15);
-
-      text-shadow: 0 0 5px rgba(51, 255, 51, 0.55);
-
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      p { font-family: $helvetica; font-size: 0.88rem; color: $body-text; margin: 0.4em 0; }
+      code { font-family: $mono; font-size: 0.85em; color: #cccccc; background: rgba(255,255,255,0.05); border: 1px solid $border; border-radius: 3px; padding: 0.1em 0.3em; }
+      pre { font-family: $mono; font-size: 0.82rem; background: #050505; border: 1px solid $border; border-radius: 4px; padding: 0.5rem 0.75rem; overflow-x: auto; color: #00ff00; margin: 0.5em 0; }
+      strong, b { color: $body-text; }
+      a { color: $link; &:hover { color: $amber; } }
     }
   }
 
