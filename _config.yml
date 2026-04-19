@@ -26,24 +26,18 @@ t:
         read_more: "Lire plus ..."
 
         menu:
-            articles: 
+            articles:
                 url: "/"
-                text: "Articles"
+                text: "/dev/java"
             retro-programming:
                 url: "/retro-programming/"
-                text: "Retro-Prog"
-            blanka: 
+                text: "/dev/retro"
+            blanka:
                 url: "/blanka-cave/fr/"
-                text: "Grotte de Blanka"
-            tips: 
-                url: "/astuces/"
-                text: "Astuces"
-            links:
-                url: "/links/en/"     
-                text: "Liens"
-            about: 
+                text: "/dev/blanka"
+            about:
                 url: "/about/"
-                text: "A Propos"
+                text: "/dev/about"
     en:
         description: "Java / APIs / Linux / RetroStuffs and more..."
         name: "FX JavaDevBlog"
@@ -58,24 +52,18 @@ t:
         read_more: "Read more ..."
 
         menu:
-            articles: 
+            articles:
                 url: "/"
-                text: "Articles"
+                text: "/dev/java"
             retro-programming:
                 url: "/retro-programming/"
-                text: "Retro-Prog"
-            blanka: 
+                text: "/dev/retro"
+            blanka:
                 url: "/blanka-cave/en/"
-                text: "Blanka Cave"
-            tips: 
-                url: "/astuces/"
-                text: "Tips"
-            links:
-                url: "/links/en/"    
-                text: "Links"
-            about: 
+                text: "/dev/blanka"
+            about:
                 url: "/about/"
-                text: "About"
+                text: "/dev/about"
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: /images/new-java-logo.png
