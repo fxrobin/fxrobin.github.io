@@ -1,0 +1,222 @@
+.post-breadcrumb {
+  font-family: $mono;
+  font-size: 0.82rem;
+  color: $amber-dim;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid $border;
+
+  &::after { content: ' $'; color: $amber; }
+}
+
+.post-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  .post-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .post-title-group {
+    flex: 1;
+
+    h1 {
+      font-family: $helvetica;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: $body-text;
+      margin: 0 0 0.25rem;
+      text-shadow: none;
+    }
+
+    .post-subtitle {
+      font-family: $mono;
+      font-size: 0.9rem;
+      color: $amber-dim;
+      font-style: italic;
+      margin: 0;
+    }
+  }
+}
+
+.post-meta {
+  font-family: $mono;
+  font-size: 0.8rem;
+  color: $amber-dim;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $border;
+}
+
+// Article body — switches to Monda for readability
+.entry {
+  font-family: $helvetica;
+  color: $body-text;
+  line-height: 1.7;
+
+  p {
+    font-family: $helvetica;
+    color: $body-text;
+    margin: 1em 0;
+    padding-left: 0;
+  }
+
+  h2 {
+    font-family: $mono;
+    color: $amber;
+    font-size: 1.3rem;
+    margin-top: 1.8rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid $border;
+    padding-bottom: 0.3rem;
+    text-shadow: 0 0 6px rgba($amber, 0.4);
+
+    &::before { content: '## '; color: $amber-dim; }
+
+    @include mobile { &::before { content: ''; } }
+  }
+
+  h3 {
+    font-family: $mono;
+    color: $body-text;
+    font-size: 1.1rem;
+    margin-top: 1.4rem;
+
+    &::before { content: '### '; color: $amber-dim; font-size: 0.9em; }
+
+    @include mobile { &::before { content: ''; } }
+  }
+
+  h4 {
+    font-family: $mono;
+    color: $amber-dim;
+    font-size: 1rem;
+    margin-top: 1.2rem;
+  }
+
+  blockquote {
+    border-left: 3px solid $amber;
+    margin: 1.5rem 0;
+    padding: 0.5rem 1rem;
+    color: #AAAAAA;
+    font-style: italic;
+    background: rgba($amber, 0.03);
+  }
+
+  strong, b {
+    color: $body-text;
+    border-bottom: 1px solid rgba($amber, 0.4);
+  }
+
+  a {
+    color: $link;
+    &:visited { color: $link-visited; }
+    &:hover { color: $amber; }
+  }
+
+  ul, ol {
+    font-family: $helvetica;
+    color: $body-text;
+
+    li { margin-bottom: 0.3rem; }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-family: $mono;
+    font-size: 0.85rem;
+
+    th {
+      background: #1a1a1a;
+      color: $amber;
+      border: 1px solid $border;
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+    }
+
+    td {
+      border: 1px solid $border;
+      padding: 0.4rem 0.75rem;
+      color: $body-text;
+    }
+
+    tr:nth-child(even) td { background: #0d0d0d; }
+  }
+
+  img { margin: 1rem auto; display: block; }
+}
+
+// TOC sidebar (article pages)
+.toc-sidebar {
+  .sidebar-section-title {
+    margin-bottom: 0.5rem;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li { margin-bottom: 0.3rem; }
+
+    a {
+      font-family: $mono;
+      font-size: 0.78rem;
+      color: $amber-dim;
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &::before { content: '§ '; }
+      &:hover { color: $amber; }
+      &:visited { color: $amber-dim; }
+    }
+  }
+}
+
+// Comments toggle
+.comments-toggle {
+  font-family: $mono;
+  font-size: 0.85rem;
+  color: $amber;
+  background: transparent;
+  border: 1px solid $amber-dim;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  margin-top: 2rem;
+  display: block;
+  width: 100%;
+  text-align: left;
+  transition: border-color 0.15s, color 0.15s;
+
+  &:hover { border-color: $amber; }
+}
+
+.comments-section { display: none; &.open { display: block; } }
+
+.sidebar-share {
+  display: flex;
+  gap: 0.5rem;
+  font-family: $mono;
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+
+  a {
+    color: $amber-dim;
+    border: 1px solid $border;
+    padding: 0.15rem 0.4rem;
+    &:hover { color: $amber; border-color: $amber; }
+    &:visited { color: $amber-dim; }
+  }
+}

@@ -2,38 +2,47 @@
 layout: default
 ---
 
-
 <article class="post">
-	<img src="{{ site.baseurl }}/images/logos/{{  page.logo }}" class="logo-in-page hvr-buzz-out""/>
-  <h1>{{ page.title }}</h1> 
-	<div class="accroche">{{ page.subtitle }}</div>
+  {% assign path_prefix = "/dev/java" %}
+  {% if page.categories contains "retro-prog" %}
+    {% assign path_prefix = "/dev/retro" %}
+  {% elsif page.categories contains "blanka-cave" %}
+    {% assign path_prefix = "/dev/blanka" %}
+  {% endif %}
 
-	<div class="metadata">
-		
+  <div class="post-breadcrumb">~{{ path_prefix }}/{{ page.url | split: '/' | last | remove: '.html' }}</div>
 
-			<span class="date">
-					{{ site.t[page.lang].published }}
-		
-					{% if page.lang == 'fr' %}
-						{{ page.date | date: "%d/%m/%Y" }}
-					{% endif %}
-		
-					{% if page.lang == 'en' %}
-						{{ page.date | date: "%Y-%m-%d" }}
-					{% endif %}
-			</span>	
+  <div class="post-header">
+    {% if page.logo %}
+      <img src="{{ site.baseurl }}/images/logos/{{ page.logo }}" class="post-logo" alt="{{ page.title }}" />
+    {% endif %}
+    <div class="post-title-group">
+      <h1>{{ page.title }}</h1>
+      {% if page.subtitle %}
+        <p class="post-subtitle">{{ page.subtitle }}</p>
+      {% endif %}
+    </div>
+  </div>
 
-			{% include language-selector.html %}
-		
-	</div>
-	
-	{% include post-aside.html %}
-  
+  <div class="post-meta">
+    <span class="date">
+      {{ site.t[page.lang].published }}
+      {% if page.lang == 'fr' %}{{ page.date | date: "%d/%m/%Y" }}{% endif %}
+      {% if page.lang == 'en' %}{{ page.date | date: "%Y-%m-%d" }}{% endif %}
+    </span>
+    {% include language-selector.html %}
+  </div>
+
+  {% include post-aside.html %}
+
   <div class="entry">
     {{ content }}
-  </div> 
+  </div>
 </article>
 
-{% include disqus.html %}	
+<button class="comments-toggle" onclick="this.textContent=this.textContent.includes('▼')?'[COMMENTS ▲]':'[COMMENTS ▼]';document.getElementById('comments-section').classList.toggle('open')">[COMMENTS ▼]</button>
+<div id="comments-section" class="comments-section">
+  {% include disqus.html %}
+</div>
 
-{% include article-list-footer.html %}	
+{% include article-list-footer.html %}
