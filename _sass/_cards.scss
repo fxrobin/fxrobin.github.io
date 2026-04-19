@@ -53,10 +53,37 @@
     }
 
     .card-excerpt {
-      font-family: $helvetica;
-      font-size: 0.88rem;
-      color: #AAAAAA;
-      margin: 0;
+      font-family: $mono;
+      font-size: 0.80rem;
+      color: #33FF33;
+      line-height: 1.6;
+      margin: 0.4rem 0 0;
+      padding: 0.55rem 0.8rem;
+
+      // CRT screen body
+      background-color: #030803;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 0, 0, 0.45),
+          rgba(0, 0, 0, 0.45) 1px,
+          transparent 1px,
+          transparent 2px
+        ),
+        radial-gradient(
+          ellipse at 50% 40%,
+          rgba(0, 60, 0, 0.25) 0%,
+          rgba(0, 0, 0, 0.75) 100%
+        );
+
+      border-radius: 6px / 4px;
+      box-shadow:
+        inset 0 0 18px rgba(0, 0, 0, 0.9),
+        inset 0 0 6px  rgba(0, 200, 0, 0.08),
+        0 0 1px rgba(0, 255, 0, 0.15);
+
+      text-shadow: 0 0 5px rgba(51, 255, 51, 0.55);
+
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
