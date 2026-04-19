@@ -1,4 +1,4 @@
---- 
+---
 ---
 
 // IMPORTS
@@ -9,7 +9,7 @@
 @import "back-to-top";
 @import "base-rules";
 @import "mixins";
-@import "header";
+
 // Nicolas Gallagher's micro clearfix hack
 // http://nicolasgallagher.com/micro-clearfix-hack/
 .clearfix:before,
@@ -29,76 +29,36 @@
 .container {
     margin: 0 auto;
     max-width: 1800px;
-    padding: 0 10px;
     width: 100%;
-    margin-left: 2.5em;
 }
 
-//
-// .masthead
-//
-
+// Layout
+@import "header";
+@import "sidebar";
+@import "footer";
 @import "nav";
-#left {
-    margin-right: 470px;
-    @include mobile {
-        margin-right: inherit
-    }
-}
 
-#right {
-    @include mobile {
-        display: none;
-    }
-    float: right;
-    width: 450px;
-    margin-right: 20px;
-    .social-icons-right {
-        clear: right;
-        padding-top: 2em;
-        text-align: center;
-        width: 100%
-    }
-}
+// Content
+@import "cards";
+@import "article";
+@import "post";
+@import "front-post";
+@import "table-of-content";
 
-.wrapper-footer {
-    margin-top: 50px;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    background-color: $lightGray;
-    footer {
-        padding: 20px 0;
-        text-align: center;
-    }
-    .legal {
-        margin-top: 1em;
-        display: block;
-        clear: both;
-        font-family: 'volter';
-        font-size: 9px;
-    }
-}
-
-//
-// .main
-//
+// Components
+@import "search";
+@import "share";
+@import "languages";
+@import "disqus";
+@import "video";
 @import "article-list";
 @import "retro-list";
 @import "blanka";
 @import "stackoverflow";
-@import "search";
-@import "front-post";
-@import "post";
-@import "table-of-content";
-@import "share";
-@import "video";
-@import "disqus";
-@import "languages";
-@import "article-list-post-footer";
+@import "back-to-top";
 @import "gurumeditation";
 
-// Settled on moving the import of syntax highlighting to the bottom of the CSS
-// ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
+// Utilities
 @import "highlights";
 @import "svg-icons";
 @import "fx";

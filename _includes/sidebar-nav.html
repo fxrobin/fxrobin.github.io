@@ -1,0 +1,15 @@
+<nav class="sidebar-nav-list">
+  {% assign menu = site.t[page.lang].menu %}
+  {% for item in menu %}
+    {% assign url = item[1].url %}
+    {% assign text = item[1].text %}
+    {% assign is_active = false %}
+    {% if page.url == url or page.url contains url and url != '/' %}
+      {% assign is_active = true %}
+    {% endif %}
+    <a href="{{ site.baseurl }}{{ url }}"
+       class="sidebar-nav-item {% if is_active %}active{% endif %}">
+      {{ text }}
+    </a>
+  {% endfor %}
+</nav>
