@@ -1,150 +1,66 @@
-.post {
-    .date {
-        font-style: italic;
-        text-align: left;
-        color: $gray;
-        @include mobile {
-            text-align: center;
-        }
-    }
-    .logo-in-page {
-        float: left;
-        display: block;
-        margin-left: auto;
-        margin-right: 1em;
-        margin-top: 1em;
-        @include mobile {
-            float: none;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-    }
-    margin-top: 1em;
-    ul,
-    ol {
-        margin-left: 1em;
-    }
-    .accroche {
-        font-family: "oswald";
-        color: $darkGray;
-        text-align: left;
-        font-size: 1.5em;
-        @include mobile {
-            text-align: center;
-        }
-    }
-    blockquote {
-        margin: 1.8em .8em;
-        border-left: 2px solid $gray;
-        padding: 0.1em 1em;
-        color: $gray;
-        font-size: 15px;
-        font-style: italic;
-    }
-    h1 {
-        padding-top: 0.5em;
-        margin-left: 1em;
-        text-shadow: 1px 1px 2px #999999;
-        @include mobile {
-            text-align: center;
-        }
-    }
-    h2 {
-        border-bottom: solid #DDDDDD 2px;
-        font-family: "Russo One";
-    }
-    h2::before {
-        // color : #33FF33;
-        // padding-left : 0.5em;
-        font-size: 1.5em;
-        content: " > ";
-        @include mobile {
-            content: '';
-        }
-    }
-}
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  font-family: $mono;
+  font-size: 0.8rem;
+  margin: 1.5rem 0;
+  padding: 0.6rem 0;
+  border-top: 1px solid $border;
+  border-bottom: 1px solid $border;
 
-.post>.entry>.intro {
-    margin: 1em;
-    font-size: 1.2em;
-    font-family: "Monda";
-    color: $darkGray;
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 0.5em;
-    padding: 0.5em;
-    margin-right: 1em;
-    box-shadow: 0px 2px 5px #DDDDDD;
-}
-
-.entry>TABLE {
-    margin: 2em;
-    TD {
-        border: solid #DDDDDD 1px;
-        padding: 1em;
-    }
-    TH {
-        border: solid #DDDDDD 1px;
-        background-color: #444444;
-        color: white;
-        padding: 1em;
-    }
-}
-
-@keyframes blinker {
-    10% {
-      opacity: 0;
-    }
+  a {
+    color: $amber-dim;
+    text-decoration: none;
+    max-width: 45%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover { color: $amber; }
   }
 
-.entry {
-    p { padding-left: 1em; }
+  .post-nav-next { margin-left: auto; }
+}
 
-    h2 {
-        /* font-family: "amiga"; */
-        margin-top: 1em;
-        // padding: 0.75em;
-        color: black;
-        // background: linear-gradient(#000066, 50%, #0000bb 50%);
-        // background-size: 100% 4px;
-        // background-repeat: repeat-y;
-        // border-radius: 0.25em;
-        font-size: 1.5em;
-        // box-shadow: 2px 2px 2px #555555;
+.post {
+  margin-top: 1rem;
+
+  ul, ol { margin-left: 1em; }
+
+  .logo-in-page { display: none; }
+  .accroche     { display: none; }
+  .date         { display: none; }
+  .metadata     { display: none; }
+}
+
+.entry-intro {
+  margin-bottom: 2rem;
+}
+
+.post-body {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+
+  .entry-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toc-sidebar {
+    flex-shrink: 0;
+    width: 320px;
+    float: none;
+    margin: 0;
+    position: sticky;
+    top: 1rem;
+  }
+
+  @include mobile {
+    flex-direction: column;
+
+    .toc-sidebar {
+      width: 100%;
+      position: static;
     }
-    h2:before {
-        margin-right: 0.25em;
-        content: '>';
-        font-size: 1em;
-    }
-    /*h2:after {
-        margin-left: 0.25em;
-        content: '\2588';
-        animation: blinker 3s ease infinite;
-    }*/
-    h3 {
-        margin-top: 1em;
-        font-size: 1.5em;
-        padding: 0.75em;
-    }
-    h3:before {
-        margin: 0.25em;
-        // content: url('/images/bullet-amiga.png');
-    }
-    h4 {
-        margin-top: 0.75em;
-        font-size: 1.2em;
-        padding-left: 0.75em;
-    }
-    P>IMG {
-        margin: 1em;
-    }
-    UL>LI {
-        margin-left: 1.5em;
-    }
-    P STRONG {
-        border-bottom: 1px solid #e7f597;
-        -webkit-box-shadow: inset 0 -9px 0 #e7f597;
-        box-shadow: inset 0 -9px 0 #e7f597;
-    }
+  }
 }

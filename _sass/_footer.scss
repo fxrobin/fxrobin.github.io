@@ -1,0 +1,45 @@
+.wrapper-footer {
+  border-top: 1px solid $border;
+  background: $bg-body;
+  margin-top: 2rem;
+}
+
+footer {
+  font-family: $mono;
+  font-size: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  color: $amber-dim;
+
+  @include mobile {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  a {
+    color: $amber-dim;
+    border: 1px solid $border;
+    padding: 0.1rem 0.35rem;
+    font-family: $mono;
+    transition: color 0.15s, border-color 0.15s;
+
+    &:hover { color: $amber; border-color: $amber; }
+    &:visited { color: $amber-dim; }
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .footer-legal {
+    color: $amber-dim;
+    opacity: 0.6;
+  }
+}

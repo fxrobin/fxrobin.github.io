@@ -27,6 +27,22 @@ Exemples :
 - `_posts/articles/lombok-oui-mais/2018-03-05-Lombok-Oui-Mais-FR.md`
 - `_posts/retro-prog/m68k-docker-compiler/2024-09-20-m68k-docker-compiler-fr.md`
 
+## Tags canoniques
+
+Utiliser **uniquement** ces tags (casse exacte). Ne pas en inventer de nouveaux.
+
+**Java / Backend**
+`Java` · `JPA` · `CDI` · `JUnit` · `Lombok` · `Quarkus` · `JAX-RS` · `REST` · `GraalVM` · `JShell` · `JVM` · `Maven` · `Build` · `Collections` · `Records`
+
+**Patterns / Qualité**
+`Lambda` · `Functional` · `Patterns` · `Craftsmanship` · `Clean Code`
+
+**Retro**
+`Retro` · `Assembly` · `C` · `Atari` · `Thomson` · `MO5` · `TO8` · `Docker`
+
+**Outils / Divers**
+`LibGDX` · `Open Source` · `Eclipse` · `GlassFish` · `Raspberry` · `Jekyll` · `GitHub Pages`
+
 ## Bilinguisme
 
 Deux fichiers distincts avec le même `ref`. La valeur de `lang` et le `permalink` diffèrent, tout le reste peut diverger (le contenu n'est pas une traduction mécanique).

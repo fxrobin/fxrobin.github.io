@@ -4,7 +4,7 @@ title: Xenon Reborn, développer en s'amusant et réciproquement
 subtitle: Ou comment apprendre à coder en réalisant un jeu vidéo ...
 logo: xenon-reborn.png
 category: articles
-tags: [algo, LibGDX, java]
+tags: [Java, LibGDX]
 lang: fr
 ref: xenon-reborn
 ---

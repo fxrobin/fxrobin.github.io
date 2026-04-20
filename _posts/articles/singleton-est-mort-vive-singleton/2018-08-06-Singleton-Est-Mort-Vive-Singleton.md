@@ -4,7 +4,7 @@ title: Le singleton est mort, vive le singleton !
 subtitle: Encore un post sur le Singleton ?
 logo: brain-logo.png
 category: articles
-tags: [patterns,java,lazy,threadsafe,classloading,holder,permgen,meta]
+tags: [Java, Patterns, JVM, Craftsmanship]
 lang: fr
 ref: single-est-mort-vive-singleton
 ---

@@ -4,7 +4,7 @@ title: C programming for Atari ST with Linux
 subtitle: cross-compiling a Helloworld for TOS and GEM
 logo: atari-st-bomb.png
 category: retro
-tags: [Retro, C, Atari, Retro-Prog]
+tags: [Retro, C, Atari]
 lang: en
 ref: m68k-cross-compiling
 permalink: /c-programming-for-atari-st-with-linux/

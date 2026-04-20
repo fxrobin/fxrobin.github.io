@@ -8,15 +8,11 @@
       <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% include favicon.html %}
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#0A0A0A" />
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
-    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/blink.css" />
-    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/hover/hover.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/TypewriterJS/1.0.0/typewriter.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/css-social-buttons/1.3.0/css/zocial.min.css" />
     <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
     <link rel="stylesheet" type="text/css" href="/asciinema/asciinema-player.css" />
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/print.css" media="print"/>
@@ -26,39 +22,52 @@
     <div class="wrapper-masthead">
       <div class="container">
         <header class="masthead clearfix">
-          <a href="{{ site.baseurl }}/" class="site-avatar"><img src="{{ site.avatar }}" alt="{{ site.name }}" title="{{ site.name }}" /></a>
-
-          <div class="site-info">
-            <h1 id="site-name" class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }} </a></h1>
-            <p class="site-description">{{ site.t[page.lang].description }}</p>
+<div class="site-info">
+          <a href="{{ site.baseurl }}/"><h1 id="site-name" class="site-name">{ site.name }}</h1></a>
           </div>
-          <nav>
-              {% for menu in site.t[page.lang].menu %}       
-                <a href="{{ menu[1].url }}" class="hvr-bob">{{ menu[1].text }}</a>
-              {% endfor %}
-          </nav>
+
+          <div class="header-lang">
+            <div class="header-lang-row">
+              <a href="{{ site.baseurl }}/fr"
+                 class="{% if page.lang == 'fr' %}active{% endif %}">FR</a>
+              <span class="lang-sep">·</span>
+              <a href="{{ site.baseurl }}/en"
+                 class="{% if page.lang == 'en' %}active{% endif %}">EN</a>
+            </div>
+            <div class="header-social">
+              <a href="https://github.com/fxrobin/" target="_blank" rel="nofollow">[gh]</a>
+              <a href="https://www.linkedin.com/in/fxrobin/" target="_blank" rel="nofollow">[li]</a>
+              <a href="https://stackoverflow.com/users/3017541/fxrobin" target="_blank" rel="nofollow">[so]</a>
+              <a href="{{ site.baseurl }}/feed.xml">[rss]</a>
+            </div>
+          </div>
         </header>
       </div>
     </div>
 
-    <div id="main" role="main" class="container">
-      {{ content }}
+    <div class="site-wrapper">
+      <aside class="sidebar">
+        <div class="sidebar-prompt">$ ls /dev/</div>
+        {% include sidebar-nav.html %}
+        <hr class="sidebar-divider">
+        {% include search.html %}
+        <hr class="sidebar-divider">
+        <div class="sidebar-section-title">#TAGS</div>
+        {% include tags.html %}
+      </aside>
+      <main class="main-content" id="main" role="main">
+        {{ content }}
+      </main>
     </div>
 
     <div class="wrapper-footer">
       <div class="container">
-        <footer class="footer">
-          {% include svg-icons.html %}
-          <div class="legal">
-            <img src="{{ site.baseurl }}/images/creative-commons/by-sa.svg" alt="CC:BY-SA" />
-            <br/>
-            Licence Creative Commons : ATTRIBUTION - PARTAGE DANS LES MEMES CONDITIONS <br/>
-            François-Xavier Robin - 2018-2023 - ref : [{{ page.ref }}] / lang : [{{ page.lang }}]
+        <footer>
+          <div class="footer-links">
+            <img src="{{ site.baseurl }}/images/creative-commons/by-sa.svg" alt="CC:BY-SA" style="height:14px; opacity:0.5;" />
           </div>
-          <div id="social" style="margin-top : 1em">
-            <a class="zocial linkedin" href="https://www.linkedin.com/in/fxrobin/">LinkeIn</a>
-            <a class="zocial stackoverflow" href="https://www.linkedin.com/in/fxrobin/">StackOverflow</a>
-            <a class="zocial github" href="https://github.com/fxrobin/">GitHub</a>     
+          <div class="footer-legal">
+            FX Robin · CC BY-SA · ref:[{{ page.ref }}]
           </div>
         </footer>
       </div>
@@ -122,6 +131,32 @@
             .pauseFor(2500)
             .start();
       {% endif %}
+    </script>
+    <script>
+    (function () {
+      document.querySelectorAll('pre.highlight').forEach(function (pre) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'pre-wrapper';
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+        var btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.textContent = '[copy]';
+        btn.addEventListener('click', function () {
+          var lines = pre.querySelectorAll('.line-number');
+          lines.forEach(function (el) { el.style.display = 'none'; });
+          navigator.clipboard.writeText(pre.innerText.trim()).then(function () {
+            lines.forEach(function (el) { el.style.display = ''; });
+            btn.textContent = '[copied!]';
+            btn.classList.add('copied');
+            setTimeout(function () { btn.textContent = '[copy]'; btn.classList.remove('copied'); }, 2000);
+          }).catch(function () {
+            lines.forEach(function (el) { el.style.display = ''; });
+          });
+        });
+        wrapper.appendChild(btn);
+      });
+    })();
     </script>
     <script src="/asciinema/asciinema-player.js"></script>
     {% if page.mermaid %}

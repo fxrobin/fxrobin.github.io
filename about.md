@@ -5,6 +5,7 @@ subtitle: parce qu'il y a quand-même un humain qui rédige ...
 logo: xenon-reborn.png
 permalink: /about/
 lang: fr
+ref: about
 ---
 
 <div class="intro" markdown='1'>
@@ -25,25 +26,19 @@ Jusqu'à l'arrivée de mon Atari 2600, la TV était l'objet sur lequel je regard
 
 Dessus, j'ai pu avoir les jeux suivants :
 
-Pole Position
-
-{%include video.html youtube-id="W2jLrNYzyr8?rel=0&amp;showinfo=0"  size="mini" %}
-
-Snoopy and the Red Baron
-
-{%include video.html youtube-id="0XfGUXoTxSo?rel=0&amp;showinfo=0"  size="mini" %}
-
-E.T. (le fameux)
-
-{%include video.html youtube-id="ZPnmewxetNA?rel=0&amp;showinfo=0"  size="mini" %}
-
-Defender
-
-{%include video.html youtube-id="FIH3qE7jUUs?rel=0&amp;showinfo=0"  size="mini" %}
-
-Real Sport Tennis
-
-{%include video.html youtube-id="wMocFmcL1a0?rel=0&amp;showinfo=0"  size="mini" %}
+<table>
+  <tr>
+    <td>Pole Position<br>{%include video.html youtube-id="W2jLrNYzyr8?rel=0&amp;showinfo=0" size="mini" %}</td>
+    <td>Snoopy and the Red Baron<br>{%include video.html youtube-id="0XfGUXoTxSo?rel=0&amp;showinfo=0" size="mini" %}</td>
+  </tr>
+  <tr>
+    <td>E.T. (le fameux)<br>{%include video.html youtube-id="ZPnmewxetNA?rel=0&amp;showinfo=0" size="mini" %}</td>
+    <td>Defender<br>{%include video.html youtube-id="FIH3qE7jUUs?rel=0&amp;showinfo=0" size="mini" %}</td>
+  </tr>
+  <tr>
+    <td>Real Sport Tennis<br>{%include video.html youtube-id="wMocFmcL1a0?rel=0&amp;showinfo=0" size="mini" %}</td>
+  </tr>
+</table>
 
 A ce jour, je possède toujours cette seule et unique console et ses jeux, car par la suite je n'ai eu que des micro-ordinateurs.
 
@@ -71,39 +66,54 @@ A 12 ans, je monte en gamme, toujours chez THOMSON avec un TO8 : toujours 1 MHz 
 
 ![TO8](/images/to8.png)
 
-Un petit exemple pour la route (dont je ne suis pas l'auteur) :
+Un extrait de mon [article sur le bootsector du TO8](/6809-thomson-to8-bootsector) :
 
 ```
-USERAF      EQU    $2070
-PUTCH       EQU    2
-CHDRAW      EQU    $2036
+** EQUATES PARAMETRES
+START_SECTOR    EQU $02          ** premier secteur à lire
+NB_READ_SECTORS EQU $02          ** 2 secteurs = 512 octets
+TARGET_ADDR     EQU $6300        ** adresse d'implantation
 
-            ORG    &32000
-            LDX    #DEFGR0
-            STX    USERAF
-            LDV    #TABLE
-DEBUT       LDB    ,U+
-            CMPB   #4
-            BEQ    SUITE
-            CALL   PUTCH
-            BRA    DEBUT
-SUITE       CLRA
-            LDX    #$14
-            LDY    #$0C
-SUITE2      LDB    #$80
-            STB    CHDRAW
-            CALL   CHPLH
-            JSR    COMPT
-etc ...
+        ORG     $6200
+        SETDP   $60
+
+BEGIN
+        LDA #$60
+        TFR A,DP
+        LDS #$A000
+
+        LDX     #TARGET_ADDR
+        STX     <REG_TARGET_ADDR
+        LDA     #DISKOP_SECT_READ
+        STA     <REG_DISKOP
+        LDB     #START_SECTOR
+        STB     <REG_SECTOR
+        LDA     #NB_READ_SECTORS
+
+!       JSR     DKCO
+        BCS     END
+        INC     <REG_TARGET_ADDR
+        INC     <REG_SECTOR
+        DECA
+        BNE     <
+        JSR     TARGET_ADDR
+
+END     JMP [$FFFE]
 ```
 
 Sur TO8 j'ai surtout perfectionné le logiciel de gestion des adhésions du club de tennis, avec sauvegarde à accès direct sur disquette (pas séquentiel). Ce programme générait aussi les étiquettes à imprimer et coller sur les enveloppes pour les mailings. Je me souviens du casse tête pour que l'impression soit bien alignée ... Là encore, je n'ai plus les codes sources ... (triste je suis).
 
 Sur ces ordinateurs, je voue toujours un culte au jeu [L'Aigle d'Or](https://fr.wikipedia.org/wiki/L%27Aigle_d%27or) de Louis-Marie Rocques.
 
-![Generique Aigle d'or](/images/generique-aigle-d-or.png) ![Aigle d'or](/images/aigle-d-or.jpg)
-
-<iframe class="video normal" src="https://www.youtube.com/embed/vwpK4_K0ygQ?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<table>
+  <tr>
+    <td><img src="/images/generique-aigle-d-or.png" alt="Generique Aigle d'or" /></td>
+    <td><img src="/images/aigle-d-or.jpg" alt="Aigle d'or" /></td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:center"><iframe class="video normal" src="https://www.youtube.com/embed/vwpK4_K0ygQ?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></td>
+  </tr>
+</table>
 
 Si vous n'avez pas la chance, comme moi, de posséder encore ces fabuleuses machines en état de fonctionnement, vous pouvez aller sur le formidable site de Daniel Coulom dédié à l'émulation des Thomson : [http://dcmoto.free.fr](http://dcmoto.free.fr/)
 
@@ -119,13 +129,21 @@ C'est l'époque où on "déplombait" les logiciels protégés avec un `POKE 8699
 
 A 14 ans, je bascule dans le monde du 68000, avec un ATARI 1040 STE ! 1 Mo de RAM, 8 Mhz. Ce n'est plus de la profusion, c'est de la décadence. Je tripote aussi l'Amiga d'un copain (Frédéric, si tu me lis, merci !) et on commence enfin à coder en C (et oui déjà), en Omikron, en GFA Basic, en STOS.
 
-![ATARI-ST](/images/atari-st.png) 
-![AMIGA](/images/amiga.png)
+<table>
+  <tr>
+    <td><img src="/images/atari-st.png" alt="ATARI-ST" /></td>
+    <td><img src="/images/amiga.png" alt="AMIGA" /></td>
+  </tr>
+</table>
 
 30 ans plus tard, je voue toujours un culte immense à cette machine et notamment aux jeux XENON et XENON 2 des [Bitmap Brothers](https://fr.wikipedia.org/wiki/Bitmap_Brothers).
 
-![Xenon 1](/images/xenon-1.jpg)
-![Xenon 2](/images/xenon-2.jpg)
+<table>
+  <tr>
+    <td><img src="/images/xenon-1.jpg" alt="Xenon 1" /></td>
+    <td><img src="/images/xenon-2.jpg" alt="Xenon 2" /></td>
+  </tr>
+</table>
 
 En 2017, j'ai d'ailleurs réalisé un petit hommage à ces deux jeux : [Xenon Reborn](https://www.youtube.com/watch?v=ki39sbk4VKc) en Java avec LibGDX.
 

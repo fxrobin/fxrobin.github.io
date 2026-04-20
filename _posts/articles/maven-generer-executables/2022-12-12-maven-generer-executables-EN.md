@@ -4,7 +4,7 @@ title: 'Java: How to generate Windows, Linux and MacOS executables?'
 subtitle: In favor of a "command line" type program, with Maven
 logo: java.png
 category: articles
-tags: [Java, Maven, JAR, EXE, SH, LAUNCH4, maven-assembly]
+tags: [Java, Maven, Build]
 lang: en
 ref: maven-generer-executables
 permalink: /how-to-generate-java-executables-with-maven/

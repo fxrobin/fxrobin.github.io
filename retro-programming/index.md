@@ -1,6 +1,6 @@
 ---
 layout: page-no-aside
-title: Retro-Programming Atari / Thomson
+title: Retro-Programming ATARI ST / THOMSON
 subtitle:  Ensemble des articles liés à la programmation "Rétro" sur Atari ST, Thomson MO5 et TO8
 logo: coding.gif
 category: RETRO
@@ -19,109 +19,101 @@ Ici, que de vieux trucs, mais avec quelques outils modernes ou presque.
 {% assign posts = site.posts %}
 <div id="left" style="margin : auto; width : 100%">
     <style>
-        .row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
+    .row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
     }
-
     .column {
-    display: flex;
-    flex-direction: column;
-    flex-basis: 100%;
-    flex: 1;
-    padding : 2em;
-    min-width : 400px;
+        display: flex;
+        flex-direction: column;
+        flex-basis: 100%;
+        flex: 1;
+        padding: 1.5em;
+        min-width: 360px;
+    }
+    .retro-prog-section {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5em;
+        box-sizing: border-box;
     }
 
-    .retro-prog-section
-    {    
-        
-        padding : 0.5em;
-        text-align: center;
-        border-radius: 0.5em 0.5em 0.5em 0.5em
-    }
-
-    .thomson-header
-    {
-        font-size : 2em;
-        font-family : "thomson";
+    .thomson-header {
+        font-size: 1.5em;
+        font-family: "thomson";
         background-color: darkblue;
         color: white;
+        letter-spacing: 0.1em;
     }
-
-    .st-header 
-    {
-        font-size : 2.25em;
-        font-family : "atari";
+    .st-header {
+        font-size: 1.6em;
+        font-family: "atari";
         background-color: darkgreen;
         color: white;
+        letter-spacing: 0.05em;
     }
-
-    .atari-st
-    {
-        background-color : #b6fcc9;
-        padding: 1em;
-        border-radius: 0.5em 0.5em 0.5em 0.5em
+    .retro-card {
+        display: flex;
+        align-items: center;
+        gap: 0.6em;
+        padding: 0.4em 0;
+        border-top: 1px solid #333;
     }
-
-    .thomson
-    {
-        background-color : #cfdffa;
-        padding: 1em;
-        border-radius: 0.5em 0.5em 0.5em 0.5em
+    .retro-card-body {
+        flex: 1;
+        min-width: 0;
     }
-
-    .retro-prog-title
-    {
-        margin-top : 0.5em;
+    .retro-card-title {
+        display: block;
+        color: #FFB000;
+        text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
-
-    .atari-st .retro-prog-title
-    {
-        font-size : 1.5em;
-        font-family : 'atari'; 
+    .atari-st .retro-card-title {
+        font-family: 'atari';
+        font-size: 1.2em;
     }
-
-    .thomson .retro-prog-title
-    {
-        font-family : 'pixel-operator';
-        font-size : 1.75em;
-        font-weight : bold;
+    .thomson .retro-card-title {
+        font-family: 'pixel-operator';
+        font-size: 1.3em;
+        font-weight: bold;
     }
-
-    .retro-prog-subtitle
-    {
-        font-family : "oswald";
+    .retro-card-title:hover {
+        color: #fff;
+        text-shadow: 0 0 6px #FFB000;
     }
-
-    .retro-prog-title A
-    {
-        color : black;
-        text-shadow: 2px 2px 1px white;
+    .retro-card-sub {
+        font-size: 1em;
+        color: #888;
+        font-family: monospace;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
-
     </style>    
     <div class="posts" style="margin-top : 4em;">
         <div class='row'>
             <div class='column' style="border-right : solid black 2px">
-                <div class="atari-st">
-                    <div style="text-align:center"><img src="/images/atari-st.png" /></div>
-                    <div class="retro-prog-section st-header">Articles ATARI ST</div>
+                <div class="atari-st common-header">
+                    <div class="retro-prog-section st-header">ATARI ST</div>
                     {% for post in posts %}
-                        {% if post.tags contains "Retro-Prog" and post.tags contains "Atari" %}
+                        {% if post.tags contains "Retro" and post.tags contains "Atari" %}
                             {% include display-retro-prog-synopsis.html %}  
                         {% endif %}
                     {% endfor %}
                 </div>
             </div>
             <div class='column'>
-                <div class="thomson">
-                    <div style="text-align:center"><img src="/images/to8.png" height="187" /></div>
-                    <div class="retro-prog-section thomson-header">Articles THOMSON</div>
+                <div class="thomson common-header">
+                    <div class="retro-prog-section thomson-header">THOMSON</div>
                     {% for post in posts %}
-                        {% if post.tags contains "Retro-Prog" and post.tags contains "Thomson" %}
+                        {% if post.tags contains "Retro" and post.tags contains "Thomson" %}
                             {% include display-retro-prog-synopsis.html %}  
                         {% endif %}
                     {% endfor %}
@@ -130,3 +122,46 @@ Ici, que de vieux trucs, mais avec quelques outils modernes ou presque.
         </div>
     </div>
 </div>
+
+<script>
+(function () {
+  var intro = document.querySelector('.intro');
+  if (!intro) return;
+
+  var html = intro.innerHTML.trim();
+  var out = '';
+  var i = 0;
+  var cursor = '<span class="type-cursor">\u2588</span>';
+
+  intro.innerHTML = cursor;
+
+  function tick() {
+    if (i >= html.length) {
+      intro.innerHTML = html + '<span class="type-cursor type-cursor--done">\u2588</span>';
+      return;
+    }
+    if (html[i] === '<') {
+      var end = html.indexOf('>', i);
+      if (end === -1) end = html.length - 1;
+      out += html.slice(i, end + 1);
+      i = end + 1;
+      tick();
+    } else if (html[i] === '&') {
+      var end = html.indexOf(';', i);
+      if (end === -1) { out += html[i++]; tick(); return; }
+      out += html.slice(i, end + 1);
+      i = end + 1;
+      tick();
+    } else {
+      var burst = i;
+      while (burst < html.length && html[burst] !== '<' && html[burst] !== '&' && burst - i < 6) burst++;
+      if (burst === i) burst = i + 1;
+      out += html.slice(i, burst);
+      i = burst;
+      intro.innerHTML = out + cursor;
+      setTimeout(tick, 18);
+    }
+  }
+  tick();
+})();
+</script>

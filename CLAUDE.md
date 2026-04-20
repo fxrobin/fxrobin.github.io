@@ -1,75 +1,69 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code (claude.ai/code) in this repository.
 
 ## About
 
-Personal tech blog at https://www.fxjavadevblog.fr — built with Jekyll. Topics: Java, APIs, Linux, retro computing.
+Personal tech blog at https://www.fxjavadevblog.fr — Jekyll. Topics: Java, APIs, Linux, retro computing.
 
 ## Build & Serve
 
-There is no Gemfile. The site is built using Docker:
+No Gemfile. Site built via Docker with an existing bash script :
 
 ```bash
-# Build (as CI does)
-docker run -v $(pwd):/srv/jekyll -v $(pwd)/_site:/srv/jekyll/_site \
-  jekyll/builder:latest /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
-
-# Local serve with live reload
-docker run --rm -p 4000:4000 -v $(pwd):/srv/jekyll \
-  jekyll/builder:latest jekyll serve --future --livereload
+$ jkl
 ```
 
 CI runs on push/PR to `master` via `.github/workflows/jekyll.yml`.
 
 ## Architecture
 
-### Multilingual System
+Use `fxjavadevblog-architecture` skill for site structure, multilingual system, post front matter, layouts, includes, and styling reference.
 
-Every post has a `lang` field (`fr` or `en`) and a `ref` field. Posts sharing the same `ref` are language variants of each other. The `language-selector.html` include uses `ref` to find and link alternate-language versions.
+### Article Writing
 
-UI strings (menus, labels) are defined per-language in `_config.yml` under `site.t[lang].*`.
+Use `fxjavadevblog-article-writing` skill when creating or editing posts.
 
-### Post Front Matter
+<!-- gitnexus:start -->
+# GitNexus — Code Intelligence
 
-```yaml
----
-layout: post
-title: "..."
-subtitle: "..."
-logo: filename.png        # from /images/logos/
-category: articles        # or retro-prog, blanka-cave
-tags: [tag1, tag2]
-lang: fr                  # or en
-ref: unique-post-ref      # shared across language variants
-permalink: /my-post/
-redirect_from:
-  - /old-url
-mermaid: true             # optional — loads mermaid.js
----
-```
+This project is indexed by GitNexus as **fxrobin.github.io** (802 symbols, 889 relationships, 14 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
-Place `<!--excerpt-->` where the article list excerpt should end.
+> If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 
-### Content Organization
+## Always Do
 
-- `_posts/articles/` — Java/tech articles (each in its own subfolder)
-- `_posts/retro-prog/` — Retro computing (m68k, 6809, Atari ST)
-- `_posts/blanka-cave/` — Opinion/rant posts ("Blanka's Cave")
-- `_drafts/` — Work in progress. See `_drafts/PLAN.md` for the editorial plan: what's being written, what's paused, and what's been dropped.
+- **MUST run impact analysis before editing any symbol.** Before modifying a function, class, or method, run `gitnexus_impact({target: "symbolName", direction: "upstream"})` and report the blast radius (direct callers, affected processes, risk level) to the user.
+- **MUST run `gitnexus_detect_changes()` before committing** to verify your changes only affect expected symbols and execution flows.
+- **MUST warn the user** if impact analysis returns HIGH or CRITICAL risk before proceeding with edits.
+- When exploring unfamiliar code, use `gitnexus_query({query: "concept"})` to find execution flows instead of grepping. It returns process-grouped results ranked by relevance.
+- When you need full context on a specific symbol — callers, callees, which execution flows it participates in — use `gitnexus_context({name: "symbolName"})`.
 
-### Layouts & Includes
+## Never Do
 
-- `default.html` — Shell: header, nav, footer, JS (TypewriterJS, Vue.js, axios, asciinema, mermaid)
-- `post.html` — Article layout: logo, title, subtitle, date, language selector, aside (TOC + share), Disqus
-- `blog_index.html` — Paginated article list
-- `page-no-aside.html` — Full-width page (no sidebar)
+- NEVER edit a function, class, or method without first running `gitnexus_impact` on it.
+- NEVER ignore HIGH or CRITICAL risk warnings from impact analysis.
+- NEVER rename symbols with find-and-replace — use `gitnexus_rename` which understands the call graph.
+- NEVER commit changes without running `gitnexus_detect_changes()` to check affected scope.
 
-### Styling
+## Resources
 
-`style.scss` imports all partials from `_sass/`. Key files:
-- `_variables.scss` — Colors, fonts (custom: `amiga`, `atari`, `volter`, `coders-crux`, `Monda`)
-- `_post.scss` — Article content styles
-- `_fonts.scss` — Custom font declarations
+| Resource | Use for |
+|----------|---------|
+| `gitnexus://repo/fxrobin.github.io/context` | Codebase overview, check index freshness |
+| `gitnexus://repo/fxrobin.github.io/clusters` | All functional areas |
+| `gitnexus://repo/fxrobin.github.io/processes` | All execution flows |
+| `gitnexus://repo/fxrobin.github.io/process/{name}` | Step-by-step execution trace |
 
-The site has a retro/hacker aesthetic (scanline header background, green-on-dark site name, pixel fonts).
+## CLI
+
+| Task | Read this skill file |
+|------|---------------------|
+| Understand architecture / "How does X work?" | `.claude/skills/gitnexus/gitnexus-exploring/SKILL.md` |
+| Blast radius / "What breaks if I change X?" | `.claude/skills/gitnexus/gitnexus-impact-analysis/SKILL.md` |
+| Trace bugs / "Why is X failing?" | `.claude/skills/gitnexus/gitnexus-debugging/SKILL.md` |
+| Rename / extract / split / refactor | `.claude/skills/gitnexus/gitnexus-refactoring/SKILL.md` |
+| Tools, resources, schema reference | `.claude/skills/gitnexus/gitnexus-guide/SKILL.md` |
+| Index, status, clean, wiki CLI commands | `.claude/skills/gitnexus/gitnexus-cli/SKILL.md` |
+
+<!-- gitnexus:end -->

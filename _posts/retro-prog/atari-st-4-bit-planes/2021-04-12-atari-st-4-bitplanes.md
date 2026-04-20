@@ -4,7 +4,7 @@ title: 4 bitplanes de l'Atari ST
 subtitle: Structure de la mémoire vidéo en 320x200 de l'Atari ST
 logo: atari-st-bomb.png
 category: retro
-tags: [Retro, C, Atari, Retro-Prog]
+tags: [Retro, C, Atari]
 lang: fr
 ref: atari-st-4-bitplanes
 ---

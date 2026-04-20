@@ -1,48 +1,70 @@
 
-code.highlighter-rouge
-{
-	background-color:rgba(204,204,221,0.5);
-	border-radius: 0.25em;
-	padding : 5px;	
-    font-family: "Share Tech Mono";
-    font-size : 1em;
+code.highlighter-rouge {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid $border;
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.92em;
+  color: #cccccc;
+}
+
+.pre-wrapper {
+  position: relative;
+
+  .copy-btn {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    font-family: $mono;
+    font-size: 0.7rem;
+    color: $amber-dim;
+    background: transparent;
+    border: 1px solid $amber-dim;
+    padding: 0.1rem 0.35rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, color 0.15s, border-color 0.15s;
+
+    &:hover { color: $amber; border-color: $amber; }
+    &.copied { color: $amber; border-color: $amber; }
+  }
+
+  &:hover .copy-btn { opacity: 1; }
 }
 
 pre.highlight {
-  font-family:"Share Tech Mono";
-  font-size : 12pt;
-  color : #00ff00;
-  background-color: #111133;
-  // background-image : url('/images/scanline.jpg');
-  // background-size : cover ;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12pt;
+  color: #00ff00;
+  background-color: #050505;
   padding: 7px 7px 7px 10px;
-  border: 2px solid #339933;
-  border-radius: 0.5em;
-  box-shadow: 2px 2px 2px #555555;
-  margin: 1em;
+  border: 1px solid $border;
+  border-radius: 4px;
+  box-shadow: none;
+  margin: 1em 0;
   overflow: auto;
   overflow-y: hidden;
-  tab-size:4;
+  tab-size: 4;
   -moz-tab-size: 4;
-  
+
   .line-number {
     display: block;
     float: left;
-    font-size : 1em;
+    font-size: 1em;
     margin: 0 1em 0 -1em;
-    border-right: 1px solid #339933;
+    border-right: 1px solid $border;
     text-align: right;
     span {
       display: block;
       padding: 0 .5em 0 1em;
-      color: #44AA44;
+      color: $amber-dim;
     }
   }
   .cl {
     display: block;
     clear: both;
   }
-  
 }
 
 .highlight .c { color: #586E75 } /* Comment */

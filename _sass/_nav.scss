@@ -1,60 +1,51 @@
-nav {
-  clear : both;
-  height : 1.5em;
-  float: right;
-  margin-top: 0.5em; 
-  margin-right : 2em;
-  font-family: 'volter';
-  font-size: 1.0em;
+.sidebar-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
 
-  @include mobile {
-    float: none;
-    margin-right : auto;
-    margin-left : auto;
-    margin-top: 0.5em;
-    margin-bottom : 1.5em;
-    display: block;
-    font-size: 1em;
+.sidebar-nav-item {
+  font-family: $mono;
+  font-size: 0.85rem;
+  color: $amber-dim;
+  padding: 0.25rem 0.3rem 0.25rem 0.5rem;
+  display: block;
+  text-decoration: none;
+  transition: color 0.15s, background 0.1s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 2px solid transparent;
+
+  &::before { content: '  '; }
+
+  &:link   { color: $amber-dim; text-decoration: none; }
+  &:visited { color: $amber-dim; text-decoration: none; }
+
+  &:hover {
+    color: $amber;
+    text-decoration: none;
+    text-shadow: 0 0 6px rgba($amber, 0.5);
+    background: rgba($amber, 0.05);
+    border-left-color: $amber-dim;
+    &::before { content: '> '; }
   }
-  
-  a:before
-  {
-    content : '>';
-    margin-right : 0.2em;
-  }
-  
-  a:visited { color: #00FF00; }
-  
-  A:hover 
-    {
-      color : #FFFF00;
-      background-color : #000080;
-      border-radius : 0.2em;
-     
-    }
-    
- 
-    A:hover:after
-    {
-      content : '\2589';
-    }
-    
-   
 
-  a {
-   	padding : 0.2em;
-    margin-left: 20px;
-    color: #00FF00;
-    text-align: right;
-    font-weight: 300;
-    letter-spacing: 1px;
-    -moz-transition: all 0.7s ease-in;
-    -o-transition: all 0.7s ease-in;
-    -webkit-transition: all 1s ease-in;
-    transition: all 0.7s ease-in;
+  &.active {
+    color: $amber;
+    text-decoration: none;
+    text-shadow: 0 0 8px rgba($amber, 0.6);
+    background: rgba($amber, 0.07);
+    border-left-color: $amber;
+    &::before { content: '> '; }
 
-    @include mobile {
-      margin: 0 1em;
+    &::after {
+      content: ' █';
+      animation: blink-cursor 1s step-end infinite;
     }
   }
+}
+
+@keyframes blink-cursor {
+  50% { opacity: 0; }
 }

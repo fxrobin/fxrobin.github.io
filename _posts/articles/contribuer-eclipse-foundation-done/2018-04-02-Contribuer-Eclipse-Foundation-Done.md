@@ -4,7 +4,7 @@ title: "Contribuer à l'Eclipse Foundation : DONE"
 subtitle: plutôt que d'attendre en pestant sur sa chaise ...
 logo: eclipse.png
 category: articles
-tags: [OpenSource, Eclipse, Java, GlassFish, GlasFishTools]
+tags: [Java, Open Source, Eclipse, GlassFish]
 lang: fr
 ref: contribuer-eclipse-foundation-done
 ---

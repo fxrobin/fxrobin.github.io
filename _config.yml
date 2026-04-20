@@ -26,24 +26,30 @@ t:
         read_more: "Lire plus ..."
 
         menu:
-            articles: 
+            articles:
                 url: "/"
-                text: "Articles"
+                text: "/dev/java"
+            tips:
+                url: "/tips/fr/"
+                text: "/dev/tips"
             retro-programming:
                 url: "/retro-programming/"
-                text: "Retro-Prog"
-            blanka: 
+                text: "/dev/retro"
+            blanka:
                 url: "/blanka-cave/fr/"
-                text: "Grotte de Blanka"
-            tips: 
+                text: "/dev/blanka"
+            astuces:
                 url: "/astuces/"
-                text: "Astuces"
-            links:
-                url: "/links/en/"     
-                text: "Liens"
-            about: 
+                text: "/dev/astuces"
+            liens:
+                url: "/liens/"
+                text: "/dev/liens"
+            about:
                 url: "/about/"
-                text: "A Propos"
+                text: "/dev/about"
+            tags:
+                url: "/tags/fr/"
+                text: "/dev/tags"
     en:
         description: "Java / APIs / Linux / RetroStuffs and more..."
         name: "FX JavaDevBlog"
@@ -58,24 +64,27 @@ t:
         read_more: "Read more ..."
 
         menu:
-            articles: 
+            articles:
                 url: "/"
-                text: "Articles"
+                text: "/dev/java"
+            tips:
+                url: "/tips/en/"
+                text: "/dev/tips"
             retro-programming:
                 url: "/retro-programming/"
-                text: "Retro-Prog"
-            blanka: 
+                text: "/dev/retro"
+            blanka:
                 url: "/blanka-cave/en/"
-                text: "Blanka Cave"
-            tips: 
-                url: "/astuces/"
-                text: "Tips"
+                text: "/dev/blanka"
             links:
-                url: "/links/en/"    
-                text: "Links"
-            about: 
-                url: "/about/"
-                text: "About"
+                url: "/links/"
+                text: "/dev/links"
+            about:
+                url: "/about/en/"
+                text: "/dev/about"
+            tags:
+                url: "/tags/en/"
+                text: "/dev/tags"
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: /images/new-java-logo.png
@@ -154,7 +163,7 @@ plugins:
   - jekyll-sitemap 
   - jekyll-seo-tag
   - jekyll-redirect-from
-# - jekyll-feed
+  - jekyll-feed
 
 
 

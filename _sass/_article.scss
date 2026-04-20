@@ -1,0 +1,319 @@
+.post-breadcrumb {
+  font-family: $mono;
+  font-size: 0.82rem;
+  color: $amber-dim;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid $border;
+
+  &::after { content: ' $'; color: $amber; }
+}
+
+.post-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  .post-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .post-title-group {
+    flex: 1;
+
+    h1 {
+      font-family: $helvetica;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: $body-text;
+      margin: 0 0 0.25rem;
+      text-shadow: none;
+    }
+
+    .post-subtitle {
+      font-family: "atari", $mono;
+      font-size: 1rem;
+      color: #33FF33;
+      margin: 0;
+    }
+  }
+}
+
+.post-meta {
+  font-family: $mono;
+  font-size: 0.8rem;
+  color: $amber-dim;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $border;
+}
+
+// Article body — switches to Monda for readability
+.entry {
+  font-family: $helvetica;
+  color: $body-text;
+  line-height: 1.7;
+
+  p {
+    font-family: $helvetica;
+    color: $body-text;
+    margin: 1em 0;
+    padding-left: 0;
+  }
+
+  .intro {
+    position: relative;
+    font-family: "atari";
+    font-size: 1rem;
+    color: #33FF33;
+    line-height: 1.75;
+    margin: 0 0 2rem;
+    padding: 1.5rem 2rem;
+
+    // CRT screen glass
+    border-radius: 4px / 4px;
+
+    // CRT screen body
+    background-color: #020802;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.4),
+        rgba(0, 0, 0, 0.4) 1px,
+        transparent 1px,
+        transparent 2px
+      ),
+      radial-gradient(
+        ellipse at 50% 35%,
+        rgba(0, 70, 0, 0.3) 0%,
+        rgba(0, 0, 0, 0.0) 55%,
+        rgba(0, 0, 0, 0.7) 100%
+      );
+
+    // Layered box-shadow: monitor frame (spread-only layers) + desk shadow + screen depth
+    box-shadow:
+      0 0 0  2px #1a1a1a,              // thin inner edge (screen lip)
+      0 0 0 20px #2c2c2c,              // main monitor bezel — dark charcoal
+      0 0 0 22px #181818,              // thin dark outer rim
+      0 0 0 24px #3a3a3a,              // subtle outer highlight ring
+      0 16px 50px rgba(0, 0, 0, 0.9), // heavy desk shadow
+      0  4px 12px rgba(0, 0, 0, 0.6), // close contact shadow
+      inset 0 0 40px rgba(0, 0, 0, 0.85),
+      inset 0 0  8px rgba(0, 200, 0, 0.06);
+
+    // Space for the frame layers (box-shadow doesn't affect layout)
+    margin: 28px 28px 44px;
+
+    /*text-shadow: 0 0 6px rgba(51, 255, 51, 0.5);*/
+
+    // screen reflection highlight at top
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 5%;
+      right: 5%;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.06) 30%,
+        rgba(255, 255, 255, 0.10) 50%,
+        rgba(255, 255, 255, 0.06) 70%,
+        transparent
+      );
+      border-radius: 50%;
+    }
+
+    p {
+      font-family: "atari", $mono;
+      color: #33FF33;      
+      margin: 0.6em 0;
+
+      &:first-child { margin-top: 0; }
+      &:last-child  { margin-bottom: 0; }
+    }
+
+    strong, b {
+      color: #66FF66;
+      text-decoration: underline wavy rgba(102, 255, 102, 0.6);
+      border-bottom: none;
+      text-shadow: 0 0 8px rgba(51, 255, 51, 0.7);
+    }
+
+    code {
+      color: #cccccc;
+      background: rgba(255, 255, 255, 0.06);
+      text-shadow: none;
+      padding: 0.1em 0.3em;
+      border-radius: 2px;
+      font-family: amiga;
+      font-size: smaller;
+    }
+
+    a {
+      color: #33FF33;
+      text-decoration: underline;
+      &:hover { color: #99FF99; }
+      &:visited { color: #33FF33; }
+    }
+  }
+
+  h2 {
+    font-family: $mono;
+    color: $amber;
+    font-size: 1.3rem;
+    margin-top: 1.8rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid $border;
+    padding-bottom: 0.3rem;
+    text-shadow: 0 0 6px rgba($amber, 0.4);
+    overflow: hidden;
+
+    &::before { content: '▌ '; color: $amber-dim; }
+
+    @include mobile { &::before { content: ''; } }
+  }
+
+  h3 {
+    font-family: $mono;
+    color: $body-text;
+    font-size: 1.1rem;
+    margin-top: 1.4rem;
+
+    &::before { content: '▏ '; color: $amber-dim; font-size: 0.9em; }
+
+    @include mobile { &::before { content: ''; } }
+  }
+
+  h4 {
+    font-family: $mono;
+    color: $amber-dim;
+    font-size: 1rem;
+    margin-top: 1.2rem;
+  }
+
+  blockquote {
+    border-left: 3px solid $amber;
+    margin: 1.5rem 0;
+    padding: 0.5rem 1rem;
+    color: #AAAAAA;
+    font-style: italic;
+    background: rgba($amber, 0.03);
+  }
+
+  strong, b {
+    color: $body-text;
+    border-bottom: 1px solid rgba($amber, 0.4);
+  }
+
+  a {
+    color: $link;
+    &:visited { color: $link-visited; }
+    &:hover { color: $amber; }
+  }
+
+  ul, ol {
+    font-family: $helvetica;
+    color: $body-text;
+
+    li { margin-bottom: 0.3rem; }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-family: $mono;
+    font-size: 0.85rem;
+
+    th {
+      background: #1a1a1a;
+      color: $amber;
+      border: 1px solid $border;
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+    }
+
+    td {
+      border: 1px solid $border;
+      padding: 0.4rem 0.75rem;
+      color: $body-text;
+    }
+
+    tr:nth-child(even) td { background: #0d0d0d; }
+  }
+
+  img { margin: 1rem auto; display: block; }
+}
+
+// TOC sidebar (article pages)
+.toc-sidebar {
+  background: rgba($amber, 0.03);
+  border: 1px solid $border;
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+
+  .sidebar-section-title {
+    margin-bottom: 0.5rem;
+  }
+}
+
+// Comments toggle
+.comments-toggle {
+  font-family: $mono;
+  font-size: 0.85rem;
+  color: $amber;
+  background: transparent;
+  border: 1px solid $amber-dim;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  margin-top: 2rem;
+  display: block;
+  width: 100%;
+  text-align: left;
+  transition: border-color 0.15s, color 0.15s;
+
+  &:hover { border-color: $amber; }
+}
+
+.comments-section { display: none; &.open { display: block; } }
+
+.sidebar-share {
+  display: flex;
+  gap: 0.5rem;
+  font-family: $mono;
+  font-size: 0.8rem;
+  margin-top: 0.4rem;
+
+  a {
+    color: $amber-dim;
+    border: 1px solid $border;
+    padding: 0.15rem 0.4rem;
+    &:hover { color: $amber; border-color: $amber; }
+    &:visited { color: $amber-dim; }
+  }
+}
+
+.type-cursor {
+  display: inline;
+  color: #33FF33;
+  text-shadow: 0 0 8px rgba(51, 255, 51, 0.8);
+  animation: type-blink 0.5s step-end infinite;
+
+  &--done {
+    animation: type-blink 1.2s step-end infinite;
+    opacity: 0.6;
+  }
+}
+
+@keyframes type-blink {
+  50% { opacity: 0; }
+}

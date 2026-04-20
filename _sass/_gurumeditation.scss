@@ -1,23 +1,28 @@
 @keyframes blink_guru {
-    50% {
-        border-color: #ff0000;
-    }
+  0%, 100% { border-color: #cc0000; }
+  50%       { border-color: #000000; }
 }
 
 .gurumeditation {
-    /*or other element you want*/
-    animation: blink_guru .5s step-end infinite alternate;
-    font-family: "amiga";
-    margin-left: 3em;
-    margin-right: 3em;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    padding: 1em;
-    color: red;
-    border: solid black 6px;
-    border-radius: 0.25em;
-    box-shadow: 2px 2px 2px #555555;
-    background: linear-gradient(#003300, 50%, #001100 50%);
-    background-size: 100% 4px;
-    background-repeat: repeat-y;
+  animation: blink_guru 2s step-end infinite;
+  font-family: "amiga";
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 1.5em 3em;
+  padding: 0.75em 1.25em;
+  color: #cc0000;
+  background: #000000;
+  border: 4px solid #cc0000;
+  border-radius: 0;
+  box-shadow: none;
+  text-align: center;
+  text-shadow: none;
+}
+
+.gurumeditation p {
+  font-family: "amiga" !important;
+  color: #cc0000 !important;
+  background: #000000;
+  margin: 0.3em 0;
+  text-shadow: none;
 }

@@ -1,0 +1,114 @@
+.site-wrapper {
+  display: flex;
+  max-width: 1800px;
+  margin: 0 auto;
+  min-height: calc(100vh - 80px);
+}
+
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  flex-shrink: 0;
+  background: $bg-body;
+
+  padding: 1.5rem 1rem;
+  font-family: $mono;
+  position: relative;
+
+  // Scanline overlay
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0,0,0,0.08),
+      rgba(0,0,0,0.08) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    pointer-events: none;
+  }
+
+  .sidebar-prompt {
+    color: $amber-dim;
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar-divider {
+    border: none;
+    border-top: 1px solid $border;
+    margin: 1rem 0;
+  }
+
+  .sidebar-section-title {
+    color: $amber-dim;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .sidebar-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+
+    a {
+      color: $amber-dim;
+      font-size: 0.75rem;
+      font-family: $mono;
+      &:hover { color: $amber; text-shadow: 0 0 6px $amber; }
+      &:visited { color: $amber-dim; }
+    }
+
+    .sidebar-tag-sep {
+      color: $amber-dim;
+      font-size: 0.75rem;
+      font-family: $mono;
+    }
+  }
+
+  .sidebar-recent {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li { margin-bottom: 0.4rem; }
+
+    a {
+      color: $amber-dim;
+      font-size: 0.75rem;
+      font-family: $mono;
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      &::before { content: '- '; color: $amber-dim; }
+      &:hover { color: $amber; }
+      &:visited { color: $amber-dim; }
+    }
+  }
+
+  @include mobile {
+    display: none;
+  }
+}
+
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  padding: 1.5rem 2rem;
+
+  @include mobile {
+    padding: 1rem;
+  }
+}

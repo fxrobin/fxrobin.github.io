@@ -95,6 +95,32 @@ div.intro (bonne base, à peaufiner)
 
 ## Idées à démarrer
 
+### 💡 L'EventBus Vert.x dans Quarkus — le bus d'événements que vous avez déjà
+**Statut :** spec rédigée — `vertx-eventbus-quarkus/SPEC.md`  
+**Angle :** Quarkus embarque Vert.x, donc un EventBus — découpler sans Kafka/RabbitMQ avec `@ConsumeEvent`  
+**Stack :** Quarkus 3.x LTS, Java 21+, virtual threads  
+**Connexions :** article Loom (@RunOnVirtualThread sur consommateur), Architecture Père Noël (à réhabiliter)  
+
+---
+
+### 💡 UUID de v1 à v7 — versions, représentations, bibliothèques et benchmarks JMH
+**Statut :** spec rédigée — `uuid-versions-jmh/SPEC.md`  
+**Angle :** `UUID.randomUUID()` détruit les index B-tree — v7 règle ça, JMH prouve les chiffres  
+**Java cible :** Java 21+ (JMH via Maven, uuid-creator, JUG)  
+**Connexions :** Primitive Obsession (UUID comme Value Object), article Loom (UUID v7 comme correlation ID)  
+
+---
+
+### 💡 Java 25 et Project Loom — Virtual Threads, Structured Concurrency, Scoped Values
+**Statut :** spec rédigée — `virtual-threads-loom/SPEC.md`  
+**Angle :** trilogie Project Loom enfin stabilisée Java 25 LTS — fil rouge : agréger 3 API en parallèle, avant/après  
+**Java cible :** Java 25 LTS (pur JDK, sans framework)  
+**Connexions :** article Eclipse Collections (style démo), Quarkus virtual threads (suite pressentie)  
+
+---
+
+
+
 ### 💡 L'Obsession des Primitives — ou pourquoi votre `String email` ment depuis le début
 **Statut :** idée, pas encore de fichier  
 **Angle :** craftsmanship — le code smell *Primitive Obsession* et comment Java Records le résout élégamment  

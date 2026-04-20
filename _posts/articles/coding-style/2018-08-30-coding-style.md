@@ -3,8 +3,8 @@ layout: post
 title: Repenser son style de codage
 subtitle: du code, pour qui, pourquoi ?
 logo: code.png
-category: articles
-tags: [Java, Craftmanship, CleanCode]
+category: tips
+tags: [Java, Craftsmanship, Clean Code]
 lang: fr
 ref: coding-style
 ---

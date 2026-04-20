@@ -2,38 +2,127 @@
 layout: default
 ---
 
-
 <article class="post">
-	<img src="{{ site.baseurl }}/images/logos/{{  page.logo }}" class="logo-in-page hvr-buzz-out""/>
-  <h1>{{ page.title }}</h1> 
-	<div class="accroche">{{ page.subtitle }}</div>
+  {% assign path_prefix = "/dev/java" %}
+  {% if page.categories contains "retro-prog" %}
+    {% assign path_prefix = "/dev/retro" %}
+  {% elsif page.categories contains "blanka-cave" %}
+    {% assign path_prefix = "/dev/blanka" %}
+  {% endif %}
 
-	<div class="metadata">
-		
+  <div class="post-breadcrumb">~{{ path_prefix }}/{{ page.url | split: '/' | last | remove: '.html' }}</div>
 
-			<span class="date">
-					{{ site.t[page.lang].published }}
-		
-					{% if page.lang == 'fr' %}
-						{{ page.date | date: "%d/%m/%Y" }}
-					{% endif %}
-		
-					{% if page.lang == 'en' %}
-						{{ page.date | date: "%Y-%m-%d" }}
-					{% endif %}
-			</span>	
+  <div class="post-header">
+    <div class="post-title-group">
+      <h1>{{ page.title }}</h1>
+      {% if page.subtitle %}
+        <p class="post-subtitle">{{ page.subtitle }}</p>
+      {% endif %}
+    </div>
+  </div>
 
-			{% include language-selector.html %}
-		
-	</div>
-	
-	{% include post-aside.html %}
-  
-  <div class="entry">
-    {{ content }}
-  </div> 
+  <div class="post-meta">
+    <span class="date">
+      {{ site.t[page.lang].published }}
+      {% if page.lang == 'fr' %}{{ page.date | date: "%d/%m/%Y" }}{% endif %}
+      {% if page.lang == 'en' %}{{ page.date | date: "%Y-%m-%d" }}{% endif %}
+    </span>
+    <span class="reading-time">~{{ page.content | number_of_words | divided_by: 200 | plus: 1 }} min</span>
+    {% include language-selector.html %}
+  </div>
+
+  {% assign content_parts = content | split: '<!--excerpt-->' %}
+
+  {% if content_parts.size > 1 %}
+    <div class="entry entry-intro">{{ content_parts[0] }}</div>
+    <div class="post-body">
+      <div class="entry entry-content">{{ content_parts[1] }}</div>
+      {% include post-aside.html %}
+    </div>
+  {% else %}
+    <div class="post-body">
+      <div class="entry">{{ content }}</div>
+      {% include post-aside.html %}
+    </div>
+  {% endif %}
+
 </article>
 
-{% include disqus.html %}	
+<button class="comments-toggle" onclick="this.textContent=this.textContent.includes('▼')?'[COMMENTS ▲]':'[COMMENTS ▼]';document.getElementById('comments-section').classList.toggle('open')">[COMMENTS ▼]</button>
+<div id="comments-section" class="comments-section">
+  {% include disqus.html %}
+</div>
 
-{% include article-list-footer.html %}	
+{% assign lang_posts = site.posts | where: "lang", page.lang %}
+{% for p in lang_posts %}
+  {% if p.url == page.url %}
+    {% assign current_idx = forloop.index0 %}
+  {% endif %}
+{% endfor %}
+{% assign prev_idx = current_idx | minus: 1 %}
+{% if current_idx > 0 %}
+  {% assign prev_post = lang_posts[prev_idx] %}
+{% endif %}
+{% assign next_idx = current_idx | plus: 1 %}
+{% if next_idx < lang_posts.size %}
+  {% assign next_post = lang_posts[next_idx] %}
+{% endif %}
+
+{% if prev_post or next_post %}
+<nav class="post-nav">
+  {% if next_post %}
+    <a href="{{ site.baseurl }}{{ next_post.url }}" class="post-nav-prev">← {{ next_post.title }}</a>
+  {% endif %}
+  {% if prev_post %}
+    <a href="{{ site.baseurl }}{{ prev_post.url }}" class="post-nav-next">{{ prev_post.title }} →</a>
+  {% endif %}
+</nav>
+{% endif %}
+
+{% include article-list-footer.html %}
+
+<script>
+(function () {
+  var intro = document.querySelector('.entry-intro .intro');
+  if (!intro) return;
+
+  var html = intro.innerHTML.trim();
+  var out = '';
+  var i = 0;
+  var cursor = '<span class="type-cursor">\u2588</span>';
+
+  intro.innerHTML = cursor;
+
+  function tick() {
+    if (i >= html.length) {
+      intro.innerHTML = html + '<span class="type-cursor type-cursor--done">\u2588</span>';
+      return;
+    }
+    if (html[i] === '<') {
+      // consume full tag instantly
+      var end = html.indexOf('>', i);
+      if (end === -1) end = html.length - 1;
+      out += html.slice(i, end + 1);
+      i = end + 1;
+      tick();
+    } else if (html[i] === '&') {
+      // consume entity instantly
+      var end = html.indexOf(';', i);
+      if (end === -1) { out += html[i++]; tick(); return; }
+      out += html.slice(i, end + 1);
+      i = end + 1;
+      tick();
+    } else {
+      // burst: up to next tag/entity boundary, max 6 chars, always advance
+      var burst = i;
+      while (burst < html.length && html[burst] !== '<' && html[burst] !== '&' && burst - i < 6) burst++;
+      if (burst === i) burst = i + 1;
+      out += html.slice(i, burst);
+      i = burst;
+      intro.innerHTML = out + cursor;
+      setTimeout(tick, 18);
+    }
+  }
+  tick();
+})();
+</script>

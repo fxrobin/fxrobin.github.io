@@ -4,7 +4,7 @@ title: 'Simulateur de Palette et 4 bitplanes'
 subtitle: Un petit simulateur pour la compréhension du 4 bitplanes de l'Atari ST
 logo: bitplanes-simulator.png
 category: retro
-tags: [Retro, C, Atari, Retro-Prog]
+tags: [Retro, C, Atari]
 lang: fr
 ref: atari-st-4-bitplanes-simulator
 ---

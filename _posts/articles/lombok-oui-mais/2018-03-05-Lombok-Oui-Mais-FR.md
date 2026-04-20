@@ -4,7 +4,7 @@ title: Lombok, Oui ! Mais...
 subtitle: Petit retour d'expérience de Lombok après 4 ans d'usage.
 logo: lombok-logo.png
 category: articles
-tags: [lombok,java,builder,patterns]
+tags: [Java, Lombok, Patterns]
 lang: fr
 ref: Lombok-Oui-Mais
 permalink: /Lombok-Oui-Mais/
