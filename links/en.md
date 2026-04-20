@@ -7,6 +7,7 @@ category: links
 date: 2020-02-17
 lang: en
 ref: links
+permalink: /links/
 ---
 
 <div class="intro" markdown='1'>

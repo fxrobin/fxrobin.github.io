@@ -29,15 +29,27 @@ t:
             articles:
                 url: "/"
                 text: "/dev/java"
+            tips:
+                url: "/tips/fr/"
+                text: "/dev/tips"
             retro-programming:
                 url: "/retro-programming/"
                 text: "/dev/retro"
             blanka:
                 url: "/blanka-cave/fr/"
                 text: "/dev/blanka"
+            astuces:
+                url: "/astuces/"
+                text: "/dev/astuces"
+            liens:
+                url: "/liens/"
+                text: "/dev/liens"
             about:
                 url: "/about/"
                 text: "/dev/about"
+            tags:
+                url: "/tags/fr/"
+                text: "/dev/tags"
     en:
         description: "Java / APIs / Linux / RetroStuffs and more..."
         name: "FX JavaDevBlog"
@@ -55,15 +67,24 @@ t:
             articles:
                 url: "/"
                 text: "/dev/java"
+            tips:
+                url: "/tips/en/"
+                text: "/dev/tips"
             retro-programming:
                 url: "/retro-programming/"
                 text: "/dev/retro"
             blanka:
                 url: "/blanka-cave/en/"
                 text: "/dev/blanka"
+            links:
+                url: "/links/"
+                text: "/dev/links"
             about:
-                url: "/about/"
+                url: "/about/en/"
                 text: "/dev/about"
+            tags:
+                url: "/tags/en/"
+                text: "/dev/tags"
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: /images/new-java-logo.png
@@ -142,7 +163,7 @@ plugins:
   - jekyll-sitemap 
   - jekyll-seo-tag
   - jekyll-redirect-from
-# - jekyll-feed
+  - jekyll-feed
 
 
 

@@ -42,13 +42,21 @@
       font-family: $helvetica;
       font-size: 1.1rem;
       font-weight: 600;
-      color: $body-text;
+      color: $amber;
       margin: 0 0 0.3rem;
+      text-shadow: 0 0 6px rgba(105, 87, 6, 0.4);
 
       a {
-        color: $body-text;
-        &:hover { color: $amber; }
-        &:visited { color: $body-text; }
+        color: $amber;
+        &:hover {
+          color: $amber;
+          text-shadow: 0 0 8px rgba(184, 143, 10, 0.6);
+          &::after {
+            content: ' █';
+            animation: blink-cursor 1s step-end infinite;
+          }
+        }
+        &:visited { color: $amber; }
       }
     }
 
@@ -61,7 +69,7 @@
       padding: 0 0.1rem;
 
       p { font-family: $helvetica; font-size: 0.88rem; color: $body-text; margin: 0.4em 0; }
-      code { font-family: $mono; font-size: 0.85em; color: #cccccc; background: rgba(255,255,255,0.05); border: 1px solid $border; border-radius: 3px; padding: 0.1em 0.3em; }
+      code { font-family: $mono; font-size: 0.85em; color: #cccccc; background: rgba(255,255,255,0.05); padding: 0.1em 0.3em; }
       pre { font-family: $mono; font-size: 0.82rem; background: #050505; border: 1px solid $border; border-radius: 4px; padding: 0.5rem 0.75rem; overflow-x: auto; color: #00ff00; margin: 0.5em 0; }
       strong, b { color: $body-text; }
       a { color: $link; &:hover { color: $amber; } }

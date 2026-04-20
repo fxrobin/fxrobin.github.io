@@ -3,8 +3,8 @@ layout: post
 title: Mes astuces Jekyll avec Github Pages
 subtitle: 5 ans d'usage divers et variés de Jekyll et Github Pages
 logo: jekyll-logo.png
-category: articles
-tags: [Site, Jekyll, Github Pages]
+category: tips
+tags: [Jekyll, GitHub Pages]
 lang: fr
 ref: my-jekyll-tips-with-github-pages
 permalink: /my-jekyll-tips-with-github-pages-fr/

@@ -4,7 +4,7 @@ title: Apache Archiva sur Raspberry PI
 subtitle: pour centraliser ses artefacts et autres archetypes ...
 logo: archiva-rpi.png
 category: articles
-tags: [OpenSource, Maven, Archiva, Raspberry]
+tags: [Open Source, Maven, Raspberry]
 lang: fr
 ref: archiva-raspberry
 ---

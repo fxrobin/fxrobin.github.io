@@ -4,7 +4,7 @@ title: Assembleur 6809 pour Thomson MO5 sous Linux
 subtitle: cross-compilation Assembleur MO5 avec C6809
 logo: mo5-pixel-art.png
 category: retro
-tags: [Retro, Assembleur, Thomson, MO5, Retro-Prog]
+tags: [Retro, Assembly, Thomson, MO5]
 lang: fr
 ref: 6809-thomson-mo5-assembly-linux
 ---

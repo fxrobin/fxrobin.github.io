@@ -4,7 +4,7 @@ title: 'Atari ST : Routines YM avec le Timer A'
 subtitle: Tutoriel en C et Assembleur pour jouer des chiptunes.
 logo: sound.gif
 category: retro
-tags: [Retro, Assembleur, Atari, Retro-Prog]
+tags: [Retro, Assembly, Atari]
 lang: fr
 ref: m68k-atari-st-ym-player
 ---

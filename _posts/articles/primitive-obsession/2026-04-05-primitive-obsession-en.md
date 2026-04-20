@@ -4,7 +4,7 @@ title: "Primitive Obsession"
 subtitle: "or why your `String email` has been lying from the start"
 logo: java.png
 category: articles
-tags: [Java, Records, Value Object, Craftsmanship, Clean Code, Lombok, JPA, Jackson]
+tags: [Java, Records, Craftsmanship, Clean Code, Lombok, JPA]
 lang: en
 ref: primitive-obsession
 permalink: /primitive-obsession-en/

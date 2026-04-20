@@ -4,7 +4,7 @@ title: Functional Switch/Case with Java 8+
 subtitle: because the new Switch/Case statement with Java 12 gave me a weird idea
 logo: code.png
 category: articles
-tags: [Java, Lambda, Functional, Fluent API, Builder]
+tags: [Java, Lambda, Functional, Patterns]
 lang: en
 ref: functional-switch
 permalink: /functional-switch-en/

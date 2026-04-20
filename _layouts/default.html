@@ -23,15 +23,23 @@
       <div class="container">
         <header class="masthead clearfix">
 <div class="site-info">
-            <h1 id="site-name" class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }}</a></h1>
+          <a href="{{ site.baseurl }}/"><h1 id="site-name" class="site-name">{ site.name }}</h1></a>
           </div>
 
           <div class="header-lang">
-            <a href="{{ site.baseurl }}/fr"
-               class="{% if page.lang == 'fr' %}active{% endif %}">FR</a>
-            <span class="lang-sep">·</span>
-            <a href="{{ site.baseurl }}/en"
-               class="{% if page.lang == 'en' %}active{% endif %}">EN</a>
+            <div class="header-lang-row">
+              <a href="{{ site.baseurl }}/fr"
+                 class="{% if page.lang == 'fr' %}active{% endif %}">FR</a>
+              <span class="lang-sep">·</span>
+              <a href="{{ site.baseurl }}/en"
+                 class="{% if page.lang == 'en' %}active{% endif %}">EN</a>
+            </div>
+            <div class="header-social">
+              <a href="https://github.com/fxrobin/" target="_blank" rel="nofollow">[gh]</a>
+              <a href="https://www.linkedin.com/in/fxrobin/" target="_blank" rel="nofollow">[li]</a>
+              <a href="https://stackoverflow.com/users/3017541/fxrobin" target="_blank" rel="nofollow">[so]</a>
+              <a href="{{ site.baseurl }}/feed.xml">[rss]</a>
+            </div>
           </div>
         </header>
       </div>
@@ -56,10 +64,6 @@
       <div class="container">
         <footer>
           <div class="footer-links">
-            <a href="https://github.com/fxrobin/" target="_blank" rel="nofollow">[gh]</a>
-            <a href="https://www.linkedin.com/in/fxrobin/" target="_blank" rel="nofollow">[li]</a>
-            <a href="https://stackoverflow.com/users/3017541/fxrobin" target="_blank" rel="nofollow">[so]</a>
-            <a href="{{ site.baseurl }}/feed.xml">[rss]</a>
             <img src="{{ site.baseurl }}/images/creative-commons/by-sa.svg" alt="CC:BY-SA" style="height:14px; opacity:0.5;" />
           </div>
           <div class="footer-legal">
@@ -127,6 +131,32 @@
             .pauseFor(2500)
             .start();
       {% endif %}
+    </script>
+    <script>
+    (function () {
+      document.querySelectorAll('pre.highlight').forEach(function (pre) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'pre-wrapper';
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+        var btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.textContent = '[copy]';
+        btn.addEventListener('click', function () {
+          var lines = pre.querySelectorAll('.line-number');
+          lines.forEach(function (el) { el.style.display = 'none'; });
+          navigator.clipboard.writeText(pre.innerText.trim()).then(function () {
+            lines.forEach(function (el) { el.style.display = ''; });
+            btn.textContent = '[copied!]';
+            btn.classList.add('copied');
+            setTimeout(function () { btn.textContent = '[copy]'; btn.classList.remove('copied'); }, 2000);
+          }).catch(function () {
+            lines.forEach(function (el) { el.style.display = ''; });
+          });
+        });
+        wrapper.appendChild(btn);
+      });
+    })();
     </script>
     <script src="/asciinema/asciinema-player.js"></script>
     {% if page.mermaid %}

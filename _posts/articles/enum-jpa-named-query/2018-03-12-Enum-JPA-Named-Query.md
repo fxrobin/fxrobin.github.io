@@ -4,7 +4,7 @@ title: Où définir au mieux une NamedQuery JPA ?
 subtitle: Parce que les mécanismes par défaut ne sont pas terribles ...
 logo: java-jpa.png
 category: articles
-tags: [java_ee, jpa]
+tags: [Java, JPA]
 lang: fr
 ref: enum-jpa-named-query
 ---

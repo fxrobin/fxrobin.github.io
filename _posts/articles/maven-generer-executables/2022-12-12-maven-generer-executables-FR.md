@@ -4,7 +4,7 @@ title: 'Java: Générer des exécutables Windows, Linux et MacOS'
 subtitle: Au profit d'un programme type "ligne de commande", avec Maven
 logo: java.png
 category: articles
-tags: [Java, Maven, JAR, EXE, SH, LAUNCH4, maven-assembly]
+tags: [Java, Maven, Build]
 lang: fr
 ref: maven-generer-executables
 permalink: /generer-executables-java-avec-maven/

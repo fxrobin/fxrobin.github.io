@@ -68,6 +68,12 @@
       &:hover { color: $amber; text-shadow: 0 0 6px $amber; }
       &:visited { color: $amber-dim; }
     }
+
+    .sidebar-tag-sep {
+      color: $amber-dim;
+      font-size: 0.75rem;
+      font-family: $mono;
+    }
   }
 
   .sidebar-recent {

@@ -4,7 +4,7 @@ title: 'Atari ST : coopération C et Assembleur'
 subtitle: Du code C qui appelle de code Assembleur et réciproquement
 logo: atari-rainbow.png
 category: retro
-tags: [Retro, Assembleur, Atari, Retro-Prog]
+tags: [Retro, Assembly, Atari]
 lang: fr
 ref: m68k-atari-st-assembly-and-c
 ---

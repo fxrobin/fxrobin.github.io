@@ -4,7 +4,7 @@ title: Découverte de Deltaspike Data Module
 subtitle: avec CDI 2.0, Weld 3, JUnit 5, JPA 2.2, EclipseLink 2.7, H2 et Lombok
 logo: deltaspike.png
 category: articles
-tags: [Java, CDI, Weld, JUnit, JPA, EclipseLink, H2, Lombok]
+tags: [Java, CDI, JUnit, JPA, Lombok]
 lang: fr
 ref: cdi-deltaspike-junit5
 ---

@@ -4,7 +4,7 @@ title: "Eclipse Collections : l'API Collections que vous ne connaissez pas (enco
 subtitle: "Parce que les Stream c'est bien, mais parfois on peut faire tellement mieux"
 logo: eclipse.png
 category: articles
-tags: [Java, Collections, Eclipse Collections, API, Fonctionnel, Lambda]
+tags: [Java, Collections, Functional, Lambda]
 lang: fr
 ref: eclipse-collections
 permalink: /eclipse-collections/

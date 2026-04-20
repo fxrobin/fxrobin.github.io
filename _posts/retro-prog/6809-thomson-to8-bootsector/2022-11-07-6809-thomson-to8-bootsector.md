@@ -4,7 +4,7 @@ title: Le Bootsector d'une disquette THOMSON
 subtitle: Ecriture d'un programme sur le Bootsector d'une disquette avec l'aide de Groovy.
 logo: thomson-to8.png
 category: retro
-tags: [Retro, Assembleur, Thomson, TO8, Retro-Prog]
+tags: [Retro, Assembly, Thomson, TO8]
 lang: fr
 ref: 6809-thomson-to8-bootsector
 ---

@@ -8,11 +8,12 @@ layout: default
 	<div class="accroche">{{ page.subtitle }}</div>
 	
 	<!-- include language-selector.html -->
-	{% include post-aside.html %}
-  
-  <div class="entry">
-    {{ content }}
-  </div> 
+  <div class="post-body">
+    <div class="entry entry-content">
+      {{ content }}
+    </div>
+    {% include post-aside.html %}
+  </div>
 </article>
 
 {% include disqus.html %}

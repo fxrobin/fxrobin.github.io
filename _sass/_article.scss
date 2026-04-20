@@ -35,10 +35,9 @@
     }
 
     .post-subtitle {
-      font-family: $mono;
-      font-size: 0.9rem;
-      color: $amber-dim;
-      font-style: italic;
+      font-family: "atari", $mono;
+      font-size: 1rem;
+      color: #33FF33;
       margin: 0;
     }
   }
@@ -71,15 +70,15 @@
 
   .intro {
     position: relative;
-    font-family: $mono;
-    font-size: 1.05rem;
+    font-family: "atari";
+    font-size: 1rem;
     color: #33FF33;
     line-height: 1.75;
     margin: 0 0 2rem;
     padding: 1.5rem 2rem;
 
     // CRT screen glass
-    border-radius: 6px / 4px;
+    border-radius: 4px / 4px;
 
     // CRT screen body
     background-color: #020802;
@@ -112,7 +111,7 @@
     // Space for the frame layers (box-shadow doesn't affect layout)
     margin: 28px 28px 44px;
 
-    text-shadow: 0 0 6px rgba(51, 255, 51, 0.5);
+    /*text-shadow: 0 0 6px rgba(51, 255, 51, 0.5);*/
 
     // screen reflection highlight at top
     &::before {
@@ -134,9 +133,8 @@
     }
 
     p {
-      font-family: $mono;
-      color: #33FF33;
-      text-shadow: 0 0 6px rgba(51, 255, 51, 0.5);
+      font-family: "atari", $mono;
+      color: #33FF33;      
       margin: 0.6em 0;
 
       &:first-child { margin-top: 0; }
@@ -145,6 +143,7 @@
 
     strong, b {
       color: #66FF66;
+      text-decoration: underline wavy rgba(102, 255, 102, 0.6);
       border-bottom: none;
       text-shadow: 0 0 8px rgba(51, 255, 51, 0.7);
     }
@@ -153,9 +152,10 @@
       color: #cccccc;
       background: rgba(255, 255, 255, 0.06);
       text-shadow: none;
-      border: 1px solid #555555;
       padding: 0.1em 0.3em;
       border-radius: 2px;
+      font-family: amiga;
+      font-size: smaller;
     }
 
     a {
@@ -177,7 +177,7 @@
     text-shadow: 0 0 6px rgba($amber, 0.4);
     overflow: hidden;
 
-    &::before { content: '## '; color: $amber-dim; }
+    &::before { content: '▌ '; color: $amber-dim; }
 
     @include mobile { &::before { content: ''; } }
   }
@@ -188,7 +188,7 @@
     font-size: 1.1rem;
     margin-top: 1.4rem;
 
-    &::before { content: '### '; color: $amber-dim; font-size: 0.9em; }
+    &::before { content: '▏ '; color: $amber-dim; font-size: 0.9em; }
 
     @include mobile { &::before { content: ''; } }
   }

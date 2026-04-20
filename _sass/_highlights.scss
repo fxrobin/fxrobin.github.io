@@ -9,6 +9,30 @@ code.highlighter-rouge {
   color: #cccccc;
 }
 
+.pre-wrapper {
+  position: relative;
+
+  .copy-btn {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    font-family: $mono;
+    font-size: 0.7rem;
+    color: $amber-dim;
+    background: transparent;
+    border: 1px solid $amber-dim;
+    padding: 0.1rem 0.35rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s, color 0.15s, border-color 0.15s;
+
+    &:hover { color: $amber; border-color: $amber; }
+    &.copied { color: $amber; border-color: $amber; }
+  }
+
+  &:hover .copy-btn { opacity: 1; }
+}
+
 pre.highlight {
   font-family: "Share Tech Mono", monospace;
   font-size: 12pt;

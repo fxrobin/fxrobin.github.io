@@ -1,0 +1,37 @@
+.tags-page {
+  .tag-section {
+    margin-bottom: 2rem;
+  }
+
+  .tag-heading {
+    color: $amber;
+    font-family: $mono;
+    font-size: 1rem;
+    border-bottom: 1px solid $border;
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tag-post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      font-family: $mono;
+      font-size: 0.85rem;
+      padding: 0.2rem 0;
+
+      a {
+        color: $amber-dim;
+        &:hover { color: $amber; }
+      }
+    }
+  }
+
+  .tag-post-date {
+    color: $border;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+  }
+}

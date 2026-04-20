@@ -4,7 +4,7 @@ title: 'Atari ST: Compiler for C programming with Docker'
 subtitle: Cross-compiling a Helloworld for TOS within a Docker container
 logo: atari-st-bomb.png
 category: retro
-tags: [Retro, C, Atari, Retro-Prog, Docker]
+tags: [Retro, C, Atari, Docker]
 lang: en
 ref: c-programming-for-atari-st-with-docker
 permalink: /c-programming-for-atari-st-with-docker/

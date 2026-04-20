@@ -4,7 +4,7 @@ title: Lombok, YES! But ...
 subtitle: small dive into Lombok after 4 years using
 logo: lombok-logo.png
 category: articles
-tags: [lombok,java,builder,patterns]
+tags: [Java, Lombok, Patterns]
 lang: en
 ref: Lombok-Oui-Mais
 permalink: /Lombok-Yes-But/
