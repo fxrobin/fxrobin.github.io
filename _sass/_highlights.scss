@@ -5,8 +5,13 @@ code.highlighter-rouge {
   border-radius: 4px;
   padding: 0.1em 0.35em;
   font-family: "Share Tech Mono", monospace;
-  font-size: 0.92em;
+  font-size: 1em;
   color: #cccccc;
+
+  @include mobile {
+    font-size: 0.8em;
+    padding: 0.08em 0.25em;
+  }
 }
 
 .pre-wrapper {
@@ -35,7 +40,7 @@ code.highlighter-rouge {
 
 pre.highlight {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12pt;
+  font-size: 1.1rem;
   color: #00ff00;
   background-color: #050505;
   padding: 7px 7px 7px 10px;
@@ -64,6 +69,11 @@ pre.highlight {
   .cl {
     display: block;
     clear: both;
+  }
+
+  @include mobile {
+    font-size: 0.75rem;
+    padding: 0.5rem;
   }
 }
 

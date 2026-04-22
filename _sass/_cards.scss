@@ -40,7 +40,7 @@
 
     .card-title {
       font-family: $helvetica;
-      font-size: 1.1rem;
+      font-size: 1.25rem;
       font-weight: 600;
       color: $amber;
       margin: 0 0 0.3rem;
@@ -62,15 +62,15 @@
 
     .card-excerpt {
       font-family: $helvetica;
-      font-size: 0.88rem;
+      font-size: 1rem;
       color: $body-text;
       line-height: 1.6;
       margin: 0.4rem 0 0;
       padding: 0 0.1rem;
 
-      p { font-family: $helvetica; font-size: 0.88rem; color: $body-text; margin: 0.4em 0; }
-      code { font-family: $mono; font-size: 0.85em; color: #cccccc; background: rgba(255,255,255,0.05); padding: 0.1em 0.3em; }
-      pre { font-family: $mono; font-size: 0.82rem; background: #050505; border: 1px solid $border; border-radius: 4px; padding: 0.5rem 0.75rem; overflow-x: auto; color: #00ff00; margin: 0.5em 0; }
+      p { font-family: $helvetica; font-size: 1rem; color: $body-text; margin: 0.4em 0; }
+      code { font-family: $mono; font-size: 1rem; color: #cccccc; background: rgba(255,255,255,0.05); padding: 0.1em 0.3em; }
+      pre { font-family: $mono; font-size: 1rem; background: #050505; border: 1px solid $border; border-radius: 4px; padding: 0.5rem 0.75rem; overflow-x: auto; color: #00ff00; margin: 0.5em 0; }
       strong, b { color: $body-text; }
       a { color: $link; &:hover { color: $amber; } }
     }
@@ -90,7 +90,7 @@
 
       .tag {
         color: $amber-dim;
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         &::before { content: '#'; }
         &:hover { color: $amber; }
         &:visited { color: $amber-dim; }
@@ -99,7 +99,7 @@
 
     .card-read-more {
       color: $amber;
-      font-size: 0.78rem;
+      font-size: 0.9rem;
       border: 1px solid $amber-dim;
       padding: 0.15rem 0.5rem;
       white-space: nowrap;
@@ -139,4 +139,15 @@
   }
 
   .page-info { color: $amber-dim; border: none; }
+}
+
+@media (max-width: 800px) {
+  .post-card {
+    .card-header .card-path { font-size: 0.75rem; }
+    .card-header .card-date { font-size: 0.65rem; }
+    .card-body .card-title { font-size: 1rem; }
+    .card-body .card-excerpt { font-size: 0.85rem; p { font-size: 0.85rem; } }
+    .card-footer .card-tags .tag { font-size: 0.7rem; }
+    .card-footer .card-read-more { font-size: 0.75rem; }
+  }
 }
