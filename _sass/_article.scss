@@ -6,7 +6,9 @@
   padding-bottom: 0.5rem;
   border-bottom: 1px solid $border;
 
-  &::after { content: ' $'; color: $amber; }
+  @include mobile {
+    display: none;
+  }
 }
 
 .post-header {
@@ -60,6 +62,12 @@
   font-family: $helvetica;
   color: $body-text;
   line-height: 1.7;
+
+  @include mobile {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
 
   p {
     font-family: $helvetica;
@@ -163,6 +171,14 @@
       text-decoration: underline;
       &:hover { color: #99FF99; }
       &:visited { color: #33FF33; }
+    }
+
+    @include mobile {
+      margin: 0 0 1rem;
+      padding: 0.5rem;
+      box-shadow: none;
+      background: transparent;
+      &::before { display: none; }
     }
   }
 

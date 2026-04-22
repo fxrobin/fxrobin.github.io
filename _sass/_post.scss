@@ -34,6 +34,10 @@
 
 .entry-intro {
   margin-bottom: 2rem;
+
+  @include mobile {
+    margin-bottom: 1rem;
+  }
 }
 
 .post-body {
@@ -57,10 +61,41 @@
 
   @include mobile {
     flex-direction: column;
+    overflow-x: hidden;
+
+    .entry-content {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      box-sizing: border-box;
+      padding: 0 !important;
+      margin: 0 !important;
+
+      img, pre, table {
+        max-width: 100%;
+        width: 100% !important;
+        height: auto;
+        box-sizing: border-box;
+      }
+    }
 
     .toc-sidebar {
       width: 100%;
+      max-width: 100%;
       position: static;
+      float: none;
+      display: block;
+      visibility: visible;
+      order: -1;
+      margin-bottom: 1.5rem;
+      box-sizing: border-box;
     }
+  }
+}
+
+.toc-sidebar {
+  @include mobile {
+    display: block !important;
+    visibility: visible !important;
   }
 }

@@ -26,6 +26,12 @@
           <a href="{{ site.baseurl }}/"><h1 id="site-name" class="site-name">{ site.name }}</h1></a>
           </div>
 
+          <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+
           <div class="header-lang">
             <div class="header-lang-row">
               <a href="{{ site.baseurl }}/fr"
@@ -46,6 +52,7 @@
     </div>
 
     <div class="site-wrapper">
+      <div class="mobile-overlay" id="mobileOverlay"></div>
       <aside class="sidebar">
         <div class="sidebar-prompt">$ ls /dev/</div>
         {% include sidebar-nav.html %}
@@ -93,9 +100,20 @@
       })();
     </script>
 
-    <script>
+<script>
       var app = document.getElementById('site-name');
 
+      function isMobile() {
+        return window.matchMedia('(max-width: 800px)').matches;
+      }
+
+      if (isMobile()) {
+        app.textContent = '> FX_JavaDevBlog';
+        var cursor = document.createElement('span');
+        cursor.className = 'typewriter-cursor';
+        cursor.innerHTML = '&#x2582;';
+        app.appendChild(cursor);
+      } else {
       var typewriter = new Typewriter(app, {
           loop: true,
           delay: 'natural',
@@ -105,7 +123,7 @@
       {% if page.lang == "fr" %}
         typewriter.typeString('>FX_JavaDevBlog : ')
             .pauseFor(2500)
-           .typeString('réflexions sur Java')
+          .typeString('réflexions sur Java')
             .pauseFor(2500)
             .typeString(" SE")
             .pauseFor(2500)
@@ -119,7 +137,7 @@
       {% else %}
         typewriter.typeString('>FX_JavaDevBlog : ')
             .pauseFor(2500)
-            .typeString('thoughts about Java')
+          .typeString('thoughts about Java')
             .pauseFor(2500)
             .typeString(" SE")
             .pauseFor(2500)
@@ -131,6 +149,7 @@
             .pauseFor(2500)
             .start();
       {% endif %}
+      }
     </script>
     <script>
     (function () {
