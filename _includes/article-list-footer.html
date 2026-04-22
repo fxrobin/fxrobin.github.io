@@ -15,7 +15,7 @@
             <i class="fa fa-chevron-circle-right"></i>
             {% assign _posts=site.posts | where:"ref", post.ref | sort: 'lang' %}
             {% for _post in _posts %}
-                    <a href="{{ _post.url }}"><img src="/images/flags/{{ _post.lang }}.png" /></a>	
+                    <a href="{{ _post.url }}"><img src="/images/flags/{{ _post.lang }}.png" loading="lazy" alt="{{ _post.lang }}" /></a>	
             {% endfor %}
             <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
         </div>  

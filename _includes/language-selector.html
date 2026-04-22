@@ -6,7 +6,7 @@
 <span class="language-selector">
     {{ site.t[page.lang].available_languages }}
     {% for post in posts %}
-            <span style="vertical-align: middle;"><a href="{{ post.url }}"><img src="/images/flags/{{ post.lang }}.png" /></a></span>	
+            <span style="vertical-align: middle;"><a href="{{ post.url }}"><img src="/images/flags/{{ post.lang }}.png" loading="lazy" alt="{{ post.lang }}" /></a></span>	
     {% endfor %}
 </span>
 {% endunless %}

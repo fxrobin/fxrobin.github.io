@@ -2,7 +2,37 @@
 layout: default
 ---
 
+{% assign iso_date = page.date | date_to_xmlschema %}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ page.title }}",
+  "description": "{{ page.description | default: page.excerpt | strip_html | truncate: 160 }}",
+  "datePublished": "{{ iso_date }}",
+  "author": {
+    "@type": "Person",
+    "name": "FX Robin",
+    "url": "https://www.fxjavadevblog.fr/about/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "FX JavaDevBlog",
+    "url": "https://www.fxjavadevblog.fr"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ site.url }}{{ page.url }}"
+  }
+}
+</script>
+
 <article class="post">
+  <div class="reading-progress" id="readingProgress">
+    <div class="reading-progress-bar" id="readingProgressBar"></div>
+  </div>
+
   {% assign path_prefix = "/dev/java" %}
   {% if page.categories contains "retro-prog" %}
     {% assign path_prefix = "/dev/retro" %}
@@ -80,6 +110,39 @@ layout: default
 {% endif %}
 
 {% include article-list-footer.html %}
+
+<script>
+(function() {
+  var progress = document.getElementById('readingProgressBar');
+  if (!progress) return;
+
+  var totalBlocks = 24;
+
+  function renderProgress(filled) {
+    var html = '<span class="filled">[</span>';
+    for (var i = 0; i < totalBlocks; i++) {
+      if (i < filled) {
+        html += '<span class="filled">■</span>';
+      } else {
+        html += '<span class="empty">■</span>';
+      }
+    }
+    html += '<span class="filled">]</span>';
+    progress.innerHTML = html;
+  }
+
+  function updateProgress() {
+    var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var scrolled = (winScroll / height) * 100;
+    var filled = Math.round((scrolled / 100) * totalBlocks);
+    renderProgress(filled);
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+})();
+</script>
 
 <script>
 (function () {

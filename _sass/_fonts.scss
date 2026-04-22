@@ -1,22 +1,21 @@
 // fonts from Google
 
-@import "https://fonts.googleapis.com/css?family=Share+Tech+Mono";
-@import "https://fonts.googleapis.com/css2?family=Share+Tech";
-@import "https://fonts.googleapis.com/css?family=Open+Sans";
-@import "https://fonts.googleapis.com/css?family=Oswald";
-@import "https://fonts.googleapis.com/css?family=Press+Start+2P";
-@import "https://fonts.googleapis.com/css?family=Monda";
-@import "https://fonts.googleapis.com/css?family=Russo+One";
-@import "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'";
+@import url('https://fonts.googleapis.com/css?family=Share+Tech+Mono');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
+@import url('https://fonts.googleapis.com/css?family=Monda');
+@import url('https://fonts.googleapis.com/css?family=Russo+One');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700');
 
-
-// custom fonts
 
 @font-face {
     font-family: 'profont-powerline';
     src: url('/fonts/profont-powerline.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -28,6 +27,7 @@
          url('/fonts/volter.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -39,6 +39,7 @@
 	     url('/fonts/amstrad-cpc-extended.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -50,6 +51,7 @@
 	     url('/fonts/Pixeled.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -61,46 +63,47 @@
 		     url('/fonts/atari-st.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
-@font-face 
-{
+@font-face {
 	font-family: "amiga";
     src: url('/fonts/amiga.woff2') format('woff2'),
          url('/fonts/amiga.woff') format('woff'),
          url('/fonts/amiga.ttf') format('truetype');
   font-weight: normal;
-  font-style: normal;        
+  font-style: normal;
+  font-display: swap;
 }
 
-@font-face 
-{
+@font-face {
 	font-family: "greenberet";
     src: url('/fonts/computer_pixel-7-webfont.woff2') format('woff2'),
          url('/fonts/computer_pixel-7-webfont.woff') format('woff'),
          url('/fonts/computer_pixel-7-webfont.ttf') format('truetype');
   font-weight: normal;
-  font-style: normal;        
+  font-style: normal;
+  font-display: swap;
 }
 
-@font-face 
-{
+@font-face {
 	font-family: "pixel-operator";
     src: url('/fonts/PixelOperatorMono.woff2') format('woff2'),
          url('/fonts/PixelOperatorMono.woff') format('woff'),
          url('/fonts/cPixelOperatorMono.ttf') format('truetype');
   font-weight: normal;
-  font-style: normal;        
+  font-style: normal;
+  font-display: swap;
 }
 
-@font-face 
-{
+@font-face {
 	font-family: "coders-crux";
     src: url('/fonts/Coders-Crux.woff2') format('woff2'),
          url('/fonts/Coders-Crux.woff') format('woff'),
          url('/fonts/Coders-Crux.ttf') format('truetype');
   font-weight: normal;
-  font-style: normal;        
+  font-style: normal;
+  font-display: swap;
 }
 
 
@@ -110,5 +113,5 @@
          url('/fonts/microgramma_d_extended_bold-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-
+    font-display: swap;
 }
