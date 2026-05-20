@@ -41,8 +41,9 @@ Template front matter complet et règles de nommage : `references/front-matter-t
 | Erreur | Correct |
 |--------|---------|
 | Tiret long `—` ou `...` Unicode `…` | ` - ` ou `...` (trois points ASCII) |
+| Tirets de liste ou de césure `- énumération` | Phrases complètes avec virgules ou deux-points, pas de tirets de liste |
 | "Il est important de noter que..." | Juste l'affirmer directement, sans intro creuse |
-| Bullets mécaniques pour tout | Prose pour les transitions, bullets pour les énumérations réelles |
+| Bullets mécaniques pour tout | Prose pour les transitions, énumérations réelles en liste uniquement |
 | Conclusion qui répète l'intro | Récap court + promesse prochain billet + appel commentaires |
 | Paragraphes tous de même longueur | Varier : phrases courtes. Puis une plus longue qui développe. |
 | Guillemets courbes `"` `'` | Guillemets et apostrophes droits `"` `'` |
