@@ -51,7 +51,7 @@ S'il ne s'agissait que des getters et setters, on pourrait s'en passer, mais pou
 
 **Et ca, ce n'est pas acceptable : la documentation est un élément essentiel du code, elle doit être complète et à jour.**
 
-Et ce n'est pas qu'une question de confort humain. Aujourd'hui, **les IA lisent votre Javadoc**. Sans documentation complète, elles doivent deviner le comportement à partir du code source — et deviner, pour une IA, ça signifie risquer l'hallucination. Une Javadoc bien écrite avec des exemples leur permet de comprendre instantanément le contrat d'une classe ou d'une méthode. **Documenter, c'est aussi coder pour les machines qui codent.**
+Et ce n'est pas qu'une question de confort humain. Aujourd'hui, **les IA lisent votre Javadoc**. Sans documentation complète, elles doivent deviner le comportement à partir du code source et deviner, pour une IA, ça signifie risquer l'hallucination. Une Javadoc bien écrite avec des exemples leur permet de comprendre instantanément le contrat d'une classe ou d'une méthode. **Documenter, c'est aussi coder pour les machines qui codent.**
 
 ## Le projet de démonstration
 
@@ -92,7 +92,7 @@ Ce qui est intéressant ici, ce sont les classes `Garage` et `Vehicule` qui sont
 - **Tags systématiques** : chaque méthode doit avoir ses `@param`, `@return`, `@throws`. Oui, **même pour `NullPointerException`**, surtout pour `NullPointerException`.
 - **Des exemples concrets** : un `@apiNote` avec un bloc `<pre>{@code ...}</pre>` qui montre l'usage réel. Sans ça, une IA va devoir deviner. Et deviner pour une IA, ça signifie inventer.
 
-Sans ces éléments, votre Javadoc sera incomplète, et votre code moins compréhensible — par les humains comme par les machines.
+Sans ces éléments, votre Javadoc sera incomplète, et votre code moins compréhensible par les humains comme par les machines.
 
 ### Les spécificités Lombok
 
@@ -100,7 +100,7 @@ Lombok simplifie l'écriture du code, mais impose des règles spécifiques pour 
 
 **1. On documente sur le champ, pas sur la méthode**
 
-Avec Lombok, **la Javadoc du champ est automatiquement copiée** vers les getters et setters générés — depuis la v1.12.0. 
+Avec Lombok, **la Javadoc du champ est automatiquement copiée** vers les getters et setters générés depuis la v1.12.0. 
 - Un `@return` sur un champ `@Getter` → atterrit sur le getter
 - Un `@param` sur un champ `@Setter` → file sur le setter
 
@@ -590,7 +590,7 @@ Vous pouvez aussi utiliser des sections personnalisées avec `-- GETTER --` pour
 
 Tout semblait enfin fonctionner. Pourtant, en ouvrant la Javadoc générée... **la classe `VehiculeBuilder` était vide.**
 
-Pas de description. Pas d'exemple. Rien. Pourtant, c'est bien cette classe que les développeurs — et les IA — doivent utiliser pour instancier `Vehicule`. **Un builder sans Javadoc, c'est comme une voiture sans volant.**
+Pas de description. Pas d'exemple. Rien. Pourtant, c'est bien cette classe que les développeurs (et les IA) doivent utiliser pour instancier `Vehicule`. **Un builder sans Javadoc, c'est comme une voiture sans volant.**
 
 L'idée est venue naturellement : **utiliser Groovy pour post-traiter les fichiers delombokés** et injecter la Javadoc manquante sur les classes et méthodes générées par Lombok. D'ailleurs, j'avais déjà utilisé Groovy avec succès pour [créer un bootsector sur Thomson TO8](/6809-thomson-to8-bootsector), ce qui prouve la polyvalence de ce langage.
 
@@ -662,7 +662,7 @@ Ce que l'on obtient est maintenant complet :
 
 ![Javadoc avec delombok - classe VehiculeBuilder vide](/images/maven-javadoc-lombok-java25/javadoc-06.png)
 
-Et le plus beau ? **Le pipeline inclut ses propres tests unitaires.** Exécutez `groovy scripts/lombok-javadoc-propagator-tests.groovy` et vous avez une validation instantanée du bon fonctionnement des scripts — sans Maven, sans build, juste Groovy.
+Et le plus beau ? **Le pipeline inclut ses propres tests unitaires.** Exécutez `groovy scripts/lombok-javadoc-propagator-tests.groovy` et vous avez une validation instantanée du bon fonctionnement des scripts sans Maven, sans build, juste Groovy.
 
 ### Les skills pour aller plus loin
 
@@ -672,8 +672,8 @@ Attention tout de même : une *skill*, aussi bien conçue soit-elle, ne remplace
 
 Cerise sur le gâteau : **la maison ne reculant devant aucun sacrifice**, j'ai même créé deux *skills* dédiées pour vous aider à appliquer ces bonnes pratiques. Elles sont disponibles directement dans le dépôt de démonstration et fonctionnent avec la plupart des agents de code modernes : Claude Code, Mistral Vibe, GitHub Copilot, Codex, OpenCode, Cursor, etc.
 
-- **`javadoc-best-practices`** : toutes les règles de base pour une Javadoc humaine *et* optimisée IA — première phrase percutante, tags obligatoires, exemples avec `@apiNote`, patterns pour les classes, méthodes et champs
-- **`javadoc-lombok`** : les spécificités Lombok — où documenter (sur le champ !), comment gérer les builders malgré le bug #2481, les sections GETTER/SETTER, et les annotations `@UtilityClass` ou `@Builder`
+- **`javadoc-best-practices`** : toutes les règles de base pour une Javadoc humaine *et* optimisée IA : première phrase percutante, tags obligatoires, exemples avec `@apiNote`, patterns pour les classes, méthodes et champs
+- **`javadoc-lombok`** : les spécificités Lombok, où documenter (sur le champ !), comment gérer les builders malgré le bug #2481, les sections GETTER/SETTER, et les annotations `@UtilityClass` ou `@Builder`
 
 Pour les invoquer depuis un projet, placez-vous dans le répertoire et utilisez la commande `skill` avec le nom de la skill : `skill name:javadoc-best-practices` ou `skill name:javadoc-lombok`. Elles sont localisées sous `.agents/skills/` dans le repo.
 
