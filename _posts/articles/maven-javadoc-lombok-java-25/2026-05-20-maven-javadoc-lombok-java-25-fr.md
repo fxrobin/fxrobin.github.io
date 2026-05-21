@@ -23,7 +23,7 @@ Jusqu'ici, je me contentais d'une Javadoc approximative. Halte à l'approximatio
 
 J'ai cherché. ChatGPT m'a proposé des versions de Lombok incompatibles avec Java 25. GitHub Copilot m'a donné des configurations de plugins qui n'existent pas. Stack Overflow affiche des réponses de l'ère Java 8. J'ai dû faire "à l'ancienne" : réfléchir, tester, corriger, recommencer. Le tout sans Generative AI.
 
-La solution que j'ai construite passe par le **delombok**, une configuration Maven précise pour Java 25, un profil dédié pour ne pas casser les IDE, des scripts **Groovy** pour injecter la Javadoc manquante sur les classes générées et en bonus, deux *skills* pour que vous n'ayez pas à refaire ce chemin.
+La solution que j'ai construite passe par **une phase delombok** (génération du code source et non pas du bytecode), une configuration Maven précise pour Java 25, un profil dédié pour ne pas casser les IDE, des scripts **Groovy** pour injecter la Javadoc manquante sur les classes générées et en bonus, deux *skills* pour que vous n'ayez pas à refaire ce chemin.
 
 Ce n'est pas simple. Mais ça fonctionne.
 
@@ -592,7 +592,7 @@ Tout semblait enfin fonctionner. Pourtant, en ouvrant la Javadoc générée... *
 
 Pas de description. Pas d'exemple. Rien. Pourtant, c'est bien cette classe que les développeurs — et les IA — doivent utiliser pour instancier `Vehicule`. **Un builder sans Javadoc, c'est comme une voiture sans volant.**
 
-L'idée est venue naturellement : **utiliser Groovy pour post-traiter les fichiers delombokés** et injecter la Javadoc manquante sur les classes et méthodes générées par Lombok.
+L'idée est venue naturellement : **utiliser Groovy pour post-traiter les fichiers delombokés** et injecter la Javadoc manquante sur les classes et méthodes générées par Lombok. D'ailleurs, j'avais déjà utilisé Groovy avec succès pour [créer un bootsector sur Thomson TO8](/6809-thomson-to8-bootsector), ce qui prouve la polyvalence de ce langage.
 
 > Pourquoi cette approche ? Parce que Lombok fait du bytecode, pas du source. Delombok génère du source, mais sans Javadoc. **Groovy, lui, peut modifier ce source.** C'est la pièce manquante du puzzle.
 
