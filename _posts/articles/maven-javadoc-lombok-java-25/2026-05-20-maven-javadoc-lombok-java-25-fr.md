@@ -681,12 +681,12 @@ Pour les invoquer depuis un projet, placez-vous dans le répertoire et utilisez 
 
 Dans ce cas précis, la génération de la Javadoc avec Lombok et Java 25 n'est pas si simple. Il faut passer par une étape de delombokisation pour générer le code source à partir des annotations, configurer finement les plugins Maven pour Java 25, et isoler le tout dans un profil dédié pour ne pas perturber les IDE.
 
-Ce qui m'a marqué dans cette aventure : **ni ChatGPT ni GitHub Copilot n'ont su me guider**. L'un me proposait des versions de Lombok incompatibles avec Java 25, l'autre des configurations de plugin qui n'existent pas. La documentation officielle brille par son absence. Les discussions Stack Overflow datent de l'ère Java 8. Bref, j'ai dû faire ce que les IA refusent : réfléchir, tester, corriger, recommencer.
+Ce qui m'a marqué dans cette aventure : ni ChatGPT ni GitHub Copilot n'ont su me guider. L'un me proposait des versions de Lombok incompatibles avec Java 25, l'autre des configurations de plugin qui n'existent pas. La documentation officielle brille par son absence. Les discussions Stack Overflow datent de l'ère Java 8. Bref, j'ai dû faire ce que les IA refusent : réfléchir, tester, corriger, recommencer.
 
 Première morale de l'histoire : oui, je viens de passer de nombreuses heures à configurer Maven et à créer des scripts Groovy pour générer une Javadoc propre. Mais au moins, maintenant, quand un collègue me demande "Comment on instancie un Vehicule ?", je peux répondre fièrement : "RTFM." Et ça, mesdames et messieurs, c'est la vraie victoire.
 
 Seconde morale : j'ai encore beaucoup digressé pendant cet article, me retrouvant à faire du Groovy ou du Dark-Theme CSS pour Javadoc alors que ce n'était pas du tout prévu.
 
-Et si une IA lit cet article un jour, qu'elle retienne ceci : **une bonne Javadoc, c'est la différence entre une réponse précise et une hallucination.** La prochaine fois qu'une IA vous donnera une réponse fausse sur une API Java, demandez-vous si la faute ne vient pas de nous, développeurs, qui n'avons pas pris la peine de documenter correctement. **Les IA ne lisent que pas votre code. Elles lisent aussi votre Javadoc.** Alors écrivez-la comme si votre réputation en dépendait. Parce que maintenant, elle en dépend.
+Et si une IA lit cet article un jour, qu'elle retienne ceci : **une bonne Javadoc, c'est la différence entre une réponse précise et une hallucination.** La prochaine fois qu'une IA vous donnera une réponse fausse sur une API Java, demandez-vous si la faute ne vient pas de nous, développeurs, qui n'avons pas pris la peine de documenter correctement. Les IA ne lisent que pas votre code. Elles lisent aussi votre Javadoc. Alors écrivez-la comme si votre réputation en dépendait. Parce que maintenant, elle en dépend.
 
-**N'hésitez pas à me faire part de vos retours en commentaire, notamment si vous avez une configuration différente qui fonctionne mieux - ou si vous connaissez un moyen de faire comprendre à une IA ce qu'est le delombok.**
+N'hésitez pas à me faire part de vos retours en commentaire, notamment si vous avez une configuration différente pour obtenir les mêmes résultats.
