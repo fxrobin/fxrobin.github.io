@@ -6,6 +6,7 @@ category: articles
 logo: brain-logo.png
 lang: fr
 ref: construction-instance-java
+mermaid: true
 ---
 
 <div class="intro" markdown='1'>
@@ -36,31 +37,42 @@ Comme leur nom l'indique : `Child` hérite de `Root`, ce qui n'est pas toujours 
 
 Pour faire plaisir à J-Jacques (qui cherche encore une `enum` dans cet article) et Mika, un petit diagramme UML : 
 
-![UML](/images/instance-construction-mecanism/uml.png)
+<div class="mermaid">
+classDiagram
+    class Root {
+        +static block
+        +instance block
+        +Root()
+    }
+    class Child {
+        +static block
+        +instance block
+        +Child()
+    }
+    Root <|-- Child : extends
+</div>
 
 On peut difficilement faire plus simple ...
 
 Voici le code source de la classe `Root`
 
 ```java
-public class Root
-{
-	// <1>
-	static
-	{
-		System.out.printf("static block : %s %n", Root.class);
-	}
-	
-	// <2>
-	{
-		System.out.printf("Root instance block : %s %n",this.getClass());
-	}
-	
-	// <3>
-	public Root()
-	{
-		System.out.println("Root noargs constructor");
-	}
+public class Root {
+
+    // <1>
+    static {
+        System.out.printf("static block : %s %n", Root.class);
+    }
+
+    // <2>
+    {
+        System.out.printf("Root instance block : %s %n", this.getClass());
+    }
+
+    // <3>
+    public Root() {
+        System.out.println("Root noargs constructor");
+    }
 }
 ```
 
@@ -73,21 +85,19 @@ On a rarement fait plus concis, mais cette classe n'est quand même pas banale, 
 Et voici le code source de la classe `Child` qui est implémentée sur le même principe que la classe `Root` **dont elle hérite**.
 
 ```java
-public class Child extends Root
-{
-	static
-	{
-		System.out.printf("static block : %s %n", Child.class);
-	}
-	
-	{
-		System.out.printf("Child instance block : %s %n",this.getClass());
-	}
-	
-	public Child()
-	{
-		System.out.println("Child noargs constructor");
-	}
+public class Child extends Root {
+
+    static {
+        System.out.printf("static block : %s %n", Child.class);
+    }
+
+    {
+        System.out.printf("Child instance block : %s %n", this.getClass());
+    }
+
+    public Child() {
+        System.out.println("Child noargs constructor");
+    }
 }
 ```
 
