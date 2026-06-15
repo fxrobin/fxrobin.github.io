@@ -90,6 +90,14 @@
         var pre = document.getElementsByTagName('pre'), pl = pre.length;
         for (var i = 0; i < pl; i++) 
         {
+          // Skip mermaid diagrams
+          var langDiv = pre[i].closest('.highlighter-rouge');
+          if (langDiv) {
+            var match = langDiv.className.match(/language-(\w+)/);
+            if (match && match[1] === 'mermaid') {
+              continue;
+            }
+          }
           pre[i].innerHTML = '<span class="line-number"></span>' + pre[i].innerHTML + '<span class="cl"></span>';
           var num = pre[i].innerHTML.split(/\n/).length;
           for (var j = 0; j < (num - 1); j++) 
@@ -152,13 +160,55 @@
       {% endif %}
       }
     </script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+    .pre-wrapper {
+      position: relative;
+      margin-top: 1.5em;
+    }
+    .code-label {
+      position: absolute;
+      top: -1.45em;
+      left: 0;
+      padding: 0.35em 0.75em;
+      color: #fff;
+      font-size: 0.7em;
+      font-family: 'Press Start 2P', monospace;
+      text-transform: uppercase;
+      z-index: 10;
+      border-radius: 2px 2px 0 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    }
+    .code-label.java { background: #8B0000; }
+    .code-label.c { background: #00599C; }
+    .code-label.nasm { background: #6E4C9F; }
+    .code-label.bash { background: #4EAA25; }
+    .code-label.javascript { background: #F7DF1E; color: #000; }
+    .code-label.python { background: #3572A5; }
+    .code-label.json { background: #292929; }
+    .code-label.xml { background: #00008B; }
+    .code-label.html { background: #E34F26; }
+    .code-label.css { background: #1572B6; }
+    .code-label.sql { background: #08607E; }
+    </style>
     <script>
     (function () {
       document.querySelectorAll('pre.highlight').forEach(function (pre) {
+        // Vérifier si c'est un bloc mermaid avant de faire quoi que ce soit
+        var langDiv = pre.closest('.highlighter-rouge');
+        if (langDiv) {
+          var match = langDiv.className.match(/language-(\w+)/);
+          if (match && match[1] === 'mermaid') {
+            return; // Skip Mermaid diagrams
+          }
+        }
+        
         var wrapper = document.createElement('div');
         wrapper.className = 'pre-wrapper';
         pre.parentNode.insertBefore(wrapper, pre);
         wrapper.appendChild(pre);
+        
         var btn = document.createElement('button');
         btn.className = 'copy-btn';
         btn.textContent = '[copy]';
@@ -175,6 +225,17 @@
           });
         });
         wrapper.appendChild(btn);
+        
+        // Add language label
+        if (langDiv) {
+          var match = langDiv.className.match(/language-(\w+)/);
+          if (match && match[1] !== 'mermaid') {
+            var label = document.createElement('span');
+            label.className = 'code-label ' + match[1];
+            label.textContent = match[1];
+            wrapper.appendChild(label);
+          }
+        }
       });
     })();
     </script>

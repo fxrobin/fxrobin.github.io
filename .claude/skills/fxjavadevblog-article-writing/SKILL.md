@@ -47,6 +47,7 @@ Template front matter complet et règles de nommage : `references/front-matter-t
 | Conclusion qui répète l'intro | Récap court + promesse prochain billet + appel commentaires |
 | Paragraphes tous de même longueur | Varier : phrases courtes. Puis une plus longue qui développe. |
 | Guillemets courbes `"` `'` | Guillemets et apostrophes droits `"` `'` |
+| Emojis UTF-8 (✅, ❌, ⚠️, 💡, etc.) | Texte seul ou symboles ASCII ([x], [X], [!], etc.) |
 
 ## Quick Reference
 

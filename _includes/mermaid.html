@@ -1,3 +1,160 @@
-<script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+<script src="https://cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'dark',
+    themeVariables: {
+      fontFamily: '"Share Tech Mono", "coders-crux", monospace',
+      primaryColor: '#111111',
+      primaryTextColor: '#cccccc',
+      primaryBorderColor: '#444444',
+      lineColor: '#FFB000',
+      secondaryColor: '#1a1a1a',
+      tertiaryColor: '#0a0a0a',
+      clusterBkg: '#0a0a0a',
+      clusterBorder: '#444444',
+      edgeLabelBackground: '#111111'
+    },
+    flowchart: { useMaxWidth: false, htmlLabels: true }
+  });
+
+  function renderMermaid() {
+    var count = 0;
+
+    var codeEls = document.querySelectorAll('code.language-mermaid');
+    for (var i = 0; i < codeEls.length; i++) {
+      var pre = codeEls[i].parentNode;
+      if (pre && pre.tagName === 'PRE') {
+        var div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = codeEls[i].textContent.trim();
+        pre.parentNode.replaceChild(div, pre);
+        count++;
+      }
+    }
+
+    var divEls = document.querySelectorAll('div.language-mermaid');
+    for (var j = 0; j < divEls.length; j++) {
+      var code = divEls[j].querySelector('code');
+      if (code) {
+        var div2 = document.createElement('div');
+        div2.className = 'mermaid';
+        div2.textContent = code.textContent.trim();
+        divEls[j].parentNode.replaceChild(div2, divEls[j]);
+        count++;
+      }
+    }
+
+    var allMermaid = document.querySelectorAll('.mermaid');
+    if (count > 0 || allMermaid.length > 0) {
+      mermaid.init(undefined, allMermaid);
+    }
+  }
+
+  (function() {
+    var S1 = SVGElement.prototype.setAttribute;
+    SVGElement.prototype.setAttribute = function(name, value) {
+      if (name === 'width' && this.hasAttribute('data-padded')) return;
+      return S1.call(this, name, value);
+    };
+  })();
+
+  function padNodeWidths() {
+    var fos = document.querySelectorAll('.mermaid .node foreignObject');
+    for (var i = 0; i < fos.length; i++) {
+      if (fos[i].hasAttribute('data-padded')) continue;
+      var w = parseFloat(fos[i].getAttribute('width'));
+      if (!isNaN(w) && w > 10 && w < 500) {
+        var pw = w + 40;
+        fos[i].setAttribute('width', pw);
+        fos[i].setAttribute('data-padded', 'true');
+        var innerG = fos[i].parentNode;
+        if (innerG && innerG.tagName && innerG.tagName.toUpperCase() === 'G') {
+          var t = innerG.getAttribute('transform');
+          var m = t && t.match(/translate\(([^,]+),([^)]+)\)/);
+          if (m) {
+            innerG.setAttribute('transform', 'translate(' + (-pw / 2) + ',' + parseFloat(m[2]) + ')');
+          }
+        }
+        var rect = fos[i].closest('.node') && fos[i].closest('.node').querySelector(':scope > rect');
+        if (rect) {
+          var diff = pw - w;
+          rect.setAttribute('width', parseFloat(rect.getAttribute('width')) + diff);
+          rect.setAttribute('x', parseFloat(rect.getAttribute('x')) - diff / 2);
+        }
+      }
+    }
+  }
+
+  function startup() {
+    renderMermaid();
+    var tries = 0;
+    (function poll() {
+      tries++;
+      padNodeWidths();
+      if (tries < 30) setTimeout(poll, 300);
+    })();
+  }
+
+  window.addEventListener('load', function() {
+    document.fonts.ready.then(function() {
+      setTimeout(startup, 200);
+    });
+  });
 </script>
+<style>
+  .mermaid {
+    text-align: center;
+    margin: 2em 0;
+    background: #050505;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 1.5em 1em;
+    overflow-x: auto;
+  }
+
+  .mermaid svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .mermaid .node rect,
+  .mermaid .node circle,
+  .mermaid .node polygon {
+    fill: #111111 !important;
+    stroke: #444444 !important;
+    stroke-width: 1px !important;
+    filter: drop-shadow(0 0 6px rgba(255, 176, 0, 0.15));
+  }
+
+  .mermaid .node foreignObject {
+    overflow: visible !important;
+    pointer-events: none;
+  }
+
+  .mermaid .node foreignObject > div {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+    text-align: center !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  .mermaid .edgeLabel rect {
+    fill: #1a1a1a !important;
+    stroke: #444444 !important;
+    stroke-width: 1px !important;
+  }
+
+  .mermaid .edgeLabel span {
+    color: #FFB000 !important;
+  }
+
+  div.mermaid:empty {
+    display: none;
+  }
+</style>
