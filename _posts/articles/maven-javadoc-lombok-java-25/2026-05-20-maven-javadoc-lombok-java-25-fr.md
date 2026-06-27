@@ -17,7 +17,7 @@ Onze ans que j'utilise Lombok dans tous mes projets Java. Onze ans de `@Builder`
 
 **Le constat : une Javadoc vide. Des builders fantômes. Des constructeurs introuvables. Un plugin Maven qui se plaint de tout sans rien résoudre.**
 
-Le problème est fondamental : Lombok ne génère pas de code source, il modifie le bytecode. Or `javadoc` lit le code source. Vos `@Builder`, `@UtilityClass` et autres annotations disparaissent dans ce gouffre - et avec eux, toute la documentation soigneusement rédigée sur vos champs.
+Le problème est fondamental : Lombok est un processeur d'annotations qui modifie l'AST (arbre de syntaxe abstrait) du compilateur Java pendant la compilation. Le bytecode final contient bien les méthodes générées, mais le code source, lui, reste inchangé. Or `javadoc` lit le code source, pas le bytecode. Vos `@Builder`, `@UtilityClass` et autres annotations disparaissent dans ce gouffre - et avec eux, toute la documentation soigneusement rédigée sur vos champs.
 
 Jusqu'ici, je me contentais d'une Javadoc approximative. Halte à l'approximation.
 
@@ -37,13 +37,13 @@ Lombok c'est super : cette librairie permet de réduire le code boilerplate en g
 
 Je l'utilise dans **tous mes projets Java** depuis plus de 11 ans, c'était la version 1.12.x à l'époque (2013). Il accompagne aussi bien SpringBoot que Quarkus ainsi que toutes les librairies Apache Commons.
 
-> **Petite digression** qui n'engage que moi : je ne comprends pas les développeurs, techleads, architectes, qui ont des réticences à utiliser Lombok avec des arguments tels que "On ne sait pas ce que ca fait", "C'est un truc de fainéant", etc. Franchement, parmi les développeurs SpringBoot, qui sait vraiment ce que fait `@Transactional`, `@GetMapping`, `@Component` ou encore une interface `JpaRepository` Spring Data JPA augmentée ? Sans parler de l'AOP. Du bytecode est généré à tous les niveaux, pourquoi Lombok serait-il mal et les autres acceptables ? J'ai entendu ici ou là que Lombok posait des problèmes en cas de refactoring. J'en ai procédé à de nombreux refactorings, et ce n'était jamais Lombok qui posait le plus de problème, loin s'en faut. Fin de la digression, vous pouvez ne pas être du même avis.
+> **Petite digression** qui n'engage que moi : je ne comprends pas les développeurs, techleads, architectes, qui ont des réticences à utiliser Lombok avec des arguments tels que "On ne sait pas ce que ca fait", "C'est un truc de fainéant", etc. Franchement, parmi les développeurs SpringBoot, qui sait vraiment ce que font `@Transactional`, `@GetMapping`, `@Component` ou une interface `JpaRepository` ? Ces annotations Spring ne génèrent pas de bytecode à la compilation : elles fonctionnent via des **proxys dynamiques au runtime** (AOP Spring, CGLIB) ou sont lues par réflexion par le framework. Le mécanisme est fondamentalement différent de Lombok, qui est un **processeur d'annotations** modifiant l'AST du compilateur pour générer du code réel dans la classe compilée. Deux mondes différents, mais dans les deux cas, de la magie opère sous le capot. Pourquoi Lombok serait-il mal et les autres acceptables ? J'ai entendu ici ou là que Lombok posait des problèmes en cas de refactoring. J'en ai procédé à de nombreux refactorings, et ce n'était jamais Lombok qui posait le plus de problème, loin s'en faut. Fin de la digression, vous pouvez ne pas être du même avis.
 
 ## Mais quel est le problème ?
 
-Lombok ne génère pas de code source, il modifie le bytecode : **c'est là que ça coince pour la génération de la Javadoc**.
+Lombok est un processeur d'annotations qui modifie l'AST du compilateur : **c'est là que ça coince pour la génération de la Javadoc**.
 
-En effet, **la Javadoc est générée à partir du code source** et non du bytecode, de fait, **les annotations Lombok ne sont pas prises en compte**.
+En effet, **la Javadoc est générée à partir du code source** et non du bytecode produit par le compilateur. Le code source ne contient pas les méthodes générées par Lombok, de fait, **les annotations Lombok ne sont pas prises en compte** par l'outil javadoc.
 
 > Si vous êtes arrivés sur cette page, ce n'est sûrement pas un hasard, vous avez déjà dû vous en rendre compte par vous-même.
 
