@@ -20,19 +20,19 @@ C'est pourquoi j'ai décidé, pour comprendre pourquoi c'est révolutionnaire, d
 
 Et histoire de replonger dans les entrailles de la machine, un peu d'assembleur sera nécessaire, car oui même le C nous cache des choses ! Si vous pensiez que C était un langage de bas niveau vous allez être déçu. Mais ne vous en faites pas, je vais essayer de rendre cela le plus digeste possible.
 
-Et donc nous répondrons à la question qu'et-ce un thread ?
+Et donc nous répondrons à la question qu'est-ce un thread ?
 
 Spoiler : ce n'est **ni une unité de calcul, ni une magie noire**. C'est bien plus simple (et bien plus malin) que ça.
 
 Dans cet article, nous allons :
 
 - Plonger dans les entrailles du processeur (asm x86 linux, registres, pile, `RIP`, `RSP`...).
-- Comprendre comment Linux gère les threads (`clone()`, `context switch`…).
-- Revoir comment Java s'accomodait des threads jusqu'à Java 21
+- Comprendre comment Linux gère les threads (`clone()`, `context switch`...).
+- Revoir comment Java s'accommodait des threads jusqu'à Java 21
 - Voir pourquoi Java 21 change la donne avec les Virtual Threads.
 - Illustrer avec des exemples concrets en Java.
 
-Prêt ? C'est parti.
+Prêts ? C'est parti.
 </div>
 
 <!--excerpt-->
@@ -68,7 +68,7 @@ Imaginons un **bureau** :
 Si on vous interrompt : poser le stylo (registres), ranger les notes (pile), noter où vous en étiez (`RIP`).
 
 Un thread, c'est **exactement ça** :
-- **registres CPU** (`RIP`, `RSP`, `RBP`…)
+- **registres CPU** (`RIP`, `RSP`, `RBP`...)
 - **pile d'exécution** (variables locales)
 - **état** (prêt, en cours, bloqué)
 
@@ -206,7 +206,7 @@ graph TD
 
 ### Pourquoi tout ça est-il important pour comprendre les threads ?
 
-Ce qui est fascinant, c'est que **ce mécanisme de frame de pile + registres est exactement ce qui permet de suspendre et reprendre un thread** :
+Ce qui est **remarquable**, c'est que **ce mécanisme de frame de pile + registres est exactement ce qui permet de suspendre et reprendre un thread** :
 
 1. **Un thread, c'est un état d'exécution** : Quand on "suspend" un thread, il faut sauvegarder :
    - La valeur de **RBP** (où est le frame actuel ?)
@@ -233,26 +233,26 @@ Vous vous demandez peut-être : *Mais comment Java gère tout ça ?* Après tout
 
 **La JVM a son propre modèle d'exécution** :
 
-Contrairement à ce qu’on pourrait croire, **la JVM n’utilise pas de "registres virtuels"** comme `RIP` ou `RSP`. Ces registres (`RIP`, `RSP`, `RBP`, `RAX`…) sont des **registres physiques** du processeur x86_64, gérés par le **système d’exploitation** et le **matériel**, pas par la JVM.
+Contrairement à ce qu'on pourrait croire, **la JVM n'utilise pas de "registres virtuels"** comme `RIP` ou `RSP`. Ces registres (`RIP`, `RSP`, `RBP`, `RAX`...) sont des **registres physiques** du processeur x86_64, gérés par le **système d'exploitation** et le **matériel**, pas par la JVM.
 
 **Alors, comment la JVM gère-t-elle les threads ?**
 
 La JVM est conçue comme une **machine à pile** (*stack-based*). Pour chaque thread, elle maintient :
 
-- **Un *program counter* (pc) register** : Chaque thread JVM a son propre registre `pc` qui pointe vers la **prochaine instruction JVM** (bytecode) à exécuter. C’est l’équivalent conceptuel du `RIP` du CPU, mais au niveau JVM.
+- **Un *program counter* (pc) register** : Chaque thread JVM a son propre registre `pc` qui pointe vers la **prochaine instruction JVM** (bytecode) à exécuter. C'est l'équivalent conceptuel du `RIP` du CPU, mais au niveau JVM.
 - **Un tableau de variables locales** (*local variables array*) : Stocké en mémoire, il joue un rôle similaire à des registres pour stocker les arguments de méthode et les variables locales.
-- **Une pile d’exécution** (*operand stack*) : Utilisée pour les calculs intermédiaires.
+- **Une pile d'exécution** (*operand stack*) : Utilisée pour les calculs intermédiaires.
 
-*Pourquoi c’est important ?* Parce que quand on parle de **suspendre un thread Java**, la JVM peut **sauvegarder et restaurer** le `pc` et la pile de chaque thread **sans intervention du noyau**. C’est exactement ce qui permet aux **Virtual Threads** d’être aussi légers : la JVM gère elle-même leur contexte (pc + pile) et peut les suspendre/réactiver **sans bloquer un thread OS**.
+*Pourquoi c'est important ?* Parce que quand on parle de **suspendre un thread Java**, la JVM peut **sauvegarder et restaurer** le `pc` et la pile de chaque thread **sans intervention du noyau**. C'est exactement ce qui permet aux **Virtual Threads** d'être aussi légers : la JVM gère elle-même leur contexte (pc + pile) et peut les suspendre/réactiver **sans bloquer un thread OS**.
 
 **En résumé :**
 
 | Niveau          | Registre d'instruction | Registres de données | Type          |
 |-----------------|------------------------|----------------------|---------------|
-| CPU x86_64      | `RIP`                  | `RSP`, `RBP`, `RAX`… | Registres **physiques** |
+| CPU x86_64      | `RIP`                  | `RSP`, `RBP`, `RAX`... | Registres **physiques** |
 | JVM             | `pc` register          | Variables locales + pile | **Stack-based** (en mémoire) |
 
-*À retenir :* La JVM n’a pas de registres virtuels comme le CPU. Elle est *stack-based* et gère son propre `pc` par thread, ce qui lui permet de suspendre efficacement les Virtual Threads.
+*À retenir :* La JVM n'a pas de registres virtuels comme le CPU. Elle est *stack-based* et gère son propre `pc` par thread, ce qui lui permet de suspendre efficacement les Virtual Threads.
 
 ## Processus et Threads sous Linux
 
@@ -773,7 +773,7 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 - Code legacy avec `synchronized` ou `ThreadLocal`
 - Bibliothèques non compatibles (vérifiez support Java 21)
 
-## Conclusion : Et maintenant ?
+## En guise de conclusion
 
 Les Virtual Threads ne sont **pas une mode**. Ce sont la réponse à **20 ans de limitations** dans la gestion des threads en Java.
 
@@ -787,9 +787,9 @@ Les Virtual Threads ne sont **pas une mode**. Ce sont la réponse à **20 ans de
 
 - **Essayez** les Virtual Threads dans un projet test.
 - **Mesurez** les gains avec des outils comme JMH ou Gatling.
-- **Adoptez** les bonnes pratiques (évitez `synchronized`, utilisez `StructuredTaskScope`…).
+- **Adoptez** les bonnes pratiques (évitez `synchronized`, utilisez `StructuredTaskScope`...).
 
 *Et surtout : amusez-vous !* Car la programmation concurrente n'a **jamais été aussi simple**.
 
-> *"Un thread, c'est comme un bureau : plus vous en avez, plus vous pouvez faire de choses en parallèle… à condition de ne pas tout mélanger."*  
-> **— François-Xavier ROBIN**
+> *"Un thread, c'est comme un bureau : plus vous en avez, plus vous pouvez faire de choses en parallèle... à condition de ne pas tout mélanger."*  
+> **- François-Xavier ROBIN**
