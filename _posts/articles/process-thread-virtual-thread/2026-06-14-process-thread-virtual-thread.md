@@ -488,13 +488,13 @@ public class VirtualThreadResource {
 
 ### Coût mémoire d'un thread
 
-Chaque thread natif sous Linux occupe **1 à 8 Mo** pour sa pile (même inactif) + des structures noyau.
+Chaque thread natif sous Linux **réserve** ~1 Mo d'adresse virtuelle pour sa pile (via `VmSize`), mais ne consomme réellement que ~15-20 KB de mémoire physique (`VmRSS`) tant que la pile n'est pas utilisée.
 
-**Exemple :** `10 000 threads × 1 Mo = 10 Go de RAM`
+**Exemple :** `10 000 threads × 1 Mo = 10 Go d'adresse virtuelle réservée`
 
-Même **inactifs**, la mémoire est **réservée**.
+**En réalité :** `10 000 threads × 15 KB = ~150 Mo de mémoire physique`
 
-*Astuce :* `htop` montre la consommation.
+*Astuce :* Utilisez `/proc/<pid>/status` pour voir `VmSize` (réservation) vs `VmRSS` (consommation réelle).
 
 ### Le problème des applications modernes
 
@@ -522,7 +522,7 @@ IntStream.range(0, 10_000).forEach(i -> {
     }).start();
 });
 ```
-**Résultat :** ~8 Go mémoire, scheduler surchargé.
+**Résultat :** ~150 Mo de mémoire physique (VmRSS), ~10 Go d'adresse virtuelle réservée (VmSize), scheduler potentiellement surchargé.
 
 *Problème :* ces threads **ne font rien** (ils attendent).
 
@@ -583,7 +583,7 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
     IntStream.range(0, 10_000).forEach(i -> {
         executor.submit(() -> {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
                 System.out.println("Tâche " + i + " terminée par " + Thread.currentThread());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -595,25 +595,27 @@ try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
 **Résultat :**
 
-- **Mémoire** : ~50 Mo (au lieu de 8 Go).
-- **Temps d'exécution** : ~1 seconde (au lieu de 100 secondes).
+- **Mémoire** : ~50 Mo (similaire aux threads natifs pour cette charge).
+- **Temps d'exécution** : ~137 ms (au lieu de ~822 ms avec des threads natifs).
 - **Threads OS** : 8 (Carrier Threads) au lieu de 10 000.
 
 ## Benchmark : Threads Natifs vs Virtual Threads
 
 ### Scénario testé
 
-- **10 000 tâches** simulant des appels bloquants (1 seconde de latence).
-- Mesure du **temps total** et de la **consommation mémoire**.
+- **10 000 tâches** simulant des appels bloquants (100 ms de latence).
+- Mesure du **temps total** et de la **consommation mémoire** (VmRSS).
 
 ### Résultats (Machine : 8 CPU, 16 Go RAM)
 
 | Critère          | Threads Natifs      | Virtual Threads        |
 | ------- | --------------- | --------------- |
-| Temps | ~100 secondes | ~1 seconde |
-| Mémoire | ~800 Mo | ~50 Mo |
-| Threads OS | 10 000 (saturation) | 8 (Carrier) |
-| Scalabilité | Limitée (~10 000) | Très élevée (millions) |
+| Temps | ~822 ms | ~137 ms |
+| Mémoire (VmRSS) | ~40 Mo | ~50 Mo |
+| Threads OS | 10 000 | 8 (Carrier) |
+| Scalabilité | Limitée par la mémoire | Très élevée (millions) |
+
+**Note :** Le gain principal des Virtual Threads n'est pas la vitesse (6x plus rapide ici), mais la **scalabilité** : ils permettent de créer des centaines de milliers de threads sans saturation du scheduler ni explosion mémoire.
 
 ## Pourquoi est-ce Révolutionnaire ?
 
@@ -638,9 +640,9 @@ String response = httpClient.send(request).body();
 
 ## Limites et Points d'Attention
 
-### Pas de `synchronized`
+### Évitez `synchronized` pour les I/O bloquants
 
-Les Virtual Threads **ne doivent pas être bloqués** par des verrous (`synchronized`).
+`synchronized` cause du **pinning** : le Virtual Thread ne peut pas être "unmounted" du carrier thread pendant la section critique. Si vous faites une opération bloquante (sleep, I/O) dans un `synchronized`, le carrier thread reste immobilisé.
 
 **Exemple à éviter :**
 
@@ -652,11 +654,11 @@ synchronized (this) {
 
 **Solution :** verrous non-bloquants (`ReentrantLock` avec `tryLock()`), structures concurrentes (`ConcurrentHashMap`, `AtomicInteger`).
 
-### Pas de `ThreadLocal`
+### Attention avec `ThreadLocal`
 
-`ThreadLocal` consomme de la mémoire **pour chaque Virtual Thread** → **risque de fuite mémoire**.
+`ThreadLocal` crée une copie des données **pour chaque Virtual Thread**. Si vous avez 50 000 VT avec 100 Ko de données chacun, cela consomme ~5 Go de mémoire. Ce n'est pas une fuite, mais une consommation proportionnelle au nombre de VT.
 
-**Solution :** passer les données **en paramètre**, utiliser des **contextes** (ex: `StructuredTaskScope`).
+**Solution :** passer les données **en paramètre**, ou utiliser `ScopedValue` (Java 24+) qui partage une seule instance.
 
 ### Pas de `Thread.stop()`
 
