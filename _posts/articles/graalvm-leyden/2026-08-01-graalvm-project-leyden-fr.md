@@ -1,0 +1,202 @@
+---
+layout: post
+title: "GraalVM vs Project Leyden : deux armes pour le même ennemi"
+subtitle: "Startup lente, warmup interminable... la JVM a enfin des réponses concrètes"
+logo: graal.png
+category: articles
+tags: [Java, GraalVM, JVM, Performance, Leyden, Native Image, Startup, JDK 26]
+lang: fr
+ref: graalvm-project-leyden
+permalink: /graalvm-project-leyden/
+---
+
+<div class="intro" markdown='1'>
+Votre application Quarkus démarre en 3 secondes. C'est rapide. Mais dans un contexte Kubernetes, avec des pods qui montent et descendent en boucle, 3 secondes c'est **une éternité**. Chaque démarrage, c'est du CPU gaspillé, des requêtes en attente, et un *autoscaler* qui stresse.
+
+Et si je vous disais qu'on peut passer de 3 secondes à 10 millisecondes ? Ou, à défaut, à 500 ms sans changer une seule ligne de code ?
+
+Il existe aujourd'hui **deux approches** pour régler ce problème de warmup JVM. Deux philosophies, deux compromis. L'une est mature et radicale (GraalVM Native Image). L'autre est pragmatique et en pleine ascension (Project Leyden). Cet article vous aide à choisir laquelle vous devez utiliser, et quand.
+</div>
+
+<!--excerpt-->
+
+## Le problème : pourquoi la JVM est lente au démarrage
+
+La JVM est une machine virtuelle formidable. Elle analyse votre code au fil de l'exécution, optimise les chemins chauds, fait du *speculative optimization*... et atteint des performances de *peak* supérieures à ce qu'un compilateur statique peut produire. Le problème, c'est le chemin pour y arriver.
+
+Au démarrage d'une application Java classique, la JVM fait tout ça **en même temps** :
+
+- Elle scanne des centaines de fichiers JAR sur disque, lit et parse des milliers de fichiers `.class`
+- Elle charge les classes en mémoire, les lie entre elles (*linking*), vérifie les bytecodes
+- Elle exécute les initialiseurs statiques (`static { ... }`), qui peuvent créer des objets, ouvrir des fichiers de log...
+- Si vous utilisez un framework comme Spring ou Quarkus, c'est encore pire : le framework scanne les annotations, crée le contexte CDI, initialise les beans...
+
+Le tout se fait **à la demande**, paresseusement, juste-à-temps. C'est optimisé, oui. Mais c'est beaucoup de travail. Et ce travail est répété **à chaque démarrage**. Spring PetClinic, par exemple, charge et lie environ 21 000 classes au démarrage. Sur un JDK 23 classique, ça prend 4,5 secondes.
+
+Dans un monde où les applications tournent dans des conteneurs, où l'*autoscaling* est la norme, où le *serverless* facture au milli-seconde, ce warmup est un vrai problème opérationnel.
+
+## GraalVM Native Image : la solution radicale
+
+### Le principe
+
+GraalVM propose une approche frontale : **compiler votre application Java en binaire natif** avant de l'exécuter. Plus de JVM au sens classique. Le compilateur AOT (*Ahead-Of-Time*) analyse tout votre code, résout les dépendances, élimine le code mort, et produit un exécutable autonome.
+
+Le résultat est spectaculaire :
+
+- Démarrage en **quelques millisecondes**
+- Empreinte mémoire réduite (50-100 Mo au lieu de 300+ Mo)
+- Idéal pour les conteneurs, le serverless, les CLI
+
+### Les contraintes
+
+Mais cette radicalité a un coût. Le compilateur AOT de GraalVM doit **tout savoir** à l'avance. Or, Java est un langage dynamique par nature : réflexion, chargement dynamique de classes, proxies, sérialisation... Tout ce qui échappe à l'analyse statique pose problème.
+
+Concrètement, il faut déclarer manuellement les éléments qui utilisent la réflexion dans des fichiers de configuration (`reflect-config.json`, `resource-config.json`, etc.). Les frameworks comme Quarkus le font automatiquement pour leurs propres classes, mais vos bibliothèques tierces ? C'est à vous.
+
+Autres limitations notables :
+
+- **Build long** : la compilation AOT peut prendre des dizaines de minutes sur de gros projets
+- **Debugging difficile** : pas de JFR classique, pas de `jcmd`, pas de profilage standard
+- **Sérialisation** : support partiel, configuration manuelle souvent nécessaire
+- **Agents dynamiques** : les agents JVMTI qui réécrivent les classes ne fonctionnent pas
+
+GraalVM est un choix binaire : vous acceptez ces contraintes, ou vous n'y touchez pas. Il n'y a pas de milieu.
+
+## Project Leyden : l'approche pragmatique
+
+### Le principe
+
+Project Leyden, incubé dans OpenJDK depuis 2022, propose une philosophie différente : **ne pas remplacer la JVM, mais l'accélérer**. Plutôt que de compiler tout le code à l'avance, Leyden décale dans le temps les travaux coûteux du démarrage.
+
+L'idée est simple : vous exécutez votre application une première fois (*training run*), et la JVM enregistre les artefacts d'optimisation dans un fichier cache. Les démarrages suivants réutilisent ce cache et démarrent beaucoup plus vite.
+
+### Ce qui a été livré (JDK 24, 25, 26)
+
+Leyden a livré quatre JEPs, chacun apportant une brique de cette stratégie :
+
+**JEP 483 - AOT Class Loading & Linking (JDK 24)**
+
+C'est la fondation. Pendant le *training run*, la JVM lit, parse, charge et lie toutes les classes utilisées par l'application, puis stocke le résultat dans un cache AOT. Au démarrage suivant, les classes sont **instantanément disponibles** : plus de scan de JAR, plus de parsing, plus de vérification de bytecode.
+
+Les chiffres parlent d'eux-mêmes :
+
+- Spring PetClinic : de 4,486 s à 2,604 s (gain de 42%)
+- Un simple `HelloStream` utilisant les Streams : de 31 ms à 18 ms (gain de 42%)
+
+Le cache AOT occupe 130 Mo pour PetClinic, 11 Mo pour le programme simple. C'est de la place, mais c'est un coût ponctuel.
+
+**JEP 514 - AOT Command-Line Ergonomics (JDK 25)**
+
+Ce JEP simplifie la ligne de commande pour créer et utiliser le cache AOT. Avant, il fallait manipuler les options CDS historiques (`-Xshare`, `-XX:SharedArchiveFile`, etc.). Maintenant, tout passe par des options `-XX:AOT*` cohérentes et lisibles. C'est du confort, mais c'est important pour l'adoption.
+
+**JEP 515 - AOT Method Profiling (JDK 25)**
+
+Là où le JEP 483 accélère le démarrage, le JEP 515 accélère le **warmup**. Pendant le *training run*, la JVM collecte les profils d'exécution des méthodes (lesquelles sont chaudes, quels types sont rencontrés) et les stocke dans le cache.
+
+Au démarrage suivant, le compilateur JIT dispose immédiatement de ces profils et peut **compiler les méthodes chaudes dès le départ**, sans attendre la période de collecte habituelle. L'application atteint ses performances de *peak* beaucoup plus vite.
+
+Sur un exemple utilisant les Streams (900 classes chargées, 30 méthodes chaudes), le gain est de 19% sur le temps d'exécution total, pour seulement 250 Ko de profils en plus dans le cache.
+
+**JEP 516 - AOT Object Caching with Any GC (JDK 26)**
+
+Le dernier en date résout un problème concret : avant JDK 26, le cache AOT était incompatible avec ZGC (*Z Garbage Collector*). Vous deviez choisir entre une latence GC faible (ZGC) et un démarrage rapide (AOT cache). Pas les deux.
+
+Le JEP 516 change ça en stockant les objets Java du cache dans un format **agnostique du GC** : des indices logiques au lieu d'adresses mémoire. Un thread d'arrière-plan materialise ces objets au démarrage, en parallèle de l'exécution de l'application. Résultat : ZGC et le cache AOT fonctionnent ensemble, sans compromis.
+
+### La commande en pratique
+
+Le workflow est simple. Deux étapes :
+
+```bash
+# Etape 1 : training run (enregistre la configuration)
+java -XX:AOTMode=record -XX:AOTConfiguration=app.aotconf \
+     -cp app.jar com.example.App
+
+# Etape 2 : creation du cache
+java -XX:AOTMode=create -XX:AOTConfiguration=app.aotconf \
+     -XX:AOTCache=app.aot -cp app.jar
+
+# Etape 3 : utilisation en production
+java -XX:AOTCache=app.aot -cp app.jar com.example.App
+```
+
+Pas de changement de code. Pas de build particulier. Pas d'outils supplémentaires. C'est du `java` standard avec des options en plus.
+
+### Ce qui reste à venir
+
+Le travail n'est pas terminé. Le dernier JEP manquant est l'**AOT Code Compilation** : compiler les méthodes chaudes en code natif à l'avance, comme le fait GraalVM mais en restant dans la JVM. Ce serait la cerise sur le gâteau : un démarrage quasi-instantané avec les performances de *peak* de la JVM.
+
+D'autres améliorations sont prévues : meilleure gestion des *class loaders* personnalisés, workflow simplifié en une seule étape (au lieu de record + create), et collecte de données de training pendant les runs de production.
+
+## GraalVM vs Leyden : le comparatif
+
+| Critère | GraalVM Native Image | Project Leyden |
+|---------|---------------------|----------------|
+| **Startup** | ~10 ms | ~500 ms |
+| **Empreinte mémoire** | 50-100 Mo | Standard JVM (~200-300 Mo) |
+| **Warmup** | Instantané (pas de JIT) | Accéléré (profils AOT) |
+| **Peak performance** | Inférieure (pas de JIT adaptatif) | Identique à la JVM |
+| **Réflexion / proxies** | Configuration manuelle | Transparent |
+| **Debugging / JFR** | Limité | Standard JVM |
+| **Build time** | Long (minutes) | Standard + 1 training run |
+| **Compatibilité** | Sous-ensemble de Java | 100% Java |
+| **GC** | SubstrateVM (GC interne) | Tous les GC JDK (ZGC inclus depuis JDK 26) |
+| **Maturité** | Production (depuis 2019) | Livré (JDK 24-26) |
+
+En résumé :
+
+- **GraalVM** est le choix quand le démarrage ultra-rapide est critique (serverless, CLI, *scale-to-zero*) et que vous acceptez les contraintes de compatibilité.
+- **Leyden** est le choix quand vous voulez un démarrage significativement plus rapide **sans changer quoi que ce soit** à votre application, en gardant toute la puissance de la JVM.
+
+Les deux ne sont pas mutuellement exclusifs. On peut imaginer un monde où Leyden accélère le démarrage de la JVM standard, et où GraalVM reste pour les cas extrêmes.
+
+## Quarkus et les deux approches
+
+Quarkus est le framework qui illustre le mieux cette dualité. Dès sa création, Quarkus a misé sur GraalVM pour le *native compilation*. Et depuis mars 2026, Quarkus intègre aussi Project Leyden de manière native, via une configuration de build.
+
+Concrètement, avec Quarkus :
+
+- **Mode natif** (`-Dquarkus.native.enabled=true`) : Quarkus utilise GraalVM (ou Mandrel) pour produire un binaire natif. Démarrage en ~10 ms, empreinte ~50 Mo. C'est le mode *serverless* par excellence.
+- **Mode JVM + AOT cache Leyden** (`-Dquarkus.package.jar.aot.enabled=true`) : Quarkus produit un JAR de type `aot-jar`, optimisé pour le chargement AOT. Les tests d'intégration servent de *training run* et génèrent automatiquement le fichier `app.aot`. Au démarrage : `java -XX:AOTCache=app.aot -jar quarkus-run.jar`. Démarrage significativement plus rapide, avec toute la flexibilité de la JVM.
+- **Mode JVM classique** : le mode par défaut, sans optimisation de démarrage.
+
+Le point fort de l'intégration Quarkus, c'est le **training automatique via les tests d'intégration**. Pas besoin d'écrire un *training run* manuel : vos `@QuarkusIntegrationTest` servent de charge de travail représentative, et Quarkus génère le cache AOT pendant le `mvn verify`.
+
+```bash
+# Build + training via tests d'integration + generation du cache AOT
+./mvnw verify -Dquarkus.package.jar.aot.enabled=true -DskipITs=false
+
+# Demarrage en production avec le cache
+cd target/quarkus-app
+java -XX:AOTCache=app.aot -jar quarkus-run.jar
+```
+
+Quarkus gère aussi la construction d'**images conteneur avec le cache AOT inclus** : l'image produite contient le cache pré-configuré, prêt pour Kubernetes.
+
+Le choix dépend de votre contexte :
+
+- Vous déployez sur AWS Lambda, Azure Functions, ou un *scale-to-zero* ? -> **GraalVM natif**
+- Vous déployez sur Kubernetes avec des pods qui montent et descendent fréquemment ? -> **Leyden AOT cache** (via `quarkus.package.jar.aot.enabled=true`)
+- Vous avez une application qui tourne en continu depuis des semaines ? -> **Mode JVM classique** (le warmup n'est pas un problème)
+
+## Préconisations (enfin...)
+
+Voici les règles d'or que je retiens après avoir suivi l'évolution de ces deux technologies :
+
+**Commencez par Leyden.** Si vous êtes sur JDK 24 ou plus, le cache AOT est la solution la plus simple. Avec Quarkus, c'est encore plus simple : `quarkus.package.jar.aot.enabled=true`, vos tests d'intégration servent de training, et le cache est généré automatiquement. Pas de changement de code, pas de contraintes de compatibilité.
+
+**Passez à GraalVM si Leyden ne suffit pas.** Si vous avez besoin de démarrages en millisecondes (serverless, CLI), et que votre application fonctionne avec les contraintes de GraalVM, alors le *native image* est le bon choix.
+
+**Ne choisissez pas GraalVM par défaut.** C'est tentant (les chiffres de démarrage sont impressionnants), mais les contraintes sont réelles. Combien de projets ont abandonné le *native* à cause de problèmes de réflexion, de sérialisation, ou de debugging impossible ? Beaucoup.
+
+**Surveillez JDK 27.** L'AOT Code Compilation, quand elle arrivera, pourrait changer la donne. Si Leyden peut compiler les méthodes chaudes à l'avance, l'écart avec GraalVM se réduira significativement.
+
+## En guise de conclusion
+
+GraalVM et Project Leyden répondent au même problème : le warmup de la JVM. Mais ils l'attaquent par des bouts différents. GraalVM élimine la JVM. Leyden l'accélère de l'intérieur.
+
+Pour la plupart des applications Java en production aujourd'hui, **Leyden est la voie pragmatique**. Pas de changement de code, pas de contraintes de compatibilité, et des gains de démarrage significatifs. GraalVM reste le champion du démarrage ultra-rapide, mais au prix d'une compatibilité réduite.
+
+Dans un prochain billet, on parlera de Structured Concurrency, le troisième volet de la trilogie Project Loom. Parce que démarrer vite, c'est bien. Mais exécuter correctement en parallèle, c'est encore mieux.
+
+**N'hésitez pas à me faire part de vos retours et de vos usages en commentaire.**
