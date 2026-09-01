@@ -13,9 +13,9 @@ permalink: /graalvm-project-leyden/
 <div class="intro" markdown='1'>
 Votre application Quarkus démarre en 1,8 seconde. C'est déjà rapide. Mais dans un contexte Kubernetes, avec des pods qui montent et descendent en boucle, 1,8 seconde c'est **une éternité**. Chaque démarrage, c'est du CPU gaspillé, des requêtes en attente, et un *autoscaler* qui stresse.
 
-Sur la démo qui accompagne cet article (Quarkus 3.38.2, 105 jeux, PostgreSQL sur volume Docker persistant, JDK 25 Corretto 25.0.3), on mesure **~1,8 s sans cache** contre **~0,41 s avec le cache AOT Leyden** : **-77%** sans changer une seule ligne de code. Et en natif GraalVM, on tombe à **~10 ms**.
+Sur la démo qui accompagne cet article (Quarkus 3.38.2, 105 jeux, PostgreSQL sur volume Docker persistant, JDK 25 Corretto 25.0.3) - que j'ai poussée sur GitHub pour que vous puissiez reproduire - je mesure **~1,8 s sans cache** contre **~0,41 s avec le cache AOT Leyden** : **-77%** sans changer une seule ligne de code. Et en natif GraalVM, on tombe à **~10 ms**.
 
-Il existe aujourd'hui **deux approches** pour régler ce problème de warmup JVM. Deux philosophies, deux compromis. L'une est mature et radicale (GraalVM Native Image). L'autre est pragmatique et en pleine ascension (Project Leyden). Cet article vous aide à choisir laquelle vous devez utiliser, et quand - avec les chiffres réels de la démo à l'appui.
+Il existe aujourd'hui **deux approches** pour régler ce problème de warmup JVM. Deux philosophies, deux compromis. L'une est mature et radicale (GraalVM Native Image). L'autre est pragmatique et en pleine ascension (Project Leyden). Je vous propose de trancher, chiffres de la démo à l'appui - et spoiler : pour 90 % des applis Quarkus en prod, la réponse n'est pas GraalVM.
 </div>
 
 <!--excerpt-->
@@ -31,7 +31,7 @@ Au démarrage d'une application Java classique, la JVM fait tout ça **en même 
 - Elle exécute les initialiseurs statiques (`static { ... }`), qui peuvent créer des objets, ouvrir des fichiers de log...
 - Si vous utilisez un framework comme Spring ou Quarkus, c'est encore pire : le framework scanne les annotations, crée le contexte CDI, initialise les beans...
 
-Le tout se fait **à la demande**, paresseusement, juste-à-temps. C'est optimisé, oui. Mais c'est beaucoup de travail. Et ce travail est répété **à chaque démarrage**. Spring PetClinic, par exemple, charge et lie environ 21 000 classes au démarrage. Sur un JDK 23 classique, ça prend 4,5 secondes.
+Le tout se fait **à la demande**, paresseusement, juste-à-temps. C'est optimisé, oui. Mais c'est beaucoup de travail. Et ce travail est répété **à chaque démarrage**. Spring PetClinic, par exemple, charge et lie environ 21 000 classes au démarrage. Sur un JDK 23 classique, ça prend 4,5 secondes (oui, j'ai chronométré - et c'est long quand votre pod redémarre en boucle).
 
 Dans un monde où les applications tournent dans des conteneurs, où l'*autoscaling* est la norme, où le *serverless* facture au milli-seconde, ce warmup est un vrai problème opérationnel.
 
@@ -60,7 +60,7 @@ Autres limitations notables :
 - **Sérialisation** : support partiel, configuration manuelle souvent nécessaire
 - **Agents dynamiques** : les agents JVMTI qui réécrivent les classes ne fonctionnent pas
 
-GraalVM est un choix binaire : vous acceptez ces contraintes, ou vous n'y touchez pas. Il n'y a pas de milieu.
+GraalVM est un choix binaire : vous acceptez ces contraintes, ou vous n'y touchez pas. Il n'y a pas de milieu. J'ai vu des équipes jeter l'éponge après deux sprints à chasser du `reflect-config.json` - croyez-moi, ça pique.
 
 ## Project Leyden : l'approche pragmatique
 
@@ -68,7 +68,7 @@ GraalVM est un choix binaire : vous acceptez ces contraintes, ou vous n'y touche
 
 Project Leyden, incubé dans OpenJDK depuis 2022, propose une philosophie différente : **ne pas remplacer la JVM, mais l'accélérer**. Plutôt que de compiler tout le code à l'avance, Leyden décale dans le temps les travaux coûteux du démarrage.
 
-L'idée est simple : vous exécutez votre application une première fois (*training run*), et la JVM enregistre les artefacts d'optimisation dans un fichier cache. Les démarrages suivants réutilisent ce cache et démarrent beaucoup plus vite.
+L'idée est simple : vous exécutez votre application une première fois (*training run*), et la JVM enregistre les artefacts d'optimisation dans un fichier cache. Les démarrages suivants réutilisent ce cache et démarrent beaucoup plus vite. Bref, on garde la JVM, on lui offre juste un bon café au démarrage.
 
 ### Ce qui a été livré (JDK 24, 25, 26)
 
@@ -96,7 +96,7 @@ Sur la démo Quarkus qui accompagne cet article (mesure pure Java, PostgreSQL pe
 | Fichier généré | - | `app.aot` ~59 Mo (`type=aot`) | - |
 | Variante AppCDS | - | `app-cds.jsa` ~40 Mo (`type=app-cds`, flag `-XX:SharedArchiveFile`) | - |
 
-Le `app.aot` et le `app-cds.jsa` ne sont jamais produits ensemble : `quarkus.package.jar.aot.type` vaut `auto` par défaut et `auto` se décide sur la **version cible du bytecode** (`maven.compiler.release=21` dans `pom.xml`), pas sur le JDK du build. Avec `release=21`, `auto` retombe sur AppCDS même sous JDK 25.
+Le `app.aot` et le `app-cds.jsa` ne sont jamais produits ensemble : `quarkus.package.jar.aot.type` vaut `auto` par défaut et `auto` se décide sur la **version cible du bytecode** (`maven.compiler.release=21` dans `pom.xml`), pas sur le JDK du build. Avec `release=21`, `auto` retombe sur AppCDS même sous JDK 25. Pas mal pour un cache qui ne touche pas à votre code, non ?
 
 **JEP 514 - AOT Command-Line Ergonomics (JDK 25)**
 

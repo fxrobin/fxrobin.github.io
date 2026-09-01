@@ -13,9 +13,9 @@ permalink: /en/graalvm-project-leyden/
 <div class="intro" markdown='1'>
 Your Quarkus application starts in 1.8 seconds. That's already fast. But in a Kubernetes world, where pods scale up and down constantly, 1.8 seconds is **an eternity**. Every startup burns CPU, leaves requests waiting, and stresses the *autoscaler*.
 
-On the demo that accompanies this article (Quarkus 3.38.2, 105 games, PostgreSQL on a persistent Docker volume, JDK 25 Corretto 25.0.3), we measure **~1.8 s without cache** vs **~0.41 s with the Leyden AOT cache**: **-77%** without changing a single line of code. And with GraalVM native, it drops to **~10 ms**.
+On the demo that accompanies this article (Quarkus 3.38.2, 105 games, PostgreSQL on a persistent Docker volume, JDK 25 Corretto 25.0.3) - which I pushed to GitHub so you can reproduce - I measure **~1.8 s without cache** vs **~0.41 s with the Leyden AOT cache**: **-77%** without changing a single line of code. And with GraalVM native, it drops to **~10 ms**.
 
-Two approaches now exist to solve the JVM warmup problem. Two philosophies, two trade-offs. One is mature and radical (GraalVM Native Image). The other is pragmatic and on the rise (Project Leyden). This article helps you choose which one to use, and when - with real numbers from the demo to back it up.
+Two approaches now exist to solve the JVM warmup problem. Two philosophies, two trade-offs. One is mature and radical (GraalVM Native Image). The other is pragmatic and on the rise (Project Leyden). I will help you decide, with real numbers from the demo - spoiler: for 90% of Quarkus apps in production, the answer is not GraalVM.
 </div>
 
 <!--excerpt-->
@@ -31,7 +31,7 @@ At startup, a classic Java application makes the JVM do all of this **at once**:
 - It executes static initializers (`static { ... }`), which may create objects, open log files...
 - If you use a framework like Spring or Quarkus, it gets worse: the framework scans annotations, creates the CDI context, initializes beans...
 
-All of this happens **on demand**, lazily, just-in-time. It is optimized, yes. But it is a lot of work. And that work is repeated **on every startup**. Spring PetClinic, for example, loads and links about 21,000 classes at startup. On a classic JDK 23, it takes 4.5 seconds.
+All of this happens **on demand**, lazily, just-in-time. It is optimized, yes. But it is a lot of work. And that work is repeated **on every startup**. Spring PetClinic, for example, loads and links about 21,000 classes at startup. On a classic JDK 23, it takes 4.5 seconds (yes, I timed it - and it feels long when your pod keeps restarting).
 
 In a world where applications run in containers, where *autoscaling* is the norm, where *serverless* is billed by the millisecond, this warmup is a real operational problem.
 
@@ -60,7 +60,7 @@ Other notable limitations:
 - **Serialization**: partial support, often requires manual configuration
 - **Dynamic agents**: JVMTI agents that rewrite classes do not work
 
-GraalVM is a binary choice: you accept these constraints, or you stay away. There is no middle ground.
+GraalVM is a binary choice: you accept these constraints, or you stay away. There is no middle ground. I have seen teams give up after two sprints hunting `reflect-config.json` - trust me, it hurts.
 
 ## Project Leyden: the pragmatic approach
 
@@ -68,7 +68,7 @@ GraalVM is a binary choice: you accept these constraints, or you stay away. Ther
 
 Project Leyden, incubated in OpenJDK since 2022, takes a different philosophy: **do not replace the JVM, accelerate it**. Rather than compiling all code ahead of time, Leyden shifts the costly startup work in time.
 
-The idea is simple: you run your application once (*training run*), and the JVM records optimization artifacts in a cache file. Subsequent startups reuse that cache and start much faster.
+The idea is simple: you run your application once (*training run*), and the JVM records optimization artifacts in a cache file. Subsequent startups reuse that cache and start much faster. In short, we keep the JVM and just give it a good coffee at startup.
 
 ### What has shipped (JDK 24, 25, 26)
 
@@ -96,7 +96,7 @@ On the Quarkus demo that accompanies this article (pure Java measurement, persis
 | Generated file | - | `app.aot` ~59 MB (`type=aot`) | - |
 | AppCDS variant | - | `app-cds.jsa` ~40 MB (`type=app-cds`, flag `-XX:SharedArchiveFile`) | - |
 
-`app.aot` and `app-cds.jsa` are never produced together: `quarkus.package.jar.aot.type` defaults to `auto` and `auto` is decided from the **bytecode target version** (`maven.compiler.release=21` in `pom.xml`), not from the JDK running the build. With `release=21`, `auto` falls back to AppCDS even under JDK 25.
+`app.aot` and `app-cds.jsa` are never produced together: `quarkus.package.jar.aot.type` defaults to `auto` and `auto` is decided from the **bytecode target version** (`maven.compiler.release=21` in `pom.xml`), not from the JDK running the build. With `release=21`, `auto` falls back to AppCDS even under JDK 25. Not bad for a cache that doesn't touch your code, right?
 
 **JEP 514 - AOT Command-Line Ergonomics (JDK 25)**
 
@@ -221,7 +221,7 @@ Here are the golden rules I take away after following the evolution of these two
 
 **Watch JDK 27.** AOT Code Compilation, when it arrives, could be a game changer. If Leyden can compile hot methods ahead of time, the gap with GraalVM will shrink significantly.
 
-## In conclusion
+## Conclusion
 
 GraalVM and Project Leyden solve the same problem: JVM warmup. But they attack it from different ends. GraalVM eliminates the JVM. Leyden accelerates it from within.
 
