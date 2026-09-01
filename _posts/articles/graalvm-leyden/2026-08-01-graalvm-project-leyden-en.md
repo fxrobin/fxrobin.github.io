@@ -13,9 +13,9 @@ permalink: /en/graalvm-project-leyden/
 <div class="intro" markdown='1'>
 Your Quarkus application starts in 1.8 seconds. That's already fast. But in a Kubernetes world, where pods scale up and down constantly, 1.8 seconds is **an eternity**. Every startup burns CPU, leaves requests waiting, and stresses the *autoscaler*.
 
-On the demo that accompanies this article (Quarkus 3.38.2, 105 games, PostgreSQL on a persistent Docker volume, JDK 25 Corretto 25.0.3) - which I pushed to GitHub so you can reproduce - I measure **~1.8 s without cache** vs **~0.41 s with the Leyden AOT cache**: **-77%** without changing a single line of code. And with GraalVM native, it drops to **~10 ms**.
+On the demo that accompanies this article (Quarkus 3.38.2, 105 games, PostgreSQL on a persistent Docker volume, JDK 25 Corretto 25.0.3, which I pushed to GitHub so you can reproduce), I measure **~1.8 s without cache** vs **~0.41 s with the Leyden AOT cache**: **-77%** without changing a single line of code. And with GraalVM native, it drops to **~10 ms**.
 
-Two approaches now exist to solve the JVM warmup problem. Two philosophies, two trade-offs. One is mature and radical (GraalVM Native Image). The other is pragmatic and on the rise (Project Leyden). I will help you decide, with real numbers from the demo - spoiler: for 90% of Quarkus apps in production, the answer is not GraalVM.
+Two approaches now exist to solve the JVM warmup problem. Two philosophies, two trade-offs. One is mature and radical (GraalVM Native Image). The other is pragmatic and on the rise (Project Leyden). I will help you decide, with real numbers from the demo (spoiler: for 90% of Quarkus apps in production, the answer is not GraalVM).
 </div>
 
 <!--excerpt-->
@@ -31,7 +31,7 @@ At startup, a classic Java application makes the JVM do all of this **at once**:
 - It executes static initializers (`static { ... }`), which may create objects, open log files...
 - If you use a framework like Spring or Quarkus, it gets worse: the framework scans annotations, creates the CDI context, initializes beans...
 
-All of this happens **on demand**, lazily, just-in-time. It is optimized, yes. But it is a lot of work. And that work is repeated **on every startup**. Spring PetClinic, for example, loads and links about 21,000 classes at startup. On a classic JDK 23, it takes 4.5 seconds (yes, I timed it - and it feels long when your pod keeps restarting).
+All of this happens **on demand**, lazily, just-in-time. It is optimized, yes. But it is a lot of work. And that work is repeated **on every startup**. Spring PetClinic, for example, loads and links about 21,000 classes at startup. On a classic JDK 23, it takes 4.5 seconds (yes, I timed it, and it feels long when your pod keeps restarting).
 
 In a world where applications run in containers, where *autoscaling* is the norm, where *serverless* is billed by the millisecond, this warmup is a real operational problem.
 
@@ -60,7 +60,7 @@ Other notable limitations:
 - **Serialization**: partial support, often requires manual configuration
 - **Dynamic agents**: JVMTI agents that rewrite classes do not work
 
-GraalVM is a binary choice: you accept these constraints, or you stay away. There is no middle ground. I have seen teams give up after two sprints hunting `reflect-config.json` - trust me, it hurts.
+GraalVM is a binary choice: you accept these constraints, or you stay away. There is no middle ground. I have seen teams give up after two sprints hunting `reflect-config.json`. Trust me, it hurts.
 
 ## Project Leyden: the pragmatic approach
 
@@ -170,7 +170,7 @@ Quarkus is the framework that best illustrates this duality. From day one, Quark
 Concretely, with Quarkus:
 
 - **Native mode** (`-Dquarkus.native.enabled=true`): Quarkus uses GraalVM (or Mandrel) to produce a native binary. Startup in ~10 ms, footprint ~50 MB. The *serverless* mode par excellence.
-- **JVM + Leyden AOT cache** (`-Dquarkus.package.jar.aot.enabled=true`): Quarkus produces an AOT cache. Depending on `quarkus.package.jar.aot.type`, you get **either** `app.aot` (Leyden, flag `-XX:AOTCache=app.aot`) **or** `app-cds.jsa` (AppCDS, flag `-XX:SharedArchiveFile=app-cds.jsa`). With `release=21`, `type=auto` (default) falls back to AppCDS even under JDK 25 - you must force `type=aot` to get the real Leyden cache. At startup with the `prod` profile: `java -XX:AOTCache=app.aot -Dquarkus.profile=prod -jar quarkus-run.jar`.
+- **JVM + Leyden AOT cache** (`-Dquarkus.package.jar.aot.enabled=true`): Quarkus produces an AOT cache. Depending on `quarkus.package.jar.aot.type`, you get **either** `app.aot` (Leyden, flag `-XX:AOTCache=app.aot`) **or** `app-cds.jsa` (AppCDS, flag `-XX:SharedArchiveFile=app-cds.jsa`). With `release=21`, `type=auto` (default) falls back to AppCDS even under JDK 25 (you must force `type=aot` to get the real Leyden cache). At startup with the `prod` profile: `java -XX:AOTCache=app.aot -Dquarkus.profile=prod -jar quarkus-run.jar`.
 - **Classic JVM mode**: the default, without startup optimization.
 
 The strength of the Quarkus integration is the **integrated training run**. Two options:
@@ -201,7 +201,7 @@ java -XX:AOTCache=app.aot -Dquarkus.profile=prod -jar quarkus-run.jar
 # ../gatling-leyden/benchmark.sh  # Normal vs AOT, startup table + Gatling
 ```
 
-Note: the current JVM image `src/main/docker/Dockerfile.jvm` (symlink to `Dockerfile.jvm-hardened`, Corretto 25 jlink on `amazonlinux:2023-minimal`, 0 CVE, 252 MB) does **not** contain the AOT cache - it copies `lib/`, `*.jar`, `app/` and `quarkus/` but not `app.aot`. To embed the cache, add `COPY target/quarkus-app/app.aot /deployments/app.aot` and adjust the `ENTRYPOINT`.
+Note: the current JVM image `src/main/docker/Dockerfile.jvm` (symlink to `Dockerfile.jvm-hardened`, Corretto 25 jlink on `amazonlinux:2023-minimal`, 0 CVE, 252 MB) does **not** contain the AOT cache: it copies `lib/`, `*.jar`, `app/` and `quarkus/` but not `app.aot`. To embed the cache, add `COPY target/quarkus-app/app.aot /deployments/app.aot` and adjust the `ENTRYPOINT`.
 
 The choice depends on your context:
 

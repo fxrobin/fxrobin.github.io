@@ -13,9 +13,9 @@ permalink: /graalvm-project-leyden/
 <div class="intro" markdown='1'>
 Votre application Quarkus démarre en 1,8 seconde. C'est déjà rapide. Mais dans un contexte Kubernetes, avec des pods qui montent et descendent en boucle, 1,8 seconde c'est **une éternité**. Chaque démarrage, c'est du CPU gaspillé, des requêtes en attente, et un *autoscaler* qui stresse.
 
-Sur la démo qui accompagne cet article (Quarkus 3.38.2, 105 jeux, PostgreSQL sur volume Docker persistant, JDK 25 Corretto 25.0.3) - que j'ai poussée sur GitHub pour que vous puissiez reproduire - je mesure **~1,8 s sans cache** contre **~0,41 s avec le cache AOT Leyden** : **-77%** sans changer une seule ligne de code. Et en natif GraalVM, on tombe à **~10 ms**.
+Sur la démo qui accompagne cet article (Quarkus 3.38.2, 105 jeux, PostgreSQL sur volume Docker persistant, JDK 25 Corretto 25.0.3, que j'ai poussée sur GitHub pour que vous puissiez reproduire), je mesure **~1,8 s sans cache** contre **~0,41 s avec le cache AOT Leyden** : **-77%** sans changer une seule ligne de code. Et en natif GraalVM, on tombe à **~10 ms**.
 
-Il existe aujourd'hui **deux approches** pour régler ce problème de warmup JVM. Deux philosophies, deux compromis. L'une est mature et radicale (GraalVM Native Image). L'autre est pragmatique et en pleine ascension (Project Leyden). Je vous propose de trancher, chiffres de la démo à l'appui - et spoiler : pour 90 % des applis Quarkus en prod, la réponse n'est pas GraalVM.
+Il existe aujourd'hui **deux approches** pour régler ce problème de warmup JVM. Deux philosophies, deux compromis. L'une est mature et radicale (GraalVM Native Image). L'autre est pragmatique et en pleine ascension (Project Leyden). Je vous propose de trancher, chiffres de la démo à l'appui (spoiler : pour 90 % des applis Quarkus en prod, la réponse n'est pas GraalVM).
 </div>
 
 <!--excerpt-->
@@ -31,7 +31,7 @@ Au démarrage d'une application Java classique, la JVM fait tout ça **en même 
 - Elle exécute les initialiseurs statiques (`static { ... }`), qui peuvent créer des objets, ouvrir des fichiers de log...
 - Si vous utilisez un framework comme Spring ou Quarkus, c'est encore pire : le framework scanne les annotations, crée le contexte CDI, initialise les beans...
 
-Le tout se fait **à la demande**, paresseusement, juste-à-temps. C'est optimisé, oui. Mais c'est beaucoup de travail. Et ce travail est répété **à chaque démarrage**. Spring PetClinic, par exemple, charge et lie environ 21 000 classes au démarrage. Sur un JDK 23 classique, ça prend 4,5 secondes (oui, j'ai chronométré - et c'est long quand votre pod redémarre en boucle).
+Le tout se fait **à la demande**, paresseusement, juste-à-temps. C'est optimisé, oui. Mais c'est beaucoup de travail. Et ce travail est répété **à chaque démarrage**. Spring PetClinic, par exemple, charge et lie environ 21 000 classes au démarrage. Sur un JDK 23 classique, ça prend 4,5 secondes (oui, j'ai chronométré, et c'est long quand votre pod redémarre en boucle).
 
 Dans un monde où les applications tournent dans des conteneurs, où l'*autoscaling* est la norme, où le *serverless* facture au milli-seconde, ce warmup est un vrai problème opérationnel.
 
@@ -60,7 +60,7 @@ Autres limitations notables :
 - **Sérialisation** : support partiel, configuration manuelle souvent nécessaire
 - **Agents dynamiques** : les agents JVMTI qui réécrivent les classes ne fonctionnent pas
 
-GraalVM est un choix binaire : vous acceptez ces contraintes, ou vous n'y touchez pas. Il n'y a pas de milieu. J'ai vu des équipes jeter l'éponge après deux sprints à chasser du `reflect-config.json` - croyez-moi, ça pique.
+GraalVM est un choix binaire : vous acceptez ces contraintes, ou vous n'y touchez pas. Il n'y a pas de milieu. J'ai vu des équipes jeter l'éponge après deux sprints à chasser du `reflect-config.json`. Croyez-moi, ça pique.
 
 ## Project Leyden : l'approche pragmatique
 
@@ -170,7 +170,7 @@ Quarkus est le framework qui illustre le mieux cette dualité. Dès sa création
 Concrètement, avec Quarkus :
 
 - **Mode natif** (`-Dquarkus.native.enabled=true`) : Quarkus utilise GraalVM (ou Mandrel) pour produire un binaire natif. Démarrage en ~10 ms, empreinte ~50 Mo. C'est le mode *serverless* par excellence.
-- **Mode JVM + AOT cache Leyden** (`-Dquarkus.package.jar.aot.enabled=true`) : Quarkus produit un cache AOT. Selon `quarkus.package.jar.aot.type`, on obtient **soit** `app.aot` (Leyden, flag `-XX:AOTCache=app.aot`) **soit** `app-cds.jsa` (AppCDS, flag `-XX:SharedArchiveFile=app-cds.jsa`). Avec `release=21`, `type=auto` (défaut) retombe sur AppCDS même sous JDK 25 - il faut forcer `type=aot` pour obtenir le vrai cache Leyden. Au démarrage avec le profil `prod` : `java -XX:AOTCache=app.aot -Dquarkus.profile=prod -jar quarkus-run.jar`.
+- **Mode JVM + AOT cache Leyden** (`-Dquarkus.package.jar.aot.enabled=true`) : Quarkus produit un cache AOT. Selon `quarkus.package.jar.aot.type`, on obtient **soit** `app.aot` (Leyden, flag `-XX:AOTCache=app.aot`) **soit** `app-cds.jsa` (AppCDS, flag `-XX:SharedArchiveFile=app-cds.jsa`). Avec `release=21`, `type=auto` (défaut) retombe sur AppCDS même sous JDK 25 (il faut forcer `type=aot` pour obtenir le vrai cache Leyden). Au démarrage avec le profil `prod` : `java -XX:AOTCache=app.aot -Dquarkus.profile=prod -jar quarkus-run.jar`.
 - **Mode JVM classique** : le mode par défaut, sans optimisation de démarrage.
 
 Le point fort de l'intégration Quarkus, c'est le **training run intégré**. Deux options :
@@ -201,7 +201,7 @@ java -XX:AOTCache=app.aot -Dquarkus.profile=prod -jar quarkus-run.jar
 # ../gatling-leyden/benchmark.sh  # Normal vs AOT, tableau startup + Gatling
 ```
 
-Note : l'image JVM actuelle `src/main/docker/Dockerfile.jvm` (symlink vers `Dockerfile.jvm-hardened`, Corretto 25 jlink sur `amazonlinux:2023-minimal`, 0 CVE, 252 Mo) ne contient **pas** le cache AOT - elle copie `lib/`, `*.jar`, `app/` et `quarkus/` mais pas `app.aot`. Pour embarquer le cache, il faut ajouter `COPY target/quarkus-app/app.aot /deployments/app.aot` et ajuster l'`ENTRYPOINT`.
+Note : l'image JVM actuelle `src/main/docker/Dockerfile.jvm` (symlink vers `Dockerfile.jvm-hardened`, Corretto 25 jlink sur `amazonlinux:2023-minimal`, 0 CVE, 252 Mo) ne contient **pas** le cache AOT : elle copie `lib/`, `*.jar`, `app/` et `quarkus/` mais pas `app.aot`. Pour embarquer le cache, il faut ajouter `COPY target/quarkus-app/app.aot /deployments/app.aot` et ajuster l'`ENTRYPOINT`.
 
 Le choix dépend de votre contexte :
 
