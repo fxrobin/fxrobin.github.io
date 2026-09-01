@@ -11,11 +11,11 @@ permalink: /graalvm-project-leyden/
 ---
 
 <div class="intro" markdown='1'>
-Votre application Quarkus démarre en 3 secondes. C'est rapide. Mais dans un contexte Kubernetes, avec des pods qui montent et descendent en boucle, 3 secondes c'est **une éternité**. Chaque démarrage, c'est du CPU gaspillé, des requêtes en attente, et un *autoscaler* qui stresse.
+Votre application Quarkus démarre en 1,8 seconde. C'est déjà rapide. Mais dans un contexte Kubernetes, avec des pods qui montent et descendent en boucle, 1,8 seconde c'est **une éternité**. Chaque démarrage, c'est du CPU gaspillé, des requêtes en attente, et un *autoscaler* qui stresse.
 
-Et si je vous disais qu'on peut passer de 3 secondes à 10 millisecondes ? Ou, à défaut, à 500 ms sans changer une seule ligne de code ?
+Sur la démo qui accompagne cet article (Quarkus 3.38.2, 105 jeux, PostgreSQL sur volume Docker persistant, JDK 25 Corretto 25.0.3), on mesure **~1,8 s sans cache** contre **~0,41 s avec le cache AOT Leyden** : **-77%** sans changer une seule ligne de code. Et en natif GraalVM, on tombe à **~10 ms**.
 
-Il existe aujourd'hui **deux approches** pour régler ce problème de warmup JVM. Deux philosophies, deux compromis. L'une est mature et radicale (GraalVM Native Image). L'autre est pragmatique et en pleine ascension (Project Leyden). Cet article vous aide à choisir laquelle vous devez utiliser, et quand.
+Il existe aujourd'hui **deux approches** pour régler ce problème de warmup JVM. Deux philosophies, deux compromis. L'une est mature et radicale (GraalVM Native Image). L'autre est pragmatique et en pleine ascension (Project Leyden). Cet article vous aide à choisir laquelle vous devez utiliser, et quand - avec les chiffres réels de la démo à l'appui.
 </div>
 
 <!--excerpt-->
@@ -85,6 +85,19 @@ Les chiffres parlent d'eux-mêmes :
 
 Le cache AOT occupe 130 Mo pour PetClinic, 11 Mo pour le programme simple. C'est de la place, mais c'est un coût ponctuel.
 
+Sur la démo Quarkus qui accompagne cet article (mesure pure Java, PostgreSQL persistant hors mesure via `docker-compose.yml` + `init-db.sh`) :
+
+| | Sans cache AOT | Avec cache AOT Leyden | Gain |
+|---|---|---|---|
+| Run 1 | 1,518 s | 0,317 s | -79% |
+| Run 2 | 2,644 s | 0,608 s | -77% |
+| Run 3 | 1,219 s | 0,320 s | -74% |
+| **Moyenne** | **~1,8 s** | **~0,41 s** | **~77%** |
+| Fichier généré | - | `app.aot` ~59 Mo (`type=aot`) | - |
+| Variante AppCDS | - | `app-cds.jsa` ~40 Mo (`type=app-cds`, flag `-XX:SharedArchiveFile`) | - |
+
+Le `app.aot` et le `app-cds.jsa` ne sont jamais produits ensemble : `quarkus.package.jar.aot.type` vaut `auto` par défaut et `auto` se décide sur la **version cible du bytecode** (`maven.compiler.release=21` dans `pom.xml`), pas sur le JDK du build. Avec `release=21`, `auto` retombe sur AppCDS même sous JDK 25.
+
 **JEP 514 - AOT Command-Line Ergonomics (JDK 25)**
 
 Ce JEP simplifie la ligne de commande pour créer et utiliser le cache AOT. Avant, il fallait manipuler les options CDS historiques (`-Xshare`, `-XX:SharedArchiveFile`, etc.). Maintenant, tout passe par des options `-XX:AOT*` cohérentes et lisibles. C'est du confort, mais c'est important pour l'adoption.
@@ -99,13 +112,13 @@ Sur un exemple utilisant les Streams (900 classes chargées, 30 méthodes chaude
 
 **JEP 516 - AOT Object Caching with Any GC (JDK 26)**
 
-Le dernier en date résout un problème concret : avant JDK 26, le cache AOT était incompatible avec ZGC (*Z Garbage Collector*). Vous deviez choisir entre une latence GC faible (ZGC) et un démarrage rapide (AOT cache). Pas les deux.
+Le dernier JEP (prévu JDK 26, déjà intégré dans les builds EA) résout un problème concret : avant JDK 26, le cache AOT était incompatible avec ZGC (*Z Garbage Collector*). Vous deviez choisir entre une latence GC faible (ZGC) et un démarrage rapide (AOT cache). Pas les deux.
 
-Le JEP 516 change ça en stockant les objets Java du cache dans un format **agnostique du GC** : des indices logiques au lieu d'adresses mémoire. Un thread d'arrière-plan materialise ces objets au démarrage, en parallèle de l'exécution de l'application. Résultat : ZGC et le cache AOT fonctionnent ensemble, sans compromis.
+Le JEP 516 change ça en stockant les objets Java du cache dans un format **agnostique du GC** : des indices logiques au lieu d'adresses mémoire. Un thread d'arrière-plan matérialise ces objets au démarrage, en parallèle de l'execution de l'application. Résultat : ZGC et le cache AOT fonctionnent ensemble, sans compromis. La démo n'active pas ZGC (G1 par défaut), c'est donc un gain prospectif à ce stade.
 
-### La commande en pratique
+### La commande en pratique (vanilla JDK)
 
-Le workflow est simple. Deux étapes :
+Le workflow vanilla Leyden tient en trois étapes :
 
 ```bash
 # Etape 1 : training run (enregistre la configuration)
@@ -120,7 +133,7 @@ java -XX:AOTMode=create -XX:AOTConfiguration=app.aotconf \
 java -XX:AOTCache=app.aot -cp app.jar com.example.App
 ```
 
-Pas de changement de code. Pas de build particulier. Pas d'outils supplémentaires. C'est du `java` standard avec des options en plus.
+Pas de changement de code applicatif. C'est du `java` standard avec des options en plus. Avec Quarkus, ces trois étapes sont encapsulées par le plugin Maven (voir section Quarkus ci-dessous) : pas besoin de les écrire à la main.
 
 ### Ce qui reste à venir
 
@@ -130,18 +143,18 @@ D'autres améliorations sont prévues : meilleure gestion des *class loaders* pe
 
 ## GraalVM vs Leyden : le comparatif
 
-| Critère | GraalVM Native Image | Project Leyden |
+| Critère | GraalVM Native Image | Project Leyden (demo Quarkus 3.38.2) |
 |---------|---------------------|----------------|
-| **Startup** | ~10 ms | ~500 ms |
-| **Empreinte mémoire** | 50-100 Mo | Standard JVM (~200-300 Mo) |
-| **Warmup** | Instantané (pas de JIT) | Accéléré (profils AOT) |
+| **Startup** | ~10 ms | **~0,41 s** mesuré (-77% vs ~1,8 s sans cache) ; ~500 ms générique |
+| **Empreinte mémoire** | 50-100 Mo | Standard JVM (~200-300 Mo) + cache ~59 Mo (`app.aot`) ou ~40 Mo (`app-cds.jsa`) |
+| **Warmup** | Instantané (pas de JIT) | Accéléré (profils AOT JEP 515) |
 | **Peak performance** | Inférieure (pas de JIT adaptatif) | Identique à la JVM |
 | **Réflexion / proxies** | Configuration manuelle | Transparent |
 | **Debugging / JFR** | Limité | Standard JVM |
 | **Build time** | Long (minutes) | Standard + 1 training run |
 | **Compatibilité** | Sous-ensemble de Java | 100% Java |
-| **GC** | SubstrateVM (GC interne) | Tous les GC JDK (ZGC inclus depuis JDK 26) |
-| **Maturité** | Production (depuis 2019) | Livré (JDK 24-26) |
+| **GC** | SubstrateVM (GC interne) | Tous les GC JDK (ZGC depuis JDK 26 EA, G1 mesuré dans la démo) |
+| **Maturité** | Production (depuis 2019) | JEP 483/514/515 livrés (JDK 24-25), JEP 516 EA (JDK 26) |
 
 En résumé :
 
@@ -152,26 +165,43 @@ Les deux ne sont pas mutuellement exclusifs. On peut imaginer un monde où Leyde
 
 ## Quarkus et les deux approches
 
-Quarkus est le framework qui illustre le mieux cette dualité. Dès sa création, Quarkus a misé sur GraalVM pour le *native compilation*. Et depuis mars 2026, Quarkus intègre aussi Project Leyden de manière native, via une configuration de build.
+Quarkus est le framework qui illustre le mieux cette dualité. Dès sa création, Quarkus a misé sur GraalVM pour le *native compilation*. Et depuis Quarkus 3.38+ (mars 2026), il intègre aussi Project Leyden de manière native, via une configuration de build. La démo utilise Quarkus 3.38.2 (`pom.xml`), bytecode `release=21`, runtime JDK 25 Corretto 25.0.3.
 
 Concrètement, avec Quarkus :
 
 - **Mode natif** (`-Dquarkus.native.enabled=true`) : Quarkus utilise GraalVM (ou Mandrel) pour produire un binaire natif. Démarrage en ~10 ms, empreinte ~50 Mo. C'est le mode *serverless* par excellence.
-- **Mode JVM + AOT cache Leyden** (`-Dquarkus.package.jar.aot.enabled=true`) : Quarkus produit un JAR de type `aot-jar`, optimisé pour le chargement AOT. Les tests d'intégration servent de *training run* et génèrent automatiquement le fichier `app.aot`. Au démarrage : `java -XX:AOTCache=app.aot -jar quarkus-run.jar`. Démarrage significativement plus rapide, avec toute la flexibilité de la JVM.
+- **Mode JVM + AOT cache Leyden** (`-Dquarkus.package.jar.aot.enabled=true`) : Quarkus produit un cache AOT. Selon `quarkus.package.jar.aot.type`, on obtient **soit** `app.aot` (Leyden, flag `-XX:AOTCache=app.aot`) **soit** `app-cds.jsa` (AppCDS, flag `-XX:SharedArchiveFile=app-cds.jsa`). Avec `release=21`, `type=auto` (défaut) retombe sur AppCDS même sous JDK 25 - il faut forcer `type=aot` pour obtenir le vrai cache Leyden. Au démarrage avec le profil `prod` : `java -XX:AOTCache=app.aot -Dquarkus.profile=prod -jar quarkus-run.jar`.
 - **Mode JVM classique** : le mode par défaut, sans optimisation de démarrage.
 
-Le point fort de l'intégration Quarkus, c'est le **training automatique via les tests d'intégration**. Pas besoin d'écrire un *training run* manuel : vos `@QuarkusIntegrationTest` servent de charge de travail représentative, et Quarkus génère le cache AOT pendant le `mvn verify`.
+Le point fort de l'intégration Quarkus, c'est le **training run intégré**. Deux options :
+
+- `quarkus.package.jar.aot.phase=build` (recommandé, utilisé dans la démo) : training autonome, pas besoin de tests d'intégration, compatible `-DskipTests`.
+- `phase=integration-tests` : les `@QuarkusIntegrationTest` (`GreetingResourceIT`, `RetroGamingResourceIT`) servent de charge de travail et le cache est généré pendant `mvn verify -DskipITs=false`.
+
+La démo isole le temps de démarrage Java pur : PostgreSQL est dans un volume Docker persistant (`docker-compose.yml`), initialisé une seule fois par `init-db.sh` (création manuelle des séquences `*_SEQ` Panache), et le profil `prod` (`application-prod.properties`, `quarkus.hibernate-orm.database.generation=update`) se contente de valider le schéma existant.
 
 ```bash
-# Build + training via tests d'integration + generation du cache AOT
-./mvnw verify -Dquarkus.package.jar.aot.enabled=true -DskipITs=false
+# 1. PostgreSQL persistant + init une seule fois
+docker compose up -d
+./init-db.sh  # no-op si tables déjà présentes
 
-# Demarrage en production avec le cache
+# 2. Build + training autonome + génération du cache AOT (JDK 25 requis)
+JAVA_HOME=$HOME/.sdkman/candidates/java/25.0.3-amzn \
+  ./mvnw verify -DskipTests \
+  -Dquarkus.package.jar.aot.enabled=true \
+  -Dquarkus.package.jar.aot.type=aot \
+  -Dquarkus.package.jar.aot.phase=build
+
+# 3. Démarrage en production avec le cache (depuis target/quarkus-app)
 cd target/quarkus-app
-java -XX:AOTCache=app.aot -jar quarkus-run.jar
+java -XX:AOTCache=app.aot -Dquarkus.profile=prod -jar quarkus-run.jar
+# Variante AppCDS si type=app-cds : java -XX:SharedArchiveFile=app-cds.jsa -Dquarkus.profile=prod -jar quarkus-run.jar
+
+# 4. Benchmark automatisé (détecte app.aot vs app-cds.jsa)
+# ../gatling-leyden/benchmark.sh  # Normal vs AOT, tableau startup + Gatling
 ```
 
-Quarkus gère aussi la construction d'**images conteneur avec le cache AOT inclus** : l'image produite contient le cache pré-configuré, prêt pour Kubernetes.
+Note : l'image JVM actuelle `src/main/docker/Dockerfile.jvm` (symlink vers `Dockerfile.jvm-hardened`, Corretto 25 jlink sur `amazonlinux:2023-minimal`, 0 CVE, 252 Mo) ne contient **pas** le cache AOT - elle copie `lib/`, `*.jar`, `app/` et `quarkus/` mais pas `app.aot`. Pour embarquer le cache, il faut ajouter `COPY target/quarkus-app/app.aot /deployments/app.aot` et ajuster l'`ENTRYPOINT`.
 
 Le choix dépend de votre contexte :
 
@@ -183,7 +213,7 @@ Le choix dépend de votre contexte :
 
 Voici les règles d'or que je retiens après avoir suivi l'évolution de ces deux technologies :
 
-**Commencez par Leyden.** Si vous êtes sur JDK 24 ou plus, le cache AOT est la solution la plus simple. Avec Quarkus, c'est encore plus simple : `quarkus.package.jar.aot.enabled=true`, vos tests d'intégration servent de training, et le cache est généré automatiquement. Pas de changement de code, pas de contraintes de compatibilité.
+**Commencez par Leyden.** Si vous êtes sur JDK 24 ou plus, le cache AOT est la solution la plus simple. Avec Quarkus 3.38+, c'est encore plus simple : `quarkus.package.jar.aot.enabled=true` + `type=aot` + `phase=build` (ou `phase=integration-tests` si vous préférez les ITs), lancé sous JDK 25, et démarré avec `-XX:AOTCache=app.aot -Dquarkus.profile=prod`. Attention au piège `maven.compiler.release=21` : `type=auto` retombe sur AppCDS (`app-cds.jsa`, `-XX:SharedArchiveFile`) même sous JDK 25.
 
 **Passez à GraalVM si Leyden ne suffit pas.** Si vous avez besoin de démarrages en millisecondes (serverless, CLI), et que votre application fonctionne avec les contraintes de GraalVM, alors le *native image* est le bon choix.
 
