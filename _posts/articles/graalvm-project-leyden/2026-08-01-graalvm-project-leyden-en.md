@@ -13,7 +13,7 @@ permalink: /en/graalvm-project-leyden/
 <div class="intro" markdown='1'>
 Your Quarkus application starts in 2.7 seconds. That's already respectable. But in a Kubernetes world, where pods scale up and down constantly, 2.7 seconds is **an eternity**. Every startup burns CPU, leaves requests waiting, and stresses the *autoscaler*.
 
-On the demo that accompanies this article (Quarkus 3.38.2, 105 games in the database as dataset, PostgreSQL on a persistent Docker volume, JDK 25 Corretto 25.0.3, which I pushed to GitHub so you can reproduce), I measure **~2.7 s without cache** vs **~1.8 s with the Leyden AOT cache**: **~-35%** on average over 5 automated, archived `benchmark.sh` runs, without touching application code. GraalVM native was not measured on this demo: expect tens of milliseconds on a minimal REST app, rather in the hundreds on a loaded one (17 ms and 242 ms reported by the Quarkus blog).
+On the demo that accompanies this article (Quarkus 3.38.2, 105 games in the database as dataset, PostgreSQL on a persistent Docker volume, JDK 25 Corretto 25.0.3, which I pushed to GitHub so you can reproduce), I measure **2.7 s without cache** vs **1.8 s with the Leyden AOT cache**: **-35%** on average over 5 automated, archived `benchmark.sh` runs, without touching application code. GraalVM native was not measured on this demo: expect tens of milliseconds on a minimal REST app, rather in the hundreds on a loaded one (17 ms and 242 ms reported by the Quarkus blog).
 
 Two approaches now exist to solve the JVM warmup problem. Two philosophies, two trade-offs. One is mature and radical (GraalVM Native Image). The other is pragmatic and on the rise (Project Leyden). I will help you decide, with real numbers from the demo (spoiler: for most Quarkus apps in production, the answer is not necessarily GraalVM).
 </div>
@@ -96,10 +96,10 @@ On the Quarkus demo that accompanies this article (timer = Quarkus `started in` 
 | Run 3 | 2.493 s | 1.868 s | -25% |
 | Run 4 | 3.074 s | 1.646 s | -46% |
 | Run 5 | 2.608 s | 1.678 s | -36% |
-| **Average (5 runs)** | **~2.72 s** | **~1.77 s** | **~-35%** |
+| **Average (5 runs)** | **2.72 s** | **1.77 s** | **-35%** |
 | **Median** | **2.608 s** | **1.807 s** | **-31%** |
-| Generated file | - | `app.aot` ~59 MB (`type=aot`) | - |
-| AppCDS variant | - | `app-cds.jsa` ~40 MB (`type=app-cds`, flag `-XX:SharedArchiveFile`) | - |
+| Generated file | - | `app.aot` 59 MB (`type=aot`) | - |
+| AppCDS variant | - | `app-cds.jsa` 40 MB (`type=app-cds`, flag `-XX:SharedArchiveFile`) | - |
 
 `app.aot` and `app-cds.jsa` are never produced together: a single one comes out of the build, depending on `quarkus.package.jar.aot.type`. In this PoC (`release=21`), `type=auto` (default) produces AppCDS even on JDK 25, because `auto` is decided from `maven.compiler.release`, not from the build JDK. You must force `type=aot` to get the real Leyden cache (`benchmark.sh` detects the produced archive and adapts the flag). The timer is the `started in` line reported by Quarkus itself: 5 `benchmark.sh` runs, `prod` profile, persistent database excluded from measurement. Not bad for a cache that doesn't touch your code, right? Note two things: the normal mode is noisy (2.41 s to 3.07 s) while the cache stabilizes startup (1.65 s to 1.87 s, standard deviation divided by 3). All 5 runs are archived in the demo repo (`target/benchmark-runs/`).
 
@@ -156,8 +156,8 @@ Other improvements are planned: better handling of custom *class loaders* and tr
 
 | Criterion | GraalVM Native Image | Project Leyden (demo Quarkus 3.38.2) |
 |---------|---------------------|----------------|
-| **Startup** | Tens to hundreds of ms (17 ms minimal REST, 242 ms large app, Quarkus blog) | **~1.77 s** measured (~-35% vs ~2.72 s without cache, 5-run average) |
-| **Memory footprint** | Smaller, varies by app (50-100 MB on a minimal app) | Standard JVM (~200-300 MB) + cache ~59 MB (`app.aot`) or ~40 MB (`app-cds.jsa`) |
+| **Startup** | Tens to hundreds of ms (17 ms minimal REST, 242 ms large app, Quarkus blog) | **1.77 s** measured (-35% vs 2.72 s without cache, 5-run average) |
+| **Memory footprint** | Smaller, varies by app (50-100 MB on a minimal app) | Standard JVM (200-300 MB) + cache 59 MB (`app.aot`) or 40 MB (`app-cds.jsa`) |
 | **Warmup** | Near-instant (no hot JIT) | Accelerated (AOT profiles JEP 515) |
 | **Peak performance** | Often lower on long-running throughput (no adaptive JIT, PGO possible) | Identical to the JVM |
 | **Reflection / proxies** | Manual configuration | Transparent for code, with conditions (no custom class loader, same JDK/OS/arch) |
@@ -172,7 +172,7 @@ In short:
 - **GraalVM** is the right choice when ultra-fast startup is critical (serverless, CLI, *scale-to-zero*) and you accept the compatibility constraints.
 - **Leyden** is the right choice when you want significantly faster startup **without touching application code** (same JDK, OS, arch and classpath required at build and run time), while keeping the full power of the JVM.
 
-The two are not mutually exclusive. You can imagine a world where Leyden accelerates the standard JVM's startup, and GraalVM remains for extreme cases.
+The two are not mutually exclusive. Leyden can accelerate the standard JVM's startup, while GraalVM remains for extreme cases.
 
 ## Quarkus and the two approaches
 
@@ -230,7 +230,7 @@ Here are the golden rules I take away after following the evolution of these two
 
 **Do not choose GraalVM by default.** It is tempting (the startup numbers are impressive), but the constraints are real. How many projects have abandoned *native* due to reflection, serialization, or impossible debugging? Many.
 
-**Watch JDK 27.** AOT Code Compilation, when it arrives, could be a game changer. If Leyden can compile hot methods ahead of time, the gap with GraalVM will shrink significantly.
+**Watch JDK 27.** What remains is AOT Code Compilation: compiling hot methods ahead of time. If it lands, the gap with GraalVM will shrink further.
 
 ## En guise de conclusion
 
