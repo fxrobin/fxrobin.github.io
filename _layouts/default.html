@@ -10,6 +10,8 @@
     <![endif]-->
     {% include favicon.html %}
     <meta name="theme-color" content="#0A0A0A" />
+    <script>try{var t=localStorage.getItem('fx-theme');if(t==='classic'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+    <script>document.documentElement.classList.add('js')</script>
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/TypewriterJS/1.0.0/typewriter.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
@@ -24,7 +26,11 @@
       <div class="container">
         <header class="masthead clearfix">
 <div class="site-info">
-          <a href="{{ site.baseurl }}/"><h1 id="site-name" class="site-name">{ site.name }}</h1></a>
+          {% if page.lang == 'en' %}
+          <a href="{{ site.baseurl }}/en/"><h1 id="site-name" class="site-name">{{ site.name }}</h1></a>
+          {% else %}
+          <a href="{{ site.baseurl }}/fr/"><h1 id="site-name" class="site-name">{{ site.name }}</h1></a>
+          {% endif %}
           </div>
 
           <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
@@ -47,6 +53,11 @@
               <a href="https://stackoverflow.com/users/3017541/fxrobin" target="_blank" rel="nofollow">[so]</a>
               <a href="{{ site.baseurl }}/feed.xml">[rss]</a>
             </div>
+            <div class="theme-switch" role="group" aria-label="Sélecteur de thème">
+              <button data-theme-set="retro" aria-pressed="true" title="Thème Rétro">Rétro</button>
+              <button data-theme-set="classic" aria-pressed="false" title="Thème Classic">Classic</button>
+              <button data-theme-set="dark" aria-pressed="false" title="Thème Dark">Dark</button>
+            </div>
           </div>
         </header>
       </div>
@@ -55,7 +66,7 @@
     <div class="site-wrapper">
       <div class="mobile-overlay" id="mobileOverlay"></div>
       <aside class="sidebar">
-        <div class="sidebar-prompt">$ ls /dev/</div>
+        <div class="sidebar-prompt"><span class="prompt-retro">$ ls /dev/</span><span class="prompt-classic">Navigation</span></div>
         {% include sidebar-nav.html %}
         <hr class="sidebar-divider">
         {% include search.html %}
@@ -82,6 +93,9 @@
     </div>
 
     <a href="#0" class="cd-top js-cd-top">Top</a>
+    <script src="/js/theme-switcher.js"></script>
+    <script src="/js/header-shrink.js"></script>
+    <script src="/js/cards-reveal.js"></script>
     <script src="/js/main.js"></script>
 
     <script>

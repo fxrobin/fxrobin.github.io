@@ -4,7 +4,7 @@ code.highlighter-rouge {
   border: 1px solid $border;
   border-radius: 4px;
   padding: 0.1em 0.35em;
-  font-family: "Share Tech Mono", monospace;
+  font-family: $mono;
   font-size: 1em;
   color: #cccccc;
 
@@ -39,7 +39,7 @@ code.highlighter-rouge {
 }
 
 pre.highlight {
-  font-family: "Share Tech Mono", monospace;
+  font-family: $mono;
   font-size: 1.1rem;
   color: #00ff00;
   background-color: #050505;
@@ -146,15 +146,11 @@ pre.highlight {
 .highlight .vi { color: #00ff00 } /* Name.Variable.Instance */
 .highlight .il { color: #2AA198 } /* Literal.Number.Integer.Long */
 
-.language-bash pre.highlight
-{
-  font-family: monospace;
-  font-size :larger;
-  background-color : rgb(1, 1, 65);
-  color : white;
-
-  span.line-number > span {color : #888888;}
-
-  .nv, .o, .k, .nt, .se, .nb , .s1{ color : white; }
-  
-}
+// Bash : aucune colorisation specifique, texte uni.
+// Neutralise les tokens Rouge (.nt, .se, .o, ...) pour que le code reste
+// lisible dans tous les themes (retro, classic, dark). Les autres langages
+// gardent leur coloration. Les numeros de ligne ne sont pas affectes
+// (regles .line-number plus specifiques, appliquees apres).
+.language-bash pre.highlight span { color: inherit; }
+html[data-theme="classic"] .language-bash pre.highlight span,
+html[data-theme="dark"] .language-bash pre.highlight span { color: inherit; }

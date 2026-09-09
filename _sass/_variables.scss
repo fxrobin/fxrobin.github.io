@@ -13,22 +13,9 @@ $border:       #333333;
 $bg-card:      #111111;
 $bg-body:      #0A0A0A;
 
-// Legacy aliases (used by other partials not yet rewritten)
-$blue:         #5BC8FF;
-$black:        #000;
-$darkerGray:   $amber;
-$darkGray:     $body-text;
-$gray:         $amber-dim;
-$lightGray:    #222222;
-$white:        $body-text;
-
 // Font stacks
 $mono:             "Share Tech Mono", "coders-crux", monospace;
 $helvetica:        "Monda", Helvetica, Arial, sans-serif;
-$helveticaNeue:    "Monda", "Helvetica Neue", Helvetica, Arial, sans-serif;
-$georgia:          Georgia, serif;
-$codeFont:         "coders-crux", "Share Tech Mono", monospace;
-$articleFont:      "Monda", Helvetica, Arial, sans-serif;
 
 // Mobile breakpoints
 @mixin mobile {

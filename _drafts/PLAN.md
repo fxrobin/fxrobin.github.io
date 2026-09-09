@@ -105,7 +105,7 @@ div.intro (bonne base, à peaufiner)
 
 ---
 
-### 💡 Java 25 et Project Loom — Virtual Threads, Structured Concurrency, Scoped Values
+### ~~💡 Java 25 et Project Loom — Virtual Threads, Structured Concurrency, Scoped Values~~ - PUBLIÉ
 **Statut :** spec rédigée — `virtual-threads-loom/SPEC.md`  
 **Angle :** trilogie Project Loom enfin stabilisée Java 25 LTS — fil rouge : agréger 3 API en parallèle, avant/après  
 **Java cible :** Java 25 LTS (pur JDK, sans framework)  

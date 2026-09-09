@@ -8,4 +8,15 @@
     <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title }}" target="_blank" rel="nofollow">[li]</a>
     <a href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.url }}{{ page.url }}" target="_blank" rel="nofollow">[tw]</a>
   </div>
+  {% if page.tags and page.tags.size > 0 %}
+  <div class="pro-aside-block">
+    <hr class="sidebar-divider">
+    <div class="sidebar-section-title">Tags</div>
+    <div class="pro-aside-tags">
+      {% for tag in page.tags %}
+        <a href="{{ site.baseurl }}/tag/{{ tag | slugify }}/" class="tag">{{ tag }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
 </aside>

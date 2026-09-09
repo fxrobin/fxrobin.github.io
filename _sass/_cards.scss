@@ -5,19 +5,19 @@
 }
 
 .post-card {
-  border: 1px solid #444444;
+  border: 1px solid $border;
   background: $bg-card;
   font-family: $mono;
   transition: border-color 0.1s;
 
-  &:hover { border-color: #666666; }
+  &:hover { border-color: $amber-dim; }
 
   .card-header {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     padding: 0.5rem 0.75rem 0.4rem;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid $border;
 
     .card-path {
       color: $amber;
@@ -81,7 +81,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.4rem 0.75rem;
-    border-top: 1px solid #333;
+    border-top: 1px solid $border;
 
     .card-tags {
       display: flex;
@@ -149,5 +149,24 @@
     .card-body .card-excerpt { font-size: 0.85rem; p { font-size: 0.85rem; } }
     .card-footer .card-tags .tag { font-size: 0.7rem; }
     .card-footer .card-read-more { font-size: 0.75rem; }
+  }
+}
+
+// Reveal successif des cartes en fondu rapide (tous themes).
+// html.js pose des le <head> par default.html ; sans JS les cartes restent visibles.
+html.js .posts-grid .post-card {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.35s ease, transform 0.35s ease, border-color 0.1s, box-shadow 0.18s ease;
+}
+html.js .posts-grid .post-card.revealed {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js .posts-grid .post-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }

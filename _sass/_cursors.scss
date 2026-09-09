@@ -1,0 +1,24 @@
+// CURSEURS LIENS — un gant par theme, sur TOUS les liens
+//
+// Convention du site :
+//   - theme retro   : main AMBRE (#FFB000, signature du blog), derivee du gant Atari
+//   - theme classic : doigt moderne outline, orange brule (#C2410C, accent du theme)
+//   - theme dark    : meme doigt moderne, orange clair (#F0883E, accent du theme)
+// Source externe : icone "hand-click" de Tabler Icons (MIT),
+// https://github.com/tabler/tabler-icons (recoloree aux accents des themes).
+// Fallback `pointer` : si le PNG ne charge pas, le navigateur montre sa main standard.
+// Ces regles sont importees APRES les themes : a specificite egale elles gagnent
+// sur les `a { cursor: auto; }` des themes classic/dark. Les boutons gardent
+// volontairement la main standard (ce sont des controles, pas des liens).
+
+a {
+  cursor: url("/images/atari-st-mouse-hand-amber.png"), pointer;
+}
+
+html[data-theme="classic"] a {
+  cursor: url("/images/link-hand-classic.png") 13 2, pointer;
+}
+
+html[data-theme="dark"] a {
+  cursor: url("/images/link-hand-dark.png") 13 2, pointer;
+}

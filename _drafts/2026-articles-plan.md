@@ -146,9 +146,9 @@ Série de 5 articles (juin-octobre 2026) couvrant tendances Java/Quarkus 2026. F
 
 | Mois | Article | Status | Notes |
 |------|---------|--------|-------|
-| Juin 2026 | Virtual Threads + Quarkus | À rédiger | Start 1er juin |
+| Juin 2026 | Virtual Threads + Quarkus | PUBLIÉ | En ligne |
 | Juillet 2026 | Quarkus AI + LangChain4j | À rédiger | Deep dive, multiple code examples |
-| Août 2026 | GraalVM & Project Leyden | À rédiger | Comparaison détaillée trade-offs |
+| Août 2026 | GraalVM & Project Leyden | En rédaction | Draft en cours |
 | Septembre 2026 | Structured Concurrency | À rédiger | Patterns + testing |
 | Octobre 2026 | Quarkus DevOps 2026 | À rédiger | Series recap + prod infrastructure |
 

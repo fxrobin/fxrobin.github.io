@@ -3,7 +3,11 @@
   border-bottom: 2px solid $amber;
   padding: 0.75rem 0;
   width: 100%;
-  position: relative;
+
+  // Sticky : reste visible pendant la lecture, se condense via JS (.is-condensed)
+  position: sticky;
+  top: 0;
+  z-index: 900;
 
   // Scanline overlay
   &::after {
@@ -126,4 +130,20 @@
   .typewriter-cursor {
     color: $amber;
   }
+}
+
+// Header condense pendant la lecture (classe posee par header-shrink.js)
+// Garde le titre + selecteur de theme, masque la rangee sociale.
+.wrapper-masthead .masthead { transition: padding 0.2s ease, gap 0.2s ease; }
+.wrapper-masthead .site-name { transition: font-size 0.2s ease; }
+.wrapper-masthead.is-condensed {
+  padding: 0.3rem 0;
+
+  .masthead { padding: 0 1rem; gap: 0.5rem; }
+  .site-name { font-size: 0.95rem; }
+  .header-social { display: none; }
+  .theme-switch { margin-top: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wrapper-masthead .masthead, .wrapper-masthead .site-name { transition: none; }
 }

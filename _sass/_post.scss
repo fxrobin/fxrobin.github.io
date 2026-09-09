@@ -109,7 +109,7 @@
     float: none;
     margin: 0;
     position: sticky;
-    top: 1rem;
+    top: 96px; // sous le header condense (voir header-shrink.js)
   }
 
   @include mobile {
@@ -120,15 +120,13 @@
       width: 100%;
       max-width: 100%;
       overflow-x: hidden;
-      box-sizing: border-box;
-      padding: 0 !important;
-      margin: 0 !important;
+      padding: 0;
+      margin: 0;
 
       img, pre, table {
         max-width: 100%;
-        width: 100% !important;
+        width: 100%;
         height: auto;
-        box-sizing: border-box;
       }
     }
 
@@ -141,14 +139,13 @@
       visibility: visible;
       order: -1;
       margin-bottom: 1.5rem;
-      box-sizing: border-box;
     }
   }
 }
 
 .toc-sidebar {
   @include mobile {
-    display: block !important;
-    visibility: visible !important;
+    display: block;
+    visibility: visible;
   }
 }
