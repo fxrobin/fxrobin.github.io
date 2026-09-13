@@ -33,8 +33,10 @@
   font-family: $mono;
 
   @include mobile {
-    flex-direction: column;
-    gap: 0.5rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    row-gap: 0.25rem;
   }
 }
 
@@ -53,6 +55,37 @@
 .site-info {
   flex: 1;
   padding-left: 1rem;
+  min-width: 0;
+}
+
+// Sous-titre rotatif (desktop uniquement) : le nom du site reste fige,
+// seul ce span defile — aucun layout shift du header.
+.site-tagline {
+  font-family: $mono;
+  font-size: 0.85rem;
+  color: $amber-dim;
+  white-space: nowrap;
+
+  @include mobile {
+    display: none;
+  }
+}
+
+// Curseur du sous-titre : clignotement CSS (opacity, composee) limite a
+// 10 iterations, puis plus aucune animation ne tourne.
+.tagline-cursor {
+  animation: tagline-blink 0.9s step-end 10;
+  will-change: opacity;
+}
+
+.tagline-cursor--done {
+  animation: none;
+  opacity: 0.6;
+  will-change: auto;
+}
+
+@keyframes tagline-blink {
+  50% { opacity: 0; }
 }
 
 .site-name {
@@ -91,6 +124,10 @@
     border: 1px solid $amber-dim;
     text-decoration: none;
     transition: color 0.15s, border-color 0.15s;
+    // Cibles tactiles d'au moins 40px de haut (mobile + desktop).
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
 
     &:visited { color: $amber-dim; }
     &:hover {
@@ -127,7 +164,8 @@
     }
   }
 
-  .typewriter-cursor {
+  .typewriter-cursor,
+  .tagline-cursor {
     color: $amber;
   }
 }

@@ -67,6 +67,7 @@
       line-height: 1.6;
       margin: 0.4rem 0 0;
       padding: 0 0.1rem;
+      max-width: none; // la largeur est deja bornee par .site-wrapper (1400px) : pleine carte
 
       p { font-family: $helvetica; font-size: 1rem; color: $body-text; margin: 0.4em 0; }
       code { font-family: $mono; font-size: 1rem; color: #cccccc; background: rgba(255,255,255,0.05); padding: 0.1em 0.3em; }
@@ -164,6 +165,15 @@ html.js .posts-grid .post-card.revealed {
   transform: none;
 }
 @media (prefers-reduced-motion: reduce) {
+  html.js .posts-grid .post-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+// Impression : toujours tout visible, meme si le JS n'a pas revele les cartes.
+@media print {
   html.js .posts-grid .post-card {
     opacity: 1;
     transform: none;

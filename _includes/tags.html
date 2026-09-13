@@ -24,6 +24,6 @@
 
 <div class="sidebar-tags">
 {% for tag in tags %}
-  <a class="sidebar-tag" href="{{ site.baseurl }}/tags/{{ page.lang }}/#{{ tag | slugify }}">{{ tag }}</a>{% unless forloop.last %}<span class="sidebar-tag-sep"> | </span>{% endunless %}
+  <a class="sidebar-tag" href="{{ site.baseurl }}/tags/{{ page.lang }}/#{{ tag | slugify }}">{{ tag }}</a>
 {% endfor %}
 </div>

@@ -30,13 +30,17 @@ html[data-theme="classic"], html[data-theme="dark"] {
     font-size: 0.68rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #996600;
+    color: #C68A1A;
     background: transparent;
     border: 1px solid #333333;
     border-radius: 4px;
     padding: 0.15rem 0.45rem;
     cursor: pointer;
     transition: color 0.15s, border-color 0.15s;
+    // Cibles tactiles d'au moins 40px de haut.
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
 
     &:hover { color: #FFB000; border-color: #FFB000; }
     &.active { color: #FFB000; border-color: #FFB000; text-shadow: 0 0 6px #FFB000; }
@@ -112,7 +116,7 @@ html[data-theme="classic"] {
     line-height: 1.2;
     a { color: #1C1917; &:visited, &:hover { color: #1C1917; } }
   }
-  .typewriter-cursor { color: #C2410C; }
+  .typewriter-cursor, .tagline-cursor { color: #C2410C; }
   .header-lang {
     font-family: $sans;
     align-items: flex-end;
@@ -429,12 +433,16 @@ html[data-theme="classic"] {
       background-image: none;
       box-shadow: none;
       border: none;
+      border-image: none;
       border-radius: 0;
       margin: 0 0 2.5rem;
       padding: 0;
       max-width: 68ch;
       &::before { display: none; }
+      &::after { display: none; } // bandeau moniteur retro : pas d'artefact en Classic
       p { font-family: $serif; font-size: inherit; line-height: inherit; color: #44403C; }
+      ul, ol { margin: 1em 0 1em 1.5em; }
+      li { font-family: $serif; font-size: inherit; line-height: inherit; color: #44403C; &::marker { color: #C2410C; } }
       p:first-child::first-letter {
         font-family: $serif;
         font-weight: 700;

@@ -1,6 +1,6 @@
 .site-wrapper {
   display: flex;
-  max-width: 1800px;
+  max-width: 1400px; // aligne sur Classic/Dark : 1800px laissait un tiers des cartes vide
   margin: 0 auto;
   min-height: calc(100vh - 80px);
 
@@ -70,15 +70,20 @@
       color: $amber-dim;
       font-size: 0.75rem;
       font-family: $mono;
-      &:hover { color: $amber; text-shadow: 0 0 6px $amber; }
+      border: 1px solid $border;
+      border-radius: 999px;
+      padding: 0.35rem 0.6rem;
+      // Cible tactile d'au moins 40px de haut.
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      &:hover { color: $amber; border-color: $amber; text-shadow: 0 0 6px $amber; }
       &:visited { color: $amber-dim; }
     }
 
-    .sidebar-tag-sep {
-      color: $amber-dim;
-      font-size: 0.75rem;
-      font-family: $mono;
-    }
+    // Anciens separateurs "|" : supprimes du markup, masques par securite.
+    .sidebar-tag-sep { display: none; }
   }
 
   .sidebar-recent {
@@ -156,8 +161,11 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
+  padding: 10px 12px;
   margin-right: 10px;
+  // Cible tactile d'au moins 40px.
+  min-height: 44px;
+  min-width: 44px;
 
   span {
     display: block;

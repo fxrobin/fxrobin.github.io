@@ -45,20 +45,20 @@ Ici, que de vieux trucs, mais avec quelques outils modernes ou presque.
     .thomson-header {
         font-size: 1.5em;
         font-family: "thomson";
-        background-color: darkblue;
+        background-color: #1E3A8A;
         color: white;
         letter-spacing: 0.1em;
     }
     .st-header {
         font-size: 1.6em;
         font-family: "atari";
-        background-color: darkgreen;
+        background-color: #14532D;
         color: white;
         letter-spacing: 0.05em;
     }
     .retro-card {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 0.6em;
         padding: 0.4em 0;
         border-top: 1px solid #333;
@@ -68,12 +68,13 @@ Ici, que de vieux trucs, mais avec quelques outils modernes ou presque.
         min-width: 0;
     }
     .retro-card-title {
-        display: block;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
         color: #FFB000;
         text-decoration: none;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        line-height: 1.35;
     }
     .atari-st .retro-card-title {
         font-family: 'atari';
@@ -92,9 +93,7 @@ Ici, que de vieux trucs, mais avec quelques outils modernes ou presque.
         font-size: 1em;
         color: #888;
         font-family: monospace;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        line-height: 1.4;
     }
     </style>    
     <div class="posts" style="margin-top : 4em;">

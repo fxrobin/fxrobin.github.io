@@ -20,6 +20,21 @@ jkl          # si le script est dans le PATH
 
 Le CI s'exécute sur push/PR vers `master` via `.github/workflows/jekyll.yml`.
 
+### Serveur de dev : vérifier en début de conversation
+
+`jkl` tourne en général déjà en mode **watch** sur le port **4000** (rebuild automatique à chaque modification).
+
+**En début de conversation, vérifier que Jekyll répond :**
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:4000/
+```
+
+- `200` : le serveur tourne. Ne pas relancer `jkl`, ne pas lancer un second `jekyll serve`.
+- Pas de réponse : signaler à l'utilisateur que Jekyll ne tourne pas et lui demander de lancer `jkl`. Ne pas le démarrer soi-même.
+
+Prévisualisation : `http://localhost:4000/<chemin-de-la-page>`. Après une modification, attendre le rebuild (quelques secondes) avant de recharger.
+
 ## Structure du contenu
 
 ### Catégories

@@ -1,28 +1,25 @@
-@keyframes blink_guru {
-  0%, 100% { border-color: #cc0000; }
-  50%       { border-color: #000000; }
-}
-
+// Bandeau d'info (ex-"guru meditation") : discret, pas d'alarme.
+// Plus de clignotement rouge plein cadre : simple note au-dessus de la liste.
 .gurumeditation {
-  animation: blink_guru 2s step-end infinite;
-  font-family: "amiga";
-  font-size: 1rem;
+  font-family: $mono;
+  font-size: 0.85rem;
   line-height: 1.6;
-  margin: 1.5em 3em;
+  margin: 1rem 0 1.5rem;
   padding: 0.75em 1.25em;
-  color: #cc0000;
-  background: #000000;
-  border: 4px solid #cc0000;
-  border-radius: 0;
+  color: $amber-dim;
+  background: rgba($amber, 0.05);
+  border: 1px solid $border;
+  border-left: 3px solid $amber-dim;
+  border-radius: 4px;
   box-shadow: none;
-  text-align: center;
+  text-align: left;
   text-shadow: none;
 }
 
 .gurumeditation p {
-  font-family: "amiga";
-  color: #cc0000;
-  background: #000000;
+  font-family: $mono;
+  color: $amber-dim;
+  background: transparent;
   margin: 0.3em 0;
   text-shadow: none;
 }

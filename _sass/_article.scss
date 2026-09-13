@@ -74,23 +74,42 @@
     color: $body-text;
     margin: 1em 0;
     padding-left: 0;
+    max-width: 90ch; // colonne large en retro : 72ch laissait ~40% de vide
   }
 
   .intro {
     position: relative;
-    font-family: "atari";
+    font-family: $crt;
     font-size: 1rem;
     color: $code-green;
     line-height: 1.75;
     margin: 0 0 2rem;
     padding: 1.5rem 2rem;
 
-    // CRT screen glass
-    border-radius: 4px / 4px;
+    // CRT screen glass — coins legers, tube bombe
+    border-radius: 8px;
 
-    // CRT screen body
+    // CRT screen body : reflet vitre en diagonale + filet superieur,
+    // scanlines + vignettage du tube. TOUTES ces couches sont statiques.
+    // Le bandeau VBL qui balaye est un element dedie .crt-vbl (injecte par
+    // js/crt-glitch.js) anime en transform : plus de repaint par frame.
     background-color: #020802;
     background-image:
+      linear-gradient(
+        115deg,
+        transparent 42%,
+        rgba(255, 255, 255, 0.05) 47%,
+        rgba(255, 255, 255, 0.02) 53%,
+        transparent 58%
+      ),
+      linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.10) 30%,
+        rgba(255, 255, 255, 0.14) 50%,
+        rgba(255, 255, 255, 0.10) 70%,
+        transparent
+      ),
       repeating-linear-gradient(
         0deg,
         rgba(0, 0, 0, 0.4),
@@ -104,46 +123,78 @@
         rgba(0, 0, 0, 0.0) 55%,
         rgba(0, 0, 0, 0.7) 100%
       );
+    background-repeat: no-repeat;
+    background-size: auto, 90% 1px, auto, auto;
+    background-position: 0 0, center top, 0 0, 0 0;
 
-    // Layered box-shadow: monitor frame (spread-only layers) + desk shadow + screen depth
+    // Coque facon Commodore 1084 : plastique grainé (SVG fractalNoise
+    // incruste en border-image 9-patch : dessus moins jauni, menton
+    // plus jaune) en vraie bordure, menton bas epais pour les controles.
+    // border-style/couleur = repli si l'image ne charge pas.
+    border: 12px solid #c9bda2;
+    border-bottom-width: 52px;
+    border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.7 0'/%3E%3C/filter%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.7 0'/%3E%3C/filter%3E%3Cfilter id='b' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.02' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.40 0 0 0 0 0.33 0 0 0 0 0.22 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' fill='%23c9bda2'/%3E%3Crect width='160' height='40' fill='%23d3c8b0' opacity='0.6'/%3E%3Crect y='100' width='160' height='60' fill='%23bfae90' opacity='0.55'/%3E%3Crect width='160' height='160' filter='url(%23b)' opacity='0.38'/%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.16'/%3E%3Crect width='160' height='160' filter='url(%23w)' opacity='0.12'/%3E%3C/svg%3E")
+      12 12 52 12 / 12px 12px 52px 12px round;
     box-shadow:
-      0 0 0  2px #1a1a1a,              // thin inner edge (screen lip)
-      0 0 0 20px #2c2c2c,              // main monitor bezel — dark charcoal
-      0 0 0 22px #181818,              // thin dark outer rim
-      0 0 0 24px #3a3a3a,              // subtle outer highlight ring
-      0 16px 50px rgba(0, 0, 0, 0.9), // heavy desk shadow
-      0  4px 12px rgba(0, 0, 0, 0.6), // close contact shadow
+      0 0 0  3px #ddd3bd,                // coque externe claire
+      0 0 0  5px #6e6350,                // jonc exterieur sombre
+      0 16px 50px rgba(0, 0, 0, 0.9),   // ombre portee sur le bureau
+      0  4px 12px rgba(0, 0, 0, 0.6),   // ombre de contact
+      inset 0 0 0 9px #b7ab90,            // cadre interne plus sombre (deux tons)
+      inset 0 0 0 12px #241f18,          // feuillure (joint du tube)
       inset 0 0 40px rgba(0, 0, 0, 0.85),
       inset 0 0  8px rgba(0, 200, 0, 0.06);
 
-    // Space for the frame layers (box-shadow doesn't affect layout)
-    margin: 28px 28px 44px;
+    // La bordure fait partie du layout : petite marge pour l'ombre du bureau
+    margin: 14px 14px 28px;
 
     /*text-shadow: 0 0 6px rgba(51, 255, 51, 0.5);*/
 
-    // screen reflection highlight at top
+    // Rangee de boutons du menton, entre deux rainures verticales
     &::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 5%;
-      right: 5%;
-      height: 1px;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.06) 30%,
-        rgba(255, 255, 255, 0.10) 50%,
-        rgba(255, 255, 255, 0.06) 70%,
-        transparent
-      );
-      border-radius: 50%;
+      left: 37%;
+      right: 37%;
+      bottom: -44px;
+      height: 36px;
+      border-left: 1px solid rgba(0, 0, 0, 0.28);
+      border-right: 1px solid rgba(255, 255, 255, 0.4);
+      background-image: radial-gradient(circle, #201c16 0 2px, #57503f 3px, rgba(0, 0, 0, 0) 4px);
+      background-size: 52px 36px;
+      background-position: center;
+      background-repeat: repeat-x;
+    }
+
+    // Menton : badge modele a gauche, LED + power a droite
+    &::after {
+      content: 'FX-1400';
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: -44px;
+      height: 36px;
+      line-height: 36px;
+      white-space: nowrap;
+      font-family: $mono;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: #655a44;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+      background-image:
+        radial-gradient(circle, #e2ffe2 0 1px, #52ff52 2px, #1c6b1c 4px, rgba(0, 0, 0, 0) 5px),
+        linear-gradient(to bottom, #8d8266 0, #6f6450 100%),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.28) 0, rgba(255, 255, 255, 0) 100%);
+      background-repeat: no-repeat;
+      background-size: 12px 12px, 15px 15px, 30px 1px;
+      background-position: right 34px center, right 10px center, 38% 9px;
     }
 
     p {
-      font-family: "atari", $mono;
+      font-family: $crt;
       color: $code-green;
       margin: 0.6em 0;
+      max-width: none; // ecran, pas copie body : toute la largeur
 
       &:first-child { margin-top: 0; }
       &:last-child  { margin-bottom: 0; }
@@ -151,19 +202,20 @@
 
     strong, b {
       color: #66FF66;
-      text-decoration: underline wavy rgba(102, 255, 102, 0.6);
+      text-decoration: none;
       border-bottom: none;
       text-shadow: 0 0 8px rgba(51, 255, 51, 0.7);
     }
 
     code {
-      color: #cccccc;
-      background: rgba(255, 255, 255, 0.06);
+      font-family: $crt;
+      font-size: inherit;
+      color: $code-green;
+      background: none;
       text-shadow: none;
-      padding: 0.1em 0.3em;
-      border-radius: 2px;
-      font-family: amiga;
-      font-size: smaller;
+      padding: 0;
+      border: none;
+      border-radius: 0;
     }
 
     a {
@@ -173,14 +225,70 @@
       &:visited { color: $code-green; }
     }
 
+    // Listes dans l'ecran : meme fonte terminale verte que les <p>,
+    // sinon la regle generique .entry ul (helvetica gris) prend le dessus.
+    ul, ol {
+      font-family: $crt;
+      color: $code-green;
+
+      li {
+        font-family: $crt;
+        color: $code-green;
+        margin-bottom: 0.3rem;
+
+        &::marker { color: $code-green; }
+      }
+    }
+
+    // Bandeau VBL : conteneur de decoupe (clip) pose sur le verre.
+    // Le bandeau lui-meme est son ::before, anime en translateY (composee).
+    .crt-vbl {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      pointer-events: none;
+      z-index: 0;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 34%;
+        background-image: linear-gradient(
+          to bottom,
+          transparent 0,
+          rgba(255, 255, 255, 0.05) 42%,
+          rgba(255, 255, 255, 0.09) 50%,
+          rgba(255, 255, 255, 0.05) 58%,
+          transparent 100%
+        );
+        transform: translateY(-78%);
+        will-change: transform;
+        animation: crt-vbl 7s linear infinite;
+      }
+    }
+
+    // Hors viewport ou onglet cache : classe posee par js/crt-glitch.js.
+    &.crt-paused .crt-vbl::before {
+      animation-play-state: paused;
+    }
+
     @include mobile {
       margin: 0 0 1rem;
       padding: 0.5rem;
+      border: none;
+      border-image: none;
       box-shadow: none;
       background: transparent;
+      animation: none;
       &::before { display: none; }
+      &::after { display: none; }
+      .crt-vbl { display: none; }
     }
-  }
+  } // .intro
 
   h2 {
     font-family: $mono;
@@ -235,6 +343,7 @@
     color: #AAAAAA;
     font-style: italic;
     background: rgba($amber, 0.03);
+    max-width: 90ch;
   }
 
   strong, b {
@@ -251,6 +360,7 @@
   ul, ol {
     font-family: $helvetica;
     color: $body-text;
+    max-width: 90ch;
 
     li { margin-bottom: 0.3rem; }
   }
@@ -325,6 +435,10 @@
     color: $amber-dim;
     border: 1px solid $border;
     padding: 0.15rem 0.4rem;
+    // Cible tactile d'au moins 40px de haut.
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
     &:hover { color: $amber; border-color: $amber; }
     &:visited { color: $amber-dim; }
   }
@@ -334,14 +448,60 @@
   display: inline;
   color: $code-green;
   text-shadow: 0 0 8px rgba(51, 255, 51, 0.8);
-  animation: type-blink 0.5s step-end infinite;
+  // Clignotement limite dans le temps : plus aucune animation ne tourne
+  // une fois la frappe terminee (~12 s de clignotement puis opacite fixe).
+  animation: type-blink 0.5s step-end 24;
+  will-change: opacity;
 
   &--done {
-    animation: type-blink 1.2s step-end infinite;
+    animation: type-blink 1.2s step-end 10;
     opacity: 0.6;
+    will-change: auto;
   }
 }
 
 @keyframes type-blink {
   50% { opacity: 0; }
+}
+
+// Balayage VBL : un bandeau clair tres leger traverse l'ecran de haut en
+// bas en boucle. Anime en transform (couche composee, pas de repaint) au
+// lieu de background-position. Les bornes reproduisent l'ancien trajet :
+// background-position 0 -40% .. 0 140% pour un bandeau de 34% de hauteur.
+@keyframes crt-vbl {
+  from { transform: translateY(-78%); }
+  to   { transform: translateY(272%); }
+}
+
+// Glitch : pose par js/crt-glitch.js a intervalles aleatoires.
+// Decrochage bref du texte (split RGB + saut), coque stable.
+// Scope retro uniquement : en Classic/Dark .intro n'est pas un ecran.
+html:not([data-theme="classic"]):not([data-theme="dark"]) .entry .intro.glitching p {
+  animation: crt-glitch 0.22s steps(2, end) both;
+  text-shadow:
+    2px 0 rgba(255, 0, 60, 0.8),
+    -2px 0 rgba(0, 220, 255, 0.8),
+    0 0 8px rgba(51, 255, 51, 0.7);
+}
+
+@keyframes crt-glitch {
+  0% { transform: translate(0); }
+  25% { transform: translate(-2px, 1px) skewX(1.5deg); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, 0) skewX(-1deg); }
+  100% { transform: translate(0); }
+}
+
+// Le bandeau VBL n'existe que pour l'ecran CRT retro. En Classic/Dark
+// .intro est un chapeau editorial : l'element reste dans le DOM (bascule
+// de theme a chaud possible) mais n'est pas rendu.
+html[data-theme="classic"] .entry .intro .crt-vbl,
+html[data-theme="dark"] .entry .intro .crt-vbl {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry .intro { animation: none; }
+  .entry .intro .crt-vbl { display: none; }
+  .type-cursor, .type-cursor--done { animation: none; }
 }

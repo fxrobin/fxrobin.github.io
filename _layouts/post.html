@@ -78,7 +78,7 @@ layout: default
 
 </article>
 
-<button class="comments-toggle" onclick="this.textContent=this.textContent.includes('▼')?'[COMMENTS ▲]':'[COMMENTS ▼]';document.getElementById('comments-section').classList.toggle('open')">[COMMENTS ▼]</button>
+<button class="comments-toggle" onclick="this.textContent=this.textContent.includes('▼')?'[COMMENTS ▲]':'[COMMENTS ▼]';document.getElementById('comments-section').classList.toggle('open');if(window.loadDisqus)window.loadDisqus()">[COMMENTS ▼]</button>
 <div id="comments-section" class="comments-section">
   {% include disqus.html %}
 </div>
@@ -149,43 +149,74 @@ layout: default
   var intro = document.querySelector('.entry-intro .intro');
   if (!intro) return;
 
-  var html = intro.innerHTML.trim();
-  var out = '';
-  var i = 0;
-  var cursor = '<span class="type-cursor">\u2588</span>';
+  // Effet machine a ecrire : retro uniquement. En Classic/Dark le chapeau
+  // est un texte editorial, affiche d'emblee.
+  var docEl = document.documentElement;
+  function isRetro() { return !docEl.hasAttribute('data-theme'); }
+  if (!isRetro()) return;
 
-  intro.innerHTML = cursor;
+  // Le HTML final reste dans le DOM du debut a la fin : on se contente de
+  // vider puis de re-remplir les noeuds TEXTE un par un. Aucun innerHTML
+  // n'est reecrit, donc pas de reconstruction du sous-arbre ni de
+  // relayout complet de l'ecran CRT a chaque tick.
+  var walker = document.createTreeWalker(intro, NodeFilter.SHOW_TEXT, null, false);
+  var nodes = [];
+  var node;
+  while ((node = walker.nextNode())) {
+    if (node.nodeValue.length) nodes.push({ node: node, text: node.nodeValue });
+  }
+  if (!nodes.length) return;
+
+  // Curseur : un seul element, deplace, jamais recree.
+  var cursor = document.createElement('span');
+  cursor.className = 'type-cursor';
+  cursor.textContent = '\u2588';
+
+  function restore() {
+    for (var k = 0; k < nodes.length; k++) nodes[k].node.nodeValue = nodes[k].text;
+  }
+
+  function finish() {
+    restore();
+    cursor.className = 'type-cursor type-cursor--done';
+    intro.appendChild(cursor);
+  }
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    finish();
+    return;
+  }
+
+  for (var j = 0; j < nodes.length; j++) nodes[j].node.nodeValue = '';
+  intro.appendChild(cursor);
+
+  var idx = 0, pos = 0;
+
+  function placeCursor(target) {
+    var parent = target.parentNode;
+    if (!parent) return;
+    if (cursor.previousSibling !== target) parent.insertBefore(cursor, target.nextSibling);
+  }
 
   function tick() {
-    if (i >= html.length) {
-      intro.innerHTML = html + '<span class="type-cursor type-cursor--done">\u2588</span>';
+    if (!isRetro()) { // bascule de theme en cours de frappe
+      restore();
+      if (cursor.parentNode) cursor.parentNode.removeChild(cursor);
       return;
     }
-    if (html[i] === '<') {
-      // consume full tag instantly
-      var end = html.indexOf('>', i);
-      if (end === -1) end = html.length - 1;
-      out += html.slice(i, end + 1);
-      i = end + 1;
-      tick();
-    } else if (html[i] === '&') {
-      // consume entity instantly
-      var end = html.indexOf(';', i);
-      if (end === -1) { out += html[i++]; tick(); return; }
-      out += html.slice(i, end + 1);
-      i = end + 1;
-      tick();
-    } else {
-      // burst: up to next tag/entity boundary, max 6 chars, always advance
-      var burst = i;
-      while (burst < html.length && html[burst] !== '<' && html[burst] !== '&' && burst - i < 6) burst++;
-      if (burst === i) burst = i + 1;
-      out += html.slice(i, burst);
-      i = burst;
-      intro.innerHTML = out + cursor;
-      setTimeout(tick, 18);
-    }
+    if (document.hidden) { setTimeout(tick, 250); return; } // onglet cache : rien ne tourne
+    if (idx >= nodes.length) { finish(); return; }
+
+    var cur = nodes[idx];
+    if (pos >= cur.text.length) { idx++; pos = 0; tick(); return; }
+
+    var next = Math.min(cur.text.length, pos + 6);
+    cur.node.nodeValue = cur.text.slice(0, next);
+    pos = next;
+    placeCursor(cur.node);
+    setTimeout(tick, 18);
   }
+
   tick();
 })();
 </script>

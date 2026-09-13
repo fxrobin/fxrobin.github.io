@@ -3,18 +3,22 @@
 //
 
 // Colors — VT-100 phosphor palette
+// $amber-dim doit rester lisible en petit corps sur fond sombre (contraste ~4.5:1).
 $amber:        #FFB000;
-$amber-dim:    #996600;
+$amber-dim:    #C68A1A;
 $body-text:    #E0E0E0;
 $code-green:   #33FF33;
 $link:         #5BC8FF;
-$link-visited: #FFB000;
+$link-visited: #C68A1A;
 $border:       #333333;
 $bg-card:      #111111;
 $bg-body:      #0A0A0A;
 
 // Font stacks
 $mono:             "Share Tech Mono", "coders-crux", monospace;
+// Fonte de l'ecran CRT (chapeau .intro du theme retro) : plus legere que
+// la bitmap "atari", accents francais complets, chargee via Google Fonts.
+$crt:              "Kode Mono", "Share Tech Mono", monospace;
 $helvetica:        "Monda", Helvetica, Arial, sans-serif;
 
 // Mobile breakpoints

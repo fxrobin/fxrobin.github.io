@@ -8,7 +8,7 @@
 			<div class="article-list-entry">
 				<span class="article-list-entry-date">
 				Date:
-					{{post.date | date: "%d/%m/%Y" }}
+					{% if page.lang == 'en' %}{{post.date | date: "%Y-%m-%d" }}{% else %}{{post.date | date: "%d/%m/%Y" }}{% endif %}
 			</span>
 				<a href="{{ site.baseurl }}{{ post.url }}">
 			    <span class="thomson-menu">&nbsp;</span>
@@ -27,7 +27,7 @@
 		<div class="retro-list-entry">
 			<span class="retro-list-entry-date">
 			Date:
-				{{post.date | date: "%d/%m/%Y" }}
+				{% if page.lang == 'en' %}{{post.date | date: "%Y-%m-%d" }}{% else %}{{post.date | date: "%d/%m/%Y" }}{% endif %}
 		</span>
 			<a href="{{ site.baseurl }}{{ post.url }}">
 			<span class="thomson-menu">&nbsp;</span>

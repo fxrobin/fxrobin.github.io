@@ -28,7 +28,7 @@
 
 .container {
     margin: 0 auto;
-    max-width: 1800px;
+    max-width: 1400px; // aligne sur Classic/Dark et .site-wrapper
     width: 100%;
 }
 
@@ -58,7 +58,13 @@
 
 // Utilities
 @import "highlights";
-@import "svg-icons";
+// Retire : _svg-icons.scss = 53 Ko de SVG base64 (icones sociales) pour
+// un seul consommateur, _includes/svg-icons.html, lui-meme inclus par la
+// seule page index-backup.html (sitemap: false, non liee). Le footer et
+// le header utilisent des liens texte [gh] [li] [so] [rss]. Le fichier
+// _sass/_svg-icons.scss est conserve : reactiver cet @import si les
+// icones reviennent.
+// @import "svg-icons";
 @import "fx";
 @import "tags";
 @import "theme-classic";

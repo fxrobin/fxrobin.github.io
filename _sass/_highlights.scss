@@ -36,6 +36,23 @@ code.highlighter-rouge {
   }
 
   &:hover .copy-btn { opacity: 1; }
+
+  // Pas de survol au tactile : bouton toujours visible sur mobile.
+  @include mobile {
+    .copy-btn { opacity: 1; }
+
+    // Indicateur de scroll horizontal : voile a droite quand le code deborde.
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 24px;
+      background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.55));
+      pointer-events: none;
+    }
+  }
 }
 
 pre.highlight {
@@ -74,6 +91,7 @@ pre.highlight {
   @include mobile {
     font-size: 0.75rem;
     padding: 0.5rem;
+    -webkit-overflow-scrolling: touch; // scroll horizontal fluide au tactile
   }
 }
 

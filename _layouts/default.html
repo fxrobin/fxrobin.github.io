@@ -12,12 +12,12 @@
     <meta name="theme-color" content="#0A0A0A" />
     <script>try{var t=localStorage.getItem('fx-theme');if(t==='classic'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
     <script>document.documentElement.classList.add('js')</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Kode+Mono:wght@400;500;700&family=Monda&family=Oswald&family=Press+Start+2P&family=Russo+One&family=Share+Tech+Mono&display=swap" />
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/TypewriterJS/1.0.0/typewriter.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <link rel="alternate" type="application/rss+xml" title="{{ site.name }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
-    <link rel="stylesheet" type="text/css" href="/asciinema/asciinema-player.css" />
+    {% if content contains 'asciinema-player' %}<link rel="stylesheet" type="text/css" href="/asciinema/asciinema-player.css" />{% endif %}
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/print.css" media="print"/>
   </head>
 
@@ -31,6 +31,7 @@
           {% else %}
           <a href="{{ site.baseurl }}/fr/"><h1 id="site-name" class="site-name">{{ site.name }}</h1></a>
           {% endif %}
+          <span id="site-tagline" class="site-tagline" aria-hidden="true"></span>
           </div>
 
           <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
@@ -86,7 +87,7 @@
             <img src="{{ site.baseurl }}/images/creative-commons/by-sa.svg" alt="CC:BY-SA" style="height:14px; opacity:0.5;" />
           </div>
           <div class="footer-legal">
-            FX Robin · CC BY-SA · ref:[{{ page.ref }}]
+            FX Robin · CC BY-SA{% if page.ref %} · ref:[{{ page.ref }}]{% endif %}
           </div>
         </footer>
       </div>
@@ -96,6 +97,7 @@
     <script src="/js/theme-switcher.js"></script>
     <script src="/js/header-shrink.js"></script>
     <script src="/js/cards-reveal.js"></script>
+    <script src="/js/crt-glitch.js"></script>
     <script src="/js/main.js"></script>
 
     <script>
@@ -123,58 +125,88 @@
       })();
     </script>
 
-<script>
-      var app = document.getElementById('site-name');
-
-      function isMobile() {
-        return window.matchMedia('(max-width: 800px)').matches;
-      }
-
-      if (isMobile()) {
-        app.textContent = '> FX_JavaDevBlog';
-        var cursor = document.createElement('span');
-        cursor.className = 'typewriter-cursor';
-        cursor.innerHTML = '&#x2582;';
-        app.appendChild(cursor);
-      } else {
-      var typewriter = new Typewriter(app, {
-          loop: true,
-          delay: 'natural',
-          cursor: '&#x2582;'
-      });
+    <script>
+    // Nom du site fige dans le <h1> (aucun layout shift) : seul le
+    // sous-titre #site-tagline defile, sur desktop uniquement.
+    // Machine a ecrire vanilla, UNE seule passe (pas de boucle rAF) :
+    // setTimeout en cascade, puis arret complet. Le curseur clignote
+    // ensuite via CSS un nombre fini d'iterations.
+    (function() {
+      var tagline = document.getElementById('site-tagline');
+      if (!tagline) return;
+      if (window.matchMedia('(max-width: 800px)').matches) return;
 
       {% if page.lang == "fr" %}
-        typewriter.typeString('>FX_JavaDevBlog : ')
-            .pauseFor(2500)
-          .typeString('réflexions sur Java')
-            .pauseFor(2500)
-            .typeString(" SE")
-            .pauseFor(2500)
-            .deleteChars(2)
-            .typeString(" EE")
-            .pauseFor(2500)
-            .deleteChars(8)
-            .typeString("l'archi. SI")
-            .pauseFor(2500)
-            .start();
+      var SEQ = [
+        { type: ': r\u00e9flexions sur Java' }, { pause: 2500 },
+        { type: ' SE' },  { pause: 2500 }, { del: 2 },
+        { type: ' EE' },  { pause: 2500 }, { del: 8 },
+        { type: "l'archi. SI" }
+      ];
+      var FINAL = ": r\u00e9flexions sur l'archi. SI";
       {% else %}
-        typewriter.typeString('>FX_JavaDevBlog : ')
-            .pauseFor(2500)
-          .typeString('thoughts about Java')
-            .pauseFor(2500)
-            .typeString(" SE")
-            .pauseFor(2500)
-            .deleteChars(2)
-            .typeString(" EE")
-            .pauseFor(2500)
-            .deleteChars(8)
-            .typeString("IT Architecture")
-            .pauseFor(2500)
-            .start();
+      var SEQ = [
+        { type: ': thoughts about Java' }, { pause: 2500 },
+        { type: ' SE' },  { pause: 2500 }, { del: 2 },
+        { type: ' EE' },  { pause: 2500 }, { del: 8 },
+        { type: 'IT Architecture' }
+      ];
+      var FINAL = ': thoughts about IT Architecture';
       {% endif %}
+
+      var textNode = document.createTextNode('');
+      var cursor = document.createElement('span');
+      cursor.className = 'tagline-cursor';
+      cursor.textContent = '\u2582';
+      tagline.appendChild(textNode);
+      tagline.appendChild(cursor);
+
+      var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (calm.matches) {
+        textNode.nodeValue = FINAL;
+        cursor.classList.add('tagline-cursor--done');
+        return;
       }
+
+      var step = 0, sub = 0, timer = null;
+
+      // Mise en pause quand l'onglet est cache (Page Visibility API) :
+      // aucun timer ne tourne en arriere-plan.
+      function schedule(fn, ms) {
+        timer = setTimeout(function () {
+          if (document.hidden) { schedule(fn, 400); return; }
+          fn();
+        }, ms);
+      }
+
+      function done() {
+        timer = null;
+        cursor.classList.add('tagline-cursor--done');
+      }
+
+      function run() {
+        if (step >= SEQ.length) { done(); return; }
+        var item = SEQ[step];
+        if (item.pause) { step++; sub = 0; schedule(run, item.pause); return; }
+        if (item.type) {
+          if (sub >= item.type.length) { step++; sub = 0; run(); return; }
+          textNode.nodeValue += item.type.charAt(sub++);
+          schedule(run, 55 + Math.random() * 65);
+          return;
+        }
+        if (item.del) {
+          if (sub >= item.del) { step++; sub = 0; run(); return; }
+          textNode.nodeValue = textNode.nodeValue.slice(0, -1);
+          sub++;
+          schedule(run, 45);
+          return;
+        }
+        step++; sub = 0; run();
+      }
+
+      schedule(run, 600);
+    })();
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
     .pre-wrapper {
       position: relative;
@@ -253,7 +285,7 @@
       });
     })();
     </script>
-    <script src="/asciinema/asciinema-player.js"></script>
+    {% if content contains 'asciinema-player' %}<script src="/asciinema/asciinema-player.js"></script>{% endif %}
     {% if page.mermaid %}
       {% include mermaid.html %}
     {% endif %}  

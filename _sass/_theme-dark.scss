@@ -73,7 +73,7 @@ html[data-theme="dark"] {
     line-height: 1.2;
     a { color: #E6EDF3; &:visited, &:hover { color: #E6EDF3; } }
   }
-  .typewriter-cursor { color: #F0883E; }
+  .typewriter-cursor, .tagline-cursor { color: #F0883E; }
   .header-lang {
     font-family: $sans;
     align-items: flex-end;
@@ -390,12 +390,16 @@ html[data-theme="dark"] {
       background-image: none;
       box-shadow: none;
       border: none;
+      border-image: none;
       border-radius: 0;
       margin: 0 0 2.5rem;
       padding: 0;
       max-width: 68ch;
       &::before { display: none; }
+      &::after { display: none; } // bandeau moniteur retro : pas d'artefact en Dark
       p { font-family: $serif; font-size: inherit; line-height: inherit; color: #C9D1D9; }
+      ul, ol { margin: 1em 0 1em 1.5em; }
+      li { font-family: $serif; font-size: inherit; line-height: inherit; color: #C9D1D9; &::marker { color: #F0883E; } }
       p:first-child::first-letter {
         font-family: $serif;
         font-weight: 700;
