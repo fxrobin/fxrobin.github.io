@@ -20,6 +20,10 @@ Il existe aujourd'hui **deux approches** pour régler ce problème de warmup JVM
 
 <!--excerpt-->
 
+## Préambule et digression Generative AI
+
+En toute transparence, cet article a été le fruit de plusieurs soirées de travail réparties sur plusieurs semaines. Je me suis fait aider de Claude Code avec Opus 5, OpenCode GO essentiellement avec Muse Spark 1.2 et enfin de Mistral Vibe. Ces outils ne remplacent pas mes idées, mes articulations, mes avis. Ils me permettent de vous délivrer un contenu riche et vérifié, projet à l'appui et j'espère que vous y trouverez la qualité recherchée. Ces outils m'ont permis aussi de relire le contenu et de corriger ma rédaction ainsi que d'obtenir une version en langue anglaise.
+
 ## Le problème : pourquoi la JVM est lente au démarrage
 
 La JVM est une machine virtuelle formidable. Elle analyse votre code au fil de l'exécution, optimise les chemins chauds, fait du *speculative optimization*... et atteint des performances de *peak* supérieures à ce qu'un compilateur statique peut produire. Le problème, c'est le chemin pour y arriver.
