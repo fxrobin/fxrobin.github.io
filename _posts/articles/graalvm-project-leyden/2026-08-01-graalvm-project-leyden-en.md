@@ -91,7 +91,7 @@ The numbers speak for themselves:
 
 The AOT cache takes 130 MB for PetClinic, 11 MB for the simple program. That is space, but a one-time cost.
 
-On the Quarkus demo that accompanies this article (timer = Quarkus `started in` line, persistent PostgreSQL excluded from measurement via `docker-compose.yml` + `init-db.sh`):
+On the Quarkus [demo](https://github.com/fxrobin/article-leyden) that accompanies this article (timer = Quarkus `started in` line, persistent PostgreSQL excluded from measurement via `docker-compose.yml` + `init-db.sh`):
 
 | | Without AOT cache | With Leyden AOT cache | Gain |
 |---|---|---|---|
@@ -236,7 +236,7 @@ Here are the golden rules I take away after following the evolution of these two
 
 **Watch JDK 27.** What remains is AOT Code Compilation: compiling hot methods ahead of time. If it lands, the gap with GraalVM will shrink further.
 
-## En guise de conclusion
+## By way of conclusion
 
 GraalVM and Project Leyden solve the same problem: JVM warmup. But they attack it from different ends. GraalVM ships your code in a native runtime, with no classic JVM at run time. Leyden accelerates the JVM from within.
 
@@ -245,3 +245,16 @@ For most Java applications in production today, **Leyden is the pragmatic path**
 In a future post, we will talk about Structured Concurrency, the third pillar of the Project Loom trilogy. Because starting fast is good. But executing correctly in parallel is even better.
 
 **Feel free to share your feedback and your use cases in the comments.**
+
+## Links
+
+- [Demo repository: `fxrobin/article-leyden`](https://github.com/fxrobin/article-leyden)
+- [Project Leyden - OpenJDK](https://openjdk.org/projects/leyden/)
+- [JEP 483: Ahead-of-Time Class Loading & Linking (JDK 24)](https://openjdk.org/jeps/483)
+- [JEP 514: Ahead-of-Time Command-Line Ergonomics (JDK 25)](https://openjdk.org/jeps/514)
+- [JEP 515: Ahead-of-Time Method Profiling (JDK 25)](https://openjdk.org/jeps/515)
+- [JEP 516: Ahead-of-Time Object Caching with Any GC (JDK 26)](https://openjdk.org/jeps/516)
+- [Quarkus: "Ahead-of-time (AOT) caching" guide](https://quarkus.io/guides/aot)
+- [Quarkus blog: How Project Leyden brought a new perspective](https://quarkus.io/blog/leyden-1/)
+- [Quarkus blog: How we integrated Project Leyden into Quarkus](https://quarkus.io/blog/leyden-2/)
+- [GraalVM Native Image: reference manual](https://www.graalvm.org/latest/reference-manual/native-image/)

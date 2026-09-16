@@ -91,7 +91,7 @@ Les chiffres parlent d'eux-mêmes :
 
 Le cache AOT occupe 130 Mo pour PetClinic, 11 Mo pour le programme simple. C'est de la place, mais c'est un coût ponctuel.
 
-Sur la démo Quarkus qui accompagne cet article (chrono = ligne `started in` de Quarkus, PostgreSQL persistant hors mesure via `docker-compose.yml` + `init-db.sh`) :
+Sur la [démo](https://github.com/fxrobin/article-leyden) Quarkus qui accompagne cet article (chrono = ligne `started in` de Quarkus, PostgreSQL persistant hors mesure via `docker-compose.yml` + `init-db.sh`) :
 
 | | Sans cache AOT | Avec cache AOT Leyden | Gain |
 |---|---|---|---|
@@ -245,3 +245,16 @@ Pour la plupart des applications Java en production aujourd'hui, **Leyden est la
 Dans un prochain billet, on parlera de Structured Concurrency, le troisième volet de la trilogie Project Loom. Parce que démarrer vite, c'est bien. Mais exécuter correctement en parallèle, c'est encore mieux.
 
 **N'hésitez pas à me faire part de vos retours et de vos usages en commentaire.**
+
+## Liens
+
+- [Dépôt de la démo : `fxrobin/article-leyden`](https://github.com/fxrobin/article-leyden)
+- [Project Leyden - OpenJDK](https://openjdk.org/projects/leyden/)
+- [JEP 483 : Ahead-of-Time Class Loading & Linking (JDK 24)](https://openjdk.org/jeps/483)
+- [JEP 514 : Ahead-of-Time Command-Line Ergonomics (JDK 25)](https://openjdk.org/jeps/514)
+- [JEP 515 : Ahead-of-Time Method Profiling (JDK 25)](https://openjdk.org/jeps/515)
+- [JEP 516 : Ahead-of-Time Object Caching with Any GC (JDK 26)](https://openjdk.org/jeps/516)
+- [Quarkus : guide « Ahead-of-time (AOT) caching »](https://quarkus.io/guides/aot)
+- [Blog Quarkus : How Project Leyden brought a new perspective](https://quarkus.io/blog/leyden-1/)
+- [Blog Quarkus : How we integrated Project Leyden into Quarkus](https://quarkus.io/blog/leyden-2/)
+- [GraalVM Native Image : manuel de référence](https://www.graalvm.org/latest/reference-manual/native-image/)
