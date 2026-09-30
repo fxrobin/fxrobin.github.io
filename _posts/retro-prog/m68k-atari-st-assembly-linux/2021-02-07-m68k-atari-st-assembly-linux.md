@@ -15,7 +15,7 @@ Ce bref tutorial montre comment compiler, à partir de Linux, un programme en as
 avec le compilateur `vasm` et le *linker* `vlink`.
 
 Le fichier exécutable sera exécuté avec l'émulateur HATARI comme dans l'article sur la [cross-compilation 
-en C](/m68k-cross-compiling/).
+en C](/programmation-c-pour-atari-st-sous-linux/).
 </div>
 <!--excerpt-->
 

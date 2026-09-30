@@ -10,6 +10,7 @@ ref: Lombok-Oui-Mais
 permalink: /Lombok-Oui-Mais/
 redirect_from:
   - /Lombok-Oui-Mais-FR
+  - /Lombok-Oui-Mais-FR/
   - /Lombok-Oui-Mais
 ---
 

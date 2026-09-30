@@ -33,7 +33,7 @@ Ce n'est pas simple. Mais ça fonctionne.
 
 ## Lombok : cette bibliothèque que j'aime
 
-Lombok c'est super : cette librairie permet de réduire le code boilerplate en générant automatiquement les getters, setters, constructeurs, builders, exceptions wrappées, etc. J'en avais déjà parlé dans [mon article Lombok, Oui mais...](/articles/lombok-oui-mais). C'est un gain de temps et de lisibilité avéré.
+Lombok c'est super : cette librairie permet de réduire le code boilerplate en générant automatiquement les getters, setters, constructeurs, builders, exceptions wrappées, etc. J'en avais déjà parlé dans [mon article Lombok, Oui mais...](/Lombok-Oui-Mais/). C'est un gain de temps et de lisibilité avéré.
 
 Je l'utilise dans **tous mes projets Java** depuis plus de 11 ans, c'était la version 1.12.x à l'époque (2013). Il accompagne aussi bien SpringBoot que Quarkus ainsi que toutes les librairies Apache Commons.
 

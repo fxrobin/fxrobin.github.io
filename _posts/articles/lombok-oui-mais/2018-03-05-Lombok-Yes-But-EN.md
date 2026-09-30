@@ -10,7 +10,9 @@ ref: Lombok-Oui-Mais
 permalink: /Lombok-Yes-But/
 redirect_from:
   - /Lombok-Oui-Mais-EN
+  - /Lombok-Oui-Mais-EN/
   - /Lombok-Oui-Mais-en
+  - /Lombok-Oui-Mais-en/
 ---
 
 <div class="intro" markdown='1'>

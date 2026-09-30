@@ -10,6 +10,7 @@ ref: maven-generer-executables
 permalink: /how-to-generate-java-executables-with-maven/
 redirect_from:
   - /maven-generer-executables-EN
+  - /maven-generer-executables-EN/
 ---
 
 

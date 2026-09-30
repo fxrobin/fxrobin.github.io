@@ -47,9 +47,9 @@ Pour ce tutoriel, vous aurez besoin :
 - du cross-compiler C `m68k-atari-mint-gcc`
 
 Je vous renvoie à mes articles concernant :
-- les [interactions entre C et Assembleurs](/m68k-atari-st-assembly-and-c/2021-06-02-m68k-atari-st-assembly-and-c.md)
+- les [interactions entre C et Assembleurs](/m68k-atari-st-assembly-and-c/)
 - la [configuration de `vasm`](/m68k-atari-st-assembly-linux)
-- la [configuration de `m68k-atari-mint-gcc`](/m68k-cross-compiling/)
+- la [configuration de `m68k-atari-mint-gcc`](/programmation-c-pour-atari-st-sous-linux/)
 
 Les outils sont prêts.
 
@@ -818,7 +818,7 @@ Enfin, si vous voulez aller plus loin dans la composition de musique YM-2149, je
 
 ## Liens & Bibliographie
 
-- [Atari ST Chiptunes "the evolution of soundchip music on Atari ST, by Georges KESSELER (Haxogreen 2018)](<https://www.youtube.com/watch?v=BxEgrkY22vg&list=PLLEkTmNIRKoPlvYx8EFjuWBBqsNDKf-wT)
+- [Atari ST Chiptunes "the evolution of soundchip music on Atari ST, by Georges KESSELER (Haxogreen 2018)](<https://www.youtube.com/watch?v=BxEgrkY22vg&list=PLLEkTmNIRKoPlvYx8EFjuWBBqsNDKf-wT>)
 - [Livre du développeur Atari ST,  2ème edition](https://devlynx.ti-fr.com/ST/le%20livre%20du%20developpeur%20tome%202%20PDF.zip)
 - [Atari ST Internals](https://www.synacktiv.com/ressources/Atari-ST-Internals.pdf)
 - [Hardware Atari ST](https://devlynx.ti-fr.com/ST/Hardware%20ATARI%20PDF.zip)

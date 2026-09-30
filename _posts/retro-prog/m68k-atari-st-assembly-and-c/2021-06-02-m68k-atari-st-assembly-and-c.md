@@ -24,7 +24,7 @@ Ce bref tutoriel montre comment compiler, à partir de Linux, un programme en mi
 avec le compilateur `vasm` et le compilateur `m68k-atari-mint-gcc`
 
 Le fichier exécutable sera exécuté avec l'émulateur HATARI comme dans l'article sur la [cross-compilation 
-en C](/m68k-cross-compiling/).
+en C](/programmation-c-pour-atari-st-sous-linux/).
 
 *Spoiler* : Je me servirai de tout cela pour implémenter une routine Timer A
 dans le cadre de la lecture de fichiers de musique YM-2149 au format "`YM3!`" à 50 Hz, dans un futur tutoriel...
@@ -42,7 +42,7 @@ Pour ce tutorial, vous aurez besoin :
 Je vous renvoie à mes articles concernant :
 
 - la [configuration de `vasm`](/m68k-atari-st-assembly-linux)
-- la [configuration de `m68k-atari-mint-gcc`](/m68k-cross-compiling/)
+- la [configuration de `m68k-atari-mint-gcc`](/programmation-c-pour-atari-st-sous-linux/)
 
 Pour compiler de l'assembleur Motorola 68000 (M68K), je vais utiliser `vasm`.
 En effet, `vasm` est un compilateur multi-plateformes (dont mon linux), multi-cibles (dont le M68K).

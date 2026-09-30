@@ -10,6 +10,7 @@ ref: functional-switch
 permalink: /functional-switch
 redirect_from:
   - /functional-switch-FR
+  - /functional-switch-FR/
 ---
 
 <div class="intro" markdown='1'>
