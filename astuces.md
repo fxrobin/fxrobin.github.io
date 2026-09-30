@@ -291,7 +291,7 @@ function cl {
 
 Exemples :
 
-- `cls` : efface l'écran, ça me rappelle mon [MO5 et mon TO8](/about/#1984-1989--découverte-pendant-mon-enfance)
+- `cls` : efface l'écran, ça me rappelle mon [MO5 et mon TO8](/about/#1984-1989--découverte-de-la-micro-informatique)
 - `lh` : c'est un `ls -l` un peu optimisé. Il met les répertoires en premier, affiche de jolies dates et les unités de taille des fichiers sont simple à lire.
 - `mkcd mon_repertoire` : va créer un répertoire `mon_repertoire` et se placer automatiquement dedans.
 - `cl mon_repertoire` : va se placer dans le répertoire et afficher son contenu avec un `lh`.

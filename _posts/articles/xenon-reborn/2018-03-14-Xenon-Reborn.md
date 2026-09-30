@@ -60,7 +60,7 @@ Ce projet « fil rouge » s'incrivait dans un cours de « Java Bases » où 
 * Maven ;
 * JUnit.
 
-De plus, mes stagiaires découvraient Eclipse, ayant fait des cours d'Algo pur en pseudo-langage et avec [Java's Cool](http://javascool.gforge.inria.fr/). Parallèlement ils avaient des cours de POO, menés avec [Bluej](https://www.bluej.org/).
+De plus, mes stagiaires découvraient Eclipse, ayant fait des cours d'Algo pur en pseudo-langage et avec [Java's Cool](https://web.archive.org/web/2018/http://javascool.gforge.inria.fr/). Parallèlement ils avaient des cours de POO, menés avec [Bluej](https://www.bluej.org/).
 
 ## Hommage
 

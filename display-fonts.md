@@ -4,7 +4,6 @@ title: Displaying Fonts
 subtitle: All the fonts referenced in _fonts.scss
 logo: fonts.png
 category: articles
-tags: [Fonts]
 lang: en
 ref: displaying-fonts
 permalink: /display-fonts

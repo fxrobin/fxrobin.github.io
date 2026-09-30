@@ -24,7 +24,7 @@ lang: fr
                         <a href="https://github.com/fxrobin/" class="btn btn-retro me-2 mb-2">
                             <i class="fab fa-github"></i> GitHub
                         </a>
-                        <a href="https://stackoverflow.com/users/fxrobin" class="btn btn-retro me-2 mb-2">
+                        <a href="https://stackoverflow.com/users/3017541/fxrobin" class="btn btn-retro me-2 mb-2">
                             <i class="fab fa-stack-overflow"></i> StackOverflow
                         </a>
                         <a href="https://twitter.com/fxrobin75" class="btn btn-retro me-2 mb-2">

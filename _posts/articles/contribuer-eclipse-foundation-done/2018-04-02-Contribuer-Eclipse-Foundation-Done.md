@@ -211,4 +211,4 @@ Cliquer sur `Next` et laisser faire l'installation.
 * <http://www.vogella.com/tutorials/EclipsePlatformDevelopment/article.html>
 * <https://git.eclipse.org/c/>
 * <https://marketplace.eclipse.org/content/egerrit>
-* <https://wiki.eclipse.org/EGerrit/User_Guide>
+* <https://web.archive.org/web/2018/https://wiki.eclipse.org/EGerrit/User_Guide>

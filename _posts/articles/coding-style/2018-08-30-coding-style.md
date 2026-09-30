@@ -73,7 +73,7 @@ Le postulat admis "*Java c'est verbeux*" est-il suffisant pour que cela en fasse
 Avant de vous montrer ce que je pense être du code lisible, je vais commencer par ce que j'estime être illisible et pourquoi.
 
 Extrait de Java `HashMap` 
-Source complet ici : <http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/src/share/classes/java/util/HashMap.java> :
+Source complet ici : <https://github.com/openjdk/jdk8u/blob/master/jdk/src/share/classes/java/util/HashMap.java> :
 
 ```java
 /**
