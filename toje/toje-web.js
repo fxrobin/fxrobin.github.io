@@ -63,7 +63,12 @@ function start(toje) {
 
   function openAudio() {
     if (audio || !soundOn) return;
-    const ctx = new AudioContext();
+    // Le contexte tourne au taux du TO8 émulé (44,1 kHz) : sans cela, un
+    // téléphone à 48 kHz doit rééchantillonner chaque tampon, et un navigateur
+    // qui s'en dispense jouerait la musique 9 % trop aiguë et trop vite.
+    let ctx;
+    try { ctx = new AudioContext({ sampleRate, latencyHint: 'interactive' }); }
+    catch { ctx = new AudioContext(); }   // navigateur qui refuse ce taux : il rééchantillonne
     const gain = ctx.createGain();
     gain.gain.value = 0.8;
     gain.connect(ctx.destination);
@@ -84,7 +89,10 @@ function start(toje) {
     src.connect(gain);
     // Sous-alimentation (onglet masqué, machine lente) : on repart un peu devant,
     // plutôt que de programmer dans le passé.
-    if (audio.next < ctx.currentTime) audio.next = ctx.currentTime + 0.03;
+    if (audio.next < ctx.currentTime) {
+      audio.next = ctx.currentTime + 0.03;
+      stats.underruns++;
+    }
     src.start(audio.next);
     audio.next += buffer.duration;
   }
@@ -95,10 +103,16 @@ function start(toje) {
   let framesThisSecond = 0;
   let fpsStamp = performance.now();
 
+  // Diagnostic de cadence, lisible depuis la console ou une recette Playwright :
+  // trames émulées, coupures du son (file audio vidée), plus grosse rafale.
+  const stats = { frames: 0, underruns: 0, maxBurst: 0, start: performance.now() };
+  window.tojeStats = stats;
+
   function step() {
     toje.runFrame();
     if (audioRunning()) queueAudio(toje.audio());
     framesThisSecond++;
+    stats.frames++;
   }
 
   function framesDue(now) {
@@ -137,6 +151,7 @@ function start(toje) {
     pollJoystick();
     const n = Math.min(framesDue(now), MAX_FRAMES_PER_TICK);
     wallLast = now;
+    stats.maxBurst = Math.max(stats.maxBurst, n);
     for (let i = 0; i < n; i++) {
       step();
       wallDue = Math.max(0, wallDue - 1);
