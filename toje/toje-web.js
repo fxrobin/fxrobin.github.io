@@ -139,9 +139,18 @@ function start(toje) {
     keyboard.setCapsLock(on);
   }
 
+  // Vitesse moyennée sur 5 s : compter une seule seconde tombe sur 49 ou 51
+  // trames selon la phase, et l'affichage oscillait entre 98 et 102 % pour
+  // une cadence exacte.
+  const SPEED_WINDOW = 5;
+  const perSecond = [];
   function updateStatus(now) {
     if (now - fpsStamp < 1000) return;
-    const speed = Math.round(framesThisSecond * 2);   // 50 trames/s = 100 %
+    perSecond.push({ frames: framesThisSecond, ms: now - fpsStamp });
+    if (perSecond.length > SPEED_WINDOW) perSecond.shift();
+    const frames = perSecond.reduce((sum, s) => sum + s.frames, 0);
+    const seconds = perSecond.reduce((sum, s) => sum + s.ms, 0) / 1000;
+    const speed = Math.round(frames / seconds * 2);   // 50 trames/s = 100 %
     status.textContent = `${speed} %${audioRunning() ? '' : ' · muet'}`;
     framesThisSecond = 0;
     fpsStamp = now;
