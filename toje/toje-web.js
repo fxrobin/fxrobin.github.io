@@ -4,24 +4,36 @@
 // moins de AUDIO_LEAD secondes d'audio sont programmées, on exécute une trame
 // (20 ms émulées, 882 échantillons). Sans son — le navigateur exige un geste
 // de l'utilisateur pour ouvrir l'AudioContext — on se cale sur performance.now().
-'use strict';
+import { createTouchPad } from './touch-pad.js';
+import { buildKeyboard } from './to8-keyboard.js';
 
-(async () => {
-  const FRAME_SECONDS = 0.02;
-  const AUDIO_LEAD = 0.08;          // ~4 trames d'avance : assez pour absorber un rAF en retard
-  const MAX_FRAMES_PER_TICK = 8;    // onglet revenu au premier plan : on ne rattrape pas tout
-  const JOY = { left: 1, right: 2, up: 4, down: 8 };   // IoHandler.JOYSTICK_*
+const FRAME_SECONDS = 0.02;
+const AUDIO_LEAD = 0.08;          // ~4 trames d'avance : assez pour absorber un rAF en retard
+const MAX_FRAMES_PER_TICK = 8;    // onglet revenu au premier plan : on ne rattrape pas tout
+const JOY = { left: 1, right: 2, up: 4, down: 8 };   // IoHandler.JOYSTICK_*
 
-  const $ = id => document.getElementById(id);
-  const canvas = $('screen');
-  const ctx2d = canvas.getContext('2d');
-  const status = $('status');
+const $ = id => document.getElementById(id);
+const canvas = $('screen');
+const ctx2d = canvas.getContext('2d');
+const status = $('status');
+const coarsePointer = matchMedia('(pointer: coarse)').matches;
 
-  let toje;
+// Réglages de confort du visiteur, dans son navigateur seulement.
+const prefs = {
+  get(key, fallback) {
+    try { const v = localStorage.getItem(`toje.${key}`); return v === null ? fallback : JSON.parse(v); }
+    catch { return fallback; }
+  },
+  set(key, value) {
+    try { localStorage.setItem(`toje.${key}`, JSON.stringify(value)); } catch { /* stockage indisponible */ }
+  },
+};
+
+async function loadEmulator() {
   try {
     const teavm = await TeaVM.wasmGC.load('toje.wasm');
-    toje = teavm.exports;
-    toje.main([]);
+    teavm.exports.main([]);
+    return teavm.exports;
   } catch (e) {
     // Deux causes courantes, à distinguer : fichiers absents (page ouverte en
     // file://, wasm non construit) ou navigateur trop ancien pour Wasm GC.
@@ -30,9 +42,14 @@
       ? 'navigateur sans WebAssembly GC (Chrome 119+, Firefox 120+, Safari 18.2+)'
       : `échec du chargement : ${e.message || e}`;
     console.error(e);
-    return;
+    return null;
   }
+}
 
+const toje = await loadEmulator();
+if (toje) start(toje);
+
+function start(toje) {
   const width = toje.screenWidth();
   const height = toje.screenHeight();
   const sampleRate = toje.sampleRate();
@@ -96,6 +113,16 @@
   function present() {
     image.data.set(new Uint8ClampedArray(toje.pixels().buffer));
     ctx2d.putImageData(image, 0, 0);
+    updateCapsLed();
+  }
+
+  // Voyant CAPS LOCK du clavier à l'écran : l'état du 6804, pas celui du clavier du PC.
+  function updateCapsLed() {
+    if (!keyboardOn) return;
+    const on = toje.capsLock();
+    if (on === capsShown) return;
+    capsShown = on;
+    keyboard.setCapsLock(on);
   }
 
   function updateStatus(now) {
@@ -107,7 +134,7 @@
   }
 
   function tick(now) {
-    pollGamepad();
+    pollJoystick();
     const n = Math.min(framesDue(now), MAX_FRAMES_PER_TICK);
     wallLast = now;
     for (let i = 0; i < n; i++) {
@@ -119,12 +146,34 @@
     requestAnimationFrame(tick);
   }
 
+  // Le navigateur n'ouvre le son qu'après un geste : n'importe lequel suffit.
+  const startHint = $('start');
+  startHint.hidden = false;
+  function firstGesture() {
+    startHint.hidden = true;
+    openAudio();
+    keepScreenAwake();
+  }
+  document.addEventListener('pointerdown', firstGesture, { capture: true });
+  startHint.addEventListener('click', () => canvas.focus());
+
+  // Un téléphone qui se met en veille au milieu d'une partie : on l'en empêche.
+  let wakeLock = null;
+  async function keepScreenAwake() {
+    if (wakeLock || !('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } catch { /* refusé (batterie faible, réglage) : sans conséquence */ }
+  }
+  document.addEventListener('visibilitychange', () => { if (audio) keepScreenAwake(); });
+
   // ── Disquette ──────────────────────────────────────────────────────────
   async function insertDisk(file) {
     const bytes = new Int8Array(await file.arrayBuffer());
     toje.insertDisk(bytes, file.name);
     $('disk-name').textContent = file.name;
-    openAudio();
+    firstGesture();
     canvas.focus();
   }
 
@@ -150,7 +199,7 @@
     button.setAttribute('aria-pressed', String(on));
   }
 
-  $('reset').addEventListener('click', () => { toje.reset(); openAudio(); canvas.focus(); });
+  $('reset').addEventListener('click', () => { toje.reset(); canvas.focus(); });
 
   $('sound').addEventListener('click', e => {
     soundOn = !soundOn;
@@ -159,13 +208,53 @@
     if (audio) soundOn ? audio.ctx.resume() : audio.ctx.suspend();
   });
 
-  $('fullscreen').addEventListener('click', () => {
-    if (document.fullscreenElement) document.exitFullscreen();
-    else frame.requestFullscreen();
+  // Plein écran : l'écran seul au bureau ; toute la page (manette, clavier)
+  // dès que les commandes tactiles sont affichées, en paysage si possible.
+  $('fullscreen').addEventListener('click', async () => {
+    if (document.fullscreenElement) { document.exitFullscreen(); return; }
+    const target = touchOn || keyboardOn ? document.documentElement : frame;
+    try {
+      await target.requestFullscreen({ navigationUI: 'hide' });
+      if (touchOn && screen.orientation && screen.orientation.lock) {
+        await screen.orientation.lock('landscape').catch(() => {});
+      }
+    } catch { /* iPhone : pas d'API plein écran hors vidéo — « Sur l'écran d'accueil » à la place */ }
     canvas.focus();
   });
 
+  // ── Manette tactile et clavier à l'écran ──────────────────────────────
+  const touchPad = createTouchPad($('stick'), $('fire'), JOY);
+  let touchOn = false;
+  function setTouch(on) {
+    touchOn = on;
+    $('stick').hidden = !on;
+    $('fire').hidden = !on;
+    document.body.classList.toggle('touch', on);
+    setPressed($('touch-mode'), on);
+    if (!on) touchPad.reset();
+    prefs.set('touch', on);
+  }
+  $('touch-mode').addEventListener('click', () => setTouch(!touchOn));
+
+  let keyboardOn = false;
+  let keyboard = null;     // { setCapsLock } une fois dessiné
+  let capsShown = null;
+  function setKeyboard(on) {
+    if (on && !keyboard) {
+      keyboard = buildKeyboard($('keyboard'), toje, (sc, down) => toje.pressKey(sc, down));
+      capsShown = null;
+    }
+    keyboardOn = on;
+    $('keyboard').hidden = !on;
+    document.body.classList.toggle('kb', on);
+    setPressed($('kb-mode'), on);
+    prefs.set('keyboard', on);
+  }
+  $('kb-mode').addEventListener('click', () => setKeyboard(!keyboardOn));
+
+  // ── Clavier du PC et manettes ─────────────────────────────────────────
   let keyboardJoystick = true;
+  const keyJoy = { dirs: 0, a: false, b: false };
   $('joy-mode').addEventListener('click', e => {
     keyboardJoystick = !keyboardJoystick;
     setPressed(e.currentTarget, keyboardJoystick);
@@ -174,27 +263,19 @@
   });
 
   let joyPort = 0;
+  function setPort(port) {
+    toje.joystick(joyPort, 0, false, false);   // relâche l'ancien port
+    joyPort = port;
+    for (const o of document.querySelectorAll('.seg-btn')) setPressed(o, Number(o.dataset.port) === port);
+    prefs.set('port', port);
+  }
   for (const b of document.querySelectorAll('.seg-btn')) {
-    b.addEventListener('click', () => {
-      toje.joystick(joyPort, 0, false, false);   // relâche l'ancien port
-      joyPort = Number(b.dataset.port);
-      for (const o of document.querySelectorAll('.seg-btn')) setPressed(o, o === b);
-      canvas.focus();
-    });
+    b.addEventListener('click', () => { setPort(Number(b.dataset.port)); canvas.focus(); });
   }
 
-  // Le navigateur n'ouvre le son qu'après un geste : premier clic ou première touche.
-  const start = $('start');
-  start.hidden = false;
-  start.addEventListener('click', () => { start.hidden = true; openAudio(); canvas.focus(); });
-  canvas.addEventListener('pointerdown', () => { start.hidden = true; openAudio(); });
-
-  // ── Clavier et manette ─────────────────────────────────────────────────
   const JOY_KEYS = {
     ArrowLeft: JOY.left, ArrowRight: JOY.right, ArrowUp: JOY.up, ArrowDown: JOY.down,
   };
-  const keyJoy = { dirs: 0, a: false, b: false };
-  let lastJoy = '';
 
   function joystickKey(code, down) {
     if (!keyboardJoystick) return false;
@@ -212,15 +293,19 @@
 
   function onKey(e, down) {
     if (e.ctrlKey && e.code === 'KeyR') return;     // laisse recharger la page
-    if (!start.hidden) { start.hidden = true; openAudio(); }
+    if (e.target instanceof HTMLInputElement) return;
+    firstGesture();
     if (e.repeat) { e.preventDefault(); return; }    // le 6804 répète lui-même
     if (joystickKey(e.code, down) || toje.key(e.code, down)) e.preventDefault();
   }
   window.addEventListener('keydown', e => onKey(e, true));
   window.addEventListener('keyup', e => onKey(e, false));
-  window.addEventListener('blur', () => { keyJoy.dirs = 0; keyJoy.a = false; keyJoy.b = false; });
+  window.addEventListener('blur', () => {
+    keyJoy.dirs = 0; keyJoy.a = false; keyJoy.b = false;
+    touchPad.reset();
+  });
 
-  function padState() {
+  function gamepadState() {
     const pad = navigator.getGamepads ? [...navigator.getGamepads()].find(p => p) : null;
     if (!pad) return { dirs: 0, a: false, b: false };
     const ax = pad.axes[0] || 0;
@@ -234,18 +319,24 @@
     return { dirs, a: btn(0) || btn(2), b: btn(1) || btn(3) };
   }
 
-  function pollGamepad() {
-    const pad = padState();
-    const dirs = keyJoy.dirs | pad.dirs;
-    const a = keyJoy.a || pad.a;
-    const b = keyJoy.b || pad.b;
+  // Trois sources pour une seule manette TO8 : clavier du PC, manette USB, écran tactile.
+  let lastJoy = '';
+  function pollJoystick() {
+    const pad = gamepadState();
+    const touch = touchPad.state();
+    const dirs = keyJoy.dirs | pad.dirs | touch.dirs;
+    const a = keyJoy.a || pad.a || touch.a;
+    const b = keyJoy.b || pad.b || touch.b;
     const state = `${dirs}${a}${b}`;
     if (state === lastJoy) return;
     lastJoy = state;
     toje.joystick(joyPort, dirs, a, b);
   }
 
+  setTouch(prefs.get('touch', coarsePointer));
+  setKeyboard(prefs.get('keyboard', false));
+  setPort(prefs.get('port', 0));
   status.textContent = 'prêt';
   canvas.focus();
   requestAnimationFrame(tick);
-})();
+}

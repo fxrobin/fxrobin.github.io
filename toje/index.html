@@ -2,9 +2,16 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>TOJE — Thomson TO8</title>
   <meta name="description" content="Émulateur Thomson TO8 TOJE compilé en WebAssembly.">
+  <meta name="theme-color" content="#CFC9B2">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="toje.png">
+  <link rel="apple-touch-icon" href="toje.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
@@ -18,26 +25,43 @@
       <span id="status" class="status">chargement…</span>
     </header>
 
-    <section id="screen-frame" class="screen-frame">
-      <canvas id="screen" width="704" height="464" tabindex="0"
-              aria-label="Écran du TO8 — cliquer puis taper au clavier"></canvas>
-      <div id="drop-hint" class="drop-hint" hidden>Déposer la disquette (.fd)</div>
-      <button id="start" class="overlay-start" hidden>Cliquer pour activer le son</button>
+    <section class="stage">
+      <div id="stick" class="touch-stick" hidden aria-label="Manette : direction">
+        <div class="stick-base"><div class="stick-knob"></div></div>
+      </div>
+      <section id="screen-frame" class="screen-frame">
+        <canvas id="screen" width="704" height="464" tabindex="0"
+                aria-label="Écran du TO8 — cliquer puis taper au clavier"></canvas>
+        <div id="drop-hint" class="drop-hint" hidden>Déposer la disquette (.fd)</div>
+        <button id="start" class="overlay-start" hidden>Toucher pour activer le son</button>
+      </section>
+      <div id="fire" class="touch-fire" hidden aria-label="Manette : boutons">
+        <button class="fire-btn fire-b" data-fire="b">B</button>
+        <button class="fire-btn fire-a" data-fire="a">A</button>
+      </div>
     </section>
+
+    <section id="keyboard" class="keyboard" hidden aria-label="Clavier du TO8"></section>
 
     <section class="panel">
       <div class="row">
         <label class="keycap action">
-          <input id="disk-input" type="file" accept=".fd,.sap" hidden>
-          Insérer une disquette…
+          <input id="disk-input" type="file" accept=".fd,.sap,application/octet-stream" hidden>
+          Disquette…
         </label>
         <button id="reset" class="keycap amber">Reset</button>
         <button id="sound" class="keycap toggle" aria-pressed="true"><i class="led"></i>Son</button>
         <button id="fullscreen" class="keycap">Plein écran</button>
       </div>
       <div class="row">
-        <span class="disk-line">Disquette : <b id="disk-name">aucune</b></span>
-        <span class="spacer"></span>
+        <button id="touch-mode" class="keycap toggle" aria-pressed="false"
+                title="Stick et boutons A/B à l'écran, pour jouer au doigt">
+          <i class="led"></i>Manette tactile
+        </button>
+        <button id="kb-mode" class="keycap toggle" aria-pressed="false"
+                title="Clavier du TO8 à l'écran">
+          <i class="led"></i>Clavier
+        </button>
         <button id="joy-mode" class="keycap toggle" aria-pressed="true"
                 title="Flèches + Espace/Alt pilotent la manette au lieu des touches du TO8">
           <i class="led"></i>Manette clavier
@@ -47,16 +71,19 @@
           <button class="keycap seg-btn" data-port="1" aria-pressed="false">Port 2</button>
         </span>
       </div>
+      <p class="disk-line">Disquette : <b id="disk-name">aucune</b></p>
       <p class="help">
-        Glisser une image <code>.fd</code> sur l'écran ou « Insérer une disquette » :
-        le TO8 redémarre et presse <b>B</b> au menu. Clavier AZERTY positionnel.
-        Manette : flèches, <b>Espace</b> = bouton A, <b>Alt</b> = bouton B, ou une
-        manette USB.
+        Glisser une image <code>.fd</code> sur l'écran ou « Disquette… » : le TO8
+        redémarre et presse <b>B</b> au menu. Au téléphone, « Manette tactile »
+        affiche un stick et les boutons A/B, « Clavier » le clavier du TO8
+        (SHIFT et CNT restent enfoncés jusqu'à la touche suivante). Au clavier
+        du PC : AZERTY positionnel, flèches + <b>Espace</b>/<b>Alt</b> pour la
+        manette. Une manette USB ou Bluetooth fonctionne aussi.
       </p>
     </section>
   </main>
 
   <script src="classes.wasm-runtime.js"></script>
-  <script src="toje-web.js"></script>
+  <script type="module" src="toje-web.js"></script>
 </body>
 </html>

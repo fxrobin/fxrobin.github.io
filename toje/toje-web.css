@@ -3,6 +3,8 @@
 :root {
   --chassis: #CFC9B2;
   --cap: #ECE8D6;
+  --cap-special: #BAB6A6;   /* pavé numérique, gris sur le TO8 */
+  --yellow: #E8C84A;
   --ink: #2E2A20;
   --ink-dim: #6A6350;
   --rule: #A6A088;
@@ -30,7 +32,9 @@ body {
   display: flex;
   justify-content: center;
   padding: 16px;
+  -webkit-tap-highlight-color: transparent;
 }
+button, label { touch-action: manipulation; }
 
 .chassis {
   width: 100%;
@@ -54,6 +58,19 @@ body {
 .sub { color: var(--ink-dim); }
 .status { margin-left: auto; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
 
+/* ── Scène : écran, et de part et d'autre la manette tactile ─────────── */
+.stage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "screen screen" "stick fire";
+  gap: 14px 10px;
+  align-items: center;
+}
+.screen-frame { grid-area: screen; }
+.touch-stick { grid-area: stick; }
+.touch-fire { grid-area: fire; }
+.touch-stick[hidden], .touch-fire[hidden] { display: none; }
+
 .screen-frame {
   position: relative;
   background: var(--crt);
@@ -69,6 +86,7 @@ body {
   aspect-ratio: 704 / 503;
   image-rendering: pixelated;
   outline: none;
+  touch-action: none;
 }
 .screen-frame:fullscreen { display: flex; align-items: center; justify-content: center; border-radius: 0; }
 .screen-frame:fullscreen #screen { width: auto; height: 100%; max-width: 100%; }
@@ -79,6 +97,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  padding: 12px;
   color: #00FF00;
   font: 700 22px Rajdhani, system-ui, sans-serif;
   background: rgba(8, 8, 12, .78);
@@ -88,10 +108,93 @@ body {
 .overlay-start { cursor: pointer; border-style: solid; }
 .drop-hint[hidden], .overlay-start[hidden] { display: none; }
 
+/* ── Manette tactile ─────────────────────────────────────────────────── */
+.touch-stick, .touch-fire { touch-action: none; user-select: none; -webkit-user-select: none; }
+.touch-stick { display: flex; justify-content: center; }
+.stick-base {
+  position: relative;
+  width: min(38vw, 150px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #BDB69C 0 30%, #A9A288 31% 100%);
+  border: 1px solid var(--rule);
+  box-shadow: inset 0 3px 8px rgba(58, 52, 36, .45);
+}
+.stick-knob {
+  position: absolute;
+  inset: 30%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #4A453A, #1E1B15 70%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, .45);
+  pointer-events: none;
+}
+.touch-fire { display: flex; justify-content: center; align-items: center; gap: 18px; }
+.fire-btn {
+  width: min(20vw, 76px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid #7A1020;
+  background: radial-gradient(circle at 35% 30%, #E0454F, #A0101C 70%);
+  color: #FBE9EA;
+  font: 700 22px Rajdhani, system-ui, sans-serif;
+  box-shadow: 0 4px 0 #5A0810, 0 6px 8px rgba(0, 0, 0, .35);
+  touch-action: none;
+}
+.fire-btn.fire-a { transform: translateY(-14px); }
+.fire-btn.down { box-shadow: 0 1px 0 #5A0810; filter: brightness(1.15); }
+.fire-btn.fire-a.down { transform: translateY(-11px); }
+.fire-btn.fire-b.down { transform: translateY(3px); }
+
+/* ── Clavier du TO8 (SVG) : boîtier, cadres noirs, touches sculptées ── */
+.keyboard {
+  margin-top: 14px;
+  padding: 6px 10px 10px;
+  background: linear-gradient(#ECEFE6, #DCE0D4);
+  border: 1px solid #B9BDB0;
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 #F7F9F3, 0 3px 8px rgba(0, 0, 0, .25);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.keyboard[hidden] { display: none; }
+.keyboard:not([hidden]) { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+/* Largeurs proportionnelles à leurs viewBox de même hauteur : même échelle. */
+.keyboard svg { display: block; height: auto; min-width: 0; }
+.keyboard .kb-head { flex: 0 0 100%; }
+.keyboard .kb-main { flex: var(--kb-main) 1 0; }
+.keyboard .kb-side { flex: var(--kb-side) 1 0; }
+.keyboard .vent { fill: #A9AE9F; }
+.keyboard .badge {
+  fill: none; stroke: var(--ink); stroke-width: 1.2;
+  font: 700 34px Rajdhani, system-ui, sans-serif; letter-spacing: 3px;
+}
+.keyboard .maker { fill: var(--ink); font: 700 13px Rajdhani, system-ui, sans-serif; letter-spacing: 1.5px; }
+.keyboard .bed { fill: #2C2D29; }
+.keyboard .key .side { fill: #BFC4B7; }
+.keyboard .key .face { fill: #EEF1EA; }
+.keyboard .key.pad .side { fill: #85897F; }
+.keyboard .key.pad .face { fill: #AEB2A7; }
+.keyboard .key.yellow .side { fill: #C1931A; }
+.keyboard .key.yellow .face { fill: #F0C232; }
+.keyboard .key .top { transition: transform .04s; }
+.keyboard .key.down .top { transform: translateY(1.6px); }
+.keyboard .key.down .face { filter: brightness(.9); }
+.keyboard .caps-led { fill: #5A2422; }
+.keyboard .key.caps-on .caps-led { fill: #FF3B2F; filter: drop-shadow(0 0 1.5px #FF3B2F); }
+.keyboard text {
+  fill: var(--ink);
+  font: 700 10px Rajdhani, system-ui, sans-serif;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+/* Légende verte des touches, comme sur le TO8 : le caractère obtenu avec SHIFT. */
+.keyboard text.shift { fill: #2E9E3A; font-size: 9px; }
+
 .panel { margin-top: 14px; }
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 10px; }
-.spacer { flex: 1; }
-.disk-line { color: var(--ink-dim); }
+.disk-line { color: var(--ink-dim); margin: 0 0 6px; }
 .disk-line b { color: var(--ink); }
 .help { color: var(--ink-dim); font-weight: 500; margin: 4px 0 0; }
 .help code { font-weight: 700; color: var(--ink); }
@@ -123,7 +226,7 @@ body {
 .keycap.action { color: var(--green); }
 .keycap.amber { color: var(--amber); }
 .seg { display: inline-flex; gap: 6px; }
-.seg-btn[aria-pressed="true"] { background: #E8C84A; color: #332A00; }
+.seg-btn[aria-pressed="true"] { background: var(--yellow); color: #332A00; }
 
 .led {
   width: 9px;
@@ -134,9 +237,48 @@ body {
 }
 .toggle[aria-pressed="true"] .led { background: var(--led-on); box-shadow: 0 0 6px var(--led-on); }
 
+/* ── Téléphone, portrait ─────────────────────────────────────────────── */
 @media (max-width: 560px) {
   body { padding: 0; }
-  .chassis { border-radius: 0; padding: 10px 16px 14px; }
+  .chassis { border-radius: 0; padding: 10px 16px 14px; min-height: 100vh; }
   .brand .sub { display: none; }
   .keycap { padding: 6px 10px; }
+  .screen-frame { padding: 6px; }
+  .drop-hint, .overlay-start { inset: 6px; font-size: 18px; }
+  .keyboard { margin-left: -12px; margin-right: -12px; padding: 5px 4px; border-radius: 0; }
+  /* Empilés : le bloc principal prend toute la largeur, le pavé garde la même échelle. */
+  .keyboard .kb-main { flex: 0 0 100%; }
+  .keyboard .kb-side { flex: 0 0 calc(100% * var(--kb-side) / var(--kb-main)); }
+  .keyboard .kb-head { display: none; }   /* superflu au téléphone : la place va aux touches */
+  /* On tape ou on joue : le clavier ouvert prend la place de la manette, sous l'écran. */
+  body.kb .touch-stick, body.kb .touch-fire { display: none; }
+}
+
+/* ── Téléphone, paysage : stick | écran | boutons, le jeu tient l'écran ── */
+@media (orientation: landscape) and (max-height: 540px) {
+  body { padding: 0; }
+  .chassis {
+    max-width: none;
+    border-radius: 0;
+    padding: max(6px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right))
+             8px max(10px, env(safe-area-inset-left));
+  }
+  .brand { display: none; }
+  body.touch .stage {
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-areas: "stick screen fire";
+    gap: 8px;
+  }
+  .screen-frame { padding: 4px; justify-self: center; }
+  .drop-hint, .overlay-start { inset: 4px; font-size: 18px; }
+  /* La hauteur décide : l'écran prend tout ce qui reste, largeur déduite du ratio. */
+  #screen { height: calc(100dvh - 24px); width: auto; max-width: 100%; }
+  body.kb #screen { height: calc(52dvh - 16px); }
+  body.kb .stage { grid-template-areas: "stick screen fire"; }
+  .keyboard { margin-top: 8px; }
+  .keyboard:not([hidden]) { flex-wrap: nowrap; }
+  .keyboard .kb-head { display: none; }
+  .keyboard .kb-main, .keyboard .kb-side { flex: none; height: calc(46dvh - 22px); width: auto; }
+  .stick-base { width: min(30vh, 150px); }
+  .fire-btn { width: min(17vh, 72px); }
 }
