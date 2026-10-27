@@ -50,7 +50,7 @@ function legends(k) {
   }
   const nodes = k.shift ? [text(cx, f.y + f.h * 0.28, k.shift, 'shift')] : [];
   const words = k.legend.split(' ');
-  const ledRoom = k.sc === CAPS_LOCK ? 1.5 : 0;
+  const ledRoom = k.sc === CAPS_LOCK ? 3 : 0;      // la légende descend sous le voyant
   const baseY = k.shift ? f.y + f.h * 0.72 : f.y + f.h / 2 - (words.length - 1) * 4.5 + ledRoom;
   const black = el('text', { x: cx, y: baseY });
   words.forEach((w, n) => {
@@ -75,8 +75,9 @@ function drawKey(k) {
   top.append(el('rect', { class: 'face', x: f.x, y: f.y, width: f.w, height: f.h, rx: 2 }));
   top.append(...legends(k));
   if (k.sc === CAPS_LOCK) {
-    // Le voyant est une bande en haut de la face : la légende, sur deux lignes, occupe le reste.
-    top.append(el('rect', { class: 'caps-led', x: f.x + 4, y: f.y + 1.3, width: f.w - 8, height: 2.2, rx: 1 }));
+    // Voyant rond en haut de la face, au-dessus de la légende CAPS LOCK.
+    top.append(el('circle', { class: 'caps-led', cx: f.x + f.w / 2, cy: f.y + 3.4, r: 2.3 }));
+    g.classList.add('caps-on');   // allumé à la mise sous tension, comme le TO8
   }
   g.append(top);
   return g;

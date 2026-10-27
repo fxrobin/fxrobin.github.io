@@ -180,8 +180,8 @@ button, label { touch-action: manipulation; }
 .keyboard .key .top { transition: transform .04s; }
 .keyboard .key.down .top { transform: translateY(1.6px); }
 .keyboard .key.down .face { filter: brightness(.9); }
-.keyboard .caps-led { fill: #5A2422; }
-.keyboard .key.caps-on .caps-led { fill: #FF3B2F; filter: drop-shadow(0 0 1.5px #FF3B2F); }
+.keyboard .caps-led { fill: #4A1C1A; stroke: #2A100F; stroke-width: .5; }
+.keyboard .key.caps-on .caps-led { fill: #FF2A1F; stroke: #B3120B; filter: drop-shadow(0 0 2px #FF3B2F); }
 .keyboard text {
   fill: var(--ink);
   font: 700 10px Rajdhani, system-ui, sans-serif;
@@ -281,4 +281,6 @@ button, label { touch-action: manipulation; }
   .keyboard .kb-main, .keyboard .kb-side { flex: none; height: calc(46dvh - 22px); width: auto; }
   .stick-base { width: min(30vh, 150px); }
   .fire-btn { width: min(17vh, 72px); }
+  /* En bas de chaque côté, là où tombent les pouces quand on tient le téléphone. */
+  .touch-stick, .touch-fire { align-self: end; padding-bottom: max(6px, env(safe-area-inset-bottom)); }
 }
