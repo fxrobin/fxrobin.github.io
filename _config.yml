@@ -47,6 +47,12 @@ t:
             about:
                 url: "/about/"
                 text: "/dev/about"
+            cv:
+                url: "/cv"
+                text: "/dev/cv"
+            terminal-cv:
+                url: "/terminal-cv/"
+                text: "/dev/cv-term"
             tags:
                 url: "/tags/fr/"
                 text: "/dev/tags"
@@ -82,6 +88,12 @@ t:
             about:
                 url: "/about/en/"
                 text: "/dev/about"
+            cv:
+                url: "/cv"
+                text: "/dev/cv"
+            terminal-cv:
+                url: "/terminal-cv/"
+                text: "/dev/cv-term"
             tags:
                 url: "/tags/en/"
                 text: "/dev/tags"
