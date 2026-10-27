@@ -6,6 +6,7 @@
 // de l'utilisateur pour ouvrir l'AudioContext — on se cale sur performance.now().
 import { createTouchPad } from './touch-pad.js';
 import { buildKeyboard } from './to8-keyboard.js';
+import { createKeyboardZoom } from './keyboard-zoom.js';
 import { BUILD } from './build-info.js';
 
 const FRAME_SECONDS = 0.02;
@@ -278,7 +279,9 @@ function start(toje) {
   let capsShown = null;
   function setKeyboard(on) {
     if (on && !keyboard) {
-      keyboard = buildKeyboard($('keyboard'), toje, (sc, down) => toje.pressKey(sc, down));
+      const zoom = createKeyboardZoom($('keyboard'), prefs.get('kbZoom', 1), z => prefs.set('kbZoom', z));
+      keyboard = buildKeyboard(zoom.inner, toje, (sc, down) => toje.pressKey(sc, down));
+      requestAnimationFrame(zoom.refresh);   // une fois les touches mesurables
       capsShown = null;
     }
     keyboardOn = on;

@@ -17,6 +17,8 @@ const PAD_X = 563;                               // pavé numérique : touches g
 const SIDE_X = 499;                              // première colonne des flèches
 const F_ROW_BOTTOM = 30;                         // touches de fonction : y < 30
 const SPACE_TOP = 160;                           // barre d'espace : y ≥ 160
+const PRESS_DELAY = 60;                          // ms : laisse un pincement se déclarer
+const MIN_HOLD = 80;                             // ms : durée minimale d'une frappe
 
 function el(name, attrs) {
   const node = document.createElementNS(SVG, name);
@@ -179,23 +181,51 @@ export function buildKeyboard(container, toje, press) {
     releaseLatched();
   }
 
+  // Appui différé de PRESS_DELAY : si un second doigt se pose entre-temps,
+  // c'est un pincement (zoom), pas une frappe — rien n'est envoyé au TO8.
+  // Un toucher plus bref que le délai est tout de même tapé, tenu MIN_HOLD
+  // pour que le 6804 ait le temps de le lire.
+  const pending = new Map();   // pointerId → { sc, timer }
+
+  function cancelPending() {
+    for (const p of pending.values()) clearTimeout(p.timer);
+    pending.clear();
+  }
+
   function listen(svg) {
     svg.addEventListener('pointerdown', e => {
       const g = e.target.closest('g[data-sc]');
       if (!g) return;
-      e.preventDefault();
+      if (pending.size > 0) { cancelPending(); return; }   // deux doigts : pincement
       svg.setPointerCapture(e.pointerId);
       const sc = Number(g.dataset.sc);
-      held.set(e.pointerId, sc);
-      down(sc);
+      const timer = setTimeout(() => {
+        pending.delete(e.pointerId);
+        held.set(e.pointerId, sc);
+        down(sc);
+      }, PRESS_DELAY);
+      pending.set(e.pointerId, { sc, timer });
     });
-    for (const type of ['pointerup', 'pointercancel']) {
-      svg.addEventListener(type, e => {
-        if (!held.has(e.pointerId)) return;
-        up(held.get(e.pointerId));
-        held.delete(e.pointerId);
-      });
-    }
+    svg.addEventListener('pointerup', e => {
+      const p = pending.get(e.pointerId);
+      if (p) {
+        clearTimeout(p.timer);
+        pending.delete(e.pointerId);
+        down(p.sc);
+        setTimeout(() => up(p.sc), MIN_HOLD);
+        return;
+      }
+      if (!held.has(e.pointerId)) return;
+      up(held.get(e.pointerId));
+      held.delete(e.pointerId);
+    });
+    svg.addEventListener('pointercancel', e => {
+      const p = pending.get(e.pointerId);
+      if (p) { clearTimeout(p.timer); pending.delete(e.pointerId); return; }
+      if (!held.has(e.pointerId)) return;
+      up(held.get(e.pointerId));
+      held.delete(e.pointerId);
+    });
   }
 
   const main = block(keys.filter(k => k.x < SIDE_X), 'kb-main');

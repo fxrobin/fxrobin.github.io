@@ -154,12 +154,29 @@ button, label { touch-action: manipulation; }
   border: 1px solid #B9BDB0;
   border-radius: 8px;
   box-shadow: inset 0 1px 0 #F7F9F3, 0 3px 8px rgba(0, 0, 0, .25);
-  touch-action: none;
+  /* Pincement à deux doigts permis (zoom de la page) ; un doigt seul tape. */
+  touch-action: pinch-zoom;
   user-select: none;
   -webkit-user-select: none;
+  --kb-zoom: 1;
 }
 .keyboard[hidden] { display: none; }
-.keyboard:not([hidden]) { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.kb-viewport { overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
+.kb-inner {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
+  width: calc(100% * var(--kb-zoom));
+}
+.kb-zoom { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-bottom: 4px; }
+.kb-zoom-btn {
+  width: 30px; height: 26px; padding: 0;
+  font: 700 18px/1 Rajdhani, system-ui, sans-serif; color: var(--ink);
+  background: linear-gradient(#F4F1E4, var(--cap)); border: 1px solid var(--rule); border-radius: 4px;
+  box-shadow: 0 2px 0 var(--shadow);
+}
+.kb-zoom-btn:disabled { opacity: .4; }
+.kb-zoom-level { min-width: 46px; text-align: center; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+.kb-pan { order: -1; flex: 1; max-width: 60%; margin-right: auto; accent-color: var(--green); }
+.kb-pan[hidden] { display: none; }
 /* Largeurs proportionnelles à leurs viewBox de même hauteur : même échelle. */
 .keyboard svg { display: block; height: auto; min-width: 0; }
 .keyboard .kb-head { flex: 0 0 100%; }
@@ -296,9 +313,10 @@ button, label { touch-action: manipulation; }
   body.kb #screen { height: calc(52dvh - 16px); }
   body.kb .stage { grid-template-areas: "stick screen fire"; }
   .keyboard { margin-top: 8px; }
-  .keyboard:not([hidden]) { flex-wrap: nowrap; }
+  .kb-inner { flex-wrap: nowrap; width: max-content; min-width: 100%; }
   .keyboard .kb-head { display: none; }
-  .keyboard .kb-main, .keyboard .kb-side { flex: none; height: calc(46dvh - 22px); width: auto; }
+  .keyboard .kb-main, .keyboard .kb-side { flex: none; height: calc((46dvh - 54px) * var(--kb-zoom)); width: auto; }
+  .kb-zoom { margin-bottom: 2px; }
   .stick-base { width: min(30vh, 150px); }
   .fire-btn { width: min(17vh, 72px); }
   /* En bas de chaque côté, là où tombent les pouces quand on tient le téléphone. */
