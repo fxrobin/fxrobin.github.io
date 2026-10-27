@@ -56,6 +56,7 @@ button, label { touch-action: manipulation; }
 .logo { font-size: 20px; letter-spacing: .12em; }
 .logo b { color: var(--green); }
 .sub { color: var(--ink-dim); }
+.build { color: var(--ink-dim); font-weight: 500; font-size: 13px; font-variant-numeric: tabular-nums; }
 .status { margin-left: auto; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
 
 /* ── Scène : écran, et de part et d'autre la manette tactile ─────────── */
@@ -242,6 +243,8 @@ button, label { touch-action: manipulation; }
   body { padding: 0; }
   .chassis { border-radius: 0; padding: 10px 16px 14px; min-height: 100vh; }
   .brand .sub { display: none; }
+  .brand { flex-wrap: wrap; row-gap: 2px; }
+  .build { order: 3; flex-basis: 100%; font-size: 12px; }   /* sous le logo : la ligne serait trop longue */
   .keycap { padding: 6px 10px; }
   .screen-frame { padding: 6px; }
   .drop-hint, .overlay-start { inset: 6px; font-size: 18px; }
@@ -263,7 +266,24 @@ button, label { touch-action: manipulation; }
     padding: max(6px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right))
              8px max(10px, env(safe-area-inset-left));
   }
-  .brand { display: none; }
+  /* L'en-tête passe dans le coin haut gauche, libre depuis que le stick est en bas. */
+  .brand {
+    position: fixed;
+    top: max(6px, env(safe-area-inset-top));
+    left: max(10px, env(safe-area-inset-left));
+    z-index: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    pointer-events: none;
+  }
+  .brand .logo { font-size: 13px; }
+  .brand .sub { display: none; }
+  .brand .status { margin-left: 0; font-size: 12px; }
+  .build { font-size: 11px; }
   body.touch .stage {
     grid-template-columns: 1fr auto 1fr;
     grid-template-areas: "stick screen fire";

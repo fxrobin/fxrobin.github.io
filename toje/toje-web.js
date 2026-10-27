@@ -6,6 +6,7 @@
 // de l'utilisateur pour ouvrir l'AudioContext — on se cale sur performance.now().
 import { createTouchPad } from './touch-pad.js';
 import { buildKeyboard } from './to8-keyboard.js';
+import { BUILD } from './build-info.js';
 
 const FRAME_SECONDS = 0.02;
 const AUDIO_LEAD = 0.08;          // ~4 trames d'avance : assez pour absorber un rAF en retard
@@ -45,6 +46,18 @@ async function loadEmulator() {
     return null;
   }
 }
+
+// Version horodatée en tête de page : savoir quel build tourne, au téléphone
+// comme au bureau. L'heure est rendue dans le fuseau du visiteur.
+function showBuild() {
+  const at = new Date(BUILD.time);
+  const when = Number.isNaN(at.getTime()) ? BUILD.time
+    : at.toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric',
+                                   hour: '2-digit', minute: '2-digit' });
+  const commit = BUILD.commit && !BUILD.commit.startsWith('$') ? ` · ${BUILD.commit}${BUILD.dirty ? '+' : ''}` : '';
+  $('build').textContent = `v${BUILD.version} · ${when}${commit}`;
+}
+showBuild();
 
 const toje = await loadEmulator();
 if (toje) start(toje);
