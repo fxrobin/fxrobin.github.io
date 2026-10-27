@@ -322,3 +322,72 @@ button, label { touch-action: manipulation; }
   /* En bas de chaque côté, là où tombent les pouces quand on tient le téléphone. */
   .touch-stick, .touch-fire { align-self: end; padding-bottom: max(6px, env(safe-area-inset-bottom)); }
 }
+
+/* ── Menu des options : panneau en ligne au bureau, tiroir ☰ au téléphone ── */
+.menu-toggle, .menu-backdrop, .menu-head { display: none; }
+
+@media (max-width: 760px), (orientation: landscape) and (max-height: 540px) {
+  .menu-toggle {
+    position: fixed;
+    top: max(8px, env(safe-area-inset-top));
+    right: max(10px, env(safe-area-inset-right));
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 42px;
+    height: 38px;
+    padding: 0 10px;
+    background: linear-gradient(#F4F1E4, var(--cap));
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    box-shadow: 0 3px 0 var(--shadow), 0 4px 6px rgba(58, 52, 36, .35);
+  }
+  .menu-toggle span { display: block; height: 3px; border-radius: 2px; background: var(--ink); }
+  .brand { padding-right: 52px; }   /* le ☰ se pose en haut à droite */
+
+  .menu-backdrop:not([hidden]) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    background: rgba(20, 18, 12, .45);
+  }
+  #menu.panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    width: min(340px, 88vw);
+    margin: 0;
+    padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right))
+             max(14px, env(safe-area-inset-bottom)) 14px;
+    overflow-y: auto;
+    background: var(--chassis);
+    box-shadow: -6px 0 18px rgba(0, 0, 0, .35);
+    transform: translateX(105%);
+    transition: transform .18s ease-out;
+    visibility: hidden;
+  }
+  body.menu-open #menu.panel { transform: none; visibility: visible; }
+  .menu-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+    letter-spacing: .08em;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  .menu-close {
+    width: 36px; height: 36px;
+    font: 700 26px/1 Rajdhani, system-ui, sans-serif;
+    color: var(--ink);
+    background: none;
+    border: 0;
+  }
+  #menu .row .keycap { flex: 1 1 auto; justify-content: center; }
+}

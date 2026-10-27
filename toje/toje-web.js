@@ -7,6 +7,7 @@
 import { createTouchPad } from './touch-pad.js';
 import { buildKeyboard } from './to8-keyboard.js';
 import { createKeyboardZoom } from './keyboard-zoom.js';
+import { createMenu } from './menu.js';
 import { BUILD } from './build-info.js';
 
 const FRAME_SECONDS = 0.02;
@@ -215,9 +216,11 @@ function start(toje) {
     canvas.focus();
   }
 
+  const menu = createMenu($('menu-toggle'), $('menu'), $('menu-backdrop'), $('menu-close'));
+
   $('disk-input').addEventListener('change', e => {
     const file = e.target.files[0];
-    if (file) insertDisk(file);
+    if (file) { insertDisk(file); menu.close(); }
     e.target.value = '';
   });
 
@@ -237,7 +240,7 @@ function start(toje) {
     button.setAttribute('aria-pressed', String(on));
   }
 
-  $('reset').addEventListener('click', () => { toje.reset(); canvas.focus(); });
+  $('reset').addEventListener('click', () => { toje.reset(); menu.close(); canvas.focus(); });
 
   $('sound').addEventListener('click', e => {
     soundOn = !soundOn;
@@ -249,6 +252,7 @@ function start(toje) {
   // Plein écran : l'écran seul au bureau ; toute la page (manette, clavier)
   // dès que les commandes tactiles sont affichées, en paysage si possible.
   $('fullscreen').addEventListener('click', async () => {
+    menu.close();
     if (document.fullscreenElement) { document.exitFullscreen(); return; }
     const target = touchOn || keyboardOn ? document.documentElement : frame;
     try {

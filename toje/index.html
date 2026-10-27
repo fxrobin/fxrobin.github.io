@@ -44,7 +44,15 @@
 
     <section id="keyboard" class="keyboard" hidden aria-label="Clavier du TO8"></section>
 
-    <section class="panel">
+    <button id="menu-toggle" class="menu-toggle" aria-label="Options" aria-controls="menu"
+            aria-expanded="false"><span></span><span></span><span></span></button>
+    <div id="menu-backdrop" class="menu-backdrop" hidden></div>
+
+    <section id="menu" class="panel" aria-label="Options">
+      <div class="menu-head">
+        <span>Options</span>
+        <button id="menu-close" class="menu-close" aria-label="Fermer les options">×</button>
+      </div>
       <div class="row">
         <label class="keycap action">
           <input id="disk-input" type="file" accept=".fd,.sap,application/octet-stream" hidden>
