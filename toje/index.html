@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css">
+  <link rel="stylesheet" href="toje-web.css?v=c589079">
 </head>
 <body>
   <main class="chassis">
@@ -92,7 +92,25 @@
     </section>
   </main>
 
-  <script src="classes.wasm-runtime.js"></script>
-  <script type="module" src="toje-web.js"></script>
+  <!--
+    Chaque fichier porte le commit du build (?v=…) : GitHub Pages laisse les
+    navigateurs garder un fichier 10 minutes, et chacun expire à son heure —
+    une page neuve pouvait tourner avec un script ancien. Cette page est le
+    seul point d'entrée non versionné ; elle désigne la bonne génération du
+    reste, modules importés compris (carte d'import).
+  -->
+  <script type="importmap">
+    {
+      "imports": {
+        "./touch-pad.js": "./touch-pad.js?v=c589079",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=c589079",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=c589079",
+        "./menu.js": "./menu.js?v=c589079",
+        "./build-info.js": "./build-info.js?v=c589079"
+      }
+    }
+  </script>
+  <script src="classes.wasm-runtime.js?v=c589079"></script>
+  <script type="module" src="toje-web.js?v=c589079"></script>
 </body>
 </html>

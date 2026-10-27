@@ -34,7 +34,7 @@ const prefs = {
 
 async function loadEmulator() {
   try {
-    const teavm = await TeaVM.wasmGC.load('toje.wasm');
+    const teavm = await TeaVM.wasmGC.load(`toje.wasm?v=${BUILD.commit}`);   // même génération que la page
     teavm.exports.main([]);
     return teavm.exports;
   } catch (e) {

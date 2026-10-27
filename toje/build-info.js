@@ -1,9 +1,9 @@
 // Généré au build par le filtrage Maven (toje-web/pom.xml) : ne pas éditer.
-// Seul fichier filtré de la page : les autres contiennent des gabarits ${…}
-// JavaScript que le filtrage réécrirait.
+// Fichiers filtrés de la page : celui-ci et index.html (versions ?v=…). Les
+// autres contiennent des gabarits ${…} JavaScript que le filtrage réécrirait.
 export const BUILD = {
   version: '1.2.0',
-  time: '2026-10-27T23:29:31Z',      // ISO 8601, UTC
-  commit: '3b78a81',
+  time: '2026-10-27T23:35:40Z',      // ISO 8601, UTC
+  commit: 'c589079',
   dirty: 'false' === 'true',
 };
