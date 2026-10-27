@@ -190,6 +190,13 @@ function executeCommand(cmd) {
         case 'projects':
             showProjects();
             break;
+        case 'interests':
+            showInterests();
+            break;
+        case 'hobbies':
+        case 'loisirs':
+            showHobbies();
+            break;
         case 'contact':
             showContact();
             break;
@@ -222,8 +229,10 @@ function showHelp() {
     print('  about      - Présentation et bio', 'success');
     print('  skills     - Compétences techniques', 'success');
     print('  experience - Parcours professionnel', 'success');
-    print('  education  - Formation', 'success');
-    print('  projects   - Projets personnels', 'success');
+    print('  education  - Diplômes et certifications', 'success');
+    print('  projects   - Gestion de projet', 'success');
+    print('  interests  - Centres d\'intérêt', 'success');
+    print('  hobbies    - Loisirs', 'success');
     print('  contact    - Informations de contact', 'success');
     print('');
     print('  neofetch   - System information', 'warning');
@@ -239,23 +248,19 @@ function showAbout() {
     printSection('ABOUT ME');
     print(`Nom      : ${cvData.about.name}`);
     print(`Titre    : ${cvData.about.title}`);
+    print(`Profil   : ${cvData.about.subtitle}`);
     print(`Location : ${cvData.about.location}`);
+    print(`XP       : ${cvData.about.experience}`);
     print('');
-    cvData.about.bio.split('\n').forEach(line => print(line));
+    cvData.about.bio.forEach(line => print(line));
     print('');
 }
 
 function showSkills() {
     printSection('COMPÉTENCES');
-    const categories = [
-        ['Languages', cvData.skills.languages],
-        ['Frameworks', cvData.skills.frameworks],
-        ['Tools', cvData.skills.tools],
-        ['Architecture', cvData.skills.architecture],
-    ];
-    categories.forEach(([label, items]) => {
+    cvData.skills.forEach(([label, items]) => {
         print(`[${label}]`, 'success');
-        printList(items);
+        print(`  ${items.join(', ')}`);
         print('');
     });
 }
@@ -264,8 +269,8 @@ function showExperience() {
     printSection('EXPÉRIENCE');
     cvData.experience.forEach(exp => {
         print(`[${exp.period}]`, 'warning');
-        print(`${exp.title} @ ${exp.company}`, 'success');
-        print(`  ${exp.description}`);
+        print(`${exp.title} @ ${exp.company} (${exp.location})`, 'success');
+        printList(exp.highlights);
         print('');
     });
 }
@@ -281,50 +286,65 @@ function showEducation() {
 }
 
 function showProjects() {
-    printSection('PROJETS');
+    printSection('GESTION DE PROJET');
     printList(cvData.projects, 'success');
+    print('');
+}
+
+function showInterests() {
+    printSection('CENTRES D\'INTÉRÊT');
+    cvData.interests.forEach(([label, description]) => {
+        print(`[${label}]`, 'success');
+        print(`  ${description}`);
+        print('');
+    });
+}
+
+function showHobbies() {
+    printSection('LOISIRS');
+    printList(cvData.hobbies, 'success');
     print('');
 }
 
 function showContact() {
     printSection('CONTACT');
-    print('  Email    : fx@example.com', 'success');
-    print('  GitHub   : github.com/fx', 'success');
-    print('  LinkedIn : linkedin.com/in/fx', 'success');
-    print('  Blog     : fx-dev.blog', 'success');
+    const width = Math.max(...cvData.contact.map(([label]) => label.length));
+    cvData.contact.forEach(([label, value]) => print(`  ${label.padEnd(width)} : ${value}`, 'success'));
+    print('');
+    print('  Pour me contacter : message sur LinkedIn, svp.', 'warning');
     print('');
 }
 
 function showNeofetch() {
     print('');
-    print('     ___       fx@retro-terminal', 'success');
-    print('    (.. |      ─────────────────', 'success');
-    print('    (<> |      OS: Retro-OS v1.0', 'success');
+    print('     ___       fxrobin@retro-terminal', 'success');
+    print('    (.. |      ──────────────────────', 'success');
+    print('    (<> |      OS: Retro-OS v2.0', 'success');
     print('   / __  \\     Shell: FX Terminal', 'success');
-    print('  ( /  \\ /|    Resolution: Vintage CRT', 'success');
-    print(' _/\\ __)\\ \\    Theme: Matrix Green', 'success');
-    print(' \\/_____)\_)   Skills: Java, Quarkus, DDD', 'success');
+    print('  ( /  \\ /|    Uptime: 27 years of code', 'success');
+    print(' _/\\ __)\\ \\    Role: Lead Software Engineer', 'success');
+    print(' \\/_____)\\_)   Skills: Java, Quarkus, Craft, GenAI', 'success');
     print('');
 }
 
 function showTree() {
+    const slug = text => text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const branch = (items, isLast) => items.forEach((item, i) => {
+        const prefix = isLast ? '    ' : '│   ';
+        print(`${prefix}${i === items.length - 1 ? '└──' : '├──'} ${item}`);
+    });
     print('');
     print('cv/', 'header');
     print('├── about/', 'success');
-    print('│   ├── bio.txt');
-    print('│   └── contact.txt');
+    branch(['bio.txt', 'contact.txt'], false);
     print('├── skills/', 'success');
-    print('│   ├── languages/');
-    print('│   ├── frameworks/');
-    print('│   └── architecture/');
+    branch(cvData.skills.map(([label]) => `${slug(label)}/`), false);
     print('├── experience/', 'success');
-    print('│   ├── 2020-present.txt');
-    print('│   └── 2017-2020.txt');
+    branch(cvData.experience.map(exp => `${exp.id}.txt`), false);
     print('├── education/', 'success');
-    print('│   └── master-2015.txt');
-    print('└── projects/', 'success');
-    print('    ├── thomson-emulator/');
-    print('    └── mqtt-router/');
+    branch(cvData.education.map(edu => `${slug(edu.year + ' ' + edu.degree)}.txt`), false);
+    print('└── hobbies/', 'success');
+    branch(['sports.txt', 'music.txt', 'retrocoding/', 'travels.txt'], true);
     print('');
 }
 
@@ -360,7 +380,7 @@ function clearTerminal() {
 // Boot sequence
 
 const bootLines = [
-    'Terminal-CV-OS v1.0. BASIC 512 Compatible',
+    'Terminal-CV-OS v2.0. BASIC 512 Compatible',
     ' ',
     'Copyright (c) 1975 FX Systems',
     '512K RAM System (256K native, 256K Extended)',
