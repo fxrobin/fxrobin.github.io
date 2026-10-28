@@ -11,6 +11,8 @@ import { createMenu } from './menu.js';
 import { createLibrary, formatOf } from './library.js';
 import { BUILD } from './build-info.js';
 import { createCrtScreen } from './crt-screen.js';
+import { openSaveStore } from './save-store.js';
+import { createGameSaves } from './game-saves.js';
 
 const FRAME_SECONDS = 0.02;
 const AUDIO_LEAD = 0.08;          // ~4 trames d'avance : assez pour absorber un rAF en retard
@@ -236,21 +238,84 @@ function start(toje) {
   }
   document.addEventListener('visibilitychange', () => { if (audio) keepScreenAwake(); });
 
-  // ── Disquette ──────────────────────────────────────────────────────────
+  // ── Médias ─────────────────────────────────────────────────────────────
   // Un média, d'où qu'il vienne (bibliothèque, fichier, glisser-déposer),
   // part vers le bon connecteur selon son extension ; .sap reste une disquette.
+  // La page garde les octets de chacun : une partie sauvegardée les remonte.
+  let media = { disks: [null, null], cart: null, sd: null };   // { name, bytes }
+
+  // « Disquette choisie » : Démarrer (redémarre dessus) ou un lecteur, où elle
+  // entre sans redémarrer — un jeu qui demande sa disquette 2. Revient à
+  // Démarrer après chaque insertion, pour ne pas surprendre au média suivant.
+  let target = 'boot';
+  function setTarget(value) {
+    target = value;
+    for (const b of document.querySelectorAll('.target-btn')) setPressed(b, b.dataset.target === value);
+  }
+  for (const b of document.querySelectorAll('.target-btn')) {
+    b.addEventListener('click', () => setTarget(b.dataset.target));
+  }
+
+  function showMedia() {
+    const parts = [];
+    media.disks.forEach((d, i) => { if (d) parts.push(`lecteur ${i + 1} : ${d.name}`); });
+    if (media.cart) parts.push(`cartouche : ${media.cart.name}`);
+    if (media.sd) parts.push(`carte SD : ${media.sd.name}`);
+    $('disk-name').textContent = parts.length ? parts.join(' · ') : 'aucun';
+  }
+
   function mount(name, bytes) {
     const format = formatOf(name) || 'fd';
-    let ok = true;
-    if (format === 'rom') toje.insertCartridge(bytes);
-    else if (format === 'sd') ok = toje.insertSdCard(bytes, name);
-    else toje.insertDisk(bytes, name);
-    $('disk-name').textContent = ok ? name : `${name} (carte non activée)`;
-    status.textContent = ok ? name : 'carte SDDrive non activée';
+    const isDisk = format !== 'rom' && format !== 'sd';
+    if (isDisk && target !== 'boot') {
+      const drive = Number(target);
+      toje.swapDisk(drive, bytes, name);
+      media.disks[drive] = { name, bytes };
+      status.textContent = `${name} → lecteur ${drive + 1}`;
+      setTarget('boot');
+    } else {
+      let ok = true;
+      if (format === 'rom') toje.insertCartridge(bytes);
+      else if (format === 'sd') ok = toje.insertSdCard(bytes, name);
+      else toje.insertDisk(bytes, name);
+      media = { disks: [isDisk ? { name, bytes } : null, null],
+                cart: format === 'rom' ? { name, bytes } : null,
+                sd: format === 'sd' && ok ? { name, bytes } : null };
+      status.textContent = ok ? name : 'carte SDDrive non activée';
+    }
+    showMedia();
+    saves.renderSlots();
     menu.close();
     firstGesture();
     canvas.focus();
   }
+
+  // Ce qu'une partie sauvegardée retient des médias, et comment les remonter
+  // sans redémarrer : la carte d'abord (elle réinitialise la machine), puis le reste.
+  const gameMedia = {
+    list() {
+      const list = [];
+      media.disks.forEach((d, drive) => { if (d) list.push({ kind: 'disk', drive, ...d }); });
+      if (media.cart) list.push({ kind: 'cart', ...media.cart });
+      if (media.sd) list.push({ kind: 'sd', ...media.sd });
+      return list;
+    },
+    title() {
+      const first = this.list()[0];
+      return first ? first.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ') : 'TO8';
+    },
+    remount(list) {
+      toje.ejectAll();
+      media = { disks: [null, null], cart: null, sd: null };
+      for (const m of list.filter(m => m.kind === 'sd')) { toje.restoreSdCard(m.bytes, m.name); media.sd = m; }
+      for (const m of list.filter(m => m.kind === 'cart')) { toje.restoreCartridge(m.bytes); media.cart = m; }
+      for (const m of list.filter(m => m.kind === 'disk')) { toje.swapDisk(m.drive, m.bytes, m.name); media.disks[m.drive] = m; }
+      showMedia();
+      startHint.hidden = true;
+      menu.close();
+      canvas.focus();
+    },
+  };
 
   async function openFile(file) {
     mount(file.name, new Int8Array(await file.arrayBuffer()));
@@ -447,6 +512,27 @@ function start(toje) {
   setPort(prefs.get('port', 0));
   setDiskTurbo(prefs.get('diskTurbo', false));
   setCrt(prefs.get('crt', false));
+
+  // Parties : magasin du navigateur ouvert en tâche de fond ; la page tourne déjà.
+  let saves = { renderSlots() {} };
+  openSaveStore().then(async store => {
+    saves = createGameSaves({
+      toje, store, media: gameMedia, canvas,
+      ui: { slots: $('saves'), resume: $('resume'), resumeTitle: $('resume-title'),
+            resumeWhen: $('resume-when'), resumeThumb: $('resume-thumb'),
+            resumeYes: $('resume-yes'), resumeNo: $('resume-no') },
+      onDone: text => { status.textContent = text; },
+      // État illisible (autre version de TOJE) : on redémarre sur son premier média.
+      onFailedResume: save => {
+        const first = save.media.find(m => m.kind !== 'disk' || m.drive === 0) || save.media[0];
+        setTarget('boot');
+        if (first) mount(first.name, first.bytes);
+        status.textContent = 'sauvegarde d\'une autre version : partie redémarrée';
+      },
+    });
+    saves.renderSlots();
+    if (await saves.offerResume()) startHint.hidden = true;
+  });
   status.textContent = 'prêt';
   canvas.focus();
   requestAnimationFrame(tick);

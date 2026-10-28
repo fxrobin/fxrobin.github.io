@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css?v=18c6354">
+  <link rel="stylesheet" href="toje-web.css?v=cb8ac15">
 </head>
 <body>
   <main class="chassis">
@@ -39,6 +39,15 @@
         <div id="crt" class="crt-overlay" hidden aria-hidden="true"></div>
         <div id="drop-hint" class="drop-hint" hidden>Déposer le média (.fd, .sd, .rom)</div>
         <button id="start" class="overlay-start" hidden>Toucher pour activer le son</button>
+        <div id="resume" class="overlay-resume" hidden role="dialog" aria-label="Reprendre la partie">
+          <img id="resume-thumb" class="resume-thumb" alt="">
+          <p>Reprendre <b id="resume-title"></b> ?</p>
+          <small id="resume-when"></small>
+          <div class="row">
+            <button id="resume-yes" class="keycap action">Reprendre</button>
+            <button id="resume-no" class="keycap">Nouvelle partie</button>
+          </div>
+        </div>
       </section>
       <div id="fire" class="touch-fire" hidden aria-label="Manette : boutons">
         <button class="fire-btn fire-b" data-fire="b">B</button>
@@ -93,6 +102,21 @@
         </span>
       </div>
       <p class="disk-line">Média : <b id="disk-name">aucun</b></p>
+      <div class="row target-row">
+        <span class="target-label">Disquette choisie :</span>
+        <span class="seg" role="group" aria-label="Où va la prochaine disquette">
+          <button class="keycap target-btn" data-target="boot" aria-pressed="true"
+                  title="Redémarre le TO8 sur cette disquette">Démarrer</button>
+          <button class="keycap target-btn" data-target="0" aria-pressed="false"
+                  title="Glisse la disquette dans le lecteur 1 sans redémarrer">Lecteur 1</button>
+          <button class="keycap target-btn" data-target="1" aria-pressed="false"
+                  title="Glisse la disquette dans le lecteur 2 sans redémarrer">Lecteur 2</button>
+        </span>
+      </div>
+      <div class="saves">
+        <div class="lib-head"><span>Parties sauvegardées</span></div>
+        <div id="saves" class="save-list"></div>
+      </div>
       <div class="library">
         <div class="lib-head">
           <span>Bibliothèque</span>
@@ -109,7 +133,11 @@
         Choisir un média dans la bibliothèque, l'ouvrir (« Ouvrir un fichier… »)
         ou le glisser sur l'écran : le TO8 redémarre et presse <b>B</b> au menu
         (disquette <code>.fd</code>, carte SDDrive <code>.sd</code>) ou <b>0</b>
-        (cartouche <code>.rom</code>). Une carte SDDrive ouvre son propre menu :
+        (cartouche <code>.rom</code>). Un jeu demande une autre disquette :
+        « Lecteur 1 » ou « Lecteur 2 » sous « Disquette choisie », puis la
+        disquette — elle entre sans redémarrer. La partie en cours est gardée
+        quand la page passe en arrière-plan, et proposée au retour ; trois
+        emplacements la sauvent à la main. Une carte SDDrive ouvre son propre menu :
         choisir le jeu aux flèches, puis ENT. Au téléphone, « Manette tactile »
         affiche un stick et les boutons A/B, « Clavier » le clavier du TO8
         (SHIFT et CNT restent enfoncés jusqu'à la touche suivante). Au clavier
@@ -132,17 +160,19 @@
   <script type="importmap">
     {
       "imports": {
-        "./touch-pad.js": "./touch-pad.js?v=18c6354",
-        "./to8-keyboard.js": "./to8-keyboard.js?v=18c6354",
-        "./keyboard-zoom.js": "./keyboard-zoom.js?v=18c6354",
-        "./menu.js": "./menu.js?v=18c6354",
-        "./build-info.js": "./build-info.js?v=18c6354",
-        "./library.js": "./library.js?v=18c6354",
-        "./crt-screen.js": "./crt-screen.js?v=18c6354"
+        "./touch-pad.js": "./touch-pad.js?v=cb8ac15",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=cb8ac15",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=cb8ac15",
+        "./menu.js": "./menu.js?v=cb8ac15",
+        "./build-info.js": "./build-info.js?v=cb8ac15",
+        "./library.js": "./library.js?v=cb8ac15",
+        "./crt-screen.js": "./crt-screen.js?v=cb8ac15",
+        "./save-store.js": "./save-store.js?v=cb8ac15",
+        "./game-saves.js": "./game-saves.js?v=cb8ac15"
       }
     }
   </script>
-  <script src="classes.wasm-runtime.js?v=18c6354"></script>
-  <script type="module" src="toje-web.js?v=18c6354"></script>
+  <script src="classes.wasm-runtime.js?v=cb8ac15"></script>
+  <script type="module" src="toje-web.js?v=cb8ac15"></script>
 </body>
 </html>
