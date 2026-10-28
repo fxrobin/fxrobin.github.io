@@ -250,16 +250,25 @@ function start(toje) {
     return n;
   }
 
+  // Une exception dans une trame ne doit jamais arrêter la boucle : sans le
+  // finally, le rafraîchissement suivant n'est pas demandé et l'émulateur se fige.
   function tick(now) {
-    pollJoystick();
-    const turbo = turboWanted(now);
-    if (turbo !== turboOn) setTurbo(turbo);
-    const n = turbo ? runTurbo(now) : runNormal(now);
-    wallLast = now;
-    stats.maxBurst = Math.max(stats.maxBurst, n);
-    if (n > 0) present();
-    updateStatus(now);
-    requestAnimationFrame(tick);
+    try {
+      pollJoystick();
+      const turbo = turboWanted(now);
+      if (turbo !== turboOn) setTurbo(turbo);
+      const n = turbo ? runTurbo(now) : runNormal(now);
+      wallLast = now;
+      stats.maxBurst = Math.max(stats.maxBurst, n);
+      if (n > 0) present();
+      updateStatus(now);
+    } catch (e) {
+      stats.errors = (stats.errors || 0) + 1;
+      console.error(e);
+      status.textContent = `erreur d'émulation : ${e.message || e}`;
+    } finally {
+      requestAnimationFrame(tick);
+    }
   }
 
   // Le navigateur n'ouvre le son qu'après un geste : n'importe lequel suffit.

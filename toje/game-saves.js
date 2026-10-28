@@ -51,9 +51,14 @@ export function createGameSaves({ toje, store, media, canvas, ui, onDone, onFail
     };
   }
 
+  // Décompresser d'abord, puis remonter et restaurer d'un seul tenant : entre
+  // les deux, la boucle de la page faisait tourner la machine sur une mémoire
+  // déjà réorganisée (cartouche retirée) — elle exécutait n'importe quoi, et ce
+  // qui n'est pas dans l'instantané pouvait en garder la trace.
   async function restore(save) {
+    const state = await unpack(save.state);
     media.remount(save.media);
-    if (toje.loadState(await unpack(save.state))) return true;
+    if (toje.loadState(state)) return true;
     onFailedResume(save);   // état d'une autre version de TOJE : on redémarre sur ses médias
     return false;
   }

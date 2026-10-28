@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css?v=a5e0ec9">
+  <link rel="stylesheet" href="toje-web.css?v=494705c">
 </head>
 <body>
   <main class="chassis">
@@ -73,68 +73,85 @@
         <span>Options</span>
         <button id="menu-close" class="menu-close" aria-label="Fermer les options">×</button>
       </div>
-      <div class="row">
+      <div class="menu-actions">
         <label class="keycap action">
           <input id="disk-input" type="file" accept=".fd,.sap,.sd,.rom,application/octet-stream" hidden>
           Ouvrir un fichier…
         </label>
-        <button id="reset" class="keycap amber">Reset</button>
-        <button id="sound" class="keycap toggle" aria-pressed="true"><i class="led"></i>Son</button>
         <button id="fullscreen" class="keycap">Plein écran</button>
-        <button id="crt-mode" class="keycap toggle" aria-pressed="false"
-                title="Lignes de balayage et coins assombris, comme un moniteur à tube">
-          <i class="led"></i>Écran cathodique
-        </button>
+        <button id="reset" class="keycap amber">Reset</button>
       </div>
-      <div class="row">
-        <button id="touch-mode" class="keycap toggle" aria-pressed="false"
-                title="Stick et boutons A/B à l'écran, pour jouer au doigt">
-          <i class="led"></i>Manette tactile
-        </button>
-        <button id="kb-mode" class="keycap toggle" aria-pressed="false"
-                title="Clavier du TO8 à l'écran">
-          <i class="led"></i>Clavier
-        </button>
-        <button id="joy-mode" class="keycap toggle" aria-pressed="true"
-                title="Flèches + Espace/Alt pilotent la manette au lieu des touches du TO8">
-          <i class="led"></i>Manette clavier
-        </button>
-        <button id="fast-load" class="keycap toggle" aria-pressed="true"
-                title="Accélère tant que le lecteur lit et que personne ne joue (son coupé)">
-          <i class="led"></i>Chargements rapides
-        </button>
-        <button id="disk-turbo" class="keycap toggle" aria-pressed="false"
-                title="Supprime les délais moteur du lecteur : chargements plus courts">
-          <i class="led"></i>Turbo disque
-        </button>
-        <span class="seg" role="group" aria-label="Port de la manette">
-          <button class="keycap seg-btn" data-port="0" aria-pressed="true">Port 1</button>
-          <button class="keycap seg-btn" data-port="1" aria-pressed="false">Port 2</button>
-        </span>
+
+      <div class="menu-grid">
+        <section class="menu-section">
+          <h3 class="menu-title">Jeu</h3>
+          <p class="disk-line">Média : <b id="disk-name">aucun</b></p>
+          <div class="opt-row">
+            <span class="opt-text">Disquette choisie<small>Démarrer dessus, ou l’insérer sans redémarrer</small></span>
+            <span class="segmented" role="group" aria-label="Où va la prochaine disquette">
+              <button class="seg-item target-btn" data-target="boot" aria-pressed="true"
+                      title="Redémarre le TO8 sur cette disquette">Démarrer</button>
+              <button class="seg-item target-btn" data-target="0" aria-pressed="false"
+                      title="Glisse la disquette dans le lecteur 1 sans redémarrer">Lecteur 1</button>
+              <button class="seg-item target-btn" data-target="1" aria-pressed="false"
+                      title="Glisse la disquette dans le lecteur 2 sans redémarrer">Lecteur 2</button>
+            </span>
+          </div>
+        </section>
+
+        <section class="menu-section saves">
+          <h3 class="menu-title">Parties sauvegardées</h3>
+          <div id="saves" class="save-list"></div>
+        </section>
+
+        <section class="menu-section">
+          <h3 class="menu-title">Commandes</h3>
+          <button id="touch-mode" class="opt toggle" aria-pressed="false">
+            <span class="opt-text">Manette tactile<small>Stick et boutons A/B à l’écran</small></span><i class="switch" aria-hidden="true"></i>
+          </button>
+          <button id="kb-mode" class="opt toggle" aria-pressed="false">
+            <span class="opt-text">Clavier du TO8<small>Le clavier complet à l’écran</small></span><i class="switch" aria-hidden="true"></i>
+          </button>
+          <button id="joy-mode" class="opt toggle" aria-pressed="true">
+            <span class="opt-text">Flèches = manette<small>Flèches, Espace et Alt jouent au lieu de taper</small></span><i class="switch" aria-hidden="true"></i>
+          </button>
+          <div class="opt-row">
+            <span class="opt-text">Port de la manette</span>
+            <span class="segmented" role="group" aria-label="Port de la manette">
+              <button class="seg-item seg-btn" data-port="0" aria-pressed="true">1</button>
+              <button class="seg-item seg-btn" data-port="1" aria-pressed="false">2</button>
+            </span>
+          </div>
+          <div class="opt-block">
+            <span class="opt-text">Touches tactiles<small>Ajoutées à A et B, retenues pour ce jeu</small></span>
+            <div id="touch-keys-settings" class="key-selects"></div>
+          </div>
+        </section>
+
+        <section class="menu-section">
+          <h3 class="menu-title">Affichage et son</h3>
+          <button id="sound" class="opt toggle" aria-pressed="true">
+            <span class="opt-text">Son</span><i class="switch" aria-hidden="true"></i>
+          </button>
+          <button id="crt-mode" class="opt toggle" aria-pressed="false">
+            <span class="opt-text">Écran cathodique<small>Lignes de balayage et coins assombris</small></span><i class="switch" aria-hidden="true"></i>
+          </button>
+        </section>
+
+        <section class="menu-section">
+          <h3 class="menu-title">Lecteur de disquette</h3>
+          <button id="fast-load" class="opt toggle" aria-pressed="true">
+            <span class="opt-text">Chargements rapides<small>Accélère quand le lecteur lit et qu’on ne joue pas</small></span><i class="switch" aria-hidden="true"></i>
+          </button>
+          <button id="disk-turbo" class="opt toggle" aria-pressed="false">
+            <span class="opt-text">Turbo disque<small>Supprime les délais du moteur du lecteur</small></span><i class="switch" aria-hidden="true"></i>
+          </button>
+        </section>
       </div>
-      <p class="disk-line">Média : <b id="disk-name">aucun</b></p>
-      <div class="row target-row">
-        <span class="target-label">Disquette choisie :</span>
-        <span class="seg" role="group" aria-label="Où va la prochaine disquette">
-          <button class="keycap target-btn" data-target="boot" aria-pressed="true"
-                  title="Redémarre le TO8 sur cette disquette">Démarrer</button>
-          <button class="keycap target-btn" data-target="0" aria-pressed="false"
-                  title="Glisse la disquette dans le lecteur 1 sans redémarrer">Lecteur 1</button>
-          <button class="keycap target-btn" data-target="1" aria-pressed="false"
-                  title="Glisse la disquette dans le lecteur 2 sans redémarrer">Lecteur 2</button>
-        </span>
-      </div>
-      <div class="touch-keys-settings">
-        <div class="lib-head"><span>Touches de la manette tactile <small>(pour ce jeu)</small></span></div>
-        <div id="touch-keys-settings" class="key-selects"></div>
-      </div>
-      <div class="saves">
-        <div class="lib-head"><span>Parties sauvegardées</span></div>
-        <div id="saves" class="save-list"></div>
-      </div>
-      <div class="library">
+
+      <section class="library">
         <div class="lib-head">
-          <span>Bibliothèque</span>
+          <h3 class="menu-title">Bibliothèque</h3>
           <span class="seg lib-chips" role="group" aria-label="Filtrer par format">
             <button class="chip" data-format="all" aria-pressed="true">Tous</button>
             <button class="chip" data-format="fd" aria-pressed="false">FD</button>
@@ -143,29 +160,12 @@
           </span>
         </div>
         <div id="library" class="lib-list">chargement…</div>
-      </div>
-      <p class="help">
-        Choisir un média dans la bibliothèque, l'ouvrir (« Ouvrir un fichier… »)
-        ou le glisser sur l'écran : le TO8 redémarre et presse <b>B</b> au menu
-        (disquette <code>.fd</code>, carte SDDrive <code>.sd</code>) ou <b>0</b>
-        (cartouche <code>.rom</code>). Un jeu demande une autre disquette :
-        « Lecteur 1 » ou « Lecteur 2 » sous « Disquette choisie », puis la
-        disquette — elle entre sans redémarrer. La partie en cours est gardée
-        quand la page passe en arrière-plan, et proposée au retour ; trois
-        emplacements la sauvent à la main. Une carte SDDrive ouvre son propre menu :
-        choisir le jeu aux flèches, puis ENT. Au téléphone, « Manette tactile »
-        affiche un stick et les boutons A/B, « Clavier » le clavier du TO8
-        (SHIFT et CNT restent enfoncés jusqu'à la touche suivante). Au clavier
-        du PC : AZERTY positionnel, flèches + <b>Espace</b>/<b>Alt</b> pour la
-        manette. Une manette USB ou Bluetooth fonctionne aussi. « Touches de la
-        manette tactile » ajoute jusqu'à quatre touches du TO8 à côté de A et B,
-        retenues pour chaque jeu. Pour aller plus vite, maintenir le bouton
-        <b>»</b> en haut (ou F7) ; « Chargements rapides » accélère seul tant que
-        le lecteur lit et qu'on ne touche à rien. Certains jeux
-        chargent longtemps sur écran noir (Turbo Cup : près d'une minute) : le
-        voyant « Disque » vert dit que la lecture se poursuit, et « Turbo
-        disque » l'abrège.
-      </p>
+      </section>
+
+      <details class="help">
+        <summary>Aide</summary>
+        <p>Choisir un média dans la bibliothèque, l'ouvrir (« Ouvrir un fichier… ») ou le glisser sur l'écran : le TO8 redémarre et presse <b>B</b> au menu (disquette <code>.fd</code>, carte SDDrive <code>.sd</code>) ou <b>0</b> (cartouche <code>.rom</code>). Un jeu demande une autre disquette : « Lecteur 1 » ou « Lecteur 2 » sous « Disquette choisie », puis la disquette — elle entre sans redémarrer. La partie en cours est gardée quand la page passe en arrière-plan, et proposée au retour ; trois emplacements la sauvent à la main. Une carte SDDrive ouvre son propre menu : choisir le jeu aux flèches, puis ENT. Au téléphone, « Manette tactile » affiche un stick et les boutons A/B, « Clavier » le clavier du TO8 (SHIFT et CNT restent enfoncés jusqu'à la touche suivante). Au clavier du PC : AZERTY positionnel, flèches + <b>Espace</b>/<b>Alt</b> pour la manette. Une manette USB ou Bluetooth fonctionne aussi. « Touches de la manette tactile » ajoute jusqu'à quatre touches du TO8 à côté de A et B, retenues pour chaque jeu. Pour aller plus vite, maintenir le bouton <b>»</b> en haut (ou F7) ; « Chargements rapides » accélère seul tant que le lecteur lit et qu'on ne touche à rien. Certains jeux chargent longtemps sur écran noir (Turbo Cup : près d'une minute) : le voyant « Disque » vert dit que la lecture se poursuit, et « Turbo disque » l'abrège.</p>
+      </details>
     </section>
   </main>
 
@@ -179,20 +179,20 @@
   <script type="importmap">
     {
       "imports": {
-        "./touch-pad.js": "./touch-pad.js?v=a5e0ec9",
-        "./to8-keyboard.js": "./to8-keyboard.js?v=a5e0ec9",
-        "./keyboard-zoom.js": "./keyboard-zoom.js?v=a5e0ec9",
-        "./menu.js": "./menu.js?v=a5e0ec9",
-        "./build-info.js": "./build-info.js?v=a5e0ec9",
-        "./library.js": "./library.js?v=a5e0ec9",
-        "./crt-screen.js": "./crt-screen.js?v=a5e0ec9",
-        "./save-store.js": "./save-store.js?v=a5e0ec9",
-        "./game-saves.js": "./game-saves.js?v=a5e0ec9",
-        "./touch-keys.js": "./touch-keys.js?v=a5e0ec9"
+        "./touch-pad.js": "./touch-pad.js?v=494705c",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=494705c",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=494705c",
+        "./menu.js": "./menu.js?v=494705c",
+        "./build-info.js": "./build-info.js?v=494705c",
+        "./library.js": "./library.js?v=494705c",
+        "./crt-screen.js": "./crt-screen.js?v=494705c",
+        "./save-store.js": "./save-store.js?v=494705c",
+        "./game-saves.js": "./game-saves.js?v=494705c",
+        "./touch-keys.js": "./touch-keys.js?v=494705c"
       }
     }
   </script>
-  <script src="classes.wasm-runtime.js?v=a5e0ec9"></script>
-  <script type="module" src="toje-web.js?v=a5e0ec9"></script>
+  <script src="classes.wasm-runtime.js?v=494705c"></script>
+  <script type="module" src="toje-web.js?v=494705c"></script>
 </body>
 </html>
