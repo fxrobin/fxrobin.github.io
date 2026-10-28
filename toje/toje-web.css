@@ -80,17 +80,28 @@ button, label { touch-action: manipulation; }
   padding: 10px;
   box-shadow: 0 0 0 4px #BDB69C, inset 0 0 18px #000;
 }
+/*
+ * Proportions : le pixel TO8 est un peu plus haut que large (59:64), le canvas
+ * 704 × 464 s'affiche donc au rapport --screen-aspect (1,3987), posé par le
+ * script depuis le domaine — comme ScreenGeometry côté libGDX. La LARGEUR est
+ * toujours fixée et la hauteur en découle : imposer les deux déformerait
+ * l'image dès qu'une contrainte en rogne une seule (constaté : −26 % en
+ * paysage 640 × 360). Avant le chargement, le rapport natif du canvas.
+ */
 #screen {
   display: block;
   width: 100%;
-  /* Pixel TO8 un peu plus haut que large : 59:64, soit 704 × 503 à l'écran (cf. vram-to8.md). */
-  aspect-ratio: 704 / 503;
+  height: auto;
+  aspect-ratio: var(--screen-aspect, auto);
   image-rendering: pixelated;
   outline: none;
   touch-action: none;
 }
 .screen-frame:fullscreen { display: flex; align-items: center; justify-content: center; border-radius: 0; }
-.screen-frame:fullscreen #screen { width: auto; height: 100%; max-width: 100%; }
+.screen-frame:fullscreen #screen {
+  /* La plus grande largeur qui tient aussi en hauteur (ScreenGeometry.contentRect). */
+  width: min(calc(100vw - 24px), calc((100vh - 24px) * var(--screen-aspect, 1.4)));
+}
 
 .drop-hint, .overlay-start {
   position: absolute;
@@ -317,19 +328,30 @@ button, label { touch-action: manipulation; }
     pointer-events: none;
   }
   .brand .logo { font-size: 13px; }
+  /* Tient dans la colonne du stick, même en paysage étroit : la version passe à la ligne. */
+  .brand { max-width: 118px; }
   .brand .sub { display: none; }
   .brand .status { margin-left: 0; font-size: 12px; }
   .build { font-size: 11px; }
+  /* Colonnes réservées au stick et aux boutons de part et d'autre de l'écran. */
+  .stage { --pad-col: 0px; }
   body.touch .stage {
-    grid-template-columns: 1fr auto 1fr;
+    --pad-col: 112px;
+    grid-template-columns: minmax(var(--pad-col), 1fr) auto minmax(var(--pad-col), 1fr);
     grid-template-areas: "stick screen fire";
     gap: 8px;
   }
-  .screen-frame { padding: 4px; justify-self: center; }
+  .screen-frame { padding: 4px; justify-self: center; align-self: center; }
+  /* Toute la hauteur : l'écran au centre, stick et boutons en bas, sous les pouces,
+     même quand l'écran, limité en largeur, ne remplit pas la hauteur. */
+  body.touch:not(.kb) .stage { min-height: calc(100dvh - 14px); }
   .drop-hint, .overlay-start { inset: 4px; font-size: 18px; }
   /* La hauteur décide : l'écran prend tout ce qui reste, largeur déduite du ratio. */
-  #screen { height: calc(100dvh - 24px); width: auto; max-width: 100%; }
-  body.kb #screen { height: calc(52dvh - 16px); }
+  /* La plus grande largeur qui tient à la fois entre les colonnes et en hauteur. */
+  #screen { width: min(calc(100vw - 2 * var(--pad-col) - 60px),
+                       calc((100dvh - 24px) * var(--screen-aspect, 1.4))); }
+  body.kb #screen { width: min(calc(100vw - 2 * var(--pad-col) - 60px),
+                               calc((52dvh - 16px) * var(--screen-aspect, 1.4))); }
   body.kb .stage { grid-template-areas: "stick screen fire"; }
   .keyboard { margin-top: 8px; }
   .kb-inner { flex-wrap: nowrap; width: max-content; min-width: 100%; }

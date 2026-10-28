@@ -71,6 +71,9 @@ function start(toje) {
   const sampleRate = toje.sampleRate();
   canvas.width = width;
   canvas.height = height;
+  // Proportions d'affichage du domaine (pixel TO8 59:64) : la feuille de style
+  // n'en porte aucune copie.
+  document.documentElement.style.setProperty('--screen-aspect', String(toje.screenAspect()));
   const image = ctx2d.createImageData(width, height);
 
   // ── Son ────────────────────────────────────────────────────────────────
