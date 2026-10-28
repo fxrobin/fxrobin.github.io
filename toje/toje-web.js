@@ -129,6 +129,7 @@ function start(toje) {
 
   function step() {
     toje.runFrame();
+    trackDrive();
     if (audioRunning()) queueAudio(toje.audio());
     framesThisSecond++;
     stats.frames++;
@@ -147,6 +148,29 @@ function start(toje) {
     image.data.set(new Uint8ClampedArray(toje.pixels().buffer));
     ctx2d.putImageData(image, 0, 0);
     updateCapsLed();
+    updateDriveLed();
+  }
+
+  // Voyant du lecteur : un accès ne dure que quelques trames ; le voyant reste
+  // allumé DRIVE_HOLD trames après le dernier (~240 ms, comme le pilote desktop),
+  // sans quoi il clignoterait trop vite pour l'œil. Rangs de THMFC1.DriveActivity.
+  const DRIVE_STATES = ['', 'seek', 'read', 'write'];
+  const DRIVE_HOLD = 12;
+  const driveLed = $('drive-led');
+  let driveHeld = 0;
+  let driveHold = 0;
+  function trackDrive() {
+    const activity = toje.diskActivity();
+    if (activity !== 0) {
+      driveHeld = activity;
+      driveHold = DRIVE_HOLD;
+    } else if (driveHold > 0 && --driveHold === 0) {
+      driveHeld = 0;
+    }
+  }
+  function updateDriveLed() {
+    const state = DRIVE_STATES[driveHeld];
+    if (driveLed.dataset.state !== state) driveLed.dataset.state = state;
   }
 
   // Voyant CAPS LOCK du clavier à l'écran : l'état du 6804, pas celui du clavier du PC.
@@ -313,6 +337,17 @@ function start(toje) {
   }
   $('kb-mode').addEventListener('click', () => setKeyboard(!keyboardOn));
 
+  // « Turbo disque » du pilote desktop : délais moteur du lecteur supprimés.
+  function setDiskTurbo(on) {
+    toje.setDiskTurbo(on);
+    setPressed($('disk-turbo'), on);
+    prefs.set('diskTurbo', on);
+  }
+  $('disk-turbo').addEventListener('click', e => {
+    setDiskTurbo(e.currentTarget.getAttribute('aria-pressed') !== 'true');
+    canvas.focus();
+  });
+
   // ── Clavier du PC et manettes ─────────────────────────────────────────
   let keyboardJoystick = true;
   const keyJoy = { dirs: 0, a: false, b: false };
@@ -397,6 +432,7 @@ function start(toje) {
   setTouch(prefs.get('touch', coarsePointer));
   setKeyboard(prefs.get('keyboard', false));
   setPort(prefs.get('port', 0));
+  setDiskTurbo(prefs.get('diskTurbo', false));
   status.textContent = 'prêt';
   canvas.focus();
   requestAnimationFrame(tick);

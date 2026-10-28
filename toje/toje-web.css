@@ -59,6 +59,19 @@ button, label { touch-action: manipulation; }
 .build { color: var(--ink-dim); font-weight: 500; font-size: 13px; font-variant-numeric: tabular-nums; }
 .status { margin-left: auto; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
 
+/* Voyant du lecteur, comme sur la façade : couleurs du pilote desktop (DriveLeds). */
+.drive { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-dim); font-size: 13px; }
+.drive-led {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--led-off);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .4);
+}
+.drive-led[data-state="read"]  { background: #3CD03C; box-shadow: 0 0 6px #3CD03C; }
+.drive-led[data-state="write"] { background: #FF2A1F; box-shadow: 0 0 6px #FF3B2F; }
+.drive-led[data-state="seek"]  { background: #F2C230; box-shadow: 0 0 6px #F2C230; }
+
 /* ── Scène : écran, et de part et d'autre la manette tactile ─────────── */
 .stage {
   display: grid;

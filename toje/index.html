@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css?v=cc6312e">
+  <link rel="stylesheet" href="toje-web.css?v=9233a79">
 </head>
 <body>
   <main class="chassis">
@@ -24,6 +24,9 @@
       <span class="sub">TOJE · WebAssembly</span>
       <span id="build" class="build" title="Version, heure du build et commit"></span>
       <span id="status" class="status">chargement…</span>
+      <span class="drive" title="Lecteur de disquette : vert en lecture, rouge en écriture, jaune quand la tête se déplace">
+        <i id="drive-led" class="drive-led"></i>Disque
+      </span>
     </header>
 
     <section class="stage">
@@ -75,6 +78,10 @@
                 title="Flèches + Espace/Alt pilotent la manette au lieu des touches du TO8">
           <i class="led"></i>Manette clavier
         </button>
+        <button id="disk-turbo" class="keycap toggle" aria-pressed="false"
+                title="Supprime les délais moteur du lecteur : chargements plus courts">
+          <i class="led"></i>Turbo disque
+        </button>
         <span class="seg" role="group" aria-label="Port de la manette">
           <button class="keycap seg-btn" data-port="0" aria-pressed="true">Port 1</button>
           <button class="keycap seg-btn" data-port="1" aria-pressed="false">Port 2</button>
@@ -102,7 +109,10 @@
         affiche un stick et les boutons A/B, « Clavier » le clavier du TO8
         (SHIFT et CNT restent enfoncés jusqu'à la touche suivante). Au clavier
         du PC : AZERTY positionnel, flèches + <b>Espace</b>/<b>Alt</b> pour la
-        manette. Une manette USB ou Bluetooth fonctionne aussi.
+        manette. Une manette USB ou Bluetooth fonctionne aussi. Certains jeux
+        chargent longtemps sur écran noir (Turbo Cup : près d'une minute) : le
+        voyant « Disque » vert dit que la lecture se poursuit, et « Turbo
+        disque » l'abrège.
       </p>
     </section>
   </main>
@@ -117,16 +127,16 @@
   <script type="importmap">
     {
       "imports": {
-        "./touch-pad.js": "./touch-pad.js?v=cc6312e",
-        "./to8-keyboard.js": "./to8-keyboard.js?v=cc6312e",
-        "./keyboard-zoom.js": "./keyboard-zoom.js?v=cc6312e",
-        "./menu.js": "./menu.js?v=cc6312e",
-        "./build-info.js": "./build-info.js?v=cc6312e",
-        "./library.js": "./library.js?v=cc6312e"
+        "./touch-pad.js": "./touch-pad.js?v=9233a79",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=9233a79",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=9233a79",
+        "./menu.js": "./menu.js?v=9233a79",
+        "./build-info.js": "./build-info.js?v=9233a79",
+        "./library.js": "./library.js?v=9233a79"
       }
     }
   </script>
-  <script src="classes.wasm-runtime.js?v=cc6312e"></script>
-  <script type="module" src="toje-web.js?v=cc6312e"></script>
+  <script src="classes.wasm-runtime.js?v=9233a79"></script>
+  <script type="module" src="toje-web.js?v=9233a79"></script>
 </body>
 </html>
