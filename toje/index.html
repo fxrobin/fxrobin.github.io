@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css?v=9233a79">
+  <link rel="stylesheet" href="toje-web.css?v=18c6354">
 </head>
 <body>
   <main class="chassis">
@@ -36,6 +36,7 @@
       <section id="screen-frame" class="screen-frame">
         <canvas id="screen" width="704" height="464" tabindex="0"
                 aria-label="Écran du TO8 — cliquer puis taper au clavier"></canvas>
+        <div id="crt" class="crt-overlay" hidden aria-hidden="true"></div>
         <div id="drop-hint" class="drop-hint" hidden>Déposer le média (.fd, .sd, .rom)</div>
         <button id="start" class="overlay-start" hidden>Toucher pour activer le son</button>
       </section>
@@ -64,6 +65,10 @@
         <button id="reset" class="keycap amber">Reset</button>
         <button id="sound" class="keycap toggle" aria-pressed="true"><i class="led"></i>Son</button>
         <button id="fullscreen" class="keycap">Plein écran</button>
+        <button id="crt-mode" class="keycap toggle" aria-pressed="false"
+                title="Lignes de balayage et coins assombris, comme un moniteur à tube">
+          <i class="led"></i>Écran cathodique
+        </button>
       </div>
       <div class="row">
         <button id="touch-mode" class="keycap toggle" aria-pressed="false"
@@ -127,16 +132,17 @@
   <script type="importmap">
     {
       "imports": {
-        "./touch-pad.js": "./touch-pad.js?v=9233a79",
-        "./to8-keyboard.js": "./to8-keyboard.js?v=9233a79",
-        "./keyboard-zoom.js": "./keyboard-zoom.js?v=9233a79",
-        "./menu.js": "./menu.js?v=9233a79",
-        "./build-info.js": "./build-info.js?v=9233a79",
-        "./library.js": "./library.js?v=9233a79"
+        "./touch-pad.js": "./touch-pad.js?v=18c6354",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=18c6354",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=18c6354",
+        "./menu.js": "./menu.js?v=18c6354",
+        "./build-info.js": "./build-info.js?v=18c6354",
+        "./library.js": "./library.js?v=18c6354",
+        "./crt-screen.js": "./crt-screen.js?v=18c6354"
       }
     }
   </script>
-  <script src="classes.wasm-runtime.js?v=9233a79"></script>
-  <script type="module" src="toje-web.js?v=9233a79"></script>
+  <script src="classes.wasm-runtime.js?v=18c6354"></script>
+  <script type="module" src="toje-web.js?v=18c6354"></script>
 </body>
 </html>

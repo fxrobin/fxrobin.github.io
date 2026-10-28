@@ -10,6 +10,7 @@ import { createKeyboardZoom } from './keyboard-zoom.js';
 import { createMenu } from './menu.js';
 import { createLibrary, formatOf } from './library.js';
 import { BUILD } from './build-info.js';
+import { createCrtScreen } from './crt-screen.js';
 
 const FRAME_SECONDS = 0.02;
 const AUDIO_LEAD = 0.08;          // ~4 trames d'avance : assez pour absorber un rAF en retard
@@ -348,6 +349,18 @@ function start(toje) {
     canvas.focus();
   });
 
+  // Écran cathodique : cosmétique, éteint par défaut — l'image brute reste la référence.
+  const crt = createCrtScreen(canvas, $('crt'), toje.screenLines());
+  function setCrt(on) {
+    crt.set(on);
+    setPressed($('crt-mode'), on);
+    prefs.set('crt', on);
+  }
+  $('crt-mode').addEventListener('click', e => {
+    setCrt(e.currentTarget.getAttribute('aria-pressed') !== 'true');
+    canvas.focus();
+  });
+
   // ── Clavier du PC et manettes ─────────────────────────────────────────
   let keyboardJoystick = true;
   const keyJoy = { dirs: 0, a: false, b: false };
@@ -433,6 +446,7 @@ function start(toje) {
   setKeyboard(prefs.get('keyboard', false));
   setPort(prefs.get('port', 0));
   setDiskTurbo(prefs.get('diskTurbo', false));
+  setCrt(prefs.get('crt', false));
   status.textContent = 'prêt';
   canvas.focus();
   requestAnimationFrame(tick);
