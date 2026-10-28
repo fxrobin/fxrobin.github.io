@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css?v=494705c">
+  <link rel="stylesheet" href="toje-web.css?v=4c84ca0">
 </head>
 <body>
   <main class="chassis">
@@ -45,7 +45,7 @@
         <button id="start" class="overlay-start" hidden>Toucher pour activer le son</button>
         <div id="resume" class="overlay-resume" hidden role="dialog" aria-label="Reprendre la partie">
           <img id="resume-thumb" class="resume-thumb" alt="">
-          <p>Reprendre <b id="resume-title"></b> ?</p>
+          <p><span id="resume-verb">Reprendre</span> <b id="resume-title"></b> ?</p>
           <small id="resume-when"></small>
           <div class="row">
             <button id="resume-yes" class="keycap action">Reprendre</button>
@@ -79,6 +79,8 @@
           Ouvrir un fichier…
         </label>
         <button id="fullscreen" class="keycap">Plein écran</button>
+        <button id="pause" class="keycap" aria-pressed="false" title="Pause (touche Pause du clavier)">Pause</button>
+        <button id="capture" class="keycap" title="Enregistre une image de l’écran">Capture</button>
         <button id="reset" class="keycap amber">Reset</button>
       </div>
 
@@ -86,6 +88,14 @@
         <section class="menu-section">
           <h3 class="menu-title">Jeu</h3>
           <p class="disk-line">Média : <b id="disk-name">aucun</b></p>
+          <div class="game-actions">
+            <button id="copy-link" class="keycap small" hidden
+                    title="Un lien qui lance directement ce jeu de la bibliothèque">Copier le lien</button>
+            <button id="disk-download" class="keycap small" hidden
+                    title="La disquette du lecteur 1, telle que le TO8 l’a laissée">Télécharger la disquette</button>
+            <button id="disk-revert" class="keycap small" hidden
+                    title="Efface les sauvegardes de ce jeu et redémarre sur la disquette d’origine">Revenir à l’original</button>
+          </div>
           <div class="opt-row">
             <span class="opt-text">Disquette choisie<small>Démarrer dessus, ou l’insérer sans redémarrer</small></span>
             <span class="segmented" role="group" aria-label="Où va la prochaine disquette">
@@ -143,6 +153,9 @@
           <button id="fast-load" class="opt toggle" aria-pressed="true">
             <span class="opt-text">Chargements rapides<small>Accélère quand le lecteur lit et qu’on ne joue pas</small></span><i class="switch" aria-hidden="true"></i>
           </button>
+          <button id="disk-write" class="opt toggle" aria-pressed="false">
+            <span class="opt-text">Sauvegardes sur disquette<small>Pour ce jeu : le TO8 peut écrire, la disquette est gardée dans le navigateur</small></span><i class="switch" aria-hidden="true"></i>
+          </button>
           <button id="disk-turbo" class="opt toggle" aria-pressed="false">
             <span class="opt-text">Turbo disque<small>Supprime les délais du moteur du lecteur</small></span><i class="switch" aria-hidden="true"></i>
           </button>
@@ -159,12 +172,19 @@
             <button class="chip" data-format="rom" aria-pressed="false">ROM</button>
           </span>
         </div>
+        <input id="lib-search" class="lib-search" type="search" placeholder="Rechercher un jeu…"
+               aria-label="Rechercher dans la bibliothèque" autocomplete="off">
         <div id="library" class="lib-list">chargement…</div>
       </section>
 
       <details class="help">
         <summary>Aide</summary>
-        <p>Choisir un média dans la bibliothèque, l'ouvrir (« Ouvrir un fichier… ») ou le glisser sur l'écran : le TO8 redémarre et presse <b>B</b> au menu (disquette <code>.fd</code>, carte SDDrive <code>.sd</code>) ou <b>0</b> (cartouche <code>.rom</code>). Un jeu demande une autre disquette : « Lecteur 1 » ou « Lecteur 2 » sous « Disquette choisie », puis la disquette — elle entre sans redémarrer. La partie en cours est gardée quand la page passe en arrière-plan, et proposée au retour ; trois emplacements la sauvent à la main. Une carte SDDrive ouvre son propre menu : choisir le jeu aux flèches, puis ENT. Au téléphone, « Manette tactile » affiche un stick et les boutons A/B, « Clavier » le clavier du TO8 (SHIFT et CNT restent enfoncés jusqu'à la touche suivante). Au clavier du PC : AZERTY positionnel, flèches + <b>Espace</b>/<b>Alt</b> pour la manette. Une manette USB ou Bluetooth fonctionne aussi. « Touches de la manette tactile » ajoute jusqu'à quatre touches du TO8 à côté de A et B, retenues pour chaque jeu. Pour aller plus vite, maintenir le bouton <b>»</b> en haut (ou F7) ; « Chargements rapides » accélère seul tant que le lecteur lit et qu'on ne touche à rien. Certains jeux chargent longtemps sur écran noir (Turbo Cup : près d'une minute) : le voyant « Disque » vert dit que la lecture se poursuit, et « Turbo disque » l'abrège.</p>
+        <p>Choisir un média dans la bibliothèque, l'ouvrir (« Ouvrir un fichier… ») ou le glisser sur l'écran : le TO8 redémarre et presse <b>B</b> au menu (disquette <code>.fd</code>, carte SDDrive <code>.sd</code>) ou <b>0</b> (cartouche <code>.rom</code>). Un jeu demande une autre disquette : « Lecteur 1 » ou « Lecteur 2 » sous « Disquette choisie », puis la disquette — elle entre sans redémarrer. La partie en cours est gardée quand la page passe en arrière-plan, et proposée au retour ; trois emplacements la sauvent à la main. Une carte SDDrive ouvre son propre menu : choisir le jeu aux flèches, puis ENT. Au téléphone, « Manette tactile » affiche un stick et les boutons A/B, « Clavier » le clavier du TO8 (SHIFT et CNT restent enfoncés jusqu'à la touche suivante). Au clavier du PC : AZERTY positionnel, flèches + <b>Espace</b>/<b>Alt</b> pour la manette. Une manette USB ou Bluetooth fonctionne aussi. « Touches de la manette tactile » ajoute jusqu'à quatre touches du TO8 à côté de A et B, retenues pour chaque jeu. Pour aller plus vite, maintenir le bouton <b>»</b> en haut (ou F7) ; « Chargements rapides » accélère seul tant que le lecteur lit et qu'on ne touche à rien. Un jeu qui sauvegarde sur sa disquette :
+        allumer « Sauvegardes sur disquette » pour ce jeu — la disquette modifiée
+        est gardée dans le navigateur, téléchargeable, et l'original intact.
+        « Copier le lien » donne une adresse qui lance directement le jeu. La page
+        se met en pause quand on la quitte ou qu'on ouvre ce menu au téléphone, et
+        fonctionne hors ligne pour ce qui a déjà été chargé. Certains jeux chargent longtemps sur écran noir (Turbo Cup : près d'une minute) : le voyant « Disque » vert dit que la lecture se poursuit, et « Turbo disque » l'abrège.</p>
       </details>
     </section>
   </main>
@@ -179,20 +199,23 @@
   <script type="importmap">
     {
       "imports": {
-        "./touch-pad.js": "./touch-pad.js?v=494705c",
-        "./to8-keyboard.js": "./to8-keyboard.js?v=494705c",
-        "./keyboard-zoom.js": "./keyboard-zoom.js?v=494705c",
-        "./menu.js": "./menu.js?v=494705c",
-        "./build-info.js": "./build-info.js?v=494705c",
-        "./library.js": "./library.js?v=494705c",
-        "./crt-screen.js": "./crt-screen.js?v=494705c",
-        "./save-store.js": "./save-store.js?v=494705c",
-        "./game-saves.js": "./game-saves.js?v=494705c",
-        "./touch-keys.js": "./touch-keys.js?v=494705c"
+        "./touch-pad.js": "./touch-pad.js?v=4c84ca0",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=4c84ca0",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=4c84ca0",
+        "./menu.js": "./menu.js?v=4c84ca0",
+        "./build-info.js": "./build-info.js?v=4c84ca0",
+        "./library.js": "./library.js?v=4c84ca0",
+        "./crt-screen.js": "./crt-screen.js?v=4c84ca0",
+        "./save-store.js": "./save-store.js?v=4c84ca0",
+        "./game-saves.js": "./game-saves.js?v=4c84ca0",
+        "./touch-keys.js": "./touch-keys.js?v=4c84ca0",
+        "./titles.js": "./titles.js?v=4c84ca0",
+        "./disk-copies.js": "./disk-copies.js?v=4c84ca0",
+        "./screenshot.js": "./screenshot.js?v=4c84ca0"
       }
     }
   </script>
-  <script src="classes.wasm-runtime.js?v=494705c"></script>
-  <script type="module" src="toje-web.js?v=494705c"></script>
+  <script src="classes.wasm-runtime.js?v=4c84ca0"></script>
+  <script type="module" src="toje-web.js?v=4c84ca0"></script>
 </body>
 </html>

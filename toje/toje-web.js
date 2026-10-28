@@ -14,6 +14,9 @@ import { createCrtScreen } from './crt-screen.js';
 import { openSaveStore } from './save-store.js';
 import { createGameSaves } from './game-saves.js';
 import { createTouchKeys, keyChoices } from './touch-keys.js';
+import { titleOf, baseName } from './titles.js';
+import { createDiskCopies } from './disk-copies.js';
+import { saveScreenshot } from './screenshot.js';
 
 const FRAME_SECONDS = 0.02;
 const AUDIO_LEAD = 0.08;          // ~4 trames d'avance : assez pour absorber un rAF en retard
@@ -67,17 +70,29 @@ function showBuild() {
 showBuild();
 
 const toje = await loadEmulator();
-if (toje) start(toje);
+// Parties et disquettes modifiées : le magasin du navigateur (IndexedDB).
+const store = toje ? await openSaveStore() : null;
+if (toje) start(toje, store);
+registerOffline();
 
-function start(toje) {
-  const width = toje.screenWidth();
-  const height = toje.screenHeight();
-  const sampleRate = toje.sampleRate();
+// Hors ligne : le service worker garde ce qui a été chargé (sw.js). Ce que la
+// première visite a chargé avant qu'il ne contrôle la page lui est signalé.
+function registerOffline() {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.register('sw.js').then(() => navigator.serviceWorker.ready).then(reg => {
+    const urls = performance.getEntriesByType('resource').map(e => e.name)
+      .filter(u => u.startsWith(location.origin));
+    reg.active.postMessage({ cache: [location.href.split('#')[0], ...urls] });
+  }).catch(e => console.warn('hors ligne indisponible', e));
+}
+
+function start(toje, store) {
+  const [width, height, aspect, scanLines, sampleRate] = toje.displayInfo();
   canvas.width = width;
   canvas.height = height;
   // Proportions d'affichage du domaine (pixel TO8 59:64) : la feuille de style
   // n'en porte aucune copie.
-  document.documentElement.style.setProperty('--screen-aspect', String(toje.screenAspect()));
+  document.documentElement.style.setProperty('--screen-aspect', String(aspect));
   const image = ctx2d.createImageData(width, height);
 
   // ── Son ────────────────────────────────────────────────────────────────
@@ -252,8 +267,37 @@ function start(toje) {
 
   // Une exception dans une trame ne doit jamais arrêter la boucle : sans le
   // finally, le rafraîchissement suivant n'est pas demandé et l'émulateur se fige.
+  // ── Pause ──────────────────────────────────────────────────────────────
+  // À la demande (bouton, touche Pause), onglet caché, ou tiroir des options
+  // ouvert au téléphone : on choisit un jeu, la partie ne file pas pendant ce
+  // temps. Le son est suspendu avec la machine.
+  let userPaused = false;
+  let pausedShown = false;
+  function isPaused() {
+    return userPaused || document.hidden || document.body.classList.contains('menu-open');
+  }
+  function syncPause(now) {
+    const paused = isPaused();
+    if (paused === pausedShown) return paused;
+    pausedShown = paused;
+    if (audio && soundOn) {
+      if (paused) audio.ctx.suspend();
+      else audio.ctx.resume().then(() => { audio.next = audio.ctx.currentTime + 0.03; });
+    }
+    wallDue = 0;
+    wallLast = now;
+    if (paused) status.textContent = 'pause';
+    return paused;
+  }
+  function setUserPaused(on) {
+    userPaused = on;
+    setPressed($('pause'), on);
+    $('pause').textContent = on ? 'Reprendre' : 'Pause';
+  }
+
   function tick(now) {
     try {
+      if (syncPause(now)) return;
       pollJoystick();
       const turbo = turboWanted(now);
       if (turbo !== turboOn) setTurbo(turbo);
@@ -313,52 +357,83 @@ function start(toje) {
 
   function showMedia() {
     const parts = [];
-    media.disks.forEach((d, i) => { if (d) parts.push(`lecteur ${i + 1} : ${d.name}`); });
-    if (media.cart) parts.push(`cartouche : ${media.cart.name}`);
-    if (media.sd) parts.push(`carte SD : ${media.sd.name}`);
+    media.disks.forEach((d, i) => {
+      if (d) parts.push(`lecteur ${i + 1} : ${titleOf(d.name)}${d.modified ? ' (modifiée)' : ''}`);
+    });
+    if (media.cart) parts.push(`cartouche : ${titleOf(media.cart.name)}`);
+    if (media.sd) parts.push(`carte SD : ${titleOf(media.sd.name)}`);
     $('disk-name').textContent = parts.length ? parts.join(' · ') : 'aucun';
+    const first = media.disks[0];
+    $('copy-link').hidden = !gameMedia.fromLibrary();
+    $('disk-download').hidden = !first;
+    $('disk-revert').hidden = !(first && first.modified);
   }
 
-  function mount(name, bytes) {
+  // Les réglages d'un jeu (touches tactiles, écriture sur disquette) suivent le
+  // jeu démarré ; une disquette glissée dans un lecteur en fait partie.
+  function gameChanged() {
+    touchKeys.forGame(gameMedia.key());
+    setPressed($('disk-write'), copies.forGame(gameMedia.key()));
+    showMedia();
+    saves.renderSlots();
+  }
+
+  async function mount(name, bytes, { fromLibrary = false } = {}) {
     const format = formatOf(name) || 'fd';
     const isDisk = format !== 'rom' && format !== 'sd';
-    if (isDisk && target !== 'boot') {
+    const swap = isDisk && target !== 'boot';
+    // Le réglage d'écriture du jeu décide si l'on monte sa copie modifiée.
+    if (!swap) copies.forGame(baseName(name));
+    const disk = isDisk ? await copies.bytesFor(name, bytes) : { bytes, modified: false };
+    const entry = { name, bytes: disk.bytes, original: bytes, modified: disk.modified, fromLibrary };
+    if (swap) {
       const drive = Number(target);
-      toje.swapDisk(drive, bytes, name);
-      media.disks[drive] = { name, bytes };
-      status.textContent = `${name} → lecteur ${drive + 1}`;
+      toje.swapDisk(drive, entry.bytes, name);
+      media.disks[drive] = entry;
+      status.textContent = `${titleOf(name)} → lecteur ${drive + 1}`;
       setTarget('boot');
     } else {
       let ok = true;
       if (format === 'rom') toje.insertCartridge(bytes);
       else if (format === 'sd') ok = toje.insertSdCard(bytes, name);
-      else toje.insertDisk(bytes, name);
-      media = { disks: [isDisk ? { name, bytes } : null, null],
-                cart: format === 'rom' ? { name, bytes } : null,
-                sd: format === 'sd' && ok ? { name, bytes } : null };
-      status.textContent = ok ? name : 'carte SDDrive non activée';
+      else toje.insertDisk(entry.bytes, name);
+      media = { disks: [isDisk ? entry : null, null],
+                cart: format === 'rom' ? entry : null,
+                sd: format === 'sd' && ok ? entry : null };
+      status.textContent = ok ? titleOf(name) : 'carte SDDrive non activée';
+      if (fromLibrary) prefs.set('lastGame', name);
     }
-    showMedia();
-    touchKeys.forGame(gameMedia.title());
-    saves.renderSlots();
+    gameChanged();
     menu.close();
     firstGesture();
     canvas.focus();
   }
 
   // Ce qu'une partie sauvegardée retient des médias, et comment les remonter
-  // sans redémarrer : la carte d'abord (elle réinitialise la machine), puis le reste.
+  // sans redémarrer : la carte d'abord (elle réinitialise la machine), puis le
+  // reste. Une disquette est prise telle que le TO8 l'a laissée.
   const gameMedia = {
     list() {
       const list = [];
-      media.disks.forEach((d, drive) => { if (d) list.push({ kind: 'disk', drive, ...d }); });
+      media.disks.forEach((d, drive) => {
+        if (d) list.push({ kind: 'disk', drive, ...d, bytes: toje.diskBytes(drive) || d.bytes });
+      });
       if (media.cart) list.push({ kind: 'cart', ...media.cart });
       if (media.sd) list.push({ kind: 'sd', ...media.sd });
       return list;
     },
+    /** Clé stable des réglages du jeu : le fichier démarré. */
+    key() {
+      const first = this.list()[0];
+      return first ? baseName(first.name) : 'TO8';
+    },
     title() {
       const first = this.list()[0];
-      return first ? first.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ') : 'TO8';
+      return first ? titleOf(first.name) : 'TO8';
+    },
+    fromLibrary() {
+      const first = this.list()[0];
+      return Boolean(first && first.fromLibrary);
     },
     remount(list) {
       toje.ejectAll();
@@ -366,8 +441,7 @@ function start(toje) {
       for (const m of list.filter(m => m.kind === 'sd')) { toje.restoreSdCard(m.bytes, m.name); media.sd = m; }
       for (const m of list.filter(m => m.kind === 'cart')) { toje.restoreCartridge(m.bytes); media.cart = m; }
       for (const m of list.filter(m => m.kind === 'disk')) { toje.swapDisk(m.drive, m.bytes, m.name); media.disks[m.drive] = m; }
-      showMedia();
-      touchKeys.forGame(gameMedia.title());
+      gameChanged();
       startHint.hidden = true;
       menu.close();
       canvas.focus();
@@ -378,13 +452,21 @@ function start(toje) {
   const touchKeys = createTouchKeys($('touch-keys'), $('touch-keys-settings'), keyChoices(toje),
     (code, down) => toje.pressKey(code, down), prefs, noteInput);
 
+  // Disquettes modifiées par les jeux qui sauvegardent, gardées par jeu.
+  const copies = createDiskCopies({
+    toje, store, prefs,
+    drives: () => media.disks,
+    busy: () => driveHeld !== 0,
+    onStatus: text => { status.textContent = text; },
+  });
+
   async function openFile(file) {
     mount(file.name, new Int8Array(await file.arrayBuffer()));
   }
 
   const menu = createMenu($('menu-toggle'), $('menu'), $('menu-backdrop'), $('menu-close'));
-  createLibrary($('library'), [...document.querySelectorAll('.lib-chips .chip')], BUILD.commit,
-    mount, text => { status.textContent = text; });
+  const library = createLibrary($('library'), [...document.querySelectorAll('.lib-chips .chip')],
+    $('lib-search'), BUILD.commit, mount, text => { status.textContent = text; });
 
   $('disk-input').addEventListener('change', e => {
     const file = e.target.files[0];
@@ -409,6 +491,50 @@ function start(toje) {
   }
 
   $('reset').addEventListener('click', () => { toje.reset(); menu.close(); canvas.focus(); });
+
+  $('pause').addEventListener('click', () => { setUserPaused(!userPaused); canvas.focus(); });
+  $('capture').addEventListener('click', () => saveScreenshot(canvas, aspect, gameMedia.title()));
+
+  // Un lien qui lance ce jeu de la bibliothèque, à partager.
+  $('copy-link').addEventListener('click', async () => {
+    const first = gameMedia.list()[0];
+    const url = `${location.origin}${location.pathname}?jeu=${encodeURIComponent(first.name)}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      status.textContent = 'lien copié';
+    } catch {
+      prompt('Lien vers ce jeu :', url);   // presse-papiers refusé : on le montre
+    }
+  });
+
+  // Sauvegardes sur disquette, par jeu (disk-copies.js).
+  $('disk-write').addEventListener('click', e => {
+    const on = e.currentTarget.getAttribute('aria-pressed') !== 'true';
+    copies.setWritable(on);
+    setPressed(e.currentTarget, on);
+    status.textContent = on ? 'la disquette de ce jeu accepte l’écriture' : 'disquette protégée';
+  });
+  $('disk-download').addEventListener('click', () => copies.download(0));
+  $('disk-revert').addEventListener('click', async () => {
+    const first = media.disks[0];
+    if (!first || !confirm(`Effacer les sauvegardes de ${titleOf(first.name)} et redémarrer sur la disquette d’origine ?`)) return;
+    await copies.forget(first.name);
+    setTarget('boot');
+    await mount(first.name, first.original, { fromLibrary: first.fromLibrary });
+    status.textContent = 'disquette d’origine';
+  });
+
+  // Dernier jeu de la bibliothèque, proposé au retour quand aucune partie n'est en cours.
+  function offerRelaunch(file, load) {
+    $('resume-verb').textContent = 'Relancer';
+    $('resume-title').textContent = titleOf(file);
+    $('resume-when').textContent = 'dernier jeu lancé';
+    $('resume-thumb').hidden = true;
+    $('resume').hidden = false;
+    startHint.hidden = true;
+    $('resume-yes').onclick = () => { $('resume').hidden = true; load(file); };
+    $('resume-no').onclick = () => { $('resume').hidden = true; prefs.set('lastGame', null); };
+  }
 
   $('sound').addEventListener('click', e => {
     soundOn = !soundOn;
@@ -476,7 +602,7 @@ function start(toje) {
   });
 
   // Écran cathodique : cosmétique, éteint par défaut — l'image brute reste la référence.
-  const crt = createCrtScreen(canvas, $('crt'), toje.screenLines());
+  const crt = createCrtScreen(canvas, $('crt'), scanLines);
   function setCrt(on) {
     crt.set(on);
     setPressed($('crt-mode'), on);
@@ -548,6 +674,7 @@ function start(toje) {
     if (e.target instanceof HTMLInputElement) return;
     firstGesture();
     if (e.code === 'F7') { turboHeld = down; e.preventDefault(); return; }
+    if (e.code === 'Pause') { if (down) setUserPaused(!userPaused); e.preventDefault(); return; }
     if (e.repeat) { e.preventDefault(); return; }    // le 6804 répète lui-même
     noteInput();
     if (joystickKey(e.code, down) || toje.key(e.code, down)) e.preventDefault();
@@ -594,28 +721,34 @@ function start(toje) {
   setDiskTurbo(prefs.get('diskTurbo', false));
   setCrt(prefs.get('crt', false));
   setFastLoad(prefs.get('fastLoad', true));
-  touchKeys.forGame(gameMedia.title());
 
-  // Parties : magasin du navigateur ouvert en tâche de fond ; la page tourne déjà.
-  let saves = { renderSlots() {} };
-  openSaveStore().then(async store => {
-    saves = createGameSaves({
-      toje, store, media: gameMedia, canvas,
-      ui: { slots: $('saves'), resume: $('resume'), resumeTitle: $('resume-title'),
-            resumeWhen: $('resume-when'), resumeThumb: $('resume-thumb'),
-            resumeYes: $('resume-yes'), resumeNo: $('resume-no') },
-      onDone: text => { status.textContent = text; },
-      // État illisible (autre version de TOJE) : on redémarre sur son premier média.
-      onFailedResume: save => {
-        const first = save.media.find(m => m.kind !== 'disk' || m.drive === 0) || save.media[0];
-        setTarget('boot');
-        if (first) mount(first.name, first.bytes);
-        status.textContent = 'sauvegarde d\'une autre version : partie redémarrée';
-      },
-    });
-    saves.renderSlots();
-    if (await saves.offerResume()) startHint.hidden = true;
+  // Parties sauvegardées.
+  const saves = createGameSaves({
+    toje, store, media: gameMedia, canvas,
+    ui: { slots: $('saves'), resume: $('resume'), resumeTitle: $('resume-title'),
+          resumeWhen: $('resume-when'), resumeThumb: $('resume-thumb'),
+          resumeYes: $('resume-yes'), resumeNo: $('resume-no') },
+    onDone: text => { status.textContent = text; },
+    // État illisible (autre version de TOJE) : on redémarre sur son premier média.
+    onFailedResume: save => {
+      const first = save.media.find(m => m.kind !== 'disk' || m.drive === 0) || save.media[0];
+      setTarget('boot');
+      if (first) mount(first.name, first.bytes);
+      status.textContent = 'sauvegarde d\'une autre version : partie redémarrée';
+    },
   });
+  gameChanged();
+
+  // Au démarrage, dans l'ordre : un lien direct (?jeu=…) lance son jeu ; sinon
+  // la partie en cours est proposée ; sinon le dernier jeu de la bibliothèque.
+  (async () => {
+    const wanted = new URLSearchParams(location.search).get('jeu');
+    const { files, load } = await library;
+    if (wanted && files.includes(wanted)) { await load(wanted); return; }
+    if (await saves.offerResume()) { startHint.hidden = true; return; }
+    const last = prefs.get('lastGame', null);
+    if (last && files.includes(last)) offerRelaunch(last, load);
+  })();
   status.textContent = 'prêt';
   canvas.focus();
   requestAnimationFrame(tick);

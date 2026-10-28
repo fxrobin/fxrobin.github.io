@@ -346,6 +346,20 @@ button, label { touch-action: manipulation; }
 }
 .lib-head .menu-title { margin: 0; padding: 0; border: 0; }
 .menu-section .disk-line { margin: 8px 0 2px; }
+.game-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; }
+.game-actions:not(:has(> :not([hidden]))) { display: none; }
+.lib-search {
+  width: 100%;
+  min-height: 38px;
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  font: inherit;
+  color: var(--ink);
+  background: #F2EFE2;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.keycap[aria-pressed="true"]#pause { background: var(--yellow); color: #332A00; }
 
 /* Une option = une ligne : libellé (et son explication) à gauche, réglage à droite. */
 .opt, .opt-row {
