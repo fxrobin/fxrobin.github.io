@@ -134,15 +134,16 @@ button, label { touch-action: manipulation; }
   width: min(20vw, 76px);
   aspect-ratio: 1;
   border-radius: 50%;
-  border: 1px solid #7A1020;
-  background: radial-gradient(circle at 35% 30%, #E0454F, #A0101C 70%);
-  color: #FBE9EA;
+  /* Jaune de la touche ENT du TO8. */
+  border: 1px solid #9A7414;
+  background: radial-gradient(circle at 35% 30%, #FFE07A, #E8B521 70%);
+  color: #3A2C00;
   font: 700 22px Rajdhani, system-ui, sans-serif;
-  box-shadow: 0 4px 0 #5A0810, 0 6px 8px rgba(0, 0, 0, .35);
+  box-shadow: 0 4px 0 #8A6410, 0 6px 8px rgba(0, 0, 0, .35);
   touch-action: none;
 }
 .fire-btn.fire-a { transform: translateY(-14px); }
-.fire-btn.down { box-shadow: 0 1px 0 #5A0810; filter: brightness(1.15); }
+.fire-btn.down { box-shadow: 0 1px 0 #8A6410; filter: brightness(.92); }
 .fire-btn.fire-a.down { transform: translateY(-11px); }
 .fire-btn.fire-b.down { transform: translateY(3px); }
 
