@@ -215,6 +215,24 @@ button, label { touch-action: manipulation; }
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 10px; }
 .disk-line { color: var(--ink-dim); margin: 0 0 6px; }
 .disk-line b { color: var(--ink); }
+/* Bibliothèque : badges aux couleurs du pilote desktop (DiskSelectorPanel). */
+.library { margin: 4px 0 10px; }
+.lib-head { display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  border-bottom: 1px solid var(--rule); padding-bottom: 6px; margin-bottom: 6px; }
+.chip { min-height: 28px; padding: 2px 10px; font: inherit; font-size: 13px; color: var(--ink);
+  background: var(--cap); border: 1px solid var(--rule); border-radius: 14px; }
+.chip[aria-pressed="true"] { background: var(--yellow); color: #332A00; }
+.lib-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 4px;
+  max-height: 260px; overflow-y: auto; color: var(--ink-dim); }
+.lib-item { display: flex; align-items: center; gap: 8px; min-height: 34px; padding: 4px 6px;
+  font: inherit; text-align: left; color: var(--ink); background: none; border: 0; border-radius: 4px; }
+.lib-item:hover, .lib-item:focus-visible { background: var(--hover); }
+.lib-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.badge { flex: none; width: 40px; padding: 2px 0; text-align: center; font-size: 12px; font-weight: 700;
+  color: #FFF; border-radius: 3px; }
+.badge-fd { background: #2E7D32; }
+.badge-sd { background: #6A1B9A; }
+.badge-rom { background: #C62828; }
 .help { color: var(--ink-dim); font-weight: 500; margin: 4px 0 0; }
 .help code { font-weight: 700; color: var(--ink); }
 
@@ -391,4 +409,5 @@ button, label { touch-action: manipulation; }
     border: 0;
   }
   #menu .row .keycap { flex: 1 1 auto; justify-content: center; }
+  #menu .lib-list { max-height: none; grid-template-columns: 1fr; }
 }

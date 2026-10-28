@@ -8,6 +8,7 @@ import { createTouchPad } from './touch-pad.js';
 import { buildKeyboard } from './to8-keyboard.js';
 import { createKeyboardZoom } from './keyboard-zoom.js';
 import { createMenu } from './menu.js';
+import { createLibrary, formatOf } from './library.js';
 import { BUILD } from './build-info.js';
 
 const FRAME_SECONDS = 0.02;
@@ -208,19 +209,32 @@ function start(toje) {
   document.addEventListener('visibilitychange', () => { if (audio) keepScreenAwake(); });
 
   // ── Disquette ──────────────────────────────────────────────────────────
-  async function insertDisk(file) {
-    const bytes = new Int8Array(await file.arrayBuffer());
-    toje.insertDisk(bytes, file.name);
-    $('disk-name').textContent = file.name;
+  // Un média, d'où qu'il vienne (bibliothèque, fichier, glisser-déposer),
+  // part vers le bon connecteur selon son extension ; .sap reste une disquette.
+  function mount(name, bytes) {
+    const format = formatOf(name) || 'fd';
+    let ok = true;
+    if (format === 'rom') toje.insertCartridge(bytes);
+    else if (format === 'sd') ok = toje.insertSdCard(bytes, name);
+    else toje.insertDisk(bytes, name);
+    $('disk-name').textContent = ok ? name : `${name} (carte non activée)`;
+    status.textContent = ok ? name : 'carte SDDrive non activée';
+    menu.close();
     firstGesture();
     canvas.focus();
   }
 
+  async function openFile(file) {
+    mount(file.name, new Int8Array(await file.arrayBuffer()));
+  }
+
   const menu = createMenu($('menu-toggle'), $('menu'), $('menu-backdrop'), $('menu-close'));
+  createLibrary($('library'), [...document.querySelectorAll('.lib-chips .chip')], BUILD.commit,
+    mount, text => { status.textContent = text; });
 
   $('disk-input').addEventListener('change', e => {
     const file = e.target.files[0];
-    if (file) { insertDisk(file); menu.close(); }
+    if (file) openFile(file);
     e.target.value = '';
   });
 
@@ -232,7 +246,7 @@ function start(toje) {
     e.preventDefault();
     hint.hidden = true;
     const file = e.dataTransfer.files[0];
-    if (file) insertDisk(file);
+    if (file) openFile(file);
   });
 
   // ── Boutons ────────────────────────────────────────────────────────────

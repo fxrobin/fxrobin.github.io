@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css?v=a0864c0">
+  <link rel="stylesheet" href="toje-web.css?v=157c022">
 </head>
 <body>
   <main class="chassis">
@@ -33,7 +33,7 @@
       <section id="screen-frame" class="screen-frame">
         <canvas id="screen" width="704" height="464" tabindex="0"
                 aria-label="Écran du TO8 — cliquer puis taper au clavier"></canvas>
-        <div id="drop-hint" class="drop-hint" hidden>Déposer la disquette (.fd)</div>
+        <div id="drop-hint" class="drop-hint" hidden>Déposer le média (.fd, .sd, .rom)</div>
         <button id="start" class="overlay-start" hidden>Toucher pour activer le son</button>
       </section>
       <div id="fire" class="touch-fire" hidden aria-label="Manette : boutons">
@@ -55,8 +55,8 @@
       </div>
       <div class="row">
         <label class="keycap action">
-          <input id="disk-input" type="file" accept=".fd,.sap,application/octet-stream" hidden>
-          Disquette…
+          <input id="disk-input" type="file" accept=".fd,.sap,.sd,.rom,application/octet-stream" hidden>
+          Ouvrir un fichier…
         </label>
         <button id="reset" class="keycap amber">Reset</button>
         <button id="sound" class="keycap toggle" aria-pressed="true"><i class="led"></i>Son</button>
@@ -80,10 +80,25 @@
           <button class="keycap seg-btn" data-port="1" aria-pressed="false">Port 2</button>
         </span>
       </div>
-      <p class="disk-line">Disquette : <b id="disk-name">aucune</b></p>
+      <p class="disk-line">Média : <b id="disk-name">aucun</b></p>
+      <div class="library">
+        <div class="lib-head">
+          <span>Bibliothèque</span>
+          <span class="seg lib-chips" role="group" aria-label="Filtrer par format">
+            <button class="chip" data-format="all" aria-pressed="true">Tous</button>
+            <button class="chip" data-format="fd" aria-pressed="false">FD</button>
+            <button class="chip" data-format="sd" aria-pressed="false">SD</button>
+            <button class="chip" data-format="rom" aria-pressed="false">ROM</button>
+          </span>
+        </div>
+        <div id="library" class="lib-list">chargement…</div>
+      </div>
       <p class="help">
-        Glisser une image <code>.fd</code> sur l'écran ou « Disquette… » : le TO8
-        redémarre et presse <b>B</b> au menu. Au téléphone, « Manette tactile »
+        Choisir un média dans la bibliothèque, l'ouvrir (« Ouvrir un fichier… »)
+        ou le glisser sur l'écran : le TO8 redémarre et presse <b>B</b> au menu
+        (disquette <code>.fd</code>, carte SDDrive <code>.sd</code>) ou <b>0</b>
+        (cartouche <code>.rom</code>). Une carte SDDrive ouvre son propre menu :
+        choisir le jeu aux flèches, puis ENT. Au téléphone, « Manette tactile »
         affiche un stick et les boutons A/B, « Clavier » le clavier du TO8
         (SHIFT et CNT restent enfoncés jusqu'à la touche suivante). Au clavier
         du PC : AZERTY positionnel, flèches + <b>Espace</b>/<b>Alt</b> pour la
@@ -102,15 +117,16 @@
   <script type="importmap">
     {
       "imports": {
-        "./touch-pad.js": "./touch-pad.js?v=a0864c0",
-        "./to8-keyboard.js": "./to8-keyboard.js?v=a0864c0",
-        "./keyboard-zoom.js": "./keyboard-zoom.js?v=a0864c0",
-        "./menu.js": "./menu.js?v=a0864c0",
-        "./build-info.js": "./build-info.js?v=a0864c0"
+        "./touch-pad.js": "./touch-pad.js?v=157c022",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=157c022",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=157c022",
+        "./menu.js": "./menu.js?v=157c022",
+        "./build-info.js": "./build-info.js?v=157c022",
+        "./library.js": "./library.js?v=157c022"
       }
     }
   </script>
-  <script src="classes.wasm-runtime.js?v=a0864c0"></script>
-  <script type="module" src="toje-web.js?v=a0864c0"></script>
+  <script src="classes.wasm-runtime.js?v=157c022"></script>
+  <script type="module" src="toje-web.js?v=157c022"></script>
 </body>
 </html>
