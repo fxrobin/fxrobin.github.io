@@ -13,6 +13,7 @@ import { BUILD } from './build-info.js';
 import { createCrtScreen } from './crt-screen.js';
 import { openSaveStore } from './save-store.js';
 import { createGameSaves } from './game-saves.js';
+import { createTouchKeys, keyChoices } from './touch-keys.js';
 
 const FRAME_SECONDS = 0.02;
 const AUDIO_LEAD = 0.08;          // ~4 trames d'avance : assez pour absorber un rAF en retard
@@ -130,10 +131,10 @@ function start(toje) {
   const stats = { frames: 0, underruns: 0, maxBurst: 0, start: performance.now() };
   window.tojeStats = stats;
 
-  function step() {
+  function step(withSound = true) {
     toje.runFrame();
     trackDrive();
-    if (audioRunning()) queueAudio(toje.audio());
+    if (withSound && audioRunning()) queueAudio(toje.audio());
     framesThisSecond++;
     stats.frames++;
   }
@@ -202,15 +203,60 @@ function start(toje) {
     fpsStamp = now;
   }
 
-  function tick(now) {
-    pollJoystick();
+  // ── Accélération ───────────────────────────────────────────────────────
+  // Maintenue (bouton » ou F7, comme le pilote desktop), ou d'elle-même avec
+  // « Chargements rapides » : tant que le voyant disque est allumé et que le
+  // joueur ne touche à rien depuis IDLE_MS — un jeu qui charge, pas un jeu
+  // qu'on joue. Son coupé : accéléré, il ne serait que du bruit. La vitesse
+  // atteinte s'affiche en %, mesurée comme d'habitude.
+  const TURBO_MAX = 10;            // ×10 au plus, plafond du pilote desktop
+  const TURBO_BUDGET_MS = 12;      // de calcul par rafraîchissement : la page reste fluide
+  const IDLE_MS = 2000;
+  let turboHeld = false;
+  let fastLoad = true;
+  let turboOn = false;
+  let lastInput = 0;
+  function noteInput() { lastInput = performance.now(); }
+
+  function turboWanted(now) {
+    return turboHeld || (fastLoad && driveHeld !== 0 && now - lastInput > IDLE_MS);
+  }
+
+  function setTurbo(on) {
+    turboOn = on;
+    $('ff').classList.toggle('on', on);
+    // En sortant, le son repart juste devant : la file s'est vidée pendant l'accélération.
+    if (!on && audio) audio.next = audio.ctx.currentTime + 0.03;
+    wallDue = 0;
+  }
+
+  function runTurbo(now) {
+    const due = Math.min((now - wallLast) / 1000 / FRAME_SECONDS, MAX_FRAMES_PER_TICK) * TURBO_MAX;
+    const start = performance.now();
+    let n = 0;
+    while (n < due && performance.now() - start < TURBO_BUDGET_MS) {
+      step(false);
+      n++;
+    }
+    return n;
+  }
+
+  function runNormal(now) {
     const n = Math.min(framesDue(now), MAX_FRAMES_PER_TICK);
-    wallLast = now;
-    stats.maxBurst = Math.max(stats.maxBurst, n);
     for (let i = 0; i < n; i++) {
       step();
       wallDue = Math.max(0, wallDue - 1);
     }
+    return n;
+  }
+
+  function tick(now) {
+    pollJoystick();
+    const turbo = turboWanted(now);
+    if (turbo !== turboOn) setTurbo(turbo);
+    const n = turbo ? runTurbo(now) : runNormal(now);
+    wallLast = now;
+    stats.maxBurst = Math.max(stats.maxBurst, n);
     if (n > 0) present();
     updateStatus(now);
     requestAnimationFrame(tick);
@@ -284,6 +330,7 @@ function start(toje) {
       status.textContent = ok ? name : 'carte SDDrive non activée';
     }
     showMedia();
+    touchKeys.forGame(gameMedia.title());
     saves.renderSlots();
     menu.close();
     firstGesture();
@@ -311,11 +358,16 @@ function start(toje) {
       for (const m of list.filter(m => m.kind === 'cart')) { toje.restoreCartridge(m.bytes); media.cart = m; }
       for (const m of list.filter(m => m.kind === 'disk')) { toje.swapDisk(m.drive, m.bytes, m.name); media.disks[m.drive] = m; }
       showMedia();
+      touchKeys.forGame(gameMedia.title());
       startHint.hidden = true;
       menu.close();
       canvas.focus();
     },
   };
+
+  // Touches du TO8 à côté de A et B, réglées pour chaque jeu.
+  const touchKeys = createTouchKeys($('touch-keys'), $('touch-keys-settings'), keyChoices(toje),
+    (code, down) => toje.pressKey(code, down), prefs, noteInput);
 
   async function openFile(file) {
     mount(file.name, new Int8Array(await file.arrayBuffer()));
@@ -391,7 +443,7 @@ function start(toje) {
   function setKeyboard(on) {
     if (on && !keyboard) {
       const zoom = createKeyboardZoom($('keyboard'), prefs.get('kbZoom', 1), z => prefs.set('kbZoom', z));
-      keyboard = buildKeyboard(zoom.inner, toje, (sc, down) => toje.pressKey(sc, down));
+      keyboard = buildKeyboard(zoom.inner, toje, (sc, down) => { noteInput(); toje.pressKey(sc, down); });
       requestAnimationFrame(zoom.refresh);   // une fois les touches mesurables
       capsShown = null;
     }
@@ -423,6 +475,23 @@ function start(toje) {
   }
   $('crt-mode').addEventListener('click', e => {
     setCrt(e.currentTarget.getAttribute('aria-pressed') !== 'true');
+    canvas.focus();
+  });
+
+  // Accélérer tant qu'on appuie.
+  const ff = $('ff');
+  ff.addEventListener('pointerdown', e => { ff.setPointerCapture(e.pointerId); turboHeld = true; e.preventDefault(); });
+  for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) {
+    ff.addEventListener(type, () => { turboHeld = false; });
+  }
+
+  function setFastLoad(on) {
+    fastLoad = on;
+    setPressed($('fast-load'), on);
+    prefs.set('fastLoad', on);
+  }
+  $('fast-load').addEventListener('click', e => {
+    setFastLoad(e.currentTarget.getAttribute('aria-pressed') !== 'true');
     canvas.focus();
   });
 
@@ -469,7 +538,9 @@ function start(toje) {
     if (e.ctrlKey && e.code === 'KeyR') return;     // laisse recharger la page
     if (e.target instanceof HTMLInputElement) return;
     firstGesture();
+    if (e.code === 'F7') { turboHeld = down; e.preventDefault(); return; }
     if (e.repeat) { e.preventDefault(); return; }    // le 6804 répète lui-même
+    noteInput();
     if (joystickKey(e.code, down) || toje.key(e.code, down)) e.preventDefault();
   }
   window.addEventListener('keydown', e => onKey(e, true));
@@ -504,6 +575,7 @@ function start(toje) {
     const state = `${dirs}${a}${b}`;
     if (state === lastJoy) return;
     lastJoy = state;
+    noteInput();
     toje.joystick(joyPort, dirs, a, b);
   }
 
@@ -512,6 +584,8 @@ function start(toje) {
   setPort(prefs.get('port', 0));
   setDiskTurbo(prefs.get('diskTurbo', false));
   setCrt(prefs.get('crt', false));
+  setFastLoad(prefs.get('fastLoad', true));
+  touchKeys.forGame(gameMedia.title());
 
   // Parties : magasin du navigateur ouvert en tâche de fond ; la page tourne déjà.
   let saves = { renderSlots() {} };

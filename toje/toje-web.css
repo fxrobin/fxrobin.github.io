@@ -59,6 +59,26 @@ button, label { touch-action: manipulation; }
 .build { color: var(--ink-dim); font-weight: 500; font-size: 13px; font-variant-numeric: tabular-nums; }
 .status { margin-left: auto; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
 
+/* Accélérer tant qu'on appuie : allumé aussi quand « Chargements rapides » agit seul. */
+.ff-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  background: linear-gradient(#F4F1E4, var(--cap));
+  box-shadow: 0 2px 0 var(--shadow);
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.ff-btn svg { width: 20px; height: 14px; fill: var(--ink-dim); }
+.ff-btn.on { background: var(--yellow); }
+.ff-btn.on svg { fill: #332A00; }
+
 /* Voyant du lecteur, comme sur la façade : couleurs du pilote desktop (DriveLeds). */
 .drive { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-dim); font-size: 13px; }
 .drive-led {
@@ -173,7 +193,39 @@ button, label { touch-action: manipulation; }
   box-shadow: 0 4px 6px rgba(0, 0, 0, .45);
   pointer-events: none;
 }
-.touch-fire { display: flex; justify-content: center; align-items: center; gap: 18px; }
+.touch-fire { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; }
+.fire-pair { display: flex; justify-content: center; align-items: center; gap: 18px; }
+
+/* Touches du TO8 choisies pour ce jeu (touch-keys.js) : petites, au-dessus de A et B. */
+.touch-keys { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 190px; }
+.touch-keys[hidden] { display: none; }
+.key-btn {
+  min-width: 52px;
+  min-height: 40px;
+  padding: 2px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: linear-gradient(#F4F1E4, var(--cap));
+  color: var(--ink);
+  font: 700 15px Rajdhani, system-ui, sans-serif;
+  box-shadow: 0 3px 0 var(--shadow), 0 4px 6px rgba(58, 52, 36, .3);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.key-btn.down { transform: translateY(2px); box-shadow: 0 1px 0 var(--shadow); filter: brightness(.94); }
+.key-selects { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
+.key-select {
+  min-height: 36px;
+  min-width: 0;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  background: #F2EFE2;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+}
+.lib-head small { color: var(--ink-dim); font-weight: 500; }
 .fire-btn {
   width: min(20vw, 76px);
   aspect-ratio: 1;
@@ -433,6 +485,7 @@ button, label { touch-action: manipulation; }
   .brand .logo { font-size: 13px; }
   /* Tient dans la colonne du stick, même en paysage étroit : la version passe à la ligne. */
   .brand { max-width: 118px; }
+  .brand .ff-btn { pointer-events: auto; margin: 4px 0; }   /* l'en-tête ignore les touchers, pas ce bouton */
   .brand .sub { display: none; }
   .brand .status { margin-left: 0; font-size: 12px; }
   .build { font-size: 11px; }
@@ -483,6 +536,9 @@ button, label { touch-action: manipulation; }
   .kb-zoom { margin-bottom: 2px; }
   .stick-base { width: min(30vh, 150px); }
   .fire-btn { width: min(17vh, 72px); }
+  .touch-keys { max-width: 112px; gap: 6px; }
+  .key-btn { min-width: 50px; min-height: 34px; font-size: 14px; padding: 2px 6px; }
+  .touch-fire { gap: 8px; }
   /* En bas de chaque côté, là où tombent les pouces quand on tient le téléphone. */
   .touch-stick, .touch-fire { align-self: end; padding-bottom: max(6px, env(safe-area-inset-bottom)); }
 }

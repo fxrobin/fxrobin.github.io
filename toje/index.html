@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css?v=cb8ac15">
+  <link rel="stylesheet" href="toje-web.css?v=a5e0ec9">
 </head>
 <body>
   <main class="chassis">
@@ -24,6 +24,10 @@
       <span class="sub">TOJE · WebAssembly</span>
       <span id="build" class="build" title="Version, heure du build et commit"></span>
       <span id="status" class="status">chargement…</span>
+      <button id="ff" class="ff-btn" aria-label="Accélérer tant qu'on appuie (F7 au clavier)"
+              title="Accélérer tant qu'on appuie (F7 au clavier)">
+        <svg viewBox="0 0 24 16" aria-hidden="true"><path d="M1 1l10 7-10 7zM12 1l10 7-10 7z"/></svg>
+      </button>
       <span class="drive" title="Lecteur de disquette : vert en lecture, rouge en écriture, jaune quand la tête se déplace">
         <i id="drive-led" class="drive-led"></i>Disque
       </span>
@@ -50,8 +54,11 @@
         </div>
       </section>
       <div id="fire" class="touch-fire" hidden aria-label="Manette : boutons">
-        <button class="fire-btn fire-b" data-fire="b">B</button>
-        <button class="fire-btn fire-a" data-fire="a">A</button>
+        <div id="touch-keys" class="touch-keys" hidden aria-label="Touches du TO8"></div>
+        <div class="fire-pair">
+          <button class="fire-btn fire-b" data-fire="b">B</button>
+          <button class="fire-btn fire-a" data-fire="a">A</button>
+        </div>
       </div>
     </section>
 
@@ -92,6 +99,10 @@
                 title="Flèches + Espace/Alt pilotent la manette au lieu des touches du TO8">
           <i class="led"></i>Manette clavier
         </button>
+        <button id="fast-load" class="keycap toggle" aria-pressed="true"
+                title="Accélère tant que le lecteur lit et que personne ne joue (son coupé)">
+          <i class="led"></i>Chargements rapides
+        </button>
         <button id="disk-turbo" class="keycap toggle" aria-pressed="false"
                 title="Supprime les délais moteur du lecteur : chargements plus courts">
           <i class="led"></i>Turbo disque
@@ -112,6 +123,10 @@
           <button class="keycap target-btn" data-target="1" aria-pressed="false"
                   title="Glisse la disquette dans le lecteur 2 sans redémarrer">Lecteur 2</button>
         </span>
+      </div>
+      <div class="touch-keys-settings">
+        <div class="lib-head"><span>Touches de la manette tactile <small>(pour ce jeu)</small></span></div>
+        <div id="touch-keys-settings" class="key-selects"></div>
       </div>
       <div class="saves">
         <div class="lib-head"><span>Parties sauvegardées</span></div>
@@ -142,7 +157,11 @@
         affiche un stick et les boutons A/B, « Clavier » le clavier du TO8
         (SHIFT et CNT restent enfoncés jusqu'à la touche suivante). Au clavier
         du PC : AZERTY positionnel, flèches + <b>Espace</b>/<b>Alt</b> pour la
-        manette. Une manette USB ou Bluetooth fonctionne aussi. Certains jeux
+        manette. Une manette USB ou Bluetooth fonctionne aussi. « Touches de la
+        manette tactile » ajoute jusqu'à quatre touches du TO8 à côté de A et B,
+        retenues pour chaque jeu. Pour aller plus vite, maintenir le bouton
+        <b>»</b> en haut (ou F7) ; « Chargements rapides » accélère seul tant que
+        le lecteur lit et qu'on ne touche à rien. Certains jeux
         chargent longtemps sur écran noir (Turbo Cup : près d'une minute) : le
         voyant « Disque » vert dit que la lecture se poursuit, et « Turbo
         disque » l'abrège.
@@ -160,19 +179,20 @@
   <script type="importmap">
     {
       "imports": {
-        "./touch-pad.js": "./touch-pad.js?v=cb8ac15",
-        "./to8-keyboard.js": "./to8-keyboard.js?v=cb8ac15",
-        "./keyboard-zoom.js": "./keyboard-zoom.js?v=cb8ac15",
-        "./menu.js": "./menu.js?v=cb8ac15",
-        "./build-info.js": "./build-info.js?v=cb8ac15",
-        "./library.js": "./library.js?v=cb8ac15",
-        "./crt-screen.js": "./crt-screen.js?v=cb8ac15",
-        "./save-store.js": "./save-store.js?v=cb8ac15",
-        "./game-saves.js": "./game-saves.js?v=cb8ac15"
+        "./touch-pad.js": "./touch-pad.js?v=a5e0ec9",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=a5e0ec9",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=a5e0ec9",
+        "./menu.js": "./menu.js?v=a5e0ec9",
+        "./build-info.js": "./build-info.js?v=a5e0ec9",
+        "./library.js": "./library.js?v=a5e0ec9",
+        "./crt-screen.js": "./crt-screen.js?v=a5e0ec9",
+        "./save-store.js": "./save-store.js?v=a5e0ec9",
+        "./game-saves.js": "./game-saves.js?v=a5e0ec9",
+        "./touch-keys.js": "./touch-keys.js?v=a5e0ec9"
       }
     }
   </script>
-  <script src="classes.wasm-runtime.js?v=cb8ac15"></script>
-  <script type="module" src="toje-web.js?v=cb8ac15"></script>
+  <script src="classes.wasm-runtime.js?v=a5e0ec9"></script>
+  <script type="module" src="toje-web.js?v=a5e0ec9"></script>
 </body>
 </html>
