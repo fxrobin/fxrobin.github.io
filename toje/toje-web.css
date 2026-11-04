@@ -831,6 +831,16 @@ button, label { touch-action: manipulation; }
 }
 .remap-add { width: auto; align-self: flex-start; }
 
+/* ── Médias récents (recent-media.js) ── */
+.recent-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.recent-head .keycap.small { margin: 0; padding: 4px 9px; }
+.recent-list { display: flex; flex-direction: column; }
+.recent-item { display: flex; align-items: center; gap: 4px; }
+.recent-item .lib-item { flex: 1; min-width: 0; }
+.recent-item .lib-name { flex: 1; display: flex; flex-direction: column; }
+.recent-item small { font-size: 12px; font-weight: 500; color: var(--ink-dim); }
+.recent-item .keycap.small { margin: 0; padding: 4px 9px; }
+
 /* ── Mes disquettes (my-disks.js) ── */
 .menu-note { margin: 4px 0 8px; font-size: 13px; font-weight: 500; color: var(--ink-dim); }
 .menu-note[hidden] { display: none; }

@@ -16,6 +16,7 @@ import { createGameSaves } from './game-saves.js';
 import { createTouchKeys, keyChoices } from './touch-keys.js';
 import { titleOf, baseName } from './titles.js';
 import { createMyDisks } from './my-disks.js';
+import { createRecentMedia } from './recent-media.js';
 import { createMousePointer } from './mouse-pointer.js';
 import { createPhoneKeyboard } from './phone-keyboard.js';
 import { saveScreenshot } from './screenshot.js';
@@ -360,6 +361,9 @@ function start(toje, store) {
   // La page garde les octets de chacun : une partie sauvegardée les remonte.
   let media = { disks: [null, null], cart: null, sd: null };   // { name, bytes }
 
+  // Médias récents : les derniers chargés, octets compris (un fichier ouvert n'a pas d'adresse).
+  const recentMedia = !locked && store ? createRecentMedia(store) : null;
+
   // « Disquette choisie » : Démarrer (redémarre dessus) ou un lecteur, où elle
   // entre sans redémarrer — un jeu qui demande sa disquette 2. Revient à
   // Démarrer après chaque insertion, pour ne pas surprendre au média suivant.
@@ -410,6 +414,8 @@ function start(toje, store) {
     const isDisk = format !== 'rom' && format !== 'sd';
     const swap = isDisk && (drive !== null || target !== 'boot');
     const entry = { name, bytes, fromLibrary, myDisk, label };
+    // Une disquette « à moi » a déjà sa liste ; une page verrouillée n'a pas d'historique.
+    if (recentMedia && !myDisk) recentMedia.remember(name, bytes).then(renderRecent, e => console.error(e));
     if (swap) {
       if (drive === null) drive = Number(target);
       toje.swapDisk(drive, entry.bytes, name);
@@ -542,6 +548,51 @@ function start(toje, store) {
     }));
     $('my-disks-empty').hidden = disks.length > 0;
   }
+
+  async function renderRecent() {
+    if (!recentMedia) return;
+    const entries = await recentMedia.list();
+    $('recent-box').hidden = entries.length === 0;
+    $('recent-list').replaceChildren(...entries.map(e => {
+      const row = document.createElement('div');
+      row.className = 'recent-item';
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'lib-item';
+      item.title = `Charger ${e.name} (suit « Disquette choisie »)`;
+      const format = formatOf(e.name) || 'fd';
+      const badge = document.createElement('span');
+      badge.className = `badge badge-${format}`;
+      badge.textContent = format.toUpperCase();
+      const name = document.createElement('span');
+      name.className = 'lib-name';
+      name.textContent = titleOf(e.name);
+      const when = document.createElement('small');
+      when.textContent = new Date(e.used).toLocaleString('fr-FR',
+        { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+      name.append(when);
+      item.append(badge, name);
+      item.addEventListener('click', async () => {
+        const bytes = await recentMedia.load(e.name);
+        if (bytes) await mount(e.name, bytes);
+        else renderRecent();
+      });
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'keycap small';
+      remove.textContent = '×';
+      remove.title = 'Retirer de la liste';
+      remove.addEventListener('click', async () => { await recentMedia.remove(e.name); renderRecent(); });
+      row.append(item, remove);
+      return row;
+    }));
+  }
+  $('recent-clear').addEventListener('click', async () => {
+    if (!recentMedia) return;
+    await recentMedia.clear();
+    renderRecent();
+  });
+  renderRecent();
 
   async function openFile(file) {
     mount(file.name, new Int8Array(await file.arrayBuffer()));
