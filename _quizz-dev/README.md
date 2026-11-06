@@ -39,3 +39,9 @@ Puis `http://<IP WSL>:8099/quizz/?emu=1` (élève) et `http://<IP WSL>:8099/quiz
 ## Production
 
 Les règles de `database.rules.json` sont à coller dans la console Firebase du projet `quizz-insa` (Realtime Database > Règles > Publier).
+
+## Questions
+
+Les questions sont stockées dans Firebase sous `/quiz/md` (lecture et écriture réservées au compte prof), jamais dans les fichiers publiés du site. La page prof les charge automatiquement après la connexion Google.
+
+Pour les modifier : éditer `~/talks/insa-2026-dev-augmente/preparation/quizz.md`, puis le déposer sur la page prof (zone « Dépose ici »). Le nouveau fichier remplace l'ancien en ligne s'il ne contient aucune erreur.
