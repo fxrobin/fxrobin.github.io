@@ -24,6 +24,7 @@ const store = {
 let quiz = null; // { rounds, errors }
 let game = null;
 let players = {};
+let present = new Set(); // uid des téléphones réellement connectés
 let answers = {}; // réponses de la question en cours : {uid: {c, t}}
 let unsubAnswers = null;
 let watchedQ = null;
@@ -33,7 +34,9 @@ let lastBoard = [];
 
 const studentUrl = () => new URL(`./${useEmulators() ? '?emu=1' : ''}`, location.href).href;
 const newSession = () => Math.random().toString(36).slice(2, 10);
-const activePlayers = () => Object.values(players).filter((p) => p.free !== true).length;
+const enrolled = () => Object.values(players).filter((p) => p.free !== true);
+const connected = () => enrolled().filter((p) => present.has(p.uid));
+const activePlayers = () => connected().length;
 const currentQuestion = () => quiz?.rounds[game.round - 1]?.questions[game.q];
 
 // ---- Connexion ---------------------------------------------------------------
@@ -167,7 +170,7 @@ async function next() {
 async function resetAll() {
   if (!confirm('Effacer la partie, les élèves, les réponses et les notes ?')) return;
   await update(ref(db), {
-    game: { phase: 'idle', session: newSession() }, players: null, answers: null, reveals: null, scores: null,
+    game: { phase: 'idle', session: newSession() }, players: null, presence: null, answers: null, reveals: null, scores: null,
   });
   lastBoard = [];
 }
@@ -293,7 +296,8 @@ function render() {
   }
   const round = quiz.rounds[game.round - 1];
   if (!round) return show(PAGES, 'setup');
-  const names = Object.values(players).filter((p) => p.free !== true).map((p) => p.name);
+  const names = connected().map((p) => p.name).sort((a, b) => a.localeCompare(b, 'fr'));
+  const enrolledCount = enrolled().length;
 
   if (game.phase === 'lobby') {
     const qrBox = qrSvg();
@@ -302,7 +306,7 @@ function render() {
       el('div', { className: 'lobby' }, qrBox, el('div', {},
         el('div', { className: 'muted', textContent: studentUrl().replace(/^https?:\/\//, '') }),
         el('div', { className: 'count-big', textContent: names.length }),
-        el('div', { className: 'muted', textContent: names.length > 1 ? 'connectés' : 'connecté' }),
+        el('div', { className: 'muted', textContent: `${names.length > 1 ? 'connectés' : 'connecté'} · ${enrolledCount} inscrit${enrolledCount > 1 ? 's' : ''}` }),
         el('p', { className: 'names', textContent: names.join(' · ') }))),
     ], `${round.questions.length} questions`, 'Lancer', () => startQuestion(0));
   }
@@ -313,7 +317,7 @@ function render() {
     const draw = () => {
       // Le minuteur d'une question déjà fermée ne doit jamais réécrire l'écran.
       if (game?.phase !== 'question' || `${game.round}/${game.q}` !== shown) { clearInterval(tick); return; }
-      const current = new Set(Object.values(players).filter((p) => p.free !== true).map((p) => p.uid));
+      const current = new Set(connected().map((p) => p.uid));
       const n = Object.keys(answers).filter((uid) => current.has(uid)).length;
       const total = activePlayers();
       const s = remaining();
@@ -368,6 +372,7 @@ function start() {
     if (s.exists() && s.val() !== store.get(MD_KEY)) loadMarkdown(s.val());
   }).catch(() => { /* hors ligne : on garde la copie locale */ });
   onValue(ref(db, 'players'), (s) => { players = s.val() || {}; render(); });
+  onValue(ref(db, 'presence'), (s) => { present = new Set(Object.keys(s.val() || {})); render(); });
   onValue(ref(db, 'game'), async (s) => {
     game = s.val();
     ensureReveal(game).catch(() => {});

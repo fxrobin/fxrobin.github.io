@@ -166,6 +166,15 @@ test('quiz_file_readable_only_by_teacher', async () => {
   await assertFails(get(ref(env.unauthenticatedContext().database(), 'quiz/md')));
 });
 
+test('presence_own_uid_only_teacher_reads', async () => {
+  await assertSucceeds(set(ref(studentDb('u1'), 'presence/u1'), true));
+  await assertSucceeds(set(ref(studentDb('u1'), 'presence/u1'), null));
+  await assertFails(set(ref(studentDb('u1'), 'presence/u2'), true));
+  await assertFails(set(ref(studentDb('u1'), 'presence/u1'), 'x'));
+  await assertFails(get(ref(studentDb('u1'), 'presence')));
+  await assertSucceeds(get(ref(teacherDb(), 'presence')));
+});
+
 test('teacher_resets_everything', async () => {
   await seed({ ...openQuestion(), answers: { 1: { 0: { u1: { c: 1, t: 1 } } } }, reveals: { 1: { 0: { correct: 1, openedAt: 1 } } } });
   await assertSucceeds(update(ref(teacherDb()), { game: null, players: null, answers: null, reveals: null, scores: null }));

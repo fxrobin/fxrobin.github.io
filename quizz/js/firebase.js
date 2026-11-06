@@ -5,7 +5,7 @@ import {
   getAuth, connectAuthEmulator, signInAnonymously, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
 } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js';
 import {
-  getDatabase, connectDatabaseEmulator, ref, onValue, set, update, get, remove, serverTimestamp, runTransaction,
+  getDatabase, connectDatabaseEmulator, ref, onValue, set, update, get, remove, serverTimestamp, runTransaction, onDisconnect,
 } from 'https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js';
 
 const config = {
@@ -45,6 +45,6 @@ export function serverNow() {
 }
 
 export {
-  ref, onValue, set, update, get, remove, serverTimestamp, runTransaction,
+  ref, onValue, set, update, get, remove, serverTimestamp, runTransaction, onDisconnect,
   signInAnonymously, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
 };

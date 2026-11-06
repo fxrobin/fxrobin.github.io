@@ -1,6 +1,6 @@
 // Page élève : rejoindre avec un prénom, répondre, voir juste ou faux.
 import {
-  auth, db, ref, onValue, update, get, set, serverTimestamp, signInAnonymously, onAuthStateChanged, serverNow,
+  auth, db, ref, onValue, update, get, set, serverTimestamp, signInAnonymously, onAuthStateChanged, serverNow, onDisconnect,
 } from './firebase.js';
 import { cleanName, nameKey, validateName, NAME_TAKEN } from './names.js';
 import { CHOICES, show } from './ui.js';
@@ -83,7 +83,14 @@ async function tryResume() {
 function joined() {
   $('me').textContent = me.name;
   unsubs.forEach((u) => u());
+  const presence = ref(db, `presence/${uid}`);
   unsubs = [
+    // Présence : posée à chaque (re)connexion, retirée par Firebase quand la page se ferme ou coupe.
+    onValue(ref(db, '.info/connected'), (c) => {
+      if (c.val() !== true) return;
+      onDisconnect(presence).remove().then(() => set(presence, true)).catch(() => {});
+    }),
+    () => { set(presence, null).catch(() => {}); },
     onValue(ref(db, 'game'), (s) => { game = s.val(); render(); }),
     onValue(ref(db, `scores/${me.key}`), (s) => { score = s.val(); render(); }),
     onValue(ref(db, 'players'), (s) => { playerCount = s.size; render(); }),

@@ -47,6 +47,14 @@
       }
     },
 
+    "presence": {
+      ".read": "auth != null && auth.token.email === 'fxrobin@gmail.com' && auth.token.email_verified === true",
+      "$uid": {
+        ".write": "auth != null && $uid === auth.uid",
+        ".validate": "newData.val() === true"
+      }
+    },
+
     "quiz": {
       ".read": "auth != null && auth.token.email === 'fxrobin@gmail.com' && auth.token.email_verified === true",
       "md": { ".validate": "newData.isString() && newData.val().length <= 200000" },
