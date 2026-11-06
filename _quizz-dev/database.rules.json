@@ -1,0 +1,58 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": "auth != null && auth.token.email === 'fxrobin@gmail.com' && auth.token.email_verified === true",
+
+    "game": {
+      ".read": "auth != null"
+    },
+
+    "players": {
+      ".read": "auth != null",
+      "$key": {
+        "name": {
+          ".write": "auth != null && !data.exists()",
+          ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 20"
+        },
+        "uid": {
+          ".write": "auth != null && newData.val() === auth.uid && (!data.exists() || data.parent().child('free').val() === true)",
+          ".validate": "newData.isString()"
+        },
+        "free": {
+          ".write": "auth != null && newData.val() === false && newData.parent().child('uid').val() === auth.uid",
+          ".validate": "newData.isBoolean()"
+        },
+        "uids": {
+          "$u": {
+            ".write": "auth != null && $u === auth.uid && newData.val() === true && newData.parent().parent().child('uid').val() === auth.uid",
+            ".validate": "newData.val() === true"
+          }
+        },
+        "$other": { ".validate": false }
+      }
+    },
+
+    "answers": {
+      ".read": "auth != null && auth.token.email === 'fxrobin@gmail.com' && auth.token.email_verified === true",
+      "$r": {
+        "$q": {
+          "$uid": {
+            ".write": "auth != null && $uid === auth.uid && !data.exists() && root.child('game/phase').val() === 'question' && root.child('game/round').val() + '' === $r && root.child('game/q').val() + '' === $q && now <= root.child('game/openedAt').val() + root.child('game/duration').val() * 1000 + 1500",
+            ".validate": "newData.hasChildren(['c', 't']) && newData.child('c').isNumber() && newData.child('c').val() % 1 === 0 && newData.child('c').val() >= 0 && newData.child('c').val() < root.child('game/nChoices').val() && newData.child('t').val() === now",
+            "c": { ".validate": true },
+            "t": { ".validate": true },
+            "$other": { ".validate": false }
+          }
+        }
+      }
+    },
+
+    "reveals": {
+      ".read": "auth != null && auth.token.email === 'fxrobin@gmail.com' && auth.token.email_verified === true"
+    },
+
+    "scores": {
+      ".read": "auth != null"
+    }
+  }
+}
