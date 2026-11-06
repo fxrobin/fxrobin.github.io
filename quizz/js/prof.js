@@ -188,10 +188,20 @@ async function openNotes() {
         openNotes();
       },
     });
+    // Retire l'élève de la partie : son téléphone revient à l'écran d'arrivée. S'il se réinscrit
+    // depuis le même téléphone, ses réponses (rattachées à son appareil) comptent de nouveau.
+    const kick = el('button', {
+      className: 'go secondary', textContent: 'Déconnecter',
+      onclick: async () => {
+        if (!confirm(`Déconnecter « ${r.name} » ? Il disparaît de la partie et des notes jusqu'à ce qu'il se réinscrive.`)) return;
+        await set(ref(db, `players/${r.key}`), null);
+        openNotes();
+      },
+    });
     return el('tr', {},
       el('td', { textContent: r.rank }), el('td', { textContent: r.name }),
       el('td', { textContent: r.r1 }), el('td', { textContent: r.r2 }), el('td', { textContent: r.r3 }),
-      el('td', {}, el('strong', { textContent: r.total })), el('td', {}, btn));
+      el('td', {}, el('strong', { textContent: r.total })), el('td', { style: 'display:flex;gap:.4rem' }, btn, kick));
   }));
   $('notes').hidden = false;
 }

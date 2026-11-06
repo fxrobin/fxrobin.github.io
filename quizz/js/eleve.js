@@ -89,12 +89,16 @@ function joined() {
     onValue(ref(db, 'players'), (s) => { playerCount = s.size; render(); }),
     onValue(ref(db, `players/${me.key}/uid`), (s) => {
       // Prénom repris ailleurs, ou partie réinitialisée : ce téléphone doit se réinscrire.
-      if (s.val() !== uid) { me = null; unsubs.forEach((u) => u()); unsubs = []; showJoin(); }
+      if (s.val() !== uid) {
+        me = null; unsubs.forEach((u) => u()); unsubs = [];
+        showJoin(s.exists() ? 'Ce prénom est utilisé sur un autre appareil.' : "Tu n'es plus inscrit : rejoins de nouveau la partie.");
+      }
     }),
   ];
 }
 
-function showJoin() {
+function showJoin(message = '') {
+  $('join-error').textContent = message;
   $('me').textContent = 'Quiz INSA 2026';
   $('status').textContent = '';
   hideVerdict();
