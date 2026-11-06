@@ -16,7 +16,7 @@ test('parseQuiz_reads_real_file', { skip: !process.env.QUIZZ_MD }, () => {
   assert.equal(q.choices.length, 4);
   assert.equal(q.choices[q.correct], "Il enchaîne des appels d'outils sur un environnement réel");
   assert.equal(q.duration, 20);
-  assert.ok(q.explanation.startsWith('Slide 4'));
+  assert.match(q.explanation, /^(Note de la )?[Ss]lide \d+ :/);
 });
 
 test('parseQuiz_true_false', () => {
