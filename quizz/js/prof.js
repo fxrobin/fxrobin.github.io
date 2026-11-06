@@ -30,6 +30,10 @@ let unsubAnswers = null;
 let watchedQ = null;
 let tick = null;
 let closing = false;
+let launching = false;
+let acks = {}; // téléphones prêts pour la question en cours : {uid: true}
+let unsubAcks = null;
+let watchedAcks = null;
 let lastBoard = [];
 
 const studentUrl = () => new URL(`./${useEmulators() ? '?emu=1' : ''}`, location.href).href;
@@ -111,13 +115,31 @@ async function openLobby(round) {
   });
 }
 
+/** Prépare la question : les téléphones affichent les boutons et confirment qu'ils sont prêts. */
 async function startQuestion(q) {
   const question = quiz.rounds[game.round - 1].questions[q];
   closing = false;
+  launching = false;
   await update(ref(db, 'game'), {
-    phase: 'question', q, nChoices: question.choices.length, duration: question.duration,
-    openedAt: serverTimestamp(), correct: null,
+    phase: 'ready', q, nChoices: question.choices.length, duration: question.duration,
+    openedAt: 0, correct: null,
   });
+}
+
+/** Démarre le chrono, une seule fois, seulement depuis la phase « prêts ». */
+async function goLive() {
+  if (launching || game?.phase !== 'ready') return;
+  launching = true;
+  const { round, q } = game;
+  try {
+    await runTransaction(ref(db, 'game'), (g) => {
+      if (!g || g.phase !== 'ready' || g.round !== round || g.q !== q) return undefined;
+      // Heure de départ corrigée par l'écart avec le serveur (pas l'horloge brute du poste prof).
+      return { ...g, phase: 'question', openedAt: Math.round(serverNow()) };
+    });
+  } finally {
+    launching = false;
+  }
 }
 
 async function closeQuestion() {
@@ -170,7 +192,7 @@ async function next() {
 async function resetAll() {
   if (!confirm('Effacer la partie, les élèves, les réponses et les notes ?')) return;
   await update(ref(db), {
-    game: { phase: 'idle', session: newSession() }, players: null, presence: null, answers: null, reveals: null, scores: null,
+    game: { phase: 'idle', session: newSession() }, players: null, presence: null, acks: null, answers: null, reveals: null, scores: null,
   });
   lastBoard = [];
 }
@@ -244,6 +266,16 @@ function toolButtons() {
 
 // ---- Affichage -------------------------------------------------------------------
 
+function watchAcks() {
+  const key = game && (game.phase === 'ready' || game.phase === 'question') ? `${game.round}/${game.q}` : null;
+  if (key === watchedAcks) return;
+  unsubAcks?.();
+  unsubAcks = null;
+  acks = {};
+  watchedAcks = key;
+  if (key) unsubAcks = onValue(ref(db, `acks/${key}`), (s) => { acks = s.val() || {}; render(); });
+}
+
 function watchAnswers() {
   const key = game && (game.phase === 'question' || game.phase === 'reveal') ? `${game.round}/${game.q}` : null;
   if (key === watchedQ) return;
@@ -288,6 +320,7 @@ function stage(kicker, body, info, actionLabel, action) {
 function render() {
   clearInterval(tick);
   watchAnswers();
+  watchAcks();
   if (!auth.currentUser || auth.currentUser.isAnonymous) return;
   const ready = quiz && quiz.errors.length === 0;
   if (!game || game.phase === 'idle' || !ready) {
@@ -312,6 +345,22 @@ function render() {
   }
 
   const q = currentQuestion();
+  if (game.phase === 'ready') {
+    const waiting = connected().filter((p) => !acks[p.uid]);
+    const total = activePlayers();
+    const readyCount = total - waiting.length;
+    stage(`Question ${game.q + 1} / ${game.qCount} · préparez-vous`, [
+      el('h1', { className: 'title q-text', textContent: q.text }),
+      el('div', { className: 'grid4' }, ...q.choices.map((c, i) => choiceBox(i, c))),
+      el('div', { className: 'explain', textContent: waiting.length
+        ? `En attente de : ${waiting.map((p) => p.name).join(', ')}`
+        : 'Tous les téléphones sont prêts.' }),
+    ], `${readyCount} / ${total} téléphones prêts`, waiting.length ? 'Lancer sans attendre' : 'Lancer', goLive);
+    // Le chrono part tout seul dès que tous les téléphones connectés ont confirmé.
+    if (total > 0 && waiting.length === 0) setTimeout(goLive, 300);
+    return;
+  }
+
   if (game.phase === 'question') {
     const shown = `${game.round}/${game.q}`;
     const draw = () => {

@@ -175,6 +175,22 @@ test('presence_own_uid_only_teacher_reads', async () => {
   await assertSucceeds(get(ref(teacherDb(), 'presence')));
 });
 
+test('ack_own_uid_for_current_question_only', async () => {
+  await seed({ game: { phase: 'ready', round: 1, title: 'Manche 1', q: 0, qCount: 6, nChoices: 4, openedAt: 0, duration: 20, correct: null } });
+  const db = studentDb('u1');
+  await assertSucceeds(set(ref(db, 'acks/1/0/u1'), true));
+  await assertFails(set(ref(db, 'acks/1/0/u2'), true));
+  await assertFails(set(ref(db, 'acks/1/1/u1'), true));
+  await assertFails(set(ref(db, 'acks/1/0/u1'), 'x'));
+  await assertFails(get(ref(db, 'acks/1/0')));
+  await assertSucceeds(get(ref(teacherDb(), 'acks/1/0')));
+});
+
+test('answer_denied_while_ready', async () => {
+  await seed({ game: { phase: 'ready', round: 1, title: 'Manche 1', q: 0, qCount: 6, nChoices: 4, openedAt: Date.now(), duration: 20, correct: null } });
+  await assertFails(answer(studentDb('u1'), 'u1', 0));
+});
+
 test('teacher_resets_everything', async () => {
   await seed({ ...openQuestion(), answers: { 1: { 0: { u1: { c: 1, t: 1 } } } }, reveals: { 1: { 0: { correct: 1, openedAt: 1 } } } });
   await assertSucceeds(update(ref(teacherDb()), { game: null, players: null, answers: null, reveals: null, scores: null }));

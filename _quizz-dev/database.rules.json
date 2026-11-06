@@ -47,6 +47,18 @@
       }
     },
 
+    "acks": {
+      ".read": "auth != null && auth.token.email === 'fxrobin@gmail.com' && auth.token.email_verified === true",
+      "$r": {
+        "$q": {
+          "$uid": {
+            ".write": "auth != null && $uid === auth.uid && (root.child('game/phase').val() === 'ready' || root.child('game/phase').val() === 'question') && root.child('game/round').val() + '' === $r && root.child('game/q').val() + '' === $q",
+            ".validate": "newData.val() === true"
+          }
+        }
+      }
+    },
+
     "presence": {
       ".read": "auth != null && auth.token.email === 'fxrobin@gmail.com' && auth.token.email_verified === true",
       "$uid": {

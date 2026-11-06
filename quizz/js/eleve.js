@@ -134,7 +134,8 @@ function render() {
   }
   $('status').textContent = g.phase === 'question' || g.phase === 'reveal' ? `Q${g.q + 1}/${g.qCount}` : `Manche ${g.round}`;
   if (g.phase === 'lobby') return wait(g.title || `Manche ${g.round}`, "Regarde l'écran", 'Tu es dans la partie.');
-  if (g.phase === 'question') return renderQuestion(g);
+  if (g.phase === 'ready') return renderReady(g);
+  if (g.phase === 'question') { ack(g); return renderQuestion(g); }
   if (g.phase === 'reveal') return renderReveal(g);
   if (g.phase === 'roundEnd') return renderEnd(g);
   return wait('En attente', "Regarde l'écran");
@@ -178,6 +179,36 @@ function renderQuestion(g) {
   };
   tick();
   timer = setInterval(tick, 250);
+}
+
+// ---- Prêt : le téléphone confirme avoir reçu la question avant que le chrono parte ----
+
+const acked = new Set();
+
+function ack(g) {
+  const k = `${g.session ?? 's'}.${g.round}.${g.q}`;
+  if (acked.has(k)) return;
+  acked.add(k);
+  set(ref(db, `acks/${g.round}/${g.q}/${uid}`), true).catch(() => acked.delete(k));
+}
+
+function renderReady(g) {
+  hideVerdict();
+  $('status').textContent = `Q${g.q + 1}/${g.qCount} · prépare-toi`;
+  const box = $('answers');
+  box.className = `answers${g.nChoices === 2 ? ' two' : ''}`;
+  box.replaceChildren(...CHOICES.slice(0, g.nChoices).map((ch) => {
+    const b = document.createElement('button');
+    b.className = ch.cls;
+    b.disabled = true;
+    b.style.opacity = '.35';
+    b.setAttribute('aria-label', `Réponse ${ch.letter}, pas encore ouverte`);
+    b.innerHTML = `<span class="shape" aria-hidden="true">${ch.shape}</span><span class="letter">${ch.letter}</span>`;
+    return b;
+  }));
+  show(SECTIONS, 'question');
+  // Confirmation envoyée une fois les boutons affichés.
+  requestAnimationFrame(() => ack(g));
 }
 
 const pending = new Set(); // réponses envoyées, en attente de confirmation du serveur
