@@ -225,6 +225,7 @@ function toolButtons() {
     el('button', { className: 'go secondary', textContent: 'Notes', onclick: openNotes }),
     el('button', { className: 'go secondary', textContent: 'Questions', onclick: () => show(PAGES, 'setup') }),
     el('button', { className: 'go secondary', textContent: 'Réinitialiser', onclick: resetAll }),
+    el('button', { className: 'go secondary', textContent: 'Se déconnecter', onclick: () => signOut(auth).then(() => location.reload()) }),
   ];
 }
 

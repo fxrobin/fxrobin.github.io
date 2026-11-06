@@ -34,7 +34,8 @@
     .drop { border: 2px dashed var(--muted); border-radius: var(--radius); padding: 2rem; text-align: center; cursor: pointer; }
     .drop.over { border-color: var(--action); }
     .errors { color: #FF816E; }
-    .rounds { display: flex; gap: .8rem; flex-wrap: wrap; }
+    .rounds { display: grid; grid-template-columns: minmax(0, 560px); gap: .8rem; }
+    .rounds .go { width: 100%; text-align: left; }
     .qr-full { position: fixed; inset: 0; z-index: 20; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2vh; cursor: pointer; }
     .qr-full .qr svg { width: min(80vw, 78vh); }
     .qr-full .url { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 800; font-size: clamp(1.6rem, 3.5vw, 4.5rem); }
