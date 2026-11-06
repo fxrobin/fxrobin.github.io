@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Quiz INSA 2026 · Prof</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { min-height: 100dvh; }
+    .stage { min-height: 100dvh; display: flex; flex-direction: column; gap: 1.5vw; padding: 2.5vw 3vw; }
+    .bar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .tools { display: flex; gap: .6rem; flex-wrap: wrap; }
+    .tools .go { padding: .5rem .9rem; font-size: .9rem; }
+    .kicker { font-size: clamp(1rem, 1.3vw, 1.6rem); }
+    .h-round { font-size: clamp(2rem, 4.5vw, 6rem); }
+    .q-text { font-size: clamp(2rem, 3.4vw, 4.4rem); border-left: .6vw solid var(--action); padding: .2em .6em; }
+    .grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 1vw; flex: 1; }
+    .grid4 > div { border-radius: var(--radius); padding: 1.2vw 1.6vw; display: flex; align-items: center; gap: 1vw; font-size: clamp(1.2rem, 2.2vw, 3rem); font-weight: 700; }
+    .grid4 > div .tag { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 800; white-space: nowrap; }
+    .grid4 > div .count { margin-left: auto; font-size: 1.3em; font-weight: 800; }
+    .grid4 > div.dim { opacity: .3; }
+    .grid4 > div.right { outline: .4vw solid #fff; }
+    .clock { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: clamp(2.5rem, 5vw, 7rem); color: var(--action); }
+    .explain { border: 1px solid var(--line); border-radius: var(--radius); padding: 1vw 1.4vw; color: var(--muted); font-size: clamp(1.1rem, 1.8vw, 2.4rem); }
+    .lobby { display: flex; gap: 3vw; align-items: center; flex: 1; }
+    .qr svg { width: min(32vw, 60vh); height: auto; background: #fff; border-radius: var(--radius); display: block; }
+    .names { color: var(--muted); font-size: clamp(1rem, 1.6vw, 2rem); line-height: 1.5; }
+    .count-big { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: clamp(3rem, 7vw, 9rem); color: var(--action); line-height: 1; }
+    table.board { border-collapse: collapse; width: 100%; font-size: clamp(1.2rem, 2.2vw, 3rem); }
+    table.board td { border-bottom: 1px solid var(--line); padding: .35em .5em; }
+    table.board td.rank { color: var(--action); width: 3em; font-weight: 800; }
+    .panel { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 1rem; }
+    .drop { border: 2px dashed var(--muted); border-radius: var(--radius); padding: 2rem; text-align: center; cursor: pointer; }
+    .drop.over { border-color: var(--action); }
+    .errors { color: #FF816E; }
+    .rounds { display: flex; gap: .8rem; flex-wrap: wrap; }
+    .notes { position: fixed; inset: 0; background: #f4f4f6; color: #111; overflow: auto; padding: 2rem; z-index: 10; }
+    .notes table { border-collapse: collapse; width: 100%; max-width: 900px; font-size: 1rem; }
+    .notes th, .notes td { border-bottom: 1px solid #ccc; padding: .4rem .6rem; text-align: left; }
+    .notes .go.secondary { color: #111; border-color: #111; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha384-mZT2gIty7ZDdOGkxfP6joZcYdMW1Jvj9dRlfpTmaJAKKXTqzygtB22k7FLe+KZC1" crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- Connexion -->
+  <section id="login" class="panel" hidden>
+    <div class="mono">Quiz INSA 2026 · Prof</div>
+    <h1 class="title" style="font-size:2.4rem">Connexion enseignant</h1>
+    <p id="login-msg" class="muted"></p>
+    <div><button class="go" id="login-btn">Se connecter avec Google</button></div>
+  </section>
+
+  <!-- Préparation : fichier de questions et choix de la manche -->
+  <section id="setup" class="panel" hidden>
+    <div class="bar"><div class="mono">Quiz INSA 2026 · Prof</div><div class="tools" id="tools-setup"></div></div>
+    <h1 class="title" style="font-size:2.4rem">Préparer une manche</h1>
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept=".md,text/markdown,text/plain" hidden>
+      <span id="file-label">Dépose ici <code>quizz.md</code> ou clique pour le choisir</span>
+    </label>
+    <ul class="errors" id="errors"></ul>
+    <div class="rounds" id="rounds"></div>
+  </section>
+
+  <!-- Écrans projetés -->
+  <section id="stage" class="stage" hidden>
+    <div class="bar">
+      <div class="mono kicker" id="stage-kicker"></div>
+      <div class="tools" id="tools-stage"></div>
+    </div>
+    <div id="stage-body" style="flex:1;display:flex;flex-direction:column;gap:1.5vw"></div>
+    <div class="bar">
+      <div class="muted" id="stage-info"></div>
+      <button class="go" id="stage-action"></button>
+    </div>
+  </section>
+
+  <!-- Notes (non projetées) -->
+  <section id="notes" class="notes" hidden>
+    <div class="bar" style="max-width:900px">
+      <h1 class="title" style="font-size:2rem">Notes</h1>
+      <div class="tools">
+        <button class="go" id="csv-btn">Télécharger CSV</button>
+        <button class="go secondary" id="notes-close">Fermer</button>
+      </div>
+    </div>
+    <p>Note sur 20 = nombre de bonnes réponses. Absent d'une manche = 0 sur ses questions. « Libérer » permet à un élève de reprendre son prénom depuis un autre appareil.</p>
+    <table><thead><tr><th>#</th><th>Prénom</th><th>M1</th><th>M2</th><th>M3</th><th>/20</th><th></th></tr></thead><tbody id="notes-body"></tbody></table>
+  </section>
+
+  <script type="module" src="js/prof.js"></script>
+</body>
+</html>

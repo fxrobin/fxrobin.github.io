@@ -84,8 +84,8 @@ function joined() {
     onValue(ref(db, `scores/${me.key}`), (s) => { score = s.val(); render(); }),
     onValue(ref(db, 'players'), (s) => { playerCount = s.size; render(); }),
     onValue(ref(db, `players/${me.key}/uid`), (s) => {
-      // Prénom libéré puis repris ailleurs : ce téléphone n'est plus le bon.
-      if (s.exists() && s.val() !== uid) { me = null; unsubs.forEach((u) => u()); unsubs = []; showJoin(); }
+      // Prénom repris ailleurs, ou partie réinitialisée : ce téléphone doit se réinscrire.
+      if (s.val() !== uid) { me = null; unsubs.forEach((u) => u()); unsubs = []; showJoin(); }
     }),
   ];
 }
