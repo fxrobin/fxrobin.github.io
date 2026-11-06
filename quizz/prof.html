@@ -24,7 +24,7 @@
     .clock { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: clamp(2.5rem, 5vw, 7rem); color: var(--action); }
     .explain { border: 1px solid var(--line); border-radius: var(--radius); padding: 1vw 1.4vw; color: var(--muted); font-size: clamp(1.1rem, 1.8vw, 2.4rem); }
     .lobby { display: flex; gap: 3vw; align-items: center; flex: 1; }
-    .qr svg { width: min(32vw, 60vh); height: auto; background: #fff; border-radius: var(--radius); display: block; }
+    .qr svg { width: min(40vw, 66vh); height: auto; background: #fff; border-radius: var(--radius); display: block; }
     .names { color: var(--muted); font-size: clamp(1rem, 1.6vw, 2rem); line-height: 1.5; }
     .count-big { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: clamp(3rem, 7vw, 9rem); color: var(--action); line-height: 1; }
     table.board { border-collapse: collapse; width: 100%; font-size: clamp(1.2rem, 2.2vw, 3rem); }
@@ -35,6 +35,9 @@
     .drop.over { border-color: var(--action); }
     .errors { color: #FF816E; }
     .rounds { display: flex; gap: .8rem; flex-wrap: wrap; }
+    .qr-full { position: fixed; inset: 0; z-index: 20; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2vh; cursor: pointer; }
+    .qr-full .qr svg { width: min(80vw, 78vh); }
+    .qr-full .url { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 800; font-size: clamp(1.6rem, 3.5vw, 4.5rem); }
     .notes { position: fixed; inset: 0; background: #f4f4f6; color: #111; overflow: auto; padding: 2rem; z-index: 10; }
     .notes table { border-collapse: collapse; width: 100%; max-width: 900px; font-size: 1rem; }
     .notes th, .notes td { border-bottom: 1px solid #ccc; padding: .4rem .6rem; text-align: left; }
@@ -74,6 +77,14 @@
       <div class="muted" id="stage-info"></div>
       <button class="go" id="stage-action"></button>
     </div>
+  </section>
+
+  <!-- QR code plein écran (clic pour fermer) -->
+  <section id="qr-full" class="qr-full" hidden>
+    <div class="mono kicker">Rejoins le quiz</div>
+    <div id="qr-full-code"></div>
+    <div class="url" id="qr-full-url"></div>
+    <div class="muted">Clique pour fermer</div>
   </section>
 
   <!-- Notes (non projetées) -->

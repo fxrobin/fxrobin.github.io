@@ -57,9 +57,16 @@ onAuthStateChanged(auth, (user) => {
 
 // ---- Fichier de questions ------------------------------------------------------
 
-function loadMarkdown(text, remember = true) {
+function loadMarkdown(text, { persist = false } = {}) {
   quiz = parseQuiz(text);
-  if (remember) store.set(MD_KEY, text);
+  store.set(MD_KEY, text);
+  // Un fichier valide déposé par le prof est gardé dans Firebase (lecture prof seulement) :
+  // les 3 manches sont proposées d'office sur n'importe quel poste après connexion.
+  if (persist && quiz.errors.length === 0) {
+    set(ref(db, 'quiz'), { md: text, updatedAt: serverTimestamp() }).catch((e) => {
+      $('file-label').textContent += ` (non enregistré en ligne : ${e.code || e.message})`;
+    });
+  }
   $('errors').replaceChildren(...quiz.errors.map((e) => el('li', { textContent: e })));
   const total = quiz.rounds.reduce((n, r) => n + r.questions.length, 0);
   $('file-label').textContent = quiz.errors.length
@@ -71,7 +78,7 @@ function loadMarkdown(text, remember = true) {
 
 $('file').addEventListener('change', async (ev) => {
   const f = ev.target.files[0];
-  if (f) loadMarkdown(await f.text());
+  if (f) loadMarkdown(await f.text(), { persist: true });
 });
 const drop = $('drop');
 drop.addEventListener('dragover', (ev) => { ev.preventDefault(); drop.classList.add('over'); });
@@ -80,7 +87,7 @@ drop.addEventListener('drop', async (ev) => {
   ev.preventDefault();
   drop.classList.remove('over');
   const f = ev.dataTransfer.files[0];
-  if (f) loadMarkdown(await f.text());
+  if (f) loadMarkdown(await f.text(), { persist: true });
 });
 
 function renderRounds() {
@@ -196,8 +203,25 @@ $('csv-btn').addEventListener('click', async () => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 
+function qrSvg() {
+  const qr = qrcode(0, 'M');
+  qr.addData(studentUrl());
+  qr.make();
+  const box = el('div', { className: 'qr' });
+  box.innerHTML = qr.createSvgTag({ cellSize: 8, margin: 2, scalable: true });
+  return box;
+}
+
+function showQr() {
+  $('qr-full-code').replaceChildren(qrSvg());
+  $('qr-full-url').textContent = studentUrl().replace(/^https?:\/\//, '');
+  $('qr-full').hidden = false;
+}
+$('qr-full').addEventListener('click', () => { $('qr-full').hidden = true; });
+
 function toolButtons() {
   return [
+    el('button', { className: 'go secondary', textContent: 'QR code', onclick: showQr }),
     el('button', { className: 'go secondary', textContent: 'Notes', onclick: openNotes }),
     el('button', { className: 'go secondary', textContent: 'Questions', onclick: () => show(PAGES, 'setup') }),
     el('button', { className: 'go secondary', textContent: 'Réinitialiser', onclick: resetAll }),
@@ -261,11 +285,7 @@ function render() {
   const names = Object.values(players).filter((p) => p.free !== true).map((p) => p.name);
 
   if (game.phase === 'lobby') {
-    const qr = qrcode(0, 'M');
-    qr.addData(studentUrl());
-    qr.make();
-    const qrBox = el('div', { className: 'qr' });
-    qrBox.innerHTML = qr.createSvgTag({ cellSize: 8, margin: 2, scalable: true });
+    const qrBox = qrSvg();
     return stage(`Manche ${game.round}`, [
       el('h1', { className: 'title h-round', textContent: round.title.replace(/^Manche \d+ · |^Finale · /, '') }),
       el('div', { className: 'lobby' }, qrBox, el('div', {},
@@ -331,7 +351,11 @@ function start() {
   if (started) return render();
   started = true;
   const saved = store.get(MD_KEY);
-  if (saved) loadMarkdown(saved, false);
+  if (saved) loadMarkdown(saved);
+  // Questions enregistrées en ligne : elles priment sur la copie locale (autre poste, autre navigateur).
+  get(ref(db, 'quiz/md')).then((s) => {
+    if (s.exists() && s.val() !== store.get(MD_KEY)) loadMarkdown(s.val());
+  }).catch(() => { /* hors ligne : on garde la copie locale */ });
   onValue(ref(db, 'players'), (s) => { players = s.val() || {}; render(); });
   onValue(ref(db, 'game'), async (s) => {
     game = s.val();

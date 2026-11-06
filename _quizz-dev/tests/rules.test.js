@@ -157,6 +157,15 @@ test('student_reads_only_own_score', async () => {
   await assertSucceeds(get(ref(teacherDb(), 'scores')));
 });
 
+test('quiz_file_readable_only_by_teacher', async () => {
+  await assertSucceeds(set(ref(teacherDb(), 'quiz'), { md: '## Manche 1\n', updatedAt: 1 }));
+  await assertSucceeds(get(ref(teacherDb(), 'quiz/md')));
+  await assertFails(get(ref(studentDb('u1'), 'quiz')));
+  await assertFails(get(ref(studentDb('u1'), 'quiz/md')));
+  await assertFails(set(ref(studentDb('u1'), 'quiz/md'), 'piratage'));
+  await assertFails(get(ref(env.unauthenticatedContext().database(), 'quiz/md')));
+});
+
 test('teacher_resets_everything', async () => {
   await seed({ ...openQuestion(), answers: { 1: { 0: { u1: { c: 1, t: 1 } } } }, reveals: { 1: { 0: { correct: 1, openedAt: 1 } } } });
   await assertSucceeds(update(ref(teacherDb()), { game: null, players: null, answers: null, reveals: null, scores: null }));
