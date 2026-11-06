@@ -109,6 +109,12 @@ function renderRounds() {
 
 async function openLobby(round) {
   const r = quiz.rounds[round - 1];
+  // Une manche déjà jouée garde ses réponses : on propose de les effacer pour repartir à zéro.
+  if ((await get(ref(db, `answers/${round}`))).exists()
+    && confirm(`La manche ${round} a déjà des réponses enregistrées (essai précédent ?). Les effacer avant de l'ouvrir ?\n\nOK : effacer les réponses de cette manche. Annuler : les garder.`)) {
+    await update(ref(db), { [`answers/${round}`]: null, [`reveals/${round}`]: null, [`acks/${round}`]: null });
+    await publishScores();
+  }
   await set(ref(db, 'game'), {
     session: game?.session || newSession(), phase: 'lobby', round, title: r.title,
     q: 0, qCount: r.questions.length, nChoices: 0, openedAt: 0, duration: 0, correct: null,
