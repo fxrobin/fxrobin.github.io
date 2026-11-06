@@ -115,13 +115,30 @@ async function closeQuestion() {
   closing = true;
   const { round, q, openedAt } = game;
   const correct = currentQuestion().correct;
-  const res = await runTransaction(ref(db, 'game'), (g) => {
-    if (!g || g.phase !== 'question' || g.round !== round || g.q !== q) return undefined;
-    return { ...g, phase: 'reveal', correct };
-  });
-  if (!res.committed) return;
-  await set(ref(db, `reveals/${round}/${q}`), { correct, openedAt });
-  await publishScores();
+  try {
+    // La bonne réponse est enregistrée (lecture prof seulement) AVANT d'ouvrir la correction :
+    // un rechargement entre les deux écritures ne peut plus faire perdre la question.
+    await set(ref(db, `reveals/${round}/${q}`), { correct, openedAt });
+    const res = await runTransaction(ref(db, 'game'), (g) => {
+      if (!g || g.phase !== 'question' || g.round !== round || g.q !== q) return undefined;
+      return { ...g, phase: 'reveal', correct };
+    });
+    if (res.committed) await publishScores();
+  } catch (e) {
+    $('stage-info').textContent = `Erreur à la fermeture (${e.code || e.message}) : clique de nouveau sur « Fermer la question ».`;
+  } finally {
+    closing = false;
+  }
+}
+
+/** Reprise : une correction affichée doit toujours avoir sa bonne réponse enregistrée. */
+async function ensureReveal(g) {
+  if (g?.phase !== 'reveal' || g.correct === null || g.correct === undefined) return;
+  const r = ref(db, `reveals/${g.round}/${g.q}`);
+  if (!(await get(r)).exists()) {
+    await set(r, { correct: g.correct, openedAt: g.openedAt });
+    await publishScores();
+  }
 }
 
 async function publishScores() {
@@ -158,7 +175,11 @@ async function openNotes() {
     const free = p?.free === true;
     const btn = el('button', {
       className: 'go secondary', textContent: free ? 'Libéré' : 'Libérer', disabled: free,
-      onclick: async () => { await set(ref(db, `players/${r.key}/free`), true); openNotes(); },
+      onclick: async () => {
+        if (!confirm(`Libérer « ${r.name} » ? L'élève pourra reprendre ce prénom depuis un autre appareil.`)) return;
+        await set(ref(db, `players/${r.key}/free`), true);
+        openNotes();
+      },
     });
     return el('tr', {},
       el('td', { textContent: r.rank }), el('td', { textContent: r.name }),
@@ -214,6 +235,12 @@ function stage(kicker, body, info, actionLabel, action) {
   $('stage-info').textContent = info;
   const btn = $('stage-action');
   btn.hidden = !actionLabel;
+  if (btn.textContent !== (actionLabel || '')) {
+    // Le bouton change de rôle (Lancer -> Fermer -> Suivante) : un double-clic ne doit pas
+    // déclencher l'action suivante. Bouton inerte un court instant après chaque changement.
+    btn.disabled = true;
+    setTimeout(() => { btn.disabled = false; }, 900);
+  }
   btn.textContent = actionLabel || '';
   btn.onclick = action || null;
   $('tools-stage').replaceChildren(...toolButtons());
@@ -255,14 +282,18 @@ function render() {
     const draw = () => {
       // Le minuteur d'une question déjà fermée ne doit jamais réécrire l'écran.
       if (game?.phase !== 'question' || `${game.round}/${game.q}` !== shown) { clearInterval(tick); return; }
-      const n = Object.keys(answers).length;
+      const current = new Set(Object.values(players).filter((p) => p.free !== true).map((p) => p.uid));
+      const n = Object.keys(answers).filter((uid) => current.has(uid)).length;
       const total = activePlayers();
       const s = remaining();
+      // Fermeture au chrono avec la même marge que les règles (1,5 s) : une réponse touchée
+      // à la dernière seconde sur un réseau chargé arrive encore à temps.
+      const expired = serverNow() - game.openedAt >= game.duration * 1000 + 1500;
       stage(`Question ${game.q + 1} / ${game.qCount}`, [
         el('div', { className: 'bar' }, el('h1', { className: 'title q-text', textContent: q.text }), el('div', { className: 'clock', textContent: s })),
         el('div', { className: 'grid4' }, ...q.choices.map((c, i) => choiceBox(i, c))),
       ], `${n} / ${total} réponses`, 'Fermer la question', closeQuestion);
-      if (s <= 0 || (total > 0 && n >= total)) setTimeout(closeQuestion, 0);
+      if (expired || (total > 0 && n >= total)) setTimeout(closeQuestion, 0);
     };
     tick = setInterval(draw, 500);
     draw();
@@ -304,6 +335,7 @@ function start() {
   onValue(ref(db, 'players'), (s) => { players = s.val() || {}; render(); });
   onValue(ref(db, 'game'), async (s) => {
     game = s.val();
+    ensureReveal(game).catch(() => {});
     if (game?.phase === 'roundEnd' && lastBoard.length === 0) {
       const rows = await publishScores().catch(() => []);
       lastBoard = rows;

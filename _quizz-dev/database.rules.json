@@ -52,7 +52,10 @@
     },
 
     "scores": {
-      ".read": "auth != null"
+      ".read": "auth != null && auth.token.email === 'fxrobin@gmail.com' && auth.token.email_verified === true",
+      "$key": {
+        ".read": "auth != null && root.child('players/' + $key + '/uid').val() === auth.uid"
+      }
     }
   }
 }

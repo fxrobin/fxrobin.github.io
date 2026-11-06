@@ -26,3 +26,11 @@ test('cleanName_trims', () => {
 test('NAME_TAKEN_text', () => {
   assert.equal(NAME_TAKEN, "Ce prénom est déjà pris : ajoute l'initiale de ton nom.");
 });
+
+test('validateName_requires_latin_letters_for_key', () => {
+  assert.equal(validateName('王芳'), 'Écris ton prénom en lettres latines.');
+  assert.equal(validateName('Ольга'), 'Écris ton prénom en lettres latines.');
+  assert.equal(validateName('Ægir'), null);
+  assert.equal(nameKey('Ægir'), 'aegir');
+  assert.equal(nameKey('Łukasz'), 'lukasz');
+});

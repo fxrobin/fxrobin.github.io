@@ -66,3 +66,28 @@ test('toCsv_format', () => {
   assert.equal(lines[1], 'Inès;6;7;6;19');
   assert.equal(lines[2], 'Léa;5;5;6;16');
 });
+
+test('computeScores_one_point_per_player_per_question', () => {
+  // Après « Libérer », l'ancien et le nouvel appareil de Léa répondent juste à la même question.
+  const p = { lea: { name: 'Léa', uid: 'b', uids: { a: true, b: true } } };
+  const a = { 1: { 0: { a: { c: 0, t: 1100 }, b: { c: 0, t: 1200 } } } };
+  const [row] = computeScores({ players: p, answers: a, reveals });
+  assert.deepEqual([row.r1, row.total], [1, 1]);
+});
+
+test('computeScores_uid_belongs_to_current_owner', () => {
+  // u1 a été libéré de « Léa » puis utilisé pour « Zoé » : ses réponses vont à Zoé.
+  const p = {
+    lea: { name: 'Léa', uid: 'u2', uids: { u1: true, u2: true } },
+    zoe: { name: 'Zoé', uid: 'u1', uids: { u1: true } },
+  };
+  const a = { 1: { 0: { u1: { c: 0, t: 1100 } } } };
+  const rows = computeScores({ players: p, answers: a, reveals });
+  assert.equal(rows.find((r) => r.key === 'zoe').total, 1);
+  assert.equal(rows.find((r) => r.key === 'lea').total, 0);
+});
+
+test('toCsv_neutralizes_formulas', () => {
+  const csv = toCsv([{ key: 'x', name: "=cmd|'/c calc'!A1", r1: 0, r2: 0, r3: 0, total: 0 }]);
+  assert.equal(csv.slice(1).split('\r\n')[1], "'=cmd|'/c calc'!A1;0;0;0;0");
+});

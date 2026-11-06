@@ -31,7 +31,11 @@ async function claim(name) {
   const pRef = ref(db, `players/${key}`);
   const snap = await get(pRef);
   const p = snap.val();
-  if (p && p.uid === uid) return { key, name: p.name };
+  if (p && p.uid === uid) {
+    // Prénom libéré par erreur puis repris depuis le même téléphone : on le marque de nouveau pris.
+    if (p.free === true) await update(ref(db, `players/${key}`), { free: false });
+    return { key, name: p.name };
+  }
   const updates = { [`players/${key}/uid`]: uid, [`players/${key}/free`]: false, [`players/${key}/uids/${uid}`]: true };
   if (!p) updates[`players/${key}/name`] = name;
   else if (p.free !== true) throw new Error(NAME_TAKEN);
@@ -131,11 +135,17 @@ function remaining(g) {
 
 function renderQuestion(g) {
   hideVerdict();
-  const mine = store.get(answerKey(g));
+  const mine = store.get(answerKey(g)) ?? (pending.has(answerKey(g)) ? 'pending' : null);
+  if (mine === 'pending') {
+    $('sent-shape').textContent = '';
+    $('sent').querySelector('.mono').textContent = 'Envoi en cours';
+    show(SECTIONS, 'sent');
+    return;
+  }
   if (mine !== null) {
     $('sent-shape').textContent = mine === 'late' ? '' : `${CHOICES[Number(mine)].shape} ${CHOICES[Number(mine)].letter}`;
+    $('sent').querySelector('.mono').textContent = mine === 'late' ? 'Trop tard' : 'Réponse envoyée';
     show(SECTIONS, 'sent');
-    if (mine === 'late') { $('sent').querySelector('.mono').textContent = 'Trop tard'; }
     return;
   }
   $('sent').querySelector('.mono').textContent = 'Réponse envoyée';
@@ -159,13 +169,20 @@ function renderQuestion(g) {
   timer = setInterval(tick, 250);
 }
 
+const pending = new Set(); // réponses envoyées, en attente de confirmation du serveur
+
 async function answer(g, choice) {
+  const k = answerKey(g);
+  if (pending.has(k) || store.get(k) !== null) return; // un seul envoi par question
+  pending.add(k);
   for (const b of $('answers').querySelectorAll('button')) b.disabled = true;
   try {
     await set(ref(db, `answers/${g.round}/${g.q}/${uid}`), { c: choice, t: serverTimestamp() });
-    store.set(answerKey(g), String(choice));
+    store.set(k, String(choice));
   } catch {
-    store.set(answerKey(g), 'late');
+    if (store.get(k) === null) store.set(k, 'late');
+  } finally {
+    pending.delete(k);
   }
   render();
 }

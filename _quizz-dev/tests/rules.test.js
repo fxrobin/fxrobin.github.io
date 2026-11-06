@@ -145,10 +145,16 @@ test('answer_when_closed_denied', async () => {
   await assertFails(answer(studentDb('u1'), 'u1', 0));
 });
 
-test('scores_readable_by_students_writable_by_teacher', async () => {
+test('student_reads_only_own_score', async () => {
+  await assertSucceeds(claim(studentDb('u1'), 'lea', 'Léa', 'u1'));
   await assertSucceeds(set(ref(teacherDb(), 'scores/lea'), { name: 'Léa', r1: 1, r2: 0, r3: 0, total: 1, rank: 1 }));
+  await assertSucceeds(set(ref(teacherDb(), 'scores/hugo'), { name: 'Hugo', r1: 0, r2: 0, r3: 0, total: 0, rank: 2 }));
   await assertSucceeds(get(ref(studentDb('u1'), 'scores/lea')));
+  await assertFails(get(ref(studentDb('u1'), 'scores/hugo')));
+  await assertFails(get(ref(studentDb('u1'), 'scores')));
+  await assertFails(get(ref(studentDb('u2'), 'scores/lea')));
   await assertFails(set(ref(studentDb('u1'), 'scores/lea/total'), 20));
+  await assertSucceeds(get(ref(teacherDb(), 'scores')));
 });
 
 test('teacher_resets_everything', async () => {
