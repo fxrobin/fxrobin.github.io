@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Quiz INSA 2026 · Écran</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Écran projeté aux élèves : aucun bouton, il suit la partie pilotée depuis la régie. */
+    body { min-height: 100dvh; cursor: default; }
+    .stage { min-height: 100dvh; display: flex; flex-direction: column; gap: 1.5vw; padding: 2.5vw 3vw; }
+    .bar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .kicker { font-size: clamp(1rem, 1.3vw, 1.6rem); }
+    .h-round { font-size: clamp(2rem, 4.5vw, 6rem); }
+    .q-text { font-size: clamp(2rem, 3.4vw, 4.4rem); border-left: .6vw solid var(--action); padding: .2em .6em; }
+    .grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 1vw; flex: 1; }
+    .grid4 > div { border-radius: var(--radius); padding: 1.2vw 1.6vw; display: flex; align-items: center; gap: 1vw; font-size: clamp(1.2rem, 2.2vw, 3rem); font-weight: 700; }
+    .grid4 > div .mark { --s: clamp(48px, 5.5vw, 110px); }
+    .grid4 > div .count { margin-left: auto; font-size: 1.3em; font-weight: 800; }
+    .grid4 > div.dim { opacity: .3; }
+    .grid4 > div.right { outline: .4vw solid #fff; }
+    .clock { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: clamp(2.5rem, 5vw, 7rem); color: var(--action); }
+    .explain { border: 1px solid var(--line); border-radius: var(--radius); padding: 1vw 1.4vw; color: var(--muted); font-size: clamp(1.1rem, 1.8vw, 2.4rem); }
+    .info { color: var(--muted); font-size: clamp(1rem, 1.4vw, 1.8rem); }
+    .lobby { display: flex; gap: 3vw; align-items: center; flex: 1; }
+    .qr svg { width: min(40vw, 66vh); height: auto; background: #fff; border-radius: var(--radius); display: block; }
+    .names { color: var(--muted); font-size: clamp(1rem, 1.6vw, 2rem); line-height: 1.5; }
+    .count-big { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: clamp(3rem, 7vw, 9rem); color: var(--action); line-height: 1; }
+    table.board { border-collapse: collapse; width: 100%; font-size: clamp(1.2rem, 2.2vw, 3rem); }
+    table.board td { border-bottom: 1px solid var(--line); padding: .35em .5em; }
+    table.board td.rank { color: var(--action); width: 3em; font-weight: 800; }
+    .idle { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 2vw; }
+    .idle .title { font-size: clamp(3rem, 8vw, 10rem); }
+    .qr-full { position: fixed; inset: 0; z-index: 20; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2vh; }
+    .qr-full .qr svg { width: min(80vw, 78vh); }
+    .qr-full .url { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 800; font-size: clamp(1.6rem, 3.5vw, 4.5rem); }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha384-mZT2gIty7ZDdOGkxfP6joZcYdMW1Jvj9dRlfpTmaJAKKXTqzygtB22k7FLe+KZC1" crossorigin="anonymous"></script>
+</head>
+<body>
+  <section id="login" class="panel" hidden>
+    <div class="mono">Quiz INSA 2026 · Écran</div>
+    <h1 class="title" style="font-size:2.4rem">Connexion enseignant</h1>
+    <p id="login-msg" class="muted"></p>
+    <div><button class="go" id="login-btn">Se connecter avec Google</button></div>
+  </section>
+
+  <section id="stage" class="stage" hidden>
+    <div class="bar"><div class="mono kicker" id="stage-kicker"></div></div>
+    <div id="stage-body" style="flex:1;display:flex;flex-direction:column;gap:1.5vw"></div>
+    <div class="info" id="stage-info"></div>
+  </section>
+
+  <section id="qr-full" class="qr-full" hidden>
+    <div class="mono kicker">Rejoins le quiz</div>
+    <div id="qr-full-code"></div>
+    <div class="url" id="qr-full-url"></div>
+  </section>
+
+  <script type="module" src="js/ecran.js"></script>
+</body>
+</html>

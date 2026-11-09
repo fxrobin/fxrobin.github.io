@@ -1,66 +1,45 @@
-// Page prof : fichier de questions, pilotage des manches, correction, classement, notes.
+// Régie du prof : fichier de questions, pilotage des manches, suivi des élèves, notes.
+// C'est la seule page qui fait avancer la partie. L'écran projeté (ecran.html) ne fait que la suivre.
 import {
-  auth, db, ref, onValue, update, get, set, serverTimestamp, runTransaction,
-  GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, serverNow, useEmulators,
+  auth, db, ref, onValue, update, get, set, serverTimestamp, runTransaction, signOut, serverNow,
 } from './firebase.js';
 import { parseQuiz } from './quiz-format.js';
 import { computeScores, toCsv } from './scoring.js';
-import { CHOICES, show } from './ui.js';
+import { followUp } from './suivi-model.js';
+import { $, el, pageUrl, teacherLogin } from './teacher.js';
+import { CHOICES, mark, show } from './ui.js';
 
-const TEACHER = 'fxrobin@gmail.com';
 const MD_KEY = 'quizz.prof.md';
-const PAGES = ['login', 'setup', 'stage'];
-const $ = (id) => document.getElementById(id);
-const el = (tag, props = {}, ...children) => {
-  const n = Object.assign(document.createElement(tag), props);
-  n.append(...children);
-  return n;
+const PAGES = ['login', 'setup', 'dash'];
+const PHASES = {
+  idle: 'Pas de partie', lobby: 'Salle ouverte', ready: 'Préparation', question: 'Question ouverte',
+  reveal: 'Correction', roundEnd: 'Fin de manche',
 };
 const store = {
   get: (k) => { try { return localStorage.getItem(k); } catch { return null; } },
   set: (k, v) => { try { localStorage.setItem(k, v); } catch { /* indisponible */ } },
 };
+const byName = (a, b) => a.name.localeCompare(b.name, 'fr');
 
 let quiz = null; // { rounds, errors }
 let game = null;
 let players = {};
-let present = new Set(); // uid des téléphones réellement connectés
-let answers = {}; // réponses de la question en cours : {uid: {c, t}}
-let unsubAnswers = null;
-let watchedQ = null;
-let tick = null;
+const state = { present: new Set(), answers: {}, reveals: {}, acks: {}, scores: {}, linked: false };
 let closing = false;
 let launching = false;
-let acks = {}; // téléphones prêts pour la question en cours : {uid: true}
-let unsubAcks = null;
-let watchedAcks = null;
-let lastBoard = [];
+let view = 'auto'; // 'setup' quand le prof revient au fichier de questions en cours de partie
+let sortMode = 'issues';
+const offlineSince = new Map(); // key -> heure du décrochage (null : déjà absent à l'ouverture)
+let firstRender = true;
 
-const studentUrl = () => new URL(`./${useEmulators() ? '?emu=1' : ''}`, location.href).href;
 const newSession = () => Math.random().toString(36).slice(2, 10);
 const enrolled = () => Object.values(players).filter((p) => p.free !== true);
-const connected = () => enrolled().filter((p) => present.has(p.uid));
-const activePlayers = () => connected().length;
+const connected = () => enrolled().filter((p) => state.present.has(p.uid));
 const currentQuestion = () => quiz?.rounds[game.round - 1]?.questions[game.q];
+const roundQuestions = () => quiz?.rounds[(game?.round ?? 0) - 1]?.questions ?? [];
+const quizReady = () => quiz && quiz.errors.length === 0;
 
-// ---- Connexion ---------------------------------------------------------------
-
-$('login-btn').addEventListener('click', () => signInWithPopup(auth, new GoogleAuthProvider()).catch((e) => {
-  $('login-msg').textContent = `Connexion impossible : ${e.code || e.message}`;
-}));
-
-onAuthStateChanged(auth, (user) => {
-  if (!user || user.isAnonymous) {
-    $('login-msg').textContent = '';
-    return show(PAGES, 'login');
-  }
-  if (user.email !== TEACHER || !user.emailVerified) {
-    $('login-msg').textContent = `Accès réservé à l'enseignant (connecté en tant que ${user.email}).`;
-    signOut(auth);
-    return show(PAGES, 'login');
-  }
-  start();
-});
+teacherLogin(PAGES, start);
 
 // ---- Fichier de questions ------------------------------------------------------
 
@@ -68,7 +47,7 @@ function loadMarkdown(text, { persist = false } = {}) {
   quiz = parseQuiz(text);
   store.set(MD_KEY, text);
   // Un fichier valide déposé par le prof est gardé dans Firebase (lecture prof seulement) :
-  // les 3 manches sont proposées d'office sur n'importe quel poste après connexion.
+  // les 3 manches sont proposées d'office sur n'importe quel poste, et l'écran projeté le lit.
   if (persist && quiz.errors.length === 0) {
     set(ref(db, 'quiz'), { md: text, updatedAt: serverTimestamp() }).catch((e) => {
       $('file-label').textContent += ` (non enregistré en ligne : ${e.code || e.message})`;
@@ -80,7 +59,7 @@ function loadMarkdown(text, { persist = false } = {}) {
     ? 'Fichier refusé : corrige les erreurs ci-dessous puis recharge-le.'
     : `${quiz.rounds.length} manches, ${total} questions chargées. Dépose un autre fichier pour le remplacer.`;
   renderRounds();
-  render();
+  schedule();
 }
 
 $('file').addEventListener('change', async (ev) => {
@@ -98,10 +77,9 @@ drop.addEventListener('drop', async (ev) => {
 });
 
 function renderRounds() {
-  const ok = quiz && quiz.errors.length === 0;
-  $('rounds').replaceChildren(...(ok ? quiz.rounds : []).map((r, i) => el('button', {
+  $('rounds').replaceChildren(...(quizReady() ? quiz.rounds : []).map((r, i) => el('button', {
     className: 'go', textContent: `Ouvrir la salle : ${r.title} (${r.questions.length} q)`,
-    onclick: () => openLobby(i + 1),
+    onclick: () => { view = 'auto'; openLobby(i + 1); },
   })));
 }
 
@@ -117,7 +95,7 @@ async function openLobby(round) {
   }
   await set(ref(db, 'game'), {
     session: game?.session || newSession(), phase: 'lobby', round, title: r.title,
-    q: 0, qCount: r.questions.length, nChoices: 0, openedAt: 0, duration: 0, correct: null,
+    q: 0, qCount: r.questions.length, nChoices: 0, openedAt: 0, duration: 0, correct: null, qr: false,
   });
 }
 
@@ -128,7 +106,7 @@ async function startQuestion(q) {
   launching = false;
   await update(ref(db, 'game'), {
     phase: 'ready', q, nChoices: question.choices.length, duration: question.duration,
-    openedAt: 0, correct: null,
+    openedAt: 0, correct: null, qr: false,
   });
 }
 
@@ -163,7 +141,7 @@ async function closeQuestion() {
     });
     if (res.committed) await publishScores();
   } catch (e) {
-    $('stage-info').textContent = `Erreur à la fermeture (${e.code || e.message}) : clique de nouveau sur « Fermer la question ».`;
+    $('action-msg').textContent = `Erreur à la fermeture (${e.code || e.message}) : recommence.`;
   } finally {
     closing = false;
   }
@@ -179,10 +157,10 @@ async function ensureReveal(g) {
   }
 }
 
+/** Recalcule les notes et les publie (l'écran projeté lit le classement dans /scores). */
 async function publishScores() {
   const [p, a, rv] = await Promise.all(['players', 'answers', 'reveals'].map((k) => get(ref(db, k))));
   const rows = computeScores({ players: p.val(), answers: a.val(), reveals: rv.val() });
-  lastBoard = rows;
   const scores = {};
   for (const r of rows) scores[r.key] = { name: r.name, r1: r.r1, r2: r.r2, r3: r.r3, total: r.total, rank: r.rank };
   await set(ref(db, 'scores'), scores);
@@ -200,8 +178,78 @@ async function resetAll() {
   await update(ref(db), {
     game: { phase: 'idle', session: newSession() }, players: null, presence: null, acks: null, answers: null, reveals: null, scores: null,
   });
-  lastBoard = [];
 }
+
+const toggleQr = () => update(ref(db, 'game'), { qr: !game?.qr });
+const openScreen = () => window.open(pageUrl('ecran.html'), 'quizz-ecran', 'popup,width=1280,height=720');
+
+/** Bouton principal : l'étape suivante de la partie, selon la phase. */
+function primary() {
+  const phase = game?.phase;
+  if (phase === 'lobby') return { label: 'Lancer la question 1', run: () => startQuestion(0), hint: 'Les téléphones affichent les boutons' };
+  if (phase === 'ready') {
+    const waiting = connected().filter((p) => !state.acks[p.uid]).length;
+    return waiting
+      ? { label: 'Lancer sans attendre', run: goLive, hint: `${waiting} téléphone${waiting > 1 ? 's' : ''} pas encore prêt${waiting > 1 ? 's' : ''}` }
+      : { label: 'Lancer le chrono', run: goLive, hint: 'Départ automatique : tous prêts' };
+  }
+  if (phase === 'question') return { label: 'Fermer la question', run: closeQuestion, hint: 'Fermeture automatique au chrono ou quand tous ont répondu' };
+  if (phase === 'reveal') {
+    const last = game.q + 1 >= game.qCount;
+    return { label: last ? 'Fin de la manche' : `Question suivante (${game.q + 2}/${game.qCount})`, run: next, hint: last ? "Affiche le classement à l'écran" : 'Passe en préparation' };
+  }
+  if (phase === 'roundEnd') {
+    const nextRound = game.round < (quiz?.rounds.length ?? 0) ? game.round + 1 : null;
+    return nextRound
+      ? { label: `Ouvrir la manche ${nextRound}`, run: () => openLobby(nextRound), hint: 'Affiche la salle et le QR code' }
+      : { label: 'Voir les notes', run: openNotes, hint: 'Fin du quiz' };
+  }
+  return null;
+}
+
+/** Enchaînements automatiques : départ quand tous sont prêts, fermeture au chrono. */
+function automate() {
+  if (game?.phase === 'ready') {
+    const list = connected();
+    if (list.length > 0 && list.every((p) => state.acks[p.uid])) setTimeout(goLive, 300);
+  }
+  if (game?.phase === 'question' && game.openedAt) {
+    const current = new Set(connected().map((p) => p.uid));
+    const n = Object.keys(state.answers[game.q] ?? {}).filter((uid) => current.has(uid)).length;
+    // Fermeture au chrono avec la même marge que les règles (1,5 s) : une réponse touchée
+    // à la dernière seconde sur un réseau chargé arrive encore à temps.
+    const expired = serverNow() - game.openedAt >= game.duration * 1000 + 1500;
+    if (expired || (current.size > 0 && n >= current.size)) setTimeout(closeQuestion, 0);
+  }
+}
+
+// Le bouton change de rôle (Lancer -> Fermer -> Suivante) : un double-clic ou un double appui
+// ne doit pas déclencher l'action suivante. Bouton inerte un court instant après chaque changement.
+let lastLabel = '';
+function renderAction() {
+  const p = primary();
+  const btn = $('action');
+  btn.hidden = !p;
+  $('action-hint').textContent = p?.hint ?? '';
+  if (!p) return;
+  if (p.label !== lastLabel) {
+    lastLabel = p.label;
+    btn.textContent = p.label;
+    btn.disabled = true;
+    $('action-msg').textContent = '';
+    setTimeout(() => { btn.disabled = false; }, 900);
+  }
+  btn.onclick = () => { if (!btn.disabled) p.run(); };
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.repeat || (e.key !== ' ' && e.key !== 'Enter')) return;
+  // Sur un bouton ou un champ, le navigateur gère déjà la touche : pas de double déclenchement.
+  if (e.target.closest('button, input, textarea, select, a, label')) return;
+  if ($('dash').hidden || !$('notes').hidden) return;
+  e.preventDefault();
+  $('action').click();
+});
 
 // ---- Notes -----------------------------------------------------------------------
 
@@ -244,181 +292,52 @@ $('csv-btn').addEventListener('click', async () => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 
-function qrSvg() {
-  const qr = qrcode(0, 'M');
-  qr.addData(studentUrl());
-  qr.make();
-  const box = el('div', { className: 'qr' });
-  box.innerHTML = qr.createSvgTag({ cellSize: 8, margin: 2, scalable: true });
-  return box;
+/** Barre d'outils reconstruite seulement si elle change : un clic n'est jamais perdu pendant le chrono. */
+const toolsKey = new Map();
+function renderTools(id, inSetup) {
+  const key = `${inSetup}|${Boolean(game?.qr)}|${game && game.phase !== 'idle'}|${quizReady()}`;
+  if (toolsKey.get(id) === key) return;
+  toolsKey.set(id, key);
+  $(id).replaceChildren(...toolButtons({ inSetup }));
 }
 
-function showQr() {
-  $('qr-full-code').replaceChildren(qrSvg());
-  $('qr-full-url').textContent = studentUrl().replace(/^https?:\/\//, '');
-  $('qr-full').hidden = false;
-}
-$('qr-full').addEventListener('click', () => { $('qr-full').hidden = true; });
-
-function toolButtons() {
+function toolButtons({ inSetup }) {
+  const active = game && game.phase !== 'idle';
   return [
-    el('button', { className: 'go secondary', textContent: 'QR code', onclick: showQr }),
+    el('button', { className: 'go secondary', textContent: 'Écran projeté', title: 'Ouvre la fenêtre à placer sur le vidéoprojecteur', onclick: openScreen }),
+    el('button', { className: `go secondary${game?.qr ? ' on' : ''}`, textContent: game?.qr ? 'Masquer le QR' : 'QR à l\'écran', onclick: toggleQr }),
     el('button', { className: 'go secondary', textContent: 'Notes', onclick: openNotes }),
-    el('button', { className: 'go secondary', textContent: 'Questions', onclick: () => show(PAGES, 'setup') }),
+    inSetup
+      ? (active && quizReady() ? el('button', { className: 'go secondary', textContent: 'Retour à la régie', onclick: () => { view = 'auto'; schedule(); } }) : '')
+      : el('button', { className: 'go secondary', textContent: 'Questions', onclick: () => { view = 'setup'; schedule(); } }),
     el('button', { className: 'go secondary', textContent: 'Réinitialiser', onclick: resetAll }),
     el('button', { className: 'go secondary', textContent: 'Se déconnecter', onclick: () => signOut(auth).then(() => location.reload()) }),
   ];
 }
 
-// ---- Affichage -------------------------------------------------------------------
+// ---- Abonnements -----------------------------------------------------------------
 
-function watchAcks() {
-  const key = game && (game.phase === 'ready' || game.phase === 'question') ? `${game.round}/${game.q}` : null;
-  if (key === watchedAcks) return;
-  unsubAcks?.();
-  unsubAcks = null;
-  acks = {};
-  watchedAcks = key;
-  if (key) unsubAcks = onValue(ref(db, `acks/${key}`), (s) => { acks = s.val() || {}; render(); });
+const subs = new Map(); // nom -> {path, off}
+/** (Ré)abonne un flux quand son chemin change (nouvelle manche, nouvelle question). */
+function watch(name, path, apply) {
+  const cur = subs.get(name);
+  if (cur?.path === path) return;
+  cur?.off();
+  apply(null);
+  subs.set(name, { path, off: path ? onValue(ref(db, path), (s) => { apply(s.val()); schedule(); }) : () => {} });
 }
 
-function watchAnswers() {
-  const key = game && (game.phase === 'question' || game.phase === 'reveal') ? `${game.round}/${game.q}` : null;
-  if (key === watchedQ) return;
-  unsubAnswers?.();
-  unsubAnswers = null;
-  answers = {};
-  watchedQ = key;
-  if (key) unsubAnswers = onValue(ref(db, `answers/${key}`), (s) => { answers = s.val() || {}; render(); });
+function follow() {
+  const round = game && game.phase !== 'idle' ? game.round : null;
+  watch('answers', round ? `answers/${round}` : null, (v) => { state.answers = v || {}; });
+  watch('reveals', round ? `reveals/${round}` : null, (v) => { state.reveals = v || {}; });
+  const live = game && (game.phase === 'ready' || game.phase === 'question');
+  watch('acks', live ? `acks/${game.round}/${game.q}` : null, (v) => { state.acks = v || {}; });
 }
-
-function remaining() {
-  return Math.min(game.duration, Math.max(0, Math.ceil(game.duration - (serverNow() - game.openedAt) / 1000)));
-}
-
-function choiceBox(i, text, extraClass = '', count = null) {
-  const ch = CHOICES[i];
-  const box = el('div', { className: `${ch.cls} ${extraClass}` },
-    el('span', { className: 'tag', textContent: `${ch.shape} ${ch.letter}` }),
-    el('span', { textContent: text }));
-  if (count !== null) box.append(el('span', { className: 'count', textContent: count }));
-  return box;
-}
-
-function stage(kicker, body, info, actionLabel, action) {
-  $('stage-kicker').textContent = kicker;
-  $('stage-body').replaceChildren(...body);
-  $('stage-info').textContent = info;
-  const btn = $('stage-action');
-  btn.hidden = !actionLabel;
-  if (btn.textContent !== (actionLabel || '')) {
-    // Le bouton change de rôle (Lancer -> Fermer -> Suivante) : un double-clic ne doit pas
-    // déclencher l'action suivante. Bouton inerte un court instant après chaque changement.
-    btn.disabled = true;
-    setTimeout(() => { btn.disabled = false; }, 900);
-  }
-  btn.textContent = actionLabel || '';
-  btn.onclick = action || null;
-  $('tools-stage').replaceChildren(...toolButtons());
-  show(PAGES, 'stage');
-}
-
-function render() {
-  clearInterval(tick);
-  watchAnswers();
-  watchAcks();
-  if (!auth.currentUser || auth.currentUser.isAnonymous) return;
-  const ready = quiz && quiz.errors.length === 0;
-  if (!game || game.phase === 'idle' || !ready) {
-    $('tools-setup').replaceChildren(...toolButtons().filter((b) => b.textContent !== 'Questions'));
-    return show(PAGES, 'setup');
-  }
-  const round = quiz.rounds[game.round - 1];
-  if (!round) return show(PAGES, 'setup');
-  const names = connected().map((p) => p.name).sort((a, b) => a.localeCompare(b, 'fr'));
-  const enrolledCount = enrolled().length;
-
-  if (game.phase === 'lobby') {
-    const qrBox = qrSvg();
-    return stage(`Manche ${game.round}`, [
-      el('h1', { className: 'title h-round', textContent: round.title.replace(/^Manche \d+ · |^Finale · /, '') }),
-      el('div', { className: 'lobby' }, qrBox, el('div', {},
-        el('div', { className: 'muted', textContent: studentUrl().replace(/^https?:\/\//, '') }),
-        el('div', { className: 'count-big', textContent: names.length }),
-        el('div', { className: 'muted', textContent: `${names.length > 1 ? 'connectés' : 'connecté'} · ${enrolledCount} inscrit${enrolledCount > 1 ? 's' : ''}` }),
-        el('p', { className: 'names', textContent: names.join(' · ') }))),
-    ], `${round.questions.length} questions`, 'Lancer', () => startQuestion(0));
-  }
-
-  const q = currentQuestion();
-  if (game.phase === 'ready') {
-    const waiting = connected().filter((p) => !acks[p.uid]);
-    const total = activePlayers();
-    const readyCount = total - waiting.length;
-    stage(`Question ${game.q + 1} / ${game.qCount} · préparez-vous`, [
-      el('h1', { className: 'title q-text', textContent: q.text }),
-      el('div', { className: 'grid4' }, ...q.choices.map((c, i) => choiceBox(i, c))),
-      el('div', { className: 'explain', textContent: waiting.length
-        ? `En attente de : ${waiting.map((p) => p.name).join(', ')}`
-        : 'Tous les téléphones sont prêts.' }),
-    ], `${readyCount} / ${total} téléphones prêts`, waiting.length ? 'Lancer sans attendre' : 'Lancer', goLive);
-    // Le chrono part tout seul dès que tous les téléphones connectés ont confirmé.
-    if (total > 0 && waiting.length === 0) setTimeout(goLive, 300);
-    return;
-  }
-
-  if (game.phase === 'question') {
-    const shown = `${game.round}/${game.q}`;
-    const draw = () => {
-      // Le minuteur d'une question déjà fermée ne doit jamais réécrire l'écran.
-      if (game?.phase !== 'question' || `${game.round}/${game.q}` !== shown) { clearInterval(tick); return; }
-      const current = new Set(connected().map((p) => p.uid));
-      const n = Object.keys(answers).filter((uid) => current.has(uid)).length;
-      const total = activePlayers();
-      const s = remaining();
-      // Fermeture au chrono avec la même marge que les règles (1,5 s) : une réponse touchée
-      // à la dernière seconde sur un réseau chargé arrive encore à temps.
-      const expired = serverNow() - game.openedAt >= game.duration * 1000 + 1500;
-      stage(`Question ${game.q + 1} / ${game.qCount}`, [
-        el('div', { className: 'bar' }, el('h1', { className: 'title q-text', textContent: q.text }), el('div', { className: 'clock', textContent: s })),
-        el('div', { className: 'grid4' }, ...q.choices.map((c, i) => choiceBox(i, c))),
-      ], `${n} / ${total} réponses`, 'Fermer la question', closeQuestion);
-      if (expired || (total > 0 && n >= total)) setTimeout(closeQuestion, 0);
-    };
-    tick = setInterval(draw, 500);
-    draw();
-    return;
-  }
-
-  if (game.phase === 'reveal') {
-    const counts = q.choices.map((_, i) => Object.values(answers).filter((a) => a.c === i).length);
-    const last = game.q + 1 >= game.qCount;
-    return stage(`Question ${game.q + 1} / ${game.qCount} · correction`, [
-      el('h1', { className: 'title q-text', textContent: q.text }),
-      el('div', { className: 'grid4' }, ...q.choices.map((c, i) => choiceBox(i, `${i === game.correct ? '✓ ' : ''}${c}`, i === game.correct ? 'right' : 'dim', counts[i]))),
-      q.explanation ? el('div', { className: 'explain', textContent: q.explanation }) : '',
-    ], `${Object.keys(answers).length} réponses`, last ? 'Fin de la manche' : 'Question suivante', next);
-  }
-
-  if (game.phase === 'roundEnd') {
-    const top = lastBoard.slice(0, 10);
-    const nextRound = game.round < quiz.rounds.length ? game.round + 1 : null;
-    return stage(`Fin de la manche ${game.round}`, [
-      el('h1', { className: 'title h-round', textContent: 'Classement' }),
-      el('table', { className: 'board' }, ...top.map((r) => el('tr', {},
-        el('td', { className: 'rank', textContent: r.rank }), el('td', { textContent: r.name }),
-        el('td', { textContent: `${r[`r${game.round}`]} / ${game.qCount}` }), el('td', { textContent: `total ${r.total}` })))),
-    ], 'Classement par total, puis par rapidité à égalité (sans effet sur la note).',
-    nextRound ? `Ouvrir la manche ${nextRound}` : 'Voir les notes', nextRound ? () => openLobby(nextRound) : openNotes);
-  }
-  show(PAGES, 'setup');
-}
-
-// ---- Démarrage -------------------------------------------------------------------
 
 let started = false;
 function start() {
-  if (started) return render();
+  if (started) return schedule();
   started = true;
   const saved = store.get(MD_KEY);
   if (saved) loadMarkdown(saved);
@@ -426,15 +345,210 @@ function start() {
   get(ref(db, 'quiz/md')).then((s) => {
     if (s.exists() && s.val() !== store.get(MD_KEY)) loadMarkdown(s.val());
   }).catch(() => { /* hors ligne : on garde la copie locale */ });
-  onValue(ref(db, 'players'), (s) => { players = s.val() || {}; render(); });
-  onValue(ref(db, 'presence'), (s) => { present = new Set(Object.keys(s.val() || {})); render(); });
-  onValue(ref(db, 'game'), async (s) => {
+  onValue(ref(db, '.info/connected'), (s) => { state.linked = s.val() === true; schedule(); });
+  onValue(ref(db, 'players'), (s) => { players = s.val() || {}; schedule(); });
+  onValue(ref(db, 'presence'), (s) => { state.present = new Set(Object.keys(s.val() || {})); schedule(); });
+  onValue(ref(db, 'scores'), (s) => { state.scores = s.val() || {}; schedule(); });
+  onValue(ref(db, 'game'), (s) => {
     game = s.val();
+    follow();
     ensureReveal(game).catch(() => {});
-    if (game?.phase === 'roundEnd' && lastBoard.length === 0) {
-      const rows = await publishScores().catch(() => []);
-      lastBoard = rows;
-    }
-    render();
+    schedule();
+  });
+  setInterval(() => {
+    tickClock();
+    automate();
+    // Pendant le chrono, compteurs et tableau se rafraîchissent même sans nouvelle donnée.
+    if (game?.phase === 'question' || [...offlineSince.values()].some(Boolean)) schedule();
+  }, 500);
+}
+
+let pending = false;
+function schedule() {
+  if (pending) return;
+  pending = true;
+  requestAnimationFrame(() => { pending = false; render(); });
+}
+
+// ---- Affichage -------------------------------------------------------------------
+
+function remaining() {
+  if (game?.phase !== 'question' || !game.openedAt) return '';
+  return Math.min(game.duration, Math.max(0, Math.ceil(game.duration - (serverNow() - game.openedAt) / 1000)));
+}
+
+function tickClock() {
+  if (!started) return;
+  $('chrono').textContent = remaining();
+  $('clock').textContent = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+}
+
+function ago(t) {
+  const s = Math.round((Date.now() - t) / 1000);
+  return s < 60 ? `${s} s` : `${Math.floor(s / 60)} min`;
+}
+
+function kpi(value, label, { alert = false, ratio = null } = {}) {
+  return el('div', { className: `kpi${alert ? ' alert' : ''}` },
+    el('div', { className: 'v', textContent: value }),
+    el('div', { className: 'l', textContent: label }),
+    ratio === null ? '' : el('div', { className: 'bar2' }, el('i', { style: `width:${Math.round(ratio * 100)}%` })));
+}
+
+/** Case du tableau : pastille de la couleur choisie ; fond vert si juste, rouge si faux. */
+function cell(c, { showDelay = false } = {}) {
+  if (!c) return { cls: '', node: el('span', { className: 'nil', textContent: '·' }) };
+  const chip = el('span', { className: `chip ${CHOICES[c.c].cls}`, textContent: CHOICES[c.c].letter });
+  const node = el('span', { className: 'cell' }, chip);
+  if (c.delay !== null) {
+    node.title = `${CHOICES[c.c].letter} en ${c.delay.toFixed(1)} s`;
+    if (showDelay) node.append(el('small', { textContent: `${c.delay.toFixed(1)} s` }));
+  }
+  return { cls: c.ok === true ? 'ok' : c.ok === false ? 'ko' : '', node };
+}
+
+function issueWeight(r, phase) {
+  if (r.free) return 9;
+  if (!r.online) return 0;
+  if (phase === 'ready' && !r.ready) return 1;
+  if (phase === 'question' && !r.current) return 2;
+  return 5;
+}
+
+function render() {
+  if (!auth.currentUser || auth.currentUser.isAnonymous) return;
+  const phase = game?.phase ?? 'idle';
+  const round = quiz?.rounds[(game?.round ?? 0) - 1];
+  if (view === 'setup' || !quizReady() || phase === 'idle' || !round) {
+    renderTools('tools-setup', true);
+    return show(PAGES, 'setup');
+  }
+  show(PAGES, 'dash');
+  renderTools('tools-dash', false);
+
+  const questions = roundQuestions();
+  const { rows, alerts, stats } = followUp({
+    players, present: state.present, answers: state.answers, reveals: state.reveals,
+    acks: state.acks, game, questions,
+  });
+
+  for (const r of rows) {
+    if (r.online || r.free) offlineSince.delete(r.key);
+    else if (!offlineSince.has(r.key)) offlineSince.set(r.key, firstRender ? null : Date.now());
+  }
+  if (rows.length) firstRender = false; // attend le premier chargement des élèves
+
+  // En-tête
+  $('where').textContent = `${round.title}${['ready', 'question', 'reveal'].includes(phase) ? ` · Q${game.q + 1}/${game.qCount}` : ''}`;
+  const pill = $('phase');
+  pill.textContent = PHASES[phase] ?? phase;
+  pill.className = `pill${phase === 'question' ? ' live' : phase === 'ready' ? ' warn' : ''}`;
+  $('link-dot').className = `dot ${state.linked ? 'on' : 'off'}`;
+  $('link-txt').textContent = state.linked ? 'Liaison Firebase OK' : 'Liaison Firebase coupée';
+  tickClock();
+
+  // Indicateurs
+  const live = stats.distribution.length > 0; // une question est affichée (préparation, chrono ou correction)
+  const offline = stats.enrolled - stats.online;
+  $('kpis').replaceChildren(
+    kpi(stats.enrolled, 'inscrits'),
+    kpi(stats.online, offline ? `en ligne · ${offline} hors ligne` : 'en ligne', { alert: offline > 0, ratio: stats.enrolled ? stats.online / stats.enrolled : null }),
+    kpi(stats.ready ?? '–', 'téléphones prêts', { ratio: stats.ready === null || !stats.online ? null : stats.ready / stats.online }),
+    kpi(live ? stats.answered : '–', 'réponses reçues', { ratio: live && stats.enrolled ? stats.answered / stats.enrolled : null }),
+    kpi(stats.rightRate === null ? '–' : `${Math.round(stats.rightRate * 100)} %`, 'bonnes réponses (direct)'),
+    kpi(stats.orphans, 'téléphones sans prénom', { alert: stats.orphans > 0 }),
+  );
+
+  renderAction();
+  renderQuestion(questions, stats);
+  renderPerQuestion(stats);
+  $('alerts').replaceChildren(...(alerts.length
+    ? alerts.map((a) => el('div', { className: a.level, textContent: a.text }))
+    : [el('div', { className: 'none', textContent: 'Rien à signaler.' })]));
+  renderTable(rows, questions, phase);
+}
+
+function renderQuestion(questions, stats) {
+  const live = ['ready', 'question', 'reveal'].includes(game.phase);
+  const q = live ? questions[game.q] : null;
+  if (game.phase === 'roundEnd') {
+    const top = Object.values(state.scores).sort((a, b) => a.rank - b.rank || byName(a, b)).slice(0, 8);
+    $('qcard').replaceChildren(el('h2', { textContent: 'Classement projeté' }),
+      el('table', { className: 'board-mini' }, ...top.map((r) => el('tr', {},
+        el('td', { textContent: r.rank }), el('td', { textContent: r.name }), el('td', { textContent: `total ${r.total}` })))));
+    return;
+  }
+  if (!q) {
+    const first = game.phase === 'lobby' ? questions[0] : null;
+    $('qcard').replaceChildren(el('h2', { textContent: 'Question' }),
+      el('p', { className: 'nextq', textContent: first ? `Première question : ${first.text}` : 'Pas de question en cours.' }));
+    return;
+  }
+  const total = Math.max(1, stats.answered);
+  const choices = q.choices.map((text, i) => {
+    const n = stats.distribution[i] ?? 0;
+    return el('div', { className: `choice${i === q.correct ? ' right' : ''}` },
+      mark(i, { solo: true }),
+      el('span', { className: 't', textContent: `${i === q.correct ? '✓ ' : ''}${text}` }),
+      el('span', { className: 'n', textContent: n }),
+      el('span', { className: 'gauge' }, el('i', { style: `width:${(n / total) * 100}%;background:${CHOICES[i].color}` })));
+  });
+  const following = questions[game.q + 1];
+  $('qcard').replaceChildren(
+    el('h2', { textContent: `Question ${game.q + 1} · ${q.duration} s` }),
+    el('p', { className: 'qtext', textContent: q.text }),
+    ...choices,
+    q.explanation ? el('div', { className: 'say', textContent: `À dire : ${q.explanation}` }) : '',
+    el('p', { className: 'nextq', textContent: following ? `Ensuite : ${following.text}` : 'Dernière question de la manche.' }),
+  );
+}
+
+function renderPerQuestion(stats) {
+  $('perq').replaceChildren(...stats.perQuestion.map((p, i) => {
+    const pct = p.answered ? Math.round((p.right / p.answered) * 100) : null;
+    const cls = [pct !== null && pct < 50 && p.revealed ? 'low' : '', game.q === i && game.phase !== 'lobby' ? 'cur' : ''].join(' ');
+    return el('div', { className: cls, title: `${p.right} / ${p.answered} bonnes réponses` },
+      el('b', { textContent: pct === null ? '–' : `${pct}%` }), `Q${i + 1}`);
+  }));
+}
+
+function renderTable(rows, questions, phase) {
+  const curQ = ['ready', 'question', 'reveal'].includes(phase) ? game.q : null;
+  const showReady = phase === 'ready' || phase === 'question';
+  $('thead').replaceChildren(el('tr', {},
+    el('th', { textContent: 'Élève', style: 'text-align:left' }),
+    showReady ? el('th', { textContent: 'Prêt' }) : '',
+    ...questions.map((_, i) => el('th', { className: i === curQ ? 'cur' : '', textContent: `Q${i + 1}` })),
+    el('th', { textContent: 'Manche' }),
+    el('th', { textContent: 'Total' })));
+
+  const sorters = {
+    name: byName,
+    score: (a, b) => b.score - a.score || byName(a, b),
+    issues: (a, b) => issueWeight(a, phase) - issueWeight(b, phase) || byName(a, b),
+  };
+  $('tbody').replaceChildren(...[...rows].sort(sorters[sortMode]).map((r) => {
+    const since = offlineSince.get(r.key);
+    const status = r.free ? 'Libéré' : r.online ? '' : `hors ligne${since ? ` · ${ago(since)}` : ''}`;
+    const dot = r.free ? '' : !r.online ? 'off' : showReady && !r.ready ? 'wait' : 'on';
+    return el('tr', { className: r.free ? 'free' : r.online ? '' : 'offline' },
+      el('td', { className: 'name' }, el('span', { className: `dot ${dot}` }), r.name,
+        r.devices > 1 ? el('small', { textContent: `${r.devices} appareils` }) : '',
+        status ? el('small', { textContent: status }) : ''),
+      showReady ? el('td', {}, el('span', { className: r.ready ? 'yes' : 'no', textContent: r.ready ? '✓' : '✗' })) : '',
+      ...r.cells.map((c, i) => {
+        const { cls, node } = cell(c, { showDelay: i === curQ });
+        return el('td', { className: [cls, i === curQ ? 'cur' : ''].join(' ').trim() }, node);
+      }),
+      el('td', { className: 'score', textContent: `${r.score} / ${questions.length}` }),
+      el('td', { className: 'score', textContent: state.scores[r.key]?.total ?? '–' }));
+  }));
+}
+
+for (const b of document.querySelectorAll('[data-sort]')) {
+  b.addEventListener('click', () => {
+    sortMode = b.dataset.sort;
+    for (const o of document.querySelectorAll('[data-sort]')) o.classList.toggle('on', o === b);
+    schedule();
   });
 }

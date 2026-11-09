@@ -15,7 +15,7 @@ test('parseQuiz_reads_real_file', { skip: !process.env.QUIZZ_MD }, () => {
   assert.equal(q.text, "Qu'est-ce qui distingue un agent d'un simple chat ?");
   assert.equal(q.choices.length, 4);
   assert.equal(q.choices[q.correct], "Il enchaîne des appels d'outils sur un environnement réel");
-  assert.equal(q.duration, 20);
+  assert.equal(q.duration, 40);
   assert.match(q.explanation, /^(Note de la )?[Ss]lide \d+ :/);
 });
 

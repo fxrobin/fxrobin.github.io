@@ -4,52 +4,108 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>Quiz INSA 2026 · Prof</title>
+  <title>Quiz INSA 2026 · Régie</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body { min-height: 100dvh; }
-    .stage { min-height: 100dvh; display: flex; flex-direction: column; gap: 1.5vw; padding: 2.5vw 3vw; }
-    .bar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
-    .tools { display: flex; gap: .6rem; flex-wrap: wrap; }
-    .tools .go { padding: .5rem .9rem; font-size: .9rem; }
-    .kicker { font-size: clamp(1rem, 1.3vw, 1.6rem); }
-    .h-round { font-size: clamp(2rem, 4.5vw, 6rem); }
-    .q-text { font-size: clamp(2rem, 3.4vw, 4.4rem); border-left: .6vw solid var(--action); padding: .2em .6em; }
-    .grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 1vw; flex: 1; }
-    .grid4 > div { border-radius: var(--radius); padding: 1.2vw 1.6vw; display: flex; align-items: center; gap: 1vw; font-size: clamp(1.2rem, 2.2vw, 3rem); font-weight: 700; }
-    .grid4 > div .tag { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 800; white-space: nowrap; }
-    .grid4 > div .count { margin-left: auto; font-size: 1.3em; font-weight: 800; }
-    .grid4 > div.dim { opacity: .3; }
-    .grid4 > div.right { outline: .4vw solid #fff; }
-    .clock { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: clamp(2.5rem, 5vw, 7rem); color: var(--action); }
-    .explain { border: 1px solid var(--line); border-radius: var(--radius); padding: 1vw 1.4vw; color: var(--muted); font-size: clamp(1.1rem, 1.8vw, 2.4rem); }
-    .lobby { display: flex; gap: 3vw; align-items: center; flex: 1; }
-    .qr svg { width: min(40vw, 66vh); height: auto; background: #fff; border-radius: var(--radius); display: block; }
-    .names { color: var(--muted); font-size: clamp(1rem, 1.6vw, 2rem); line-height: 1.5; }
-    .count-big { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: clamp(3rem, 7vw, 9rem); color: var(--action); line-height: 1; }
-    table.board { border-collapse: collapse; width: 100%; font-size: clamp(1.2rem, 2.2vw, 3rem); }
-    table.board td { border-bottom: 1px solid var(--line); padding: .35em .5em; }
-    table.board td.rank { color: var(--action); width: 3em; font-weight: 800; }
+    /* Régie du prof : pilotage et suivi des élèves. Jamais projetée (la projection est ecran.html). */
+    body { min-height: 100dvh; font-size: 15px; }
+    .dash { height: 100dvh; display: grid; grid-template-rows: auto auto 1fr; gap: 12px; padding: 14px 18px; }
+    .top { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .top .where { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: 1.5rem; }
+    .pill { font-family: ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+    .pill.live { background: var(--action); color: var(--on-accent); border-color: var(--action); }
+    .pill.warn { background: var(--c); color: var(--on-accent); border-color: var(--c); }
+    .top .chrono { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: 2rem; color: var(--action); min-width: 2.5ch; }
+    .top .link { margin-left: auto; display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: .85rem; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: var(--muted); flex: none; }
+    .dot.on { background: var(--action); } .dot.off { background: #FF5A4E; } .dot.wait { background: var(--c); }
+
+    .kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+    .kpi { border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 12px; }
+    .kpi .v { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: 2rem; line-height: 1.1; }
+    .kpi .l { color: var(--muted); font-size: .8rem; }
+    .kpi.alert { border-color: #FF5A4E; } .kpi.alert .v { color: #FF816E; }
+    .kpi .bar2 { height: 4px; background: var(--line); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+    .kpi .bar2 > i { display: block; height: 100%; background: var(--action); }
+
+    .main { display: grid; grid-template-columns: minmax(340px, 34%) minmax(0, 1fr); gap: 14px; min-height: 0; }
+    .side, .right { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+    .card { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; }
+    .card h2 { font-family: ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; color: var(--action); margin: 0 0 8px; font-weight: 600; }
+    .qtext { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: 1.25rem; line-height: 1.25; margin: 0 0 10px; }
+    .choice { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 5px 0; }
+    .choice .mark { --s: 30px; }
+    .choice .t { font-size: .95rem; }
+    .choice .n { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: 1.2rem; min-width: 2ch; text-align: right; }
+    .choice .gauge { grid-column: 2 / 4; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+    .choice .gauge > i { display: block; height: 100%; }
+    .choice.right .t { color: var(--action); font-weight: 700; }
+    .say { color: var(--muted); font-size: .9rem; border-left: 3px solid var(--action); padding-left: 10px; margin-top: 8px; }
+    .nextq { color: var(--muted); font-size: .9rem; }
+    .perq { display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 6px; }
+    .perq div { text-align: center; font-size: .75rem; color: var(--muted); }
+    .perq b { display: block; font-family: 'Inter Tight', sans-serif; font-size: 1rem; color: var(--fg); }
+    .perq .low b { color: #FF816E; } .perq .cur { outline: 1px solid var(--action); border-radius: 3px; }
+
+    .alerts { display: flex; flex-direction: column; gap: 6px; }
+    .alerts div { padding: 6px 10px; border-radius: var(--radius); font-size: .9rem; border-left: 4px solid var(--muted); background: rgb(212 211 241 / .06); }
+    .alerts .ko { border-color: #FF5A4E; } .alerts .warn { border-color: var(--c); } .alerts .info { border-color: var(--b); }
+    .alerts .none { border-color: var(--action); color: var(--muted); }
+
+    .tablewrap { flex: 1; min-height: 0; overflow: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+    .tablebar { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .85rem; }
+    .tablebar button { background: transparent; color: var(--muted); border: 1px solid var(--line); border-radius: var(--radius); padding: 3px 10px; font: inherit; cursor: pointer; }
+    .tablebar button.on { color: var(--on-accent); background: var(--action); border-color: var(--action); }
+    table.follow { border-collapse: collapse; width: 100%; font-size: .9rem; }
+    table.follow th { position: sticky; top: 0; background: var(--bg); z-index: 1; font-weight: 600; color: var(--muted); font-size: .75rem; text-align: center; padding: 6px 4px; border-bottom: 1px solid var(--line); }
+    table.follow th.cur { color: var(--action); }
+    table.follow td { padding: 3px 4px; border-bottom: 1px solid rgb(212 211 241 / .1); text-align: center; height: 30px; }
+    table.follow td.name { text-align: left; font-weight: 600; white-space: nowrap; }
+    table.follow td.name .dot { margin-right: 8px; vertical-align: middle; }
+    table.follow td.name small { color: var(--muted); font-weight: 400; margin-left: 6px; }
+    table.follow tr.free td { opacity: .35; }
+    table.follow tr.offline td.name { color: #FF816E; }
+    .cell { display: inline-flex; align-items: center; gap: 5px; }
+    .chip { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 3px; font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: .8rem; }
+    .cell small { font-size: .7rem; color: var(--muted); }
+    table.follow td.ok { background: rgb(0 213 208 / .22); }
+    table.follow td.ko { background: rgb(255 90 78 / .2); }
+    table.follow td.cur { box-shadow: inset 2px 0 0 var(--action), inset -2px 0 0 var(--action); }
+    .nil { color: rgb(212 211 241 / .35); }
+    .score { font-family: 'Inter Tight', sans-serif; font-weight: 800; }
+    .yes { color: var(--action); font-weight: 800; } .no { color: var(--c); font-weight: 800; }
+    @media (max-width: 1100px) { .main { grid-template-columns: 1fr; } .kpis { grid-template-columns: repeat(3, 1fr); } .dash { height: auto; } }
+    /* Pilotage */
+    .tools { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .tools .go { padding: .4rem .8rem; font-size: .85rem; }
+    .tools .go.on { background: var(--c); color: var(--on-accent); border-color: var(--c); }
+    .action { display: flex; flex-direction: column; gap: 8px; }
+    .action .go { font-size: 1.3rem; padding: 1rem 1.2rem; width: 100%; }
+    .action .go:disabled { opacity: .5; cursor: wait; }
+    .action .hint { color: var(--muted); font-size: .8rem; display: flex; justify-content: space-between; gap: 8px; }
+    .action .msg { color: #FF816E; font-size: .9rem; }
+    kbd { font-family: ui-monospace, monospace; border: 1px solid var(--line); border-radius: 3px; padding: 0 5px; font-size: .75rem; }
+    .board-mini { width: 100%; border-collapse: collapse; font-size: .95rem; }
+    .board-mini td { padding: 3px 4px; border-bottom: 1px solid rgb(212 211 241 / .1); }
+    .board-mini td:first-child { color: var(--action); font-weight: 800; width: 2.5em; }
+    /* Préparation et notes */
     .panel { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 1rem; }
+    .bar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
     .drop { border: 2px dashed var(--muted); border-radius: var(--radius); padding: 2rem; text-align: center; cursor: pointer; }
     .drop.over { border-color: var(--action); }
     .errors { color: #FF816E; }
     .rounds { display: grid; grid-template-columns: minmax(0, 560px); gap: .8rem; }
     .rounds .go { width: 100%; text-align: left; }
-    .qr-full { position: fixed; inset: 0; z-index: 20; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2vh; cursor: pointer; }
-    .qr-full .qr svg { width: min(80vw, 78vh); }
-    .qr-full .url { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 800; font-size: clamp(1.6rem, 3.5vw, 4.5rem); }
     .notes { position: fixed; inset: 0; background: #f4f4f6; color: #111; overflow: auto; padding: 2rem; z-index: 10; }
     .notes table { border-collapse: collapse; width: 100%; max-width: 900px; font-size: 1rem; }
     .notes th, .notes td { border-bottom: 1px solid #ccc; padding: .4rem .6rem; text-align: left; }
     .notes .go.secondary { color: #111; border-color: #111; }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha384-mZT2gIty7ZDdOGkxfP6joZcYdMW1Jvj9dRlfpTmaJAKKXTqzygtB22k7FLe+KZC1" crossorigin="anonymous"></script>
 </head>
 <body>
   <!-- Connexion -->
   <section id="login" class="panel" hidden>
-    <div class="mono">Quiz INSA 2026 · Prof</div>
+    <div class="mono">Quiz INSA 2026 · Régie</div>
     <h1 class="title" style="font-size:2.4rem">Connexion enseignant</h1>
     <p id="login-msg" class="muted"></p>
     <div><button class="go" id="login-btn">Se connecter avec Google</button></div>
@@ -57,7 +113,7 @@
 
   <!-- Préparation : fichier de questions et choix de la manche -->
   <section id="setup" class="panel" hidden>
-    <div class="bar"><div class="mono">Quiz INSA 2026 · Prof</div><div class="tools" id="tools-setup"></div></div>
+    <div class="bar"><div class="mono">Quiz INSA 2026 · Régie</div><div class="tools" id="tools-setup"></div></div>
     <h1 class="title" style="font-size:2.4rem">Préparer une manche</h1>
     <label class="drop" id="drop">
       <input type="file" id="file" accept=".md,text/markdown,text/plain" hidden>
@@ -67,28 +123,42 @@
     <div class="rounds" id="rounds"></div>
   </section>
 
-  <!-- Écrans projetés -->
-  <section id="stage" class="stage" hidden>
-    <div class="bar">
-      <div class="mono kicker" id="stage-kicker"></div>
-      <div class="tools" id="tools-stage"></div>
-    </div>
-    <div id="stage-body" style="flex:1;display:flex;flex-direction:column;gap:1.5vw"></div>
-    <div class="bar">
-      <div class="muted" id="stage-info"></div>
-      <button class="go" id="stage-action"></button>
+  <!-- Régie : tableau de bord et pilotage -->
+  <section id="dash" class="dash" hidden>
+    <header class="top">
+      <span class="mono">Régie</span>
+      <span class="where" id="where"></span>
+      <span class="pill" id="phase"></span>
+      <span class="chrono" id="chrono"></span>
+      <span class="link"><span class="dot" id="link-dot"></span><span id="link-txt"></span> · <span id="clock"></span></span>
+      <div class="tools" id="tools-dash"></div>
+    </header>
+    <div class="kpis" id="kpis"></div>
+    <div class="main">
+      <aside class="side">
+        <div class="card action">
+          <button class="go" id="action"></button>
+          <div class="hint"><span id="action-hint"></span><span><kbd>Espace</kbd> ou <kbd>Entrée</kbd></span></div>
+          <div class="msg" id="action-msg"></div>
+        </div>
+        <div class="card" id="qcard"></div>
+        <div class="card"><h2>Réussite par question</h2><div class="perq" id="perq"></div></div>
+      </aside>
+      <div class="right">
+        <div class="alerts" id="alerts"></div>
+        <div class="tablebar">
+          <span>Tri :</span>
+          <button data-sort="issues" class="on">Problèmes d'abord</button>
+          <button data-sort="name">Prénom</button>
+          <button data-sort="score">Score</button>
+          <span style="margin-left:auto">Fond vert : juste · fond rouge : faux · délai de réponse sur la question en cours</span>
+        </div>
+        <div class="tablewrap"><table class="follow"><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+      </div>
     </div>
   </section>
 
-  <!-- QR code plein écran (clic pour fermer) -->
-  <section id="qr-full" class="qr-full" hidden>
-    <div class="mono kicker">Rejoins le quiz</div>
-    <div id="qr-full-code"></div>
-    <div class="url" id="qr-full-url"></div>
-    <div class="muted">Clique pour fermer</div>
-  </section>
-
-  <!-- Notes (non projetées) -->
+  <!-- Notes (jamais projetées) -->
   <section id="notes" class="notes" hidden>
     <div class="bar" style="max-width:900px">
       <h1 class="title" style="font-size:2rem">Notes</h1>

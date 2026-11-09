@@ -3,7 +3,7 @@ import {
   auth, db, ref, onValue, update, get, set, serverTimestamp, signInAnonymously, onAuthStateChanged, serverNow, onDisconnect,
 } from './firebase.js';
 import { cleanName, nameKey, validateName, NAME_TAKEN } from './names.js';
-import { CHOICES, show } from './ui.js';
+import { CHOICES, mark, show } from './ui.js';
 
 const SECTIONS = ['join', 'wait', 'question', 'sent', 'end'];
 const $ = (id) => document.getElementById(id);
@@ -149,13 +149,13 @@ function renderQuestion(g) {
   hideVerdict();
   const mine = store.get(answerKey(g)) ?? (pending.has(answerKey(g)) ? 'pending' : null);
   if (mine === 'pending') {
-    $('sent-shape').textContent = '';
+    $('sent-shape').replaceChildren();
     $('sent').querySelector('.mono').textContent = 'Envoi en cours';
     show(SECTIONS, 'sent');
     return;
   }
   if (mine !== null) {
-    $('sent-shape').textContent = mine === 'late' ? '' : `${CHOICES[Number(mine)].shape} ${CHOICES[Number(mine)].letter}`;
+    $('sent-shape').replaceChildren(...(mine === 'late' ? [] : [mark(Number(mine), { solo: true })]));
     $('sent').querySelector('.mono').textContent = mine === 'late' ? 'Trop tard' : 'Réponse envoyée';
     show(SECTIONS, 'sent');
     return;
@@ -167,7 +167,7 @@ function renderQuestion(g) {
     const b = document.createElement('button');
     b.className = ch.cls;
     b.setAttribute('aria-label', `Réponse ${ch.letter}`);
-    b.innerHTML = `<span class="shape" aria-hidden="true">${ch.shape}</span><span class="letter">${ch.letter}</span>`;
+    b.append(mark(i));
     b.addEventListener('click', () => answer(g, i), { once: true });
     return b;
   }));
@@ -197,13 +197,13 @@ function renderReady(g) {
   $('status').textContent = `Q${g.q + 1}/${g.qCount} · prépare-toi`;
   const box = $('answers');
   box.className = `answers${g.nChoices === 2 ? ' two' : ''}`;
-  box.replaceChildren(...CHOICES.slice(0, g.nChoices).map((ch) => {
+  box.replaceChildren(...CHOICES.slice(0, g.nChoices).map((ch, i) => {
     const b = document.createElement('button');
     b.className = ch.cls;
     b.disabled = true;
     b.style.opacity = '.35';
     b.setAttribute('aria-label', `Réponse ${ch.letter}, pas encore ouverte`);
-    b.innerHTML = `<span class="shape" aria-hidden="true">${ch.shape}</span><span class="letter">${ch.letter}</span>`;
+    b.append(mark(i));
     return b;
   }));
   show(SECTIONS, 'question');

@@ -18,7 +18,7 @@ puis `npm install` dans ce dossier. Java 21 est requis pour l'émulateur.
 Depuis la racine du blog, logique pure (Markdown, prénoms, notes) :
 
 ```bash
-QUIZZ_MD=~/talks/insa-2026-dev-augmente/preparation/quizz.md node --test _quizz-dev/tests/quiz-format.test.js _quizz-dev/tests/names.test.js _quizz-dev/tests/scoring.test.js
+QUIZZ_MD=~/talks/insa-2026-dev-augmente/preparation/quizz.md node --test _quizz-dev/tests/quiz-format.test.js _quizz-dev/tests/names.test.js _quizz-dev/tests/scoring.test.js _quizz-dev/tests/suivi-model.test.js
 ```
 
 Depuis ce dossier, règles de sécurité sur l'émulateur :
@@ -34,7 +34,7 @@ npx firebase emulators:start --only database,auth --project demo-quizz   # inter
 python3 -m http.server 8099 --bind 0.0.0.0                                # depuis la racine du blog
 ```
 
-Puis `http://<IP WSL>:8099/quizz/?emu=1` (élève) et `http://<IP WSL>:8099/quizz/prof.html?emu=1` (prof).
+Puis `http://<IP WSL>:8099/quizz/?emu=1` (élève) , `http://<IP WSL>:8099/quizz/prof.html?emu=1` (régie du prof) et `http://<IP WSL>:8099/quizz/ecran.html?emu=1` (écran projeté, aussi ouvert par le bouton « Écran projeté » de la régie).
 
 ## Production
 
