@@ -216,3 +216,13 @@ test('live_rejects_unexpected_shape', async () => {
   await assertFails(set(ref(teacherDb(), 'live/nav'), { ...liveNav, extra: 1 }));
   await assertFails(set(ref(teacherDb(), 'live/autre'), 1));
 });
+
+test('live_laser_teacher_only_and_bounded', async () => {
+  const laser = { x: 42.5, y: 10 };
+  await assertFails(set(ref(env.unauthenticatedContext().database(), 'live/laser'), laser));
+  await assertFails(set(ref(studentDb('u1'), 'live/laser'), laser));
+  await assertSucceeds(set(ref(teacherDb(), 'live/laser'), laser));
+  await assertSucceeds(set(ref(teacherDb(), 'live/laser'), null));
+  await assertFails(set(ref(teacherDb(), 'live/laser'), { x: 120, y: 10 }));
+  await assertFails(set(ref(teacherDb(), 'live/laser'), { ...laser, extra: 1 }));
+});
