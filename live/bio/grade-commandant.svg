@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 140" role="img" aria-labelledby="t">
+  <title id="t">Insigne de grade de commandant : quatre galons dorés</title>
+  <defs>
+    <linearGradient id="or" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F6D77A"/>
+      <stop offset="0.5" stop-color="#D9A93B"/>
+      <stop offset="1" stop-color="#A97A1F"/>
+    </linearGradient>
+  </defs>
+  <!-- Fourreau d'épaule -->
+  <path d="M6 22 Q6 4 30 4 Q54 4 54 22 V136 H6 Z" fill="#1B2330" stroke="#3A4658" stroke-width="2"/>
+  <!-- Bouton -->
+  <circle cx="30" cy="18" r="6" fill="url(#or)"/>
+  <!-- Quatre galons -->
+  <g fill="url(#or)">
+    <rect x="10" y="64" width="40" height="8" rx="1"/>
+    <rect x="10" y="80" width="40" height="8" rx="1"/>
+    <rect x="10" y="96" width="40" height="8" rx="1"/>
+    <rect x="10" y="112" width="40" height="8" rx="1"/>
+  </g>
+</svg>

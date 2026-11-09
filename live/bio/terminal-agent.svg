@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="t">
+  <title id="t">Terminal d'un agent de code : commande, actions, tests validés</title>
+  <!-- Fenêtre -->
+  <rect x="3" y="8" width="114" height="104" rx="6" fill="#0B1229" stroke="#00D5D0" stroke-width="2"/>
+  <line x1="3" y1="26" x2="117" y2="26" stroke="#00D5D0" stroke-opacity="0.5" stroke-width="1.5"/>
+  <g fill="#D4D3F1" fill-opacity="0.7">
+    <circle cx="14" cy="17" r="3"/><circle cx="24" cy="17" r="3"/><circle cx="34" cy="17" r="3"/>
+  </g>
+  <!-- Invite et commande -->
+  <path d="M13 38 l8 6 l-8 6" fill="none" stroke="#00D5D0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="27" y="41" width="48" height="6" rx="3" fill="#FFFFFF" fill-opacity="0.9"/>
+  <rect x="80" y="39" width="7" height="10" fill="#00D5D0"/>
+  <!-- Actions de l'agent -->
+  <g fill="#D4D3F1" fill-opacity="0.45">
+    <rect x="13" y="59" width="70" height="5" rx="2.5"/>
+    <rect x="13" y="70" width="52" height="5" rx="2.5"/>
+    <rect x="13" y="81" width="62" height="5" rx="2.5"/>
+  </g>
+  <!-- Tests validés -->
+  <path d="M13 99 l5 5 l10 -10" fill="none" stroke="#00D5D0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="34" y="97" width="40" height="6" rx="3" fill="#00D5D0" fill-opacity="0.8"/>
+</svg>

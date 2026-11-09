@@ -27,6 +27,8 @@ Depuis ce dossier, règles de sécurité sur l'émulateur :
 npx firebase emulators:exec --only database --project demo-quizz "node --test tests/rules.test.js"
 ```
 
+Le nœud `/live` des règles sert la présentation live du talk (deck Slidev publié sous `/live/`) : lecture publique, écriture réservée au prof. Ses tests sont dans `tests/rules.test.js` (`live_*`).
+
 ## Essai local dans le navigateur
 
 ```bash

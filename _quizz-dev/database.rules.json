@@ -7,6 +7,27 @@
       ".read": "auth != null"
     },
 
+    "live": {
+      ".read": true,
+      "actif": { ".validate": "newData.isBoolean()" },
+      "nav": {
+        ".validate": "newData.hasChildren(['page', 'clicks']) && newData.child('page').isNumber() && newData.child('clicks').isNumber()",
+        "page": { ".validate": true },
+        "clicks": { ".validate": true },
+        "$other": { ".validate": false }
+      },
+      "video": {
+        ".validate": "newData.hasChildren(['page', 't', 'd', 'paused', 'at'])",
+        "page": { ".validate": "newData.isNumber()" },
+        "t": { ".validate": "newData.isNumber()" },
+        "d": { ".validate": "newData.isNumber()" },
+        "paused": { ".validate": "newData.isBoolean()" },
+        "at": { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
+      },
+      "$other": { ".validate": false }
+    },
+
     "players": {
       ".read": "auth != null",
       "$key": {

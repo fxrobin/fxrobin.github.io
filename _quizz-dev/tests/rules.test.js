@@ -195,3 +195,24 @@ test('teacher_resets_everything', async () => {
   await seed({ ...openQuestion(), answers: { 1: { 0: { u1: { c: 1, t: 1 } } } }, reveals: { 1: { 0: { correct: 1, openedAt: 1 } } } });
   await assertSucceeds(update(ref(teacherDb()), { game: null, players: null, answers: null, reveals: null, scores: null }));
 });
+
+// Présentation live (deck Slidev, src/utils/live-sync.ts) : lecture publique, écriture du prof seul.
+const liveNav = { page: 6, clicks: 1 };
+
+test('live_public_read', async () => {
+  await seed({ live: { actif: true, nav: liveNav } });
+  await assertSucceeds(get(ref(env.unauthenticatedContext().database(), 'live')));
+});
+
+test('live_write_teacher_only', async () => {
+  await assertFails(set(ref(env.unauthenticatedContext().database(), 'live/nav'), liveNav));
+  await assertFails(set(ref(studentDb('u1'), 'live/nav'), liveNav));
+  await assertSucceeds(set(ref(teacherDb(), 'live/nav'), liveNav));
+  await assertSucceeds(set(ref(teacherDb(), 'live/actif'), true));
+});
+
+test('live_rejects_unexpected_shape', async () => {
+  await assertFails(set(ref(teacherDb(), 'live/nav'), { page: 'six', clicks: 0 }));
+  await assertFails(set(ref(teacherDb(), 'live/nav'), { ...liveNav, extra: 1 }));
+  await assertFails(set(ref(teacherDb(), 'live/autre'), 1));
+});
