@@ -1,0 +1,6 @@
+10 SCREEN 7,0,0:CLS
+20 FOR I=0 TO 15:BOXF(I*20,48)-(I*20+19,151),I:NEXT I
+30 LOCATE 3,2:PRINT"TOJE : disquette chargée par l'adresse"
+40 LOCATE 3,4:PRINT"?media=.../toje-demo.zip"
+50 LOCATE 3,21:PRINT"Thomson TO8 dans le navigateur"
+60 GOTO 60

@@ -9,12 +9,23 @@
 // jeu » — un jeu qui demande « insérez la disquette 2 » au lecteur 1 l'y reçoit
 // sans redémarrer. Une carte SDDrive (.sd) ou une cartouche (.rom) démarre de
 // même. L'extension décide, comme pour la bibliothèque.
+//
+// Un média peut être hébergé ailleurs sur le web, et zippé :
+//
+//   /toje/?media=https://exemple.org/jeux/mon-jeu.zip
+//
+// L'archive est ouverte dans la page ; ses disquettes, cartes et cartouches
+// prennent sa place dans la liste, dans l'ordre naturel de leurs noms (disk1,
+// disk2…). Le site qui l'héberge doit autoriser la lecture depuis une autre
+// page (en-tête CORS) : GitHub (raw.githubusercontent.com, Pages) le fait.
 
 import { formatOf } from './library.js';
 import { titleOf, baseName } from './titles.js';
+import { isZip, unzip } from './zip-reader.js';
 
-/** Disquette (.fd, .sap), carte (sd), cartouche (rom), ou null. */
+/** Disquette (.fd, .sap), carte (sd), cartouche (rom), archive (zip), ou null. */
 function kindOf(name) {
+  if (/\.zip$/i.test(name)) return 'zip';
   if (/\.sap$/i.test(name)) return 'disk';
   const format = formatOf(name);
   return format === 'fd' ? 'disk' : format;
@@ -56,16 +67,48 @@ export function scopedStore(store, prefix) {
   };
 }
 
+/** Média lançable (pas une archive) : ce qu'on retient dans un zip. */
+const playable = name => { const k = kindOf(name); return k !== null && k !== 'zip'; };
+
+/** Octets d'une adresse, avec une erreur qui dit quoi faire. */
+async function download(m) {
+  let response;
+  try {
+    response = await fetch(m.url);
+  } catch (e) {
+    // fetch ne distingue pas réseau coupé et refus CORS : le navigateur cache
+    // la cause. Une autre origine est le cas qui se règle chez l'hébergeur.
+    const other = typeof location !== 'undefined' && new URL(m.url).origin !== location.origin;
+    throw new Error(other
+      ? `${m.name} : ${new URL(m.url).host} refuse la lecture depuis cette page (pas d'en-tête CORS), ou est injoignable`
+      : `${m.name} : ${e.message}`);
+  }
+  if (!response.ok) throw new Error(`${m.name} : HTTP ${response.status}`);
+  return new Int8Array(await response.arrayBuffer());
+}
+
+/**
+ * Un média téléchargé, ou les médias d'une archive : [{ name, bytes }]. Une
+ * archive se reconnaît à son nom ou à sa signature (un lien de téléchargement
+ * n'a pas toujours la bonne extension).
+ */
+export async function expand(name, bytes) {
+  if (kindOf(name) !== 'zip' && !isZip(bytes)) return [{ name, bytes }];
+  const inside = await unzip(bytes, playable);
+  if (inside.length === 0) throw new Error(`${name} : aucune disquette, carte ou cartouche dans l'archive`);
+  return inside;
+}
+
 /** Télécharge les médias du jeu ; rend [{ name, bytes, label }] dans l'ordre. */
 export async function fetchMedia(game) {
-  const disks = game.media.filter(m => isDisk(m.name));
-  return Promise.all(game.media.map(async m => {
-    const response = await fetch(m.url);
-    if (!response.ok) throw new Error(`${m.name} : HTTP ${response.status}`);
-    const rank = disks.indexOf(m);
+  const groups = await Promise.all(game.media.map(async m => expand(m.name, await download(m))));
+  const files = groups.flat();
+  const disks = files.filter(f => isDisk(f.name));
+  return files.map(f => {
+    const rank = disks.indexOf(f);
     const label = disks.length > 1 && rank >= 0 ? `${game.title} — disquette ${rank + 1}` : game.title;
-    return { name: m.name, bytes: new Int8Array(await response.arrayBuffer()), label };
-  }));
+    return { ...f, label };
+  });
 }
 
 /**

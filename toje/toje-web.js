@@ -24,6 +24,7 @@ import { createScreenScaler } from './screen-scaler.js';
 import { createBindings } from './input-bindings.js';
 import { connectedPads, padName, readPad } from './gamepads.js';
 import { createBindingsPanel } from './bindings-panel.js';
+import { createVolumeControl } from './volume-control.js';
 import { lockedGame, scopedStore, fetchMedia, renderGameDisks, isDisk } from './locked-game.js';
 
 const FRAME_SECONDS = 0.02;
@@ -685,6 +686,12 @@ function start(toje, store) {
     $('resume-no').onclick = () => { $('resume').hidden = true; prefs.set('lastGame', null); };
   }
 
+  const volume = createVolumeControl(toje, prefs, {
+    quick: $('vol-quick'), quickLabel: $('vol-quick-label'),
+    slider: $('vol-slider'), level: $('vol-level'), down: $('vol-down'), up: $('vol-up'),
+  }, text => { status.textContent = text; });
+  window.tojeVolume = volume;      // recettes Playwright
+
   $('sound').addEventListener('click', e => {
     soundOn = !soundOn;
     setPressed(e.currentTarget, soundOn);
@@ -918,6 +925,11 @@ function start(toje, store) {
     if (!down && swallowed.delete(e.code)) { e.preventDefault(); return; }
     firstGesture();
     if (e.code === 'F7') { turboHeld = down; e.preventDefault(); return; }
+    if (e.code === 'F8' || e.code === 'F9') {      // répétition permise : maintenir fait glisser
+      if (down) volume.step(e.code === 'F9' ? 1 : -1);
+      e.preventDefault();
+      return;
+    }
     if (e.code === 'Pause') { if (down) setUserPaused(!userPaused); e.preventDefault(); return; }
     if (e.repeat) { e.preventDefault(); return; }    // le 6804 répète lui-même
     noteInput();
