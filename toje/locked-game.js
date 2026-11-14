@@ -70,6 +70,14 @@ export function scopedStore(store, prefix) {
 /** Média lançable (pas une archive) : ce qu'on retient dans un zip. */
 const playable = name => { const k = kindOf(name); return k !== null && k !== 'zip'; };
 
+/** Le site du média refuse la lecture depuis la page (ou est injoignable). */
+export class BlockedMedia extends Error {
+  constructor(media, message) {
+    super(message);
+    this.media = media;
+  }
+}
+
 /** Octets d'une adresse, avec une erreur qui dit quoi faire. */
 async function download(m) {
   let response;
@@ -79,9 +87,11 @@ async function download(m) {
     // fetch ne distingue pas réseau coupé et refus CORS : le navigateur cache
     // la cause. Une autre origine est le cas qui se règle chez l'hébergeur.
     const other = typeof location !== 'undefined' && new URL(m.url).origin !== location.origin;
-    throw new Error(other
-      ? `${m.name} : ${new URL(m.url).host} refuse la lecture depuis cette page (pas d'en-tête CORS), ou est injoignable`
-      : `${m.name} : ${e.message}`);
+    if (other) {
+      throw new BlockedMedia(m,
+        `${m.name} : ${new URL(m.url).host} refuse la lecture depuis cette page (pas d'en-tête CORS), ou est injoignable`);
+    }
+    throw new Error(`${m.name} : ${e.message}`);
   }
   if (!response.ok) throw new Error(`${m.name} : HTTP ${response.status}`);
   return new Int8Array(await response.arrayBuffer());
@@ -94,14 +104,52 @@ async function download(m) {
  */
 export async function expand(name, bytes) {
   if (kindOf(name) !== 'zip' && !isZip(bytes)) return [{ name, bytes }];
-  const inside = await unzip(bytes, playable);
+  const inside = oneFormatPerGame(await unzip(bytes, playable));
   if (inside.length === 0) throw new Error(`${name} : aucune disquette, carte ou cartouche dans l'archive`);
   return inside;
 }
 
-/** Télécharge les médias du jeu ; rend [{ name, bytes, label }] dans l'ordre. */
-export async function fetchMedia(game) {
-  const groups = await Promise.all(game.media.map(async m => expand(m.name, await download(m))));
+/** Ordre de préférence quand un jeu est livré en plusieurs formats. */
+const PREFERRED = ['fd', 'sap', 'sd', 'rom'];
+const extOf = name => name.toLowerCase().split('.').pop();
+
+/**
+ * Une archive livre souvent le même jeu en plusieurs formats (NyanCatTO8.fd,
+ * .sd, .hfe) : on n'en garde qu'un par nom, la disquette d'abord. Monter aussi
+ * la carte SD changerait le démarrage (la carte prend la main au menu).
+ */
+function oneFormatPerGame(files) {
+  const best = new Map();
+  for (const f of files) {
+    const key = f.name.replace(/\.[^.]+$/, '').toLowerCase();
+    const kept = best.get(key);
+    if (!kept || PREFERRED.indexOf(extOf(f.name)) < PREFERRED.indexOf(extOf(kept.name))) best.set(key, f);
+  }
+  return files.filter(f => best.get(f.name.replace(/\.[^.]+$/, '').toLowerCase()) === f);
+}
+
+/**
+ * Télécharge les médias du jeu ; rend [{ name, bytes, label }] dans l'ordre.
+ * `askUser(media)`, s'il est donné, est appelé pour un média que son site
+ * refuse de servir à la page (lien de release GitHub, site perso sans CORS) :
+ * il rend { name, bytes } du fichier que le visiteur a téléchargé lui-même.
+ * C'est le seul recours sans intermédiaire : la page est statique, et passer
+ * par un relais tiers lui ferait voir chaque adresse jouée.
+ */
+export async function fetchMedia(game, askUser = null) {
+  const one = async m => {
+    try {
+      return await expand(m.name, await download(m));
+    } catch (e) {
+      if (!(e instanceof BlockedMedia) || !askUser) throw e;
+      const file = await askUser(m);
+      return expand(file.name, file.bytes);
+    }
+  };
+  const groups = [];
+  // Un à la fois : deux demandes « télécharge-le » à l'écran en même temps
+  // seraient illisibles.
+  for (const m of game.media) groups.push(await one(m));
   const files = groups.flat();
   const disks = files.filter(f => isDisk(f.name));
   return files.map(f => {
