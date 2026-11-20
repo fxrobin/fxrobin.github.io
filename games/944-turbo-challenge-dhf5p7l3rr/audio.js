@@ -6,6 +6,8 @@ const EV_BEEP = 1, EV_GO = 2, EV_CRASH = 4, EV_BUMP = 8, EV_LAP = 16, EV_FINISH 
 const SCREEN_RACE = 1, SCREEN_GAME_OVER = 3;
 /// Squeal gain at full slip: light, a hint of the tyres at the limit rather than a screech.
 const SQUEAL_LEVEL = 1.2;
+// kerb rumble, at full speed
+const KERB_LEVEL = 0.7;
 /// Whoosh gain for an object just past the kerb at full speed.
 const WHOOSH_LEVEL = 5.0;
 
@@ -98,12 +100,56 @@ export class Sound {
     return skid;
   }
 
+  /**
+   * Kerb rumble: the tyres drum over the ridges of the kerb, a low buzz whose rate follows
+   * the speed (a square wave, rounded off) with the gritty thud of each ridge on top
+   * (noise chopped by the same wave). Returns set(t, v), v = speed fraction or 0.
+   */
+  makeKerb(dest) {
+    const ctx = this.ctx;
+    const out = ctx.createGain();
+    out.gain.value = 0;
+    out.connect(dest);
+    const ridge = ctx.createOscillator();
+    ridge.type = 'square';
+    ridge.frequency.value = 40;
+    const round = ctx.createBiquadFilter();
+    round.type = 'lowpass';
+    round.frequency.value = 380;
+    round.Q.value = 0.9;
+    const buzz = ctx.createGain();
+    buzz.gain.value = 0.45;
+    ridge.connect(round).connect(buzz).connect(out);
+    const src = ctx.createBufferSource();
+    src.buffer = this.noise;
+    src.loop = true;
+    const band = ctx.createBiquadFilter();
+    band.type = 'bandpass';
+    band.frequency.value = 220;
+    band.Q.value = 0.8;
+    const chop = ctx.createGain();
+    chop.gain.value = 0.5;
+    const depth = ctx.createGain();
+    depth.gain.value = 0.5;
+    ridge.connect(depth).connect(chop.gain);
+    src.connect(band).connect(chop).connect(out);
+    ridge.start();
+    src.start();
+    return {
+      set(t, v) {
+        out.gain.setTargetAtTime(v > 0 ? KERB_LEVEL * (0.35 + 0.65 * v) : 0, t, v > 0 ? 0.015 : 0.05);
+        if (v > 0) ridge.frequency.setTargetAtTime(22 + v * 90, t, 0.03);
+      },
+    };
+  }
+
   makeEngine(worklet) {
     const ctx = this.ctx;
     const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : ctx.createGain();
     pan.connect(this.master);
 
     const skid = this.makeSqueal(pan);
+    const kerb = this.makeKerb(pan);
 
     if (worklet) {
       const node = new AudioWorkletNode(ctx, 'engine944', { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [1] });
@@ -112,6 +158,7 @@ export class Sound {
       return {
         pan,
         skid,
+        kerb,
         set(t, on, rpm, thr, boost) {
           p('level').setTargetAtTime(on ? 0.55 : 0, t, 0.05);
           if (!on) return;
@@ -121,7 +168,7 @@ export class Sound {
         },
       };
     }
-    return this.makeOscillatorEngine(pan, skid);
+    return { ...this.makeOscillatorEngine(pan, skid), kerb };
   }
 
   /** Fallback when AudioWorklet is missing: detuned oscillators, whistle and blow-off burst. */
@@ -184,6 +231,7 @@ export class Sound {
     this.engines.forEach((e, i) => {
       const on = i < n;
       e.skid.gain.setTargetAtTime(on ? ex.engine_skid(i) * SQUEAL_LEVEL : 0, t, 0.06);
+      e.kerb.set(t, on && this.enabled ? ex.engine_kerb(i) : 0);
       e.set(t, on, ex.engine_rpm(i), ex.engine_throttle(i), ex.engine_boost(i));
       if (on && 'pan' in e.pan) e.pan.pan.value = n === 2 ? (i === 0 ? -0.6 : 0.6) : 0;
     });

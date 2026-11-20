@@ -109,6 +109,7 @@ function present(ex) {
 async function main() {
   const { instance } = await loadWasm('game.wasm');
   const ex = instance.exports;
+  if (new URLSearchParams(location.search).has('debug')) window.game = ex; // test drivers
   ex.init((Math.random() * 0xffffffff) >>> 0);
 
   // demo mode: ?demo&players=2&course=1 lets the CPU drive (attract mode / video capture)
