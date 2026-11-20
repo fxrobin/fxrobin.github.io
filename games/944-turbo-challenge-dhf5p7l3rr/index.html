@@ -7,7 +7,12 @@ sitemap: false
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
   <title>944 Turbo Challenge</title>
   <meta name="robots" content="noindex, nofollow">
   <style>
@@ -26,9 +31,46 @@ sitemap: false
     #error { color: #ff6060; display: none; }
     #audiohint { color: #ffe860; }
     #audiohint.on { visibility: hidden; }
+
+    /* --- touch screens: full screen game and a virtual controller ------------------- */
+    #touch, #rotate { display: none; }
+    body.touch { padding: 0; gap: 0; background: #000; overflow: hidden; touch-action: none;
+      -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+    body.touch #hint, body.touch #audiohint { display: none; }
+    body.touch #frame { box-shadow: none; }
+    body.touch #touch { display: block; position: fixed; inset: 0; pointer-events: none; z-index: 2; }
+    #touch > * { pointer-events: auto; position: absolute; touch-action: none; }
+    .pad { border: 2px solid rgba(255,255,255,.35); background: rgba(20,20,28,.35); border-radius: 18px;
+      color: rgba(255,255,255,.8); font: bold 15px/1 ui-monospace, Menlo, Consolas, monospace;
+      display: flex; align-items: center; justify-content: center; }
+    .pad.off { opacity: .45; }
+    .down { background: rgba(208,20,30,.55) !important; border-color: rgba(255,120,120,.8) !important; }
+    #steer { left: max(14px, env(safe-area-inset-left)); bottom: max(16px, env(safe-area-inset-bottom));
+      width: clamp(150px, calc(var(--bar, 200px) - 28px), 230px); height: min(30vh, 120px); border-radius: 60px; }
+    #steer .l, #steer .r { position: absolute; top: 0; bottom: 0; width: 50%; display: flex; align-items: center;
+      font-size: 26px; border-radius: 60px; }
+    #steer .down { background: rgba(208,20,30,.35) !important; }
+    #pedals i { display: none; font-style: normal; font-size: 26px; }
+    body.menu #pedals i { display: inline; }
+    body.menu #pedals b { display: none; }
+    #steer .l { left: 0; justify-content: flex-start; padding-left: 16px; }
+    #steer .r { right: 0; justify-content: flex-end; padding-right: 16px; }
+    #steer .knob { width: min(13vh, 56px); height: min(13vh, 56px); border-radius: 50%;
+      background: rgba(255,255,255,.55); box-shadow: 0 0 0 3px rgba(0,0,0,.3); transition: transform .05s; }
+    #pedals { right: max(14px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom));
+      width: clamp(96px, calc(var(--bar, 160px) - 28px), 140px); height: min(62vh, 250px); border: 0; background: none; flex-direction: column; gap: 8px; }
+    #pedals > div { width: 100%; border-radius: 18px; }
+    #pedals .brake { flex: 42; }
+    #pedals .gas { flex: 58; }
+    .btns { top: max(10px, env(safe-area-inset-top)); display: flex; gap: 8px; }
+    .btns .pad { width: 52px; height: 40px; border-radius: 12px; font-size: 14px; }
+    #lbtns { left: max(14px, env(safe-area-inset-left)); }
+    #rbtns { right: max(14px, env(safe-area-inset-right)); }
+    body.touch.portrait #rotate { display: flex; position: fixed; inset: 0; z-index: 3; background: #000d;
+      color: #fff; font: bold 20px/1.5 ui-monospace, monospace; text-align: center; align-items: center; justify-content: center; padding: 24px; }
   </style>
 </head>
-<body>
+<body class="menu">
   <div id="frame" class="crt"><canvas id="screen" width="640" height="480"></canvas></div>
   <div id="hint">
     <b>Entrée</b> : valider · <b>J1</b> : flèches · <b>J2</b> : Z/W Q/A S D · <b>P</b> : pause · <b>Échap</b> : retour ·
@@ -37,6 +79,13 @@ sitemap: false
     <label><input type="checkbox" id="sound" checked> son</label> ·
     <label><input type="checkbox" id="music" checked> musique (M)</label>
   </div>
+  <div id="touch" aria-hidden="true">
+    <div id="steer" class="pad"><span class="l">◀</span><span class="knob"></span><span class="r">▶</span></div>
+    <div id="pedals" class="pad"><div class="pad brake"><b>FREIN</b><i>▲</i></div><div class="pad gas"><b>GAZ</b><i>▼</i></div></div>
+    <div id="lbtns" class="btns"><div id="t-back" class="pad">↩</div><div id="t-pause" class="pad">❚❚</div></div>
+    <div id="rbtns" class="btns"><div id="t-music" class="pad">♪</div><div id="t-full" class="pad">⛶</div><div id="t-ok" class="pad">OK</div></div>
+  </div>
+  <div id="rotate">↻ Tourne ton téléphone en mode paysage</div>
   <div id="audiohint">🔇 Appuie sur une touche ou clique pour activer le son</div>
   <div id="error"></div>
   <script type="module" src="main.js"></script>

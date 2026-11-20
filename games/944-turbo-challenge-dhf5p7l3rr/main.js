@@ -1,5 +1,6 @@
 // Host for the WebAssembly game: fixed 60 Hz simulation, palette conversion, input, sound.
 import { Sound } from './audio.js';
+import { TouchPad } from './touch.js';
 
 const W = 640, H = 480, STEP = 1000 / 60;
 
@@ -28,17 +29,59 @@ let keyBits = 0;
 // keys pressed since the last simulation step, so very short taps are never lost
 let latched = 0;
 
+const touch = new TouchPad({
+  LEFT: P1_LEFT, RIGHT: P1_RIGHT, UP: P1_UP, DOWN: P1_DOWN, START, BACK, PAUSE,
+});
+touch.attach(document.getElementById('touch'));
+
 function fit() {
-  // 640x480, square pixels; integer zoom when the window is large enough
-  const maxW = window.innerWidth - 24;
-  const maxH = window.innerHeight - 70;
+  const touchMode = document.body.classList.contains('touch');
+  document.body.classList.toggle('portrait', window.innerHeight > window.innerWidth);
+  // 640x480, square pixels; integer zoom when the window is large enough. On a touch
+  // screen the game takes the whole screen and the controls sit over the side bars.
+  const maxW = window.innerWidth - (touchMode ? 0 : 24);
+  const maxH = window.innerHeight - (touchMode ? 0 : 70);
   let w = Math.min(maxW, (maxH * 4) / 3);
-  if (w >= 1280) w = Math.floor(w / 640) * 640;
+  if (w >= 1280 && !touchMode) w = Math.floor(w / 640) * 640;
+  document.body.style.setProperty('--bar', `${Math.max(0, (window.innerWidth - w) / 2)}px`);
   frame.style.width = `${Math.floor(w)}px`;
   frame.style.height = `${Math.floor((w * 3) / 4)}px`;
 }
 window.addEventListener('resize', fit);
+
+// switch to the touch layout as soon as the screen is touched (or on a phone/tablet)
+function touchMode() {
+  if (document.body.classList.contains('touch')) return;
+  document.body.classList.add('touch');
+  fit();
+}
+if (matchMedia('(pointer: coarse)').matches) touchMode();
+window.addEventListener('touchstart', touchMode, { passive: true });
 fit();
+
+// full screen, landscape (where the browser allows it; on iPhone: "Add to Home Screen")
+const fullBtn = document.getElementById('t-full');
+const root = document.documentElement;
+const canFull = !!(root.requestFullscreen || root.webkitRequestFullscreen);
+fullBtn.style.display = canFull ? '' : 'none';
+fullBtn.addEventListener('click', async () => {
+  try {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      await (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    } else {
+      await (root.requestFullscreen || root.webkitRequestFullscreen).call(root, { navigationUI: 'hide' });
+      await screen.orientation?.lock?.('landscape').catch(() => {});
+    }
+  } catch (_) { /* refused: stay in the page */ }
+  setTimeout(fit, 200);
+});
+document.getElementById('t-music').addEventListener('click', () => {
+  const box = document.getElementById('music');
+  box.checked = !box.checked;
+  sound.musicEnabled = box.checked;
+  document.getElementById('t-music').classList.toggle('off', !box.checked);
+});
+document.addEventListener('contextmenu', (e) => { if (document.body.classList.contains('touch')) e.preventDefault(); });
 
 window.addEventListener('keydown', (e) => {
   const bit = KEYS[e.code];
@@ -106,6 +149,17 @@ function present(ex) {
   ctx2d.putImageData(image, 0, 0);
 }
 
+// In the menus the pedals become arrows: the upper one moves up, the lower one down.
+function touchBits(ex) {
+  let t = touch.take();
+  if (inMenu) {
+    const up = t & P1_UP, down = t & P1_DOWN;
+    t = (t & ~(P1_UP | P1_DOWN)) | (up ? P1_DOWN : 0) | (down ? P1_UP : 0);
+  }
+  return t;
+}
+let inMenu = true;
+
 async function main() {
   const { instance } = await loadWasm('game.wasm');
   const ex = instance.exports;
@@ -132,12 +186,14 @@ async function main() {
     last = now;
     const pads = gamepadBits();
     while (acc >= STEP) {
-      ex.tick(keyBits | latched | pads);
+      ex.tick(keyBits | latched | pads | touchBits(ex));
       latched = 0;
       acc -= STEP;
     }
     ex.render();
     present(ex);
+    const menu = ex.screen_id() !== 1;
+    if (menu !== inMenu) { inMenu = menu; document.body.classList.toggle('menu', menu); }
     sound.update(ex);
     audioHint.classList.toggle('on', sound.running);
     requestAnimationFrame(loop);
