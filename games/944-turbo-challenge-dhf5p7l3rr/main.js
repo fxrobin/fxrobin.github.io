@@ -61,6 +61,14 @@ window.addEventListener('pointerdown', () => sound.start());
 
 document.getElementById('crt').addEventListener('change', (e) => frame.classList.toggle('crt', e.target.checked));
 document.getElementById('sound').addEventListener('change', (e) => { sound.enabled = e.target.checked; });
+const musicBox = document.getElementById('music');
+musicBox.addEventListener('change', (e) => { sound.musicEnabled = e.target.checked; });
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'KeyM' && !e.repeat) {
+    musicBox.checked = !musicBox.checked;
+    sound.musicEnabled = musicBox.checked;
+  }
+});
 
 function gamepadBits() {
   let bits = 0;

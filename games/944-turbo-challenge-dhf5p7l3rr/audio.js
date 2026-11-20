@@ -1,5 +1,6 @@
-// Synthesised sound, no samples: a 4-cylinder turbo engine per player (engine-worklet.js), tyre squeal, event
-// blips and a small chiptune loop for the menus. Everything is built from WebAudio nodes.
+// Sound: a synthesised 4-cylinder turbo engine per player (engine-worklet.js), tyre squeal, wind,
+// event blips, all built from WebAudio nodes; and one recorded music track, looped:
+// "Neon Sign Circuit" by MintoDog (OpenGameArt, CC0), 145 BPM, 60 bars.
 
 const EV_BEEP = 1, EV_GO = 2, EV_CRASH = 4, EV_BUMP = 8, EV_LAP = 16, EV_FINISH = 32, EV_BACKFIRE = 64, EV_MENU = 256;
 const SCREEN_RACE = 1, SCREEN_GAME_OVER = 3;
@@ -8,24 +9,19 @@ const SQUEAL_LEVEL = 1.2;
 /// Whoosh gain for an object just past the kerb at full speed.
 const WHOOSH_LEVEL = 5.0;
 
-// --- menu music: 4 bars of 16 steps (MIDI notes, 0 = rest) ------------------------------
-const BPM = 132;
-const STEP = 60 / BPM / 4;
-const BARS = [
-  { bass: 45, lead: [69, 0, 72, 0, 76, 0, 72, 0, 69, 0, 72, 76, 0, 72, 69, 0] },
-  { bass: 41, lead: [69, 0, 72, 0, 77, 0, 72, 0, 69, 0, 72, 77, 0, 72, 69, 0] },
-  { bass: 48, lead: [67, 0, 72, 0, 76, 0, 72, 0, 67, 0, 72, 76, 0, 79, 76, 0] },
-  { bass: 43, lead: [67, 0, 71, 0, 74, 0, 79, 0, 78, 0, 74, 0, 71, 0, 74, 0] },
-];
-const hz = (midi) => 440 * 2 ** ((midi - 69) / 12);
+// --- music ---------------------------------------------------------------------------------
+const MUSIC = ['music/neon-sign-circuit.ogg', 'music/neon-sign-circuit.mp3'];
+/// The loop is exactly 60 bars at 145 BPM; looping on it also skips MP3 encoder padding.
+const MUSIC_LOOP = (60 * 4 * 60) / 145;
+/// Music level per screen (see App::screen_id): quieter in a race so the engine leads.
+const MUSIC_LEVEL = { 0: 0.75, 1: 0.45, 2: 0.7, 3: 0.55, 4: 0.8, 5: 0.2 };
 
 export class Sound {
   constructor() {
     this.ctx = null;
     this.enabled = true;
-    this.musicStep = 0;
-    this.musicTime = 0;
-    this.musicOn = false;
+    this.musicEnabled = true;
+    this.musicSource = null;
   }
 
   get running() {
@@ -48,9 +44,11 @@ export class Sound {
     comp.threshold.value = -14;
     comp.ratio.value = 6;
     this.master.connect(comp).connect(ctx.destination);
+    // the track is already mastered: it bypasses the compressor so the engine cannot pump it
     this.music = ctx.createGain();
-    this.music.gain.value = 0.8;
-    this.music.connect(this.master);
+    this.music.gain.value = 0;
+    this.music.connect(ctx.destination);
+    this.loadMusic();
     this.noise = this.makeNoise();
     this.engines = [];
     // the engine is a sample-accurate AudioWorklet; old browsers get the oscillator version
@@ -311,45 +309,30 @@ export class Sound {
 
   // --- music -----------------------------------------------------------------------
 
+  /** Decode the track (Ogg Vorbis first, MP3 for browsers without Vorbis) and start the loop. */
+  async loadMusic() {
+    for (const url of MUSIC) {
+      try {
+        const data = await (await fetch(url)).arrayBuffer();
+        const buffer = await this.ctx.decodeAudioData(data);
+        const src = this.ctx.createBufferSource();
+        src.buffer = buffer;
+        src.loop = true;
+        src.loopStart = 0;
+        src.loopEnd = Math.min(MUSIC_LOOP, buffer.duration);
+        src.connect(this.music);
+        src.start();
+        this.musicSource = src;
+        return;
+      } catch (err) {
+        console.warn(`music: ${url} unavailable (${err})`);
+      }
+    }
+  }
+
   updateMusic(screen) {
-    const wanted = screen !== SCREEN_RACE && screen !== SCREEN_GAME_OVER;
-    const now = this.ctx.currentTime;
-    if (wanted && !this.musicOn) {
-      this.musicStep = 0;
-      this.musicTime = now + 0.05;
-    }
-    this.musicOn = wanted;
-    this.music.gain.setTargetAtTime(wanted ? 0.8 : 0, now, 0.08);
-    if (!wanted) return;
-    if (this.musicTime < now) this.musicTime = now; // tab was in the background
-    while (this.musicTime < now + 0.2) {
-      this.playStep(this.musicStep, this.musicTime);
-      this.musicStep = (this.musicStep + 1) % (BARS.length * 16);
-      this.musicTime += STEP;
-    }
-  }
-
-  playStep(step, t) {
-    const bar = BARS[step >> 4];
-    const s = step & 15;
-    const lead = bar.lead[s];
-    if (lead) this.note(hz(lead), t, STEP * 1.8, 0.24, 'square', this.music);
-    if (s % 2 === 0) this.note(hz(bar.bass - (s % 4 === 2 ? 0 : 12) + 12), t, STEP * 1.6, 0.45, 'triangle', this.music);
-    if (s % 8 === 0) this.kick(t);
-    if (s % 8 === 4) this.burst(0.12, 0.3, 'highpass', 1800, 1200, this.music, t);
-    else if (s % 2 === 0) this.burst(0.03, 0.12, 'highpass', 7000, 6000, this.music, t);
-  }
-
-  kick(t) {
-    const ctx = this.ctx;
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.frequency.setValueAtTime(150, t);
-    o.frequency.exponentialRampToValueAtTime(45, t + 0.12);
-    g.gain.setValueAtTime(0.6, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
-    o.connect(g).connect(this.music);
-    o.start(t);
-    o.stop(t + 0.2);
+    const on = this.enabled && this.musicEnabled && this.musicSource;
+    const level = on ? MUSIC_LEVEL[screen] ?? 0.6 : 0;
+    this.music.gain.setTargetAtTime(level, this.ctx.currentTime, 0.25);
   }
 }
