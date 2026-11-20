@@ -5,6 +5,8 @@ const EV_BEEP = 1, EV_GO = 2, EV_CRASH = 4, EV_BUMP = 8, EV_LAP = 16, EV_FINISH 
 const SCREEN_RACE = 1, SCREEN_GAME_OVER = 3;
 /// Squeal gain at full slip: light, a hint of the tyres at the limit rather than a screech.
 const SQUEAL_LEVEL = 1.2;
+/// Whoosh gain for an object just past the kerb at full speed.
+const WHOOSH_LEVEL = 5.0;
 
 // --- menu music: 4 bars of 16 steps (MIDI notes, 0 = rest) ------------------------------
 const BPM = 132;
@@ -230,39 +232,43 @@ export class Sound {
   }
 
   /**
-   * Wind of a tree or a sign rushing past: band-passed noise whose pitch falls as the object
-   * goes by (a hint of Doppler), swinging from ahead towards its side.
+   * Wind of a tree or a sign brushed past along the verge: a soft "fwoosh" of air rather than
+   * a hit. Low-passed noise swells in over 0.16 s and dies away smoothly, its brightness
+   * falling as the object goes by (a hint of Doppler), swinging towards the object's side.
    */
   whoosh(pan, gain) {
     const ctx = this.ctx;
     const t = ctx.currentTime;
-    const dur = 0.22;
+    const rise = 0.16;
+    const dur = 0.6;
     const src = ctx.createBufferSource();
     src.buffer = this.noise;
-    const band = ctx.createBiquadFilter();
-    band.type = 'bandpass';
-    band.Q.value = 0.7;
-    // above most of the engine's energy, so it reads clearly without masking the motor
-    band.frequency.setValueAtTime(5000 + gain * 2000, t);
-    band.frequency.exponentialRampToValueAtTime(1600, t + dur);
+    const low = ctx.createBiquadFilter();
+    low.type = 'lowpass';
+    low.Q.value = 0.6;
+    low.frequency.setValueAtTime(1400 + gain * 1400, t);
+    low.frequency.exponentialRampToValueAtTime(450, t + dur);
+    const high = ctx.createBiquadFilter();
+    high.type = 'highpass';
+    high.frequency.value = 160;
     const g = ctx.createGain();
-    // far objects fade quickly, close ones really slap
-    const vol = 0.15 + Math.pow(gain, 1.2) * 4.0;
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(vol, t + 0.03);
-    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    const vol = WHOOSH_LEVEL * (0.2 + 0.8 * gain);
+    // no click: start from silence, swell linearly, then an exponential tail
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(vol, t + rise);
+    g.gain.setTargetAtTime(0, t + rise, 0.12);
     let out = g;
     if (ctx.createStereoPanner) {
       const p = ctx.createStereoPanner();
-      p.pan.setValueAtTime(pan * 0.3, t);
-      p.pan.linearRampToValueAtTime(pan, t + 0.1);
+      p.pan.setValueAtTime(pan * 0.2, t);
+      p.pan.linearRampToValueAtTime(pan, t + rise + 0.1);
       g.connect(p);
       out = p;
     }
-    src.connect(band).connect(g);
+    src.connect(high).connect(low).connect(g);
     out.connect(this.master);
-    src.start(t, Math.random() * 0.6);
-    src.stop(t + dur + 0.05);
+    src.start(t, Math.random() * 0.3);
+    src.stop(t + dur + 0.1);
   }
 
   /** Exhaust backfire on an upshift: a dull bang followed by two crackles. */
