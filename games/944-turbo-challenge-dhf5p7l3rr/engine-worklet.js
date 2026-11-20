@@ -126,7 +126,7 @@ class Engine944 extends AudioWorkletProcessor {
 
       const exhaust = this.exhaustTone.run(combustion) * 1.6 + this.exhaustPipe.run(combustion) * 1.1 + combustion * 0.35;
       let y = this.muffler.run(exhaust);
-      y += this.intake.run(n) * this.load * (rpm / 7000) * 0.12;
+      y += this.intake.run(n) * this.load * (rpm / 7000) * 0.06;
 
       // turbocharger: whistle + airy whoosh, both scaled by boost
       this.whistlePhase += whistleHz / sr;

@@ -151,6 +151,9 @@ export class Sound {
   /** Called once per rendered frame with the wasm exports. */
   update(ex) {
     const events = ex.take_events();
+    // always drain the wind cues, even muted, so none pile up
+    const whooshes = [];
+    for (let w = ex.take_whoosh(); w !== 0; w = ex.take_whoosh()) whooshes.push(w);
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
     this.master.gain.setTargetAtTime(this.enabled ? 0.9 : 0, t, 0.02);
@@ -161,6 +164,16 @@ export class Sound {
       e.set(t, on, ex.engine_rpm(i), ex.engine_throttle(i), ex.engine_boost(i));
       if (on && 'pan' in e.pan) e.pan.pan.value = n === 2 ? (i === 0 ? -0.6 : 0.6) : 0;
     });
+    if (this.enabled) {
+      for (const w of whooshes) {
+        const player = w >>> 16;
+        const pan = ((w >>> 8) & 255) / 127.5 - 1;
+        const gain = (w & 255) / 255;
+        // split screen: player 1 on the left, player 2 on the right
+        const offset = n === 2 ? (player === 0 ? -0.5 : 0.5) : 0;
+        this.whoosh(Math.max(-1, Math.min(1, pan * (n === 2 ? 0.5 : 1) + offset)), gain);
+      }
+    }
     if (events & EV_BEEP) this.blip(440, 0.18, 0.3);
     if (events & EV_GO) this.blip(880, 0.6, 0.3);
     if (events & EV_LAP) { this.blip(660, 0.1, 0.2); this.blip(990, 0.18, 0.2, 0.12); }
@@ -191,6 +204,42 @@ export class Sound {
     o.connect(g).connect(dest);
     o.start(t);
     o.stop(t + dur + 0.02);
+  }
+
+  /**
+   * Wind of a tree or a sign rushing past: band-passed noise whose pitch falls as the object
+   * goes by (a hint of Doppler), swinging from ahead towards its side.
+   */
+  whoosh(pan, gain) {
+    const ctx = this.ctx;
+    const t = ctx.currentTime;
+    const dur = 0.22;
+    const src = ctx.createBufferSource();
+    src.buffer = this.noise;
+    const band = ctx.createBiquadFilter();
+    band.type = 'bandpass';
+    band.Q.value = 0.7;
+    // above most of the engine's energy, so it reads clearly without masking the motor
+    band.frequency.setValueAtTime(5000 + gain * 2000, t);
+    band.frequency.exponentialRampToValueAtTime(1600, t + dur);
+    const g = ctx.createGain();
+    // far objects fade quickly, close ones really slap
+    const vol = 0.15 + Math.pow(gain, 1.2) * 4.0;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.03);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    let out = g;
+    if (ctx.createStereoPanner) {
+      const p = ctx.createStereoPanner();
+      p.pan.setValueAtTime(pan * 0.3, t);
+      p.pan.linearRampToValueAtTime(pan, t + 0.1);
+      g.connect(p);
+      out = p;
+    }
+    src.connect(band).connect(g);
+    out.connect(this.master);
+    src.start(t, Math.random() * 0.6);
+    src.stop(t + dur + 0.05);
   }
 
   /** Exhaust backfire on an upshift: a dull bang followed by two crackles. */

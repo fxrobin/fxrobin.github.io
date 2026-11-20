@@ -106,7 +106,10 @@ async function main() {
   // demo mode: ?demo&players=2&course=1 lets the CPU drive (attract mode / video capture)
   const params = new URLSearchParams(location.search);
   if (params.has('autopilot')) ex.set_autopilot(3); // normal menus, but the CPU drives
-  if (params.has('demo')) {
+  // test bench: ?bench&course=1 (alone on the course, endless laps), add &autopilot to watch
+  if (params.has('bench')) {
+    ex.bench_race(Number(params.get('players') ?? 1), Number(params.get('course') ?? 0));
+  } else if (params.has('demo')) {
     ex.set_autopilot(3);
     ex.quick_race(Number(params.get('players') ?? 1), Number(params.get('course') ?? 0), 0);
   }
