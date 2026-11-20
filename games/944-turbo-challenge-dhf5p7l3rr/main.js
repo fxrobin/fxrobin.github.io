@@ -101,8 +101,8 @@ async function loadWasm(url) {
 function present(ex) {
   const mem = ex.memory.buffer;
   const fb = new Uint8Array(mem, ex.framebuffer(), W * H);
-  const pal = new Uint32Array(mem, ex.palette(), 32);
-  for (let i = 0; i < W * H; i++) pixels[i] = pal[fb[i] & 31];
+  const pal = new Uint32Array(mem, ex.palette(), 256);
+  for (let i = 0; i < W * H; i++) pixels[i] = pal[fb[i]];
   ctx2d.putImageData(image, 0, 0);
 }
 
@@ -114,7 +114,9 @@ async function main() {
 
   // demo mode: ?demo&players=2&course=1 lets the CPU drive (attract mode / video capture)
   const params = new URLSearchParams(location.search);
-  if (params.has('autopilot')) ex.set_autopilot(3); // normal menus, but the CPU drives
+  if (params.has('autopilot')) ex.set_autopilot(3);
+  // weather: ?weather=0 clear, 1 rain, 2 snow (default: each course's own)
+  if (params.has('weather')) ex.set_weather(Number(params.get('weather'))); // normal menus, but the CPU drives
   // test bench: ?bench&course=1 (alone on the course, endless laps), add &autopilot to watch
   if (params.has('bench')) {
     ex.bench_race(Number(params.get('players') ?? 1), Number(params.get('course') ?? 0));

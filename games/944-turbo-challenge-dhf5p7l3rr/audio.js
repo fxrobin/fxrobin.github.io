@@ -52,6 +52,7 @@ export class Sound {
     this.music.connect(ctx.destination);
     this.loadMusic();
     this.noise = this.makeNoise();
+    this.rain = this.makeRain();
     this.engines = [];
     // the engine is a sample-accurate AudioWorklet; old browsers get the oscillator version
     const ready = ctx.audioWorklet ? ctx.audioWorklet.addModule('engine-worklet.js') : Promise.reject(new Error('no AudioWorklet'));
@@ -98,6 +99,25 @@ export class Sound {
     wobble.start();
     src.start();
     return skid;
+  }
+
+  /** Rain on the car: a soft hiss, louder with speed (the drops hit harder). */
+  makeRain() {
+    const ctx = this.ctx;
+    const src = ctx.createBufferSource();
+    src.buffer = this.noise;
+    src.loop = true;
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 1200;
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 6500;
+    const g = ctx.createGain();
+    g.gain.value = 0;
+    src.connect(hp).connect(lp).connect(g).connect(this.master);
+    src.start();
+    return g;
   }
 
   /**
@@ -228,6 +248,7 @@ export class Sound {
     const t = this.ctx.currentTime;
     this.master.gain.setTargetAtTime(this.enabled ? 0.9 : 0, t, 0.02);
     const n = ex.active_players();
+    this.rain.gain.setTargetAtTime(ex.weather() === 1 && n > 0 ? 0.05 : 0, t, 0.3);
     this.engines.forEach((e, i) => {
       const on = i < n;
       e.skid.gain.setTargetAtTime(on ? ex.engine_skid(i) * SQUEAL_LEVEL : 0, t, 0.06);
