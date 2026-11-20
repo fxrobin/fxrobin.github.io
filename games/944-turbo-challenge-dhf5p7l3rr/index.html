@@ -1,0 +1,43 @@
+---
+# Unlisted page: kept out of sitemap.xml and search engines, linked from nowhere.
+layout: null
+sitemap: false
+---
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>944 Turbo Challenge</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    :root { --bg: #111118; --fg: #c8c8d0; --accent: #d0141e; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg);
+      font: 13px/1.4 ui-monospace, Menlo, Consolas, monospace; }
+    body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 12px; }
+    #frame { position: relative; box-shadow: 0 0 0 3px #000, 0 0 40px rgba(208, 20, 30, .25); background: #000; }
+    canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; }
+    #frame.crt::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 2px, rgba(0,0,0,.22) 3px, rgba(0,0,0,.22) 3px); }
+    #hint { max-width: 960px; text-align: center; opacity: .8; }
+    #hint b { color: #fff; }
+    label { cursor: pointer; user-select: none; }
+    #error { color: #ff6060; display: none; }
+    #audiohint { color: #ffe860; }
+    #audiohint.on { visibility: hidden; }
+  </style>
+</head>
+<body>
+  <div id="frame" class="crt"><canvas id="screen" width="640" height="480"></canvas></div>
+  <div id="hint">
+    <b>Entrée</b> : valider · <b>J1</b> : flèches · <b>J2</b> : Z/W Q/A S D · <b>P</b> : pause · <b>Échap</b> : retour ·
+    manettes supportées ·
+    <label><input type="checkbox" id="crt" checked> scanlines</label> ·
+    <label><input type="checkbox" id="sound" checked> son</label>
+  </div>
+  <div id="audiohint">🔇 Appuie sur une touche ou clique pour activer le son</div>
+  <div id="error"></div>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
