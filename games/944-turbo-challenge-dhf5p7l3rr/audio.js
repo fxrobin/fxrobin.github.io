@@ -3,6 +3,8 @@
 
 const EV_BEEP = 1, EV_GO = 2, EV_CRASH = 4, EV_BUMP = 8, EV_LAP = 16, EV_FINISH = 32, EV_BACKFIRE = 64, EV_MENU = 256;
 const SCREEN_RACE = 1, SCREEN_GAME_OVER = 3;
+/// Squeal gain at full slip: light, a hint of the tyres at the limit rather than a screech.
+const SQUEAL_LEVEL = 1.2;
 
 // --- menu music: 4 bars of 16 steps (MIDI notes, 0 = rest) ------------------------------
 const BPM = 132;
@@ -64,23 +66,44 @@ export class Sound {
     return buf;
   }
 
+  /**
+   * Light tyre squeal: noise through two narrow resonances (the tyre's "voice" and an
+   * overtone) whose pitch wavers a little, like rubber skipping on tarmac. Returns the gain
+   * that the game's slip value drives.
+   */
+  makeSqueal(dest) {
+    const ctx = this.ctx;
+    const src = ctx.createBufferSource();
+    src.buffer = this.noise;
+    src.loop = true;
+    const skid = ctx.createGain();
+    skid.gain.value = 0;
+    const wobble = ctx.createOscillator();
+    wobble.frequency.value = 6.5;
+    for (const [freq, q, level] of [[1750, 9, 1.0], [2650, 11, 0.55]]) {
+      const band = ctx.createBiquadFilter();
+      band.type = 'bandpass';
+      band.frequency.value = freq;
+      band.Q.value = q;
+      const depth = ctx.createGain();
+      depth.gain.value = freq * 0.035;
+      wobble.connect(depth).connect(band.frequency);
+      const g = ctx.createGain();
+      g.gain.value = level;
+      src.connect(band).connect(g).connect(skid);
+    }
+    skid.connect(dest);
+    wobble.start();
+    src.start();
+    return skid;
+  }
+
   makeEngine(worklet) {
     const ctx = this.ctx;
     const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : ctx.createGain();
     pan.connect(this.master);
 
-    // tyre squeal: band-passed noise
-    const squeal = ctx.createBufferSource();
-    squeal.buffer = this.noise;
-    squeal.loop = true;
-    const band = ctx.createBiquadFilter();
-    band.type = 'bandpass';
-    band.frequency.value = 1900;
-    band.Q.value = 5;
-    const skid = ctx.createGain();
-    skid.gain.value = 0;
-    squeal.connect(band).connect(skid).connect(pan);
-    squeal.start();
+    const skid = this.makeSqueal(pan);
 
     if (worklet) {
       const node = new AudioWorkletNode(ctx, 'engine944', { numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [1] });
@@ -160,7 +183,7 @@ export class Sound {
     const n = ex.active_players();
     this.engines.forEach((e, i) => {
       const on = i < n;
-      e.skid.gain.setTargetAtTime(on ? ex.engine_skid(i) * 0.3 : 0, t, 0.05);
+      e.skid.gain.setTargetAtTime(on ? ex.engine_skid(i) * SQUEAL_LEVEL : 0, t, 0.06);
       e.set(t, on, ex.engine_rpm(i), ex.engine_throttle(i), ex.engine_boost(i));
       if (on && 'pan' in e.pan) e.pan.pan.value = n === 2 ? (i === 0 ? -0.6 : 0.6) : 0;
     });
