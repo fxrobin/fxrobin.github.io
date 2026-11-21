@@ -2,7 +2,7 @@
 // event blips, all built from WebAudio nodes; and one recorded music track, looped:
 // "Neon Sign Circuit" by MintoDog (OpenGameArt, CC0), 145 BPM, 60 bars.
 
-const EV_BEEP = 1, EV_GO = 2, EV_CRASH = 4, EV_BUMP = 8, EV_LAP = 16, EV_FINISH = 32, EV_BACKFIRE = 64, EV_MENU = 256;
+const EV_BEEP = 1, EV_GO = 2, EV_CRASH = 4, EV_BUMP = 8, EV_LAP = 16, EV_FINISH = 32, EV_BACKFIRE = 64, EV_MENU = 256, EV_SHIFT_UP = 1024, EV_SHIFT_DOWN = 2048;
 const SCREEN_RACE = 1, SCREEN_GAME_OVER = 3;
 /// Squeal gain at full slip: light, a hint of the tyres at the limit rather than a screech.
 const SQUEAL_LEVEL = 1.2;
@@ -272,6 +272,8 @@ export class Sound {
     if (events & EV_FINISH) [523, 659, 784, 1046].forEach((f, k) => this.blip(f, 0.2, 0.22, k * 0.15));
     if (events & EV_CRASH) this.burst(0.7, 0.9, 'lowpass', 2500, 120);
     if (events & EV_BACKFIRE) this.backfire();
+    if (events & EV_SHIFT_UP) this.shift(true);
+    if (events & EV_SHIFT_DOWN) this.shift(false);
     if (events & EV_BUMP) this.burst(0.18, 0.5, 'lowpass', 1200, 150);
     if (events & EV_MENU) this.blip(1200, 0.05, 0.12);
     this.updateMusic(ex.screen_id());
@@ -345,6 +347,26 @@ export class Sound {
     this.kickAt(t, 110, 40, 0.5, this.master);
     this.burst(0.05, 0.4, 'bandpass', 2600, 1800, this.master, t + 0.06);
     this.burst(0.04, 0.3, 'bandpass', 3200, 2200, this.master, t + 0.11);
+  }
+
+  /**
+   * A gear change: the dull clunk of the transaxle engaging and the metallic click of the
+   * lever in its gate; going up, the ignition cut crackles in the exhaust, going down the
+   * blip of throttle is heard through the engine itself.
+   */
+  shift(up) {
+    const t = this.ctx.currentTime;
+    // the lever: a short metallic click as it leaves the gate, another as it slots in
+    this.burst(0.025, 0.22, 'bandpass', 3200, 2600, this.master, t);
+    this.burst(0.035, 0.3, 'bandpass', 2200, 1600, this.master, t + (up ? 0.17 : 0.13));
+    // the transaxle taking up the drive: a dull thud
+    this.kickAt(t + (up ? 0.26 : 0.2), 95, 45, 0.35, this.master);
+    if (up) {
+      // ignition cut: a few sharp pops in the exhaust while the clutch is in
+      for (const [dt, v] of [[0.02, 0.16], [0.07, 0.12], [0.12, 0.09]]) {
+        this.burst(0.03, v, 'bandpass', 900, 500, this.master, t + dt);
+      }
+    }
   }
 
   kickAt(t, from, to, vol, dest) {

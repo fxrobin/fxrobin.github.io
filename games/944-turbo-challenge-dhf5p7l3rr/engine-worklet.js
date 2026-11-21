@@ -107,7 +107,7 @@ class Engine944 extends AudioWorkletProcessor {
 
     // combustion pulses last about a third of the firing interval: lumpy at idle, smooth when revving
     const decay = Math.exp(-1 / (sr * Math.min(0.014, 0.35 / firing)));
-    const bovDecay = Math.exp(-1 / (sr * 0.12));
+    const bovDecay = Math.exp(-1 / (sr * 0.2));
     const whistleHz = 1500 + boost * 2900; // shaft whistle, ~4.4 kHz at full boost
     for (let i = 0; i < out.length; i++) {
       this.gain += (level - this.gain) * 0.0008;
@@ -137,7 +137,7 @@ class Engine944 extends AudioWorkletProcessor {
       // blow-off: a short, slightly fluttering hiss
       if (this.bov > 1e-4) {
         const flutter = 0.7 + 0.3 * Math.sin(TAU * 22 * this.bov);
-        y += this.bovFilter.run(n) * this.bov * flutter * 0.5;
+        y += this.bovFilter.run(n) * this.bov * flutter * 0.85;
         this.bov *= bovDecay;
       }
 
