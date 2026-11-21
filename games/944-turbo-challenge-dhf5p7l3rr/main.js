@@ -207,3 +207,28 @@ main().catch((err) => {
   el.textContent = `Impossible de charger game.wasm (${err}). Servez le dossier web/ via HTTP, ex. : python3 -m http.server -d web`;
   console.error(err);
 });
+
+// installable and playable offline (see sw.js); not over file://
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch((err) => console.warn('service worker:', err));
+  });
+}
+
+// "Install" buttons, shown when the browser offers to install the game (Android Chrome,
+// desktop Chrome/Edge): the game then gets its own icon and opens full screen, offline
+let installPrompt = null;
+const installButtons = [document.getElementById('t-install'), document.getElementById('install')];
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  installPrompt = e;
+  installButtons.forEach((b) => { if (b) b.style.display = ''; });
+});
+installButtons.forEach((b) => b?.addEventListener('click', async () => {
+  if (!installPrompt) return;
+  installPrompt.prompt();
+  await installPrompt.userChoice.catch(() => {});
+  installPrompt = null;
+  installButtons.forEach((x) => { if (x) x.style.display = 'none'; });
+}));
+window.addEventListener('appinstalled', () => installButtons.forEach((b) => { if (b) b.style.display = 'none'; }));

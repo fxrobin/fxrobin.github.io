@@ -13,6 +13,9 @@ sitemap: false
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="application-name" content="944 Turbo">
   <title>944 Turbo Challenge</title>
   <meta name="robots" content="noindex, nofollow">
   <style>
@@ -78,6 +81,7 @@ sitemap: false
     <label><input type="checkbox" id="crt" checked> scanlines</label> ·
     <label><input type="checkbox" id="sound" checked> son</label> ·
     <label><input type="checkbox" id="music" checked> musique (M)</label>
+    <button id="install" style="display:none">installer le jeu</button>
     <br><small>Voiture : modèle 3D « 1991 Porsche 944 Turbo » de RBLXSupercars
     (<a href="https://sketchfab.com/3d-models/1991-porsche-944-turbo-ea247e5fd2ce41999d342e3e8bfc6e9d" style="color:inherit">Sketchfab</a>),
     licence <a href="https://creativecommons.org/licenses/by/4.0/" style="color:inherit">CC BY 4.0</a>, rendu en pixel art ·
@@ -88,7 +92,7 @@ sitemap: false
     <div id="steer" class="pad"><span class="l">◀</span><span class="knob"></span><span class="r">▶</span></div>
     <div id="pedals" class="pad"><div class="pad brake"><b>FREIN</b><i>▲</i></div><div class="pad gas"><b>GAZ</b><i>▼</i></div></div>
     <div id="lbtns" class="btns"><div id="t-back" class="pad">↩</div><div id="t-pause" class="pad">❚❚</div></div>
-    <div id="rbtns" class="btns"><div id="t-music" class="pad">♪</div><div id="t-full" class="pad">⛶</div><div id="t-ok" class="pad">OK</div></div>
+    <div id="rbtns" class="btns"><div id="t-install" class="pad" style="display:none;width:auto;padding:0 10px">INSTALLER</div><div id="t-music" class="pad">♪</div><div id="t-full" class="pad">⛶</div><div id="t-ok" class="pad">OK</div></div>
   </div>
   <div id="rotate">↻ Tourne ton téléphone en mode paysage</div>
   <div id="audiohint">🔇 Appuie sur une touche ou clique pour activer le son</div>
