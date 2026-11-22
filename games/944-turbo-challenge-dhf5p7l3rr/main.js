@@ -20,8 +20,6 @@ const KEYS = {
 const canvas = document.getElementById('screen');
 const frame = document.getElementById('frame');
 const ctx2d = canvas.getContext('2d', { alpha: false });
-const image = ctx2d.createImageData(W, H);
-const pixels = new Uint32Array(image.data.buffer);
 const sound = new Sound();
 const audioHint = document.getElementById('audiohint');
 
@@ -141,11 +139,16 @@ async function loadWasm(url) {
   return WebAssembly.instantiate(bytes, {});
 }
 
+// The game converts its indexed framebuffer to RGBA itself; the image wraps that buffer in
+// the wasm memory (rebuilt only if the memory grows or the buffer moves).
+let image = null, imageMem = null, imagePtr = 0;
 function present(ex) {
-  const mem = ex.memory.buffer;
-  const fb = new Uint8Array(mem, ex.framebuffer(), W * H);
-  const pal = new Uint32Array(mem, ex.palette(), 256);
-  for (let i = 0; i < W * H; i++) pixels[i] = pal[fb[i]];
+  const ptr = ex.rgba();
+  if (ex.memory.buffer !== imageMem || ptr !== imagePtr) {
+    imageMem = ex.memory.buffer;
+    imagePtr = ptr;
+    image = new ImageData(new Uint8ClampedArray(imageMem, ptr, W * H * 4), W, H);
+  }
   ctx2d.putImageData(image, 0, 0);
 }
 
@@ -185,13 +188,19 @@ async function main() {
     acc += Math.min(now - last, 250);
     last = now;
     const pads = gamepadBits();
+    let stepped = false;
     while (acc >= STEP) {
       ex.tick(keyBits | latched | pads | touchBits(ex));
       latched = 0;
       acc -= STEP;
+      stepped = true;
     }
-    ex.render();
-    present(ex);
+    // nothing moved since the last frame (screens refreshing faster than 60 Hz): the
+    // picture on the canvas is still the right one
+    if (stepped || !image) {
+      ex.render();
+      present(ex);
+    }
     const menu = ex.screen_id() !== 1;
     if (menu !== inMenu) { inMenu = menu; document.body.classList.toggle('menu', menu); }
     sound.update(ex);
